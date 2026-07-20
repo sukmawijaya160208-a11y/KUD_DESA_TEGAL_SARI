@@ -62,6 +62,14 @@ export default function PekebunProfilPage() {
   const load = useCallback(() => api.pekebun.profil().then((d) => { setProfil(d); setForm({ ...d }); }).catch((err) => toast.error(err.message)).finally(() => setLoading(false)), [toast]);
   useEffect(() => { load(); }, [load]);
 
+  const uploadHandler = (folder) => (url) => {
+    if (folder === 'foto-pekebun') {
+      setForm((prev) => ({ ...prev, foto_pekebun: url }));
+    } else {
+      setForm((prev) => ({ ...prev, [`upload_${folder}`]: url }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
