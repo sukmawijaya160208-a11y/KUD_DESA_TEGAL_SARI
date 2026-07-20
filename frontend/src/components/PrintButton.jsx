@@ -225,7 +225,7 @@ export default function PrintButton({ title, fetchAll, renderContent, onLoad }) 
           <div class="letterhead">
             <div class="top-row">
               <div>
-                <div class="kud-name">KUD Desa Tegal Sari</div>
+                <div class="kud-name">KUD Desa Sari Subur</div>
                 <div class="kud-sub">Sistem Informasi Koperasi Unit Desa</div>
                 <div class="kud-identity">Kec. Megang Sakti, Kabupaten Musi Rawas, Sumatera Selatan</div>
               </div>
@@ -245,8 +245,8 @@ export default function PrintButton({ title, fetchAll, renderContent, onLoad }) 
 
           <!-- FOOTER -->
           <div class="print-footer">
-            Dokumen ini dicetak dari Sistem Informasi KUD Desa Tegal Sari
-            <div class="footer-line2">&copy; ${new Date().getFullYear()} - KUD Desa Tegal Sari &mdash; Dokumen Resmi</div>
+            Dokumen ini dicetak dari Sistem Informasi KUD Desa Sari Subur
+            <div class="footer-line2">&copy; ${new Date().getFullYear()} - KUD Desa Sari Subur &mdash; Dokumen Resmi</div>
           </div>
 
           <script>

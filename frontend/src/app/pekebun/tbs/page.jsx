@@ -8,18 +8,20 @@ import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
+import DatePicker from '@/components/ui/DatePicker';
+import { formatDate, todayStr } from '@/lib/date';
 
 export default function PekebunTbsPage() {
   const toast = useToast();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ tanggal: new Date().toISOString().split('T')[0], jumlah_tbs: '', keterangan: '' });
+  const [form, setForm] = useState({ tanggal: todayStr(), jumlah_tbs: '', keterangan: '' });
   const [submitting, setSubmitting] = useState(false);
   const [editModal, setEditModal] = useState(null);
   const [deleteModal, setDeleteModal] = useState(null);
 
-  const load = () => api.pekebun.tbs.list().then(setData).finally(() => setLoading(false));
+  const load = () => api.pekebun.tbs.list().then(d => setData(d.data || [])).catch(() => {}).finally(() => setLoading(false));
   useEffect(() => { load(); }, []);
 
   const handleSubmit = async (e) => {
@@ -28,7 +30,7 @@ export default function PekebunTbsPage() {
     try {
       await api.pekebun.tbs.create(form);
       setShowForm(false);
-      setForm({ tanggal: new Date().toISOString().split('T')[0], jumlah_tbs: '', keterangan: '' });
+      setForm({ tanggal: todayStr(), jumlah_tbs: '', keterangan: '' });
       toast.success('Data TBS berhasil ditambahkan');
       load();
     } catch (err) {
@@ -78,7 +80,7 @@ export default function PekebunTbsPage() {
         <Card className="mb-6">
           <form onSubmit={handleSubmit} className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Input label="Tanggal" type="date" value={form.tanggal} onChange={(e) => setForm({...form, tanggal: e.target.value})} required />
+              <DatePicker label="Tanggal" value={form.tanggal} onChange={(v) => setForm({...form, tanggal: v})} />
               <Input label="Jumlah TBS" type="number" step="0.01" placeholder="0" value={form.jumlah_tbs} onChange={(e) => setForm({...form, jumlah_tbs: e.target.value})} required />
             </div>
             <Textarea label="Keterangan" value={form.keterangan} onChange={(e) => setForm({...form, keterangan: e.target.value})} rows={2} />
@@ -104,7 +106,7 @@ export default function PekebunTbsPage() {
               <tbody>
                 {data.map((d) => (
                   <tr key={d.id} className="border-b border-gray-50">
-                    <td className="py-3">{new Date(d.tanggal).toLocaleDateString('id-ID')}</td>
+                    <td className="py-3">{formatDate(d.tanggal)}</td>
                     <td className="py-3 font-semibold">{d.jumlah_tbs}</td>
                     <td className="py-3 text-gray-500">{d.keterangan || '-'}</td>
                     <td className="py-3">
@@ -123,7 +125,7 @@ export default function PekebunTbsPage() {
 
       <Modal open={!!editModal} onClose={() => setEditModal(null)} title="Edit TBS">
         <form onSubmit={handleEdit} className="space-y-3">
-          <Input label="Tanggal" type="date" value={editModal?.tanggal?.split('T')[0] || ''} onChange={(e) => setEditModal({...editModal, tanggal: e.target.value})} required />
+          <DatePicker label="Tanggal" value={editModal?.tanggal?.split('T')[0] || ''} onChange={(v) => setEditModal({...editModal, tanggal: v})} />
           <Input label="Jumlah TBS" type="number" step="0.01" value={editModal?.jumlah_tbs || ''} onChange={(e) => setEditModal({...editModal, jumlah_tbs: e.target.value})} required />
           <Textarea label="Keterangan" value={editModal?.keterangan || ''} onChange={(e) => setEditModal({...editModal, keterangan: e.target.value})} rows={2} />
           <div className="flex gap-2 justify-end">
@@ -134,7 +136,7 @@ export default function PekebunTbsPage() {
       </Modal>
 
       <Modal open={!!deleteModal} onClose={() => setDeleteModal(null)} title="Hapus TBS">
-        <p className="text-gray-600 text-sm mb-4">Yakin ingin menghapus data TBS tanggal <strong>{deleteModal?.tanggal ? new Date(deleteModal.tanggal).toLocaleDateString('id-ID') : ''}</strong>?</p>
+        <p className="text-gray-600 text-sm mb-4">Yakin ingin menghapus data TBS tanggal <strong>{deleteModal?.tanggal ? formatDate(deleteModal.tanggal) : ''}</strong>?</p>
         <div className="flex gap-2 justify-end">
           <Button variant="ghost" onClick={() => setDeleteModal(null)}>Batal</Button>
           <Button variant="danger" onClick={handleDelete}>Hapus</Button>

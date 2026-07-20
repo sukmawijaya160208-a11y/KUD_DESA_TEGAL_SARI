@@ -66,7 +66,7 @@ export default function PrintPreview({ title, fetchAll, renderContent, onLoad })
         <div class="letterhead">
           <div class="top-row">
             <div>
-              <div class="kud-name">KUD Desa Tegal Sari</div>
+              <div class="kud-name">KUD Desa Sari Subur</div>
               <div class="kud-sub">Sistem Informasi Koperasi Unit Desa</div>
             </div>
             <div class="head-date">${new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
@@ -74,7 +74,7 @@ export default function PrintPreview({ title, fetchAll, renderContent, onLoad })
         </div>
         <div class="doc-title">${title}</div>
         ${preview || '<div class="empty-state">Tidak ada data</div>'}
-        <div class="print-footer">&copy; ${new Date().getFullYear()} - KUD Desa Tegal Sari</div>
+        <div class="print-footer">&copy; ${new Date().getFullYear()} - KUD Desa Sari Subur</div>
         <script>window.onload = function() { setTimeout(function() { window.print(); }, 500); }; window.onafterprint = function() { setTimeout(function() { window.close(); }, 300); }; <\/script>
       </body>
       </html>

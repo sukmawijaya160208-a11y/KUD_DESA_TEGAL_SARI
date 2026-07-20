@@ -30,12 +30,12 @@ export default function BlogLayout({ children }) {
             <Link href="/" className="flex items-center gap-3">
               <div className="flex items-center justify-center overflow-hidden h-10 max-w-[160px] rounded-lg bg-white shadow-sm px-1">
                 {logoUrl ? (
-                  <img src={logoUrl} alt="KUD Desa Tegal Sari" className="h-full w-auto max-h-10 object-contain" />
+                  <img src={logoUrl} alt="KUD Desa Sari Subur" className="h-full w-auto max-h-10 object-contain" />
                 ) : (
                   <span className="font-heading font-bold text-lg text-primary px-2">K</span>
                 )}
               </div>
-              <span className="font-heading font-bold tracking-tight text-foreground">KUD Tegal Sari</span>
+              <span className="font-heading font-bold tracking-tight text-foreground">KUD Sari Subur</span>
             </Link>
             <div className="flex items-center gap-4">
               <Link href="/" className="text-sm font-medium text-gray-600 hover:text-foreground transition-colors">

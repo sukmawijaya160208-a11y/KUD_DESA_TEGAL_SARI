@@ -7,6 +7,7 @@ import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { TableSkeleton } from '@/components/ui/Skeleton';
 import { ShieldExclamationIcon } from '@heroicons/react/24/outline';
+import { formatDate } from '@/lib/date';
 
 export default function VerifikasiLogPage() {
   const toast = useToast();
@@ -51,7 +52,7 @@ export default function VerifikasiLogPage() {
             <tbody>
               {paged.map((v) => (
                 <tr key={v.id} className="border-b border-border/50 hover:bg-muted/50 transition-colors">
-                  <td className="py-3 px-3 text-gray-500 text-xs">{v.created_at ? new Date(v.created_at).toLocaleString('id-ID') : '-'}</td>
+                  <td className="py-3 px-3 text-gray-500 text-xs">{v.created_at ? formatDate(v.created_at) : '-'}</td>
                   <td className="py-3 px-3 font-medium text-foreground">{v.user?.name}</td>
                   <td className="py-3 px-3"><span className="text-xs text-gray-500">{v.verifiable_type?.includes('Pekebun') ? 'Pekebun' : 'Program'}</span></td>
                   <td className="py-3 px-3">{tindakanBadge(v.tindakan)}</td>

@@ -382,7 +382,7 @@ export default function PekebunLahanPage() {
                   </h3>
                   <div className="flex flex-wrap gap-2 mt-2">
                     <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-lg text-[10px] font-semibold">{l.jenis_surat}</span>
-                    <span className="px-2 py-0.5 bg-green-50 text-green-700 rounded-lg text-[10px] font-semibold">{Number(l.luas_lahan_m2).toLocaleString()} M²</span>
+                    <span className="px-2 py-0.5 bg-green-50 text-green-700 rounded-lg text-[10px] font-semibold">{Number(l.luas_lahan_m2 || 0).toLocaleString()} M²</span>
                   </div>
                 </div>
                 <button onClick={() => setDeleteModal(l)} className="p-1.5 text-gray-400 hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all lg:opacity-0 lg:group-hover:opacity-100 cursor-pointer">

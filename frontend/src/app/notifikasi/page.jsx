@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
+import { formatDate } from '@/lib/date';
 
 export default function NotifikasiPage() {
   const [notifs, setNotifs] = useState([]);
@@ -38,7 +39,7 @@ export default function NotifikasiPage() {
               <div className="flex items-center gap-2">
                 {!n.is_read && <span className="w-2 h-2 bg-kud-green rounded-full shrink-0" />}
                 <h3 className={`text-sm ${!n.is_read ? 'font-bold text-gray-800' : 'text-gray-600'}`}>{n.judul}</h3>
-                <span className="text-[10px] text-gray-400 ml-auto">{new Date(n.created_at).toLocaleDateString('id-ID')}</span>
+                <span className="text-[10px] text-gray-400 ml-auto">{formatDate(n.created_at)}</span>
               </div>
               <p className="text-xs text-gray-500 mt-1 ml-4">{n.pesan}</p>
             </button>

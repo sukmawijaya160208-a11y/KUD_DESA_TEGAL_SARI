@@ -24,6 +24,16 @@ export default function PekebunDashboard() {
     </div>
   );
 
+  if (error) return (
+    <div className="text-center py-20">
+      <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+        <span className="text-2xl text-red-500">!</span>
+      </div>
+      <p className="text-red-500 font-semibold">{error}</p>
+      <button onClick={() => window.location.reload()} className="mt-4 px-4 py-2 bg-primary text-white rounded-xl text-sm cursor-pointer">Coba Lagi</button>
+    </div>
+  );
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-foreground mb-6">Dashboard Pekebun</h1>

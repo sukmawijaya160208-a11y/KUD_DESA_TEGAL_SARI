@@ -182,7 +182,7 @@ const items = menuItems[role] || [];
             </div>
             {!collapsed && (
               <div className="transition-opacity duration-200">
-                <h2 className="text-white font-heading font-bold text-sm leading-tight">KUD Tegal Sari</h2>
+                <h2 className="text-white font-heading font-bold text-sm leading-tight">KUD Sari Subur</h2>
                 <p className="text-white/60 text-[10px] uppercase tracking-wider">{role}</p>
               </div>
             )}
@@ -266,7 +266,7 @@ const items = menuItems[role] || [];
                 <span className="text-primary font-bold text-xs">K</span>
               )}
             </div>
-            <span className="font-heading font-bold text-sm text-white">KUD Tegal Sari</span>
+            <span className="font-heading font-bold text-sm text-white">KUD Sari Subur</span>
           </div>
           <div className="ml-auto"><NotifDropdown /></div>
         </header>

@@ -3,7 +3,7 @@
 # Aktifkan: systemctl daemon-reload && systemctl enable --now kud-queue
 
 [Unit]
-Description=KUD Desa Tegal Sari — Laravel Queue Worker
+Description=KUD Desa Sari Subur — Laravel Queue Worker
 After=network.target
 After=mysql.service
 Requires=mysql.service

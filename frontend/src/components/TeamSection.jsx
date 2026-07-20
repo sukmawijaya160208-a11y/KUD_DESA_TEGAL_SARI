@@ -8,7 +8,7 @@ const team = [
   { name: 'Mas Prapto', role: 'Bendahara', desc: 'Bertanggung jawab atas pengelolaan keuangan koperasi yang sehat dan transparan untuk kesejahteraan anggota.', initial: 'MP' },
   { name: 'Triono', role: 'Manager Operasional', desc: 'Mengelola operasional harian koperasi termasuk pelayanan anggota, program PSR, dan pemasaran TBS.', initial: 'TR' },
   { name: 'M. Sukma Wijaya', role: 'Ketua Pengawas', desc: 'Memastikan seluruh kegiatan koperasi berjalan sesuai AD/ART dan peraturan yang berlaku.', initial: 'MS' },
-  { name: 'Fitriani, S.P.', role: 'Koordinator Lapangan', desc: 'Menjembatani komunikasi antara koperasi dan pekebun di 5 desa binaan KUD Tegal Sari.', initial: 'FT' },
+  { name: 'Fitriani, S.P.', role: 'Koordinator Lapangan', desc: 'Menjembatani komunikasi antara koperasi dan pekebun di 5 desa binaan KUD Sari Subur.', initial: 'FT' },
 ];
 
 const containerVariants = {
@@ -61,7 +61,7 @@ export default function TeamSection() {
         className="text-center mb-14">
         <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">TIM MANAJEMEN</span>
         <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
-          Pengurus <span className="text-primary">KUD Tegal Sari</span>
+          Pengurus <span className="text-primary">KUD Sari Subur</span>
         </h2>
         <p className="text-gray-500 max-w-3xl mx-auto leading-relaxed">
           Tim profesional yang berdedikasi tinggi untuk memajukan kesejahteraan pekebun sawit

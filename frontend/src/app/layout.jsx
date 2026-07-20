@@ -6,7 +6,7 @@ const poppins = Poppins({ variable: "--font-poppins", subsets: ["latin"], weight
 const openSans = Open_Sans({ variable: "--font-open-sans", subsets: ["latin"], weight: ["300", "400", "500", "600", "700"] });
 
 export const metadata = {
-  title: "KUD Desa Tegal Sari",
+  title: "KUD Desa Sari Subur",
   description: "Sistem Informasi Koperasi Unit Desa Tegal Sari",
 };
 

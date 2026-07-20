@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback, startTransition } from 'react';
 import { motion } from 'framer-motion';
+import { formatDate } from '@/lib/date';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Modal from '@/components/ui/Modal';
@@ -345,7 +346,7 @@ export default function AdminBlogPage() {
                         <StarIcon className="w-4 h-4" />
                       </button>
                     </td>
-                    <td className="py-3 px-3 text-xs text-gray-400">{new Date(post.created_at).toLocaleDateString('id-ID')}</td>
+                    <td className="py-3 px-3 text-xs text-gray-400">{formatDate(post.created_at)}</td>
                     <td className="py-3 px-3">
                       <div className="flex items-center gap-1">
                         <a

@@ -305,7 +305,7 @@ class AdminController extends Controller
             'pendaftaran_per_program' => PendaftaranProgram::selectRaw('program_kud_id, count(*) as total')
                 ->with('programKud:id,nama')
                 ->groupBy('program_kud_id')->get(),
-            'total_tbs_per_bulan' => TbsSync::selectRaw("DATE_FORMAT(tanggal, '%Y-%m') as bulan, SUM(jumlah_tbs) as total")
+            'total_tbs_per_bulan' => TbsSync::selectRaw("strftime('%Y-%m', tanggal) as bulan, SUM(jumlah_tbs) as total")
                 ->groupBy('bulan')->orderBy('bulan')->get(),
         ]);
     }
@@ -697,7 +697,7 @@ class AdminController extends Controller
         ]);
 
         if (isset($validated['content'])) {
-        $validated['content'] = $validated['content'];
+            $validated['content'] = strip_tags($validated['content']);
         }
         $validated['updated_by'] = $request->user()->id;
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import Toast from '@/components/ui/Toast';
 
 const ToastContext = createContext(null);
@@ -13,7 +13,7 @@ export default function ToastProvider({ children }) {
     setToasts((prev) => [...prev, { id, message, type }]);
   }, []);
   const remove = useCallback((id) => setToasts((prev) => prev.filter((t) => t.id !== id)), []);
-  const toast = { success: (m) => add(m, 'success'), error: (m) => add(m, 'error'), info: (m) => add(m, 'info') };
+  const toast = useMemo(() => ({ success: (m) => add(m, 'success'), error: (m) => add(m, 'error'), info: (m) => add(m, 'info') }), [add]);
   return (
     <ToastContext.Provider value={toast}>
       {children}

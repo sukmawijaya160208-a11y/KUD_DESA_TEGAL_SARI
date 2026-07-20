@@ -181,7 +181,7 @@ export default function AdminLahanPage() {
           </div>
         </div>
         <PrintButton
-          title="Data Lahan - KUD Desa Tegal Sari"
+          title="Data Lahan - KUD Desa Sari Subur"
           fetchAll={() => api.admin.lahan.list({ per_page: 9999 }).then((res) => res.data || res)}
           renderContent={(items) => `
             <table class="print-table">

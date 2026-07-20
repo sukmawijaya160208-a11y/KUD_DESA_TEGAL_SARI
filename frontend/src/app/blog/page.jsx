@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, startTransition, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import { formatDateLong } from '@/lib/date';
 import { api } from '@/lib/api';
 import Link from 'next/link';
 import {
@@ -29,11 +30,8 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.35 } },
 };
 
-function formatDate(dateStr) {
-  return new Date(dateStr).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-}
-
 function readingTime(text) {
+  if (!text) return 1;
   const wpm = 200;
   const words = text.split(/\s+/).length;
   return Math.max(1, Math.ceil(words / wpm));
@@ -203,7 +201,7 @@ export default function BlogPage() {
               <NewspaperIcon className="w-4 h-4" />
               Blog KUD
             </div>
-            <h1 className="font-heading font-bold text-white text-4xl md:text-5xl mb-3">Berita & Artikel KUD Tegal Sari</h1>
+            <h1 className="font-heading font-bold text-white text-4xl md:text-5xl mb-3">Berita & Artikel KUD Sari Subur</h1>
           </div>
         </section>
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8">
@@ -230,10 +228,10 @@ export default function BlogPage() {
               Blog KUD
             </div>
             <h1 className="font-heading font-bold text-white text-4xl md:text-5xl mb-3">
-              Berita & Artikel <span className="bg-gradient-to-r from-primary-light to-blue-300 bg-clip-text text-transparent">KUD Tegal Sari</span>
+              Berita & Artikel <span className="bg-gradient-to-r from-primary-light to-blue-300 bg-clip-text text-transparent">KUD Sari Subur</span>
             </h1>
             <p className="text-white/60 text-lg max-w-2xl mx-auto">
-              Ikuti perkembangan kegiatan, program, dan informasi terbaru dari KUD Desa Tegal Sari
+              Ikuti perkembangan kegiatan, program, dan informasi terbaru dari KUD Desa Sari Subur
             </p>
           </motion.div>
         </div>
@@ -294,8 +292,20 @@ export default function BlogPage() {
           </div>
         ) : posts.length === 0 ? (
           <div className="text-center py-16">
-            <NewspaperIcon className="w-16 h-16 text-gray-200 mx-auto mb-4" />
-            <p className="text-gray-400 text-lg">Tidak ada artikel ditemukan</p>
+            {error ? (
+              <>
+                <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
+                  <span className="text-2xl">!</span>
+                </div>
+                <p className="text-red-500 text-lg font-semibold">Gagal memuat artikel</p>
+                <p className="text-gray-400 text-sm mt-1">{error}</p>
+              </>
+            ) : (
+              <>
+                <NewspaperIcon className="w-16 h-16 text-gray-200 mx-auto mb-4" />
+                <p className="text-gray-400 text-lg">Tidak ada artikel ditemukan</p>
+              </>
+            )}
           </div>
         ) : (
           <motion.div variants={containerAnim} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -348,7 +358,7 @@ export default function BlogPage() {
                           {post.title}
                         </h3>
                         <p className="text-xs text-gray-500 leading-relaxed line-clamp-2 mb-3">
-                          {post.excerpt || post.content.slice(0, 120) + '...'}
+                          {post.excerpt || (post.content ?? '').slice(0, 120) + '...'}
                         </p>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2 text-[10px] text-gray-400">
@@ -381,7 +391,7 @@ export default function BlogPage() {
                           <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${catColor.bg} ${catColor.text}`}>
                             {post.category}
                           </span>
-                          <span className="text-xs text-gray-400">{formatDate(post.published_at || post.created_at)}</span>
+                          <span className="text-xs text-gray-400">{formatDateLong(post.published_at || post.created_at)}</span>
                           <span className="text-xs text-gray-300">·</span>
                           <span className="text-xs text-gray-400">{time} menit baca</span>
                           <span className="text-xs text-gray-300">·</span>
@@ -556,7 +566,7 @@ export default function BlogPage() {
 
                       {/* Close */}
                       <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
-                        <span className="text-xs text-gray-400">{formatDate(post.published_at || post.created_at)}</span>
+                        <span className="text-xs text-gray-400">{formatDateLong(post.published_at || post.created_at)}</span>
                         <button
                           onClick={() => setExpandedId(null)}
                           className="text-xs font-semibold text-primary hover:text-primary-dark transition-colors flex items-center gap-1 cursor-pointer"

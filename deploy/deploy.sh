@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================
-# KUD Desa Tegal Sari — Deploy Script
+# KUD Desa Sari Subur — Deploy Script
 # ============================================
 # Usage:
 #   chmod +x deploy.sh
@@ -16,15 +16,15 @@ info() { echo -e "${CYAN}[i]${NC} $1"; }
 
 # --- Config ---
 APP_DIR="/var/www/kud"
-DOMAIN="${DOMAIN:-kud-tegal-sari.my.id}"
-DB_NAME="${DB_NAME:-kud_desa_tegal_sari}"
+DOMAIN="${DOMAIN:-kud-sari-subur.my.id}"
+DB_NAME="${DB_NAME:-kud_desa_sari_subur}"
 DB_USER="${DB_USER:-kud_user}"
 DB_PASS="${DB_PASS:-$(openssl rand -base64 24)}"
 PHP_VERSION="8.2"
 NODE_VERSION="20"
 
 info "=========================================="
-info "  KUD Desa Tegal Sari — Deploy"
+info "  KUD Desa Sari Subur — Deploy"
 info "  Domain : $DOMAIN"
 info "  Dir    : $APP_DIR"
 info "=========================================="
@@ -52,7 +52,7 @@ if [ -d "$APP_DIR/.git" ]; then
     git pull origin main
 else
     info "Clone repository..."
-    git clone https://github.com/username/kud-desa-tegal-sari.git "$APP_DIR"
+    git clone https://github.com/username/kud-desa-sari-subur.git "$APP_DIR"
     cd "$APP_DIR"
 fi
 

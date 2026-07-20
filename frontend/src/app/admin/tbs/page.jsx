@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Card from '@/components/ui/Card';
 import { TableSkeleton } from '@/components/ui/Skeleton';
+import { formatDate } from '@/lib/date';
 
 export default function AdminTBSPage() {
   const toast = useToast();
@@ -14,7 +15,7 @@ export default function AdminTBSPage() {
   const [page, setPage] = useState(1);
   const perPage = 15;
 
-  useEffect(() => { api.admin.tbs.list().then(setData).catch((e) => toast.error(e.message)).finally(() => setLoading(false)); }, [toast]);
+  useEffect(() => { api.admin.tbs.list().then(d => setData(d.data || [])).catch((e) => toast.error(e.message)).finally(() => setLoading(false)); }, [toast]);
 
   const filtered = data.filter((d) =>
     d.pekebun?.user?.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -47,7 +48,7 @@ export default function AdminTBSPage() {
                     <div className="font-medium text-foreground">{d.pekebun?.nama}</div>
                     <div className="text-xs text-gray-400">{d.pekebun?.user?.email}</div>
                   </td>
-                  <td className="py-3 px-3 text-gray-600">{d.tanggal ? new Date(d.tanggal).toLocaleDateString('id-ID') : '-'}</td>
+                  <td className="py-3 px-3 text-gray-600">{d.tanggal ? formatDate(d.tanggal) : '-'}</td>
                   <td className="py-3 px-3 text-right font-semibold text-foreground">{d.jumlah_tbs} kg</td>
                   <td className="py-3 px-3 text-gray-500">{d.keterangan || '-'}</td>
                 </tr>

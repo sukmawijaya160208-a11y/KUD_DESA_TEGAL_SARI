@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, memo, startTransition, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { formatDate } from '@/lib/date';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Modal from '@/components/ui/Modal';
@@ -88,7 +89,7 @@ const ProgramRow = memo(function ProgramRow({ d, expandedId, onToggle, onPreview
         <span className="text-sm font-medium text-foreground">{d.programKud?.nama || '-'}</span>
       </td>
       <td className="py-3 px-3 text-sm text-gray-500">
-        {new Date(d.created_at).toLocaleDateString('id-ID')}
+        {formatDate(d.created_at)}
       </td>
       <td className="py-3 px-3">
         <Badge status={d.status} />
@@ -295,8 +296,8 @@ export default function VerifikatorProgramPage() {
           setData(fmt);
           setMeta({ currentPage: res.current_page, lastPage: res.last_page, total: res.total });
         } else {
-          setData(res);
-          setMeta({ currentPage: 1, lastPage: 1, total: res.length });
+          setData(Array.isArray(res) ? res : []);
+          setMeta(Array.isArray(res) ? { currentPage: 1, lastPage: 1, total: res.length } : null);
         }
       }))
       .catch((e) => toast.error(e.message))

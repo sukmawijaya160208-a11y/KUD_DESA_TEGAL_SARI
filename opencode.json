@@ -1,10 +1,25 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "lsp": {
-    "typescript": { "disabled": false },
-    "javascript": { "disabled": false },
-    "php": { "disabled": false },
-    "css": { "disabled": false },
-    "json": { "disabled": false }
+    "typescript": {
+      "command": ["typescript-language-server", "--stdio"],
+      "extensions": [".ts", ".tsx"]
+    },
+    "javascript": {
+      "command": ["typescript-language-server", "--stdio"],
+      "extensions": [".js", ".jsx"]
+    },
+    "php": {
+      "command": ["intelephense", "--stdio"],
+      "extensions": [".php"]
+    },
+    "css": {
+      "command": ["vscode-css-language-server", "--stdio"],
+      "extensions": [".css"]
+    },
+    "json": {
+      "command": ["vscode-json-language-server", "--stdio"],
+      "extensions": [".json"]
+    }
   }
 }

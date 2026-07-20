@@ -8,10 +8,12 @@ import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 import Select from '@/components/ui/Select';
 import Modal from '@/components/ui/Modal';
+import DatePicker from '@/components/ui/DatePicker';
 import {
   CurrencyDollarIcon, PlusIcon, PencilIcon, TrashIcon,
   CalendarDaysIcon, CheckCircleIcon, ClockIcon,
 } from '@heroicons/react/24/outline';
+import { formatDate, todayStr } from '@/lib/date';
 
 const KELAS = { A: 'Tandan Buah Segar A', B: 'Tandan Buah Segar B', C: 'Tandan Buah Segar C' };
 
@@ -25,19 +27,8 @@ function rupiah(n) {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
 }
 
-function friendly(d) {
-  if (!d) return '';
-  const date = new Date(d + 'T00:00:00');
-  if (isNaN(date)) return d;
-  return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-function today() {
-  return new Date().toISOString().split('T')[0];
-}
-
 function stateOf(item) {
-  const t = today();
+  const t = todayStr();
   if (item.dari_tanggal <= t && (!item.sampai_tanggal || item.sampai_tanggal >= t)) return 'active';
   if (item.dari_tanggal > t) return 'upcoming';
   return 'expired';
@@ -63,13 +54,13 @@ export default function AdminHargaTbsPage() {
   const [del, setDel] = useState(null);
   const [sub, setSub] = useState(false);
   const [tab, setTab] = useState('ALL');
-  const [f, setF] = useState({ kelas: 'A', harga_per_kg: '', dari_tanggal: today(), sampai_tanggal: '', keterangan: '' });
+  const [f, setF] = useState({ kelas: 'A', harga_per_kg: '', dari_tanggal: todayStr(), sampai_tanggal: '', keterangan: '' });
 
   useEffect(() => {
-    api.admin.hargaTbs.list().then(setData).catch((e) => toast.error(e.message)).finally(() => setLoading(false));
+    api.admin.hargaTbs.list().then(d => setData(d.data || [])).catch((e) => toast.error(e.message)).finally(() => setLoading(false));
   }, [toast]);
 
-  const openAdd = () => { setEdit(null); setF({ kelas: 'A', harga_per_kg: '', dari_tanggal: today(), sampai_tanggal: '', keterangan: '' }); setShow(true); };
+  const openAdd = () => { setEdit(null); setF({ kelas: 'A', harga_per_kg: '', dari_tanggal: todayStr(), sampai_tanggal: '', keterangan: '' }); setShow(true); };
   const openEdit = (item) => { setEdit(item); setF({ kelas: item.kelas, harga_per_kg: String(item.harga_per_kg), dari_tanggal: item.dari_tanggal, sampai_tanggal: item.sampai_tanggal || '', keterangan: item.keterangan || '' }); setShow(true); };
 
   const submit = async (e) => {
@@ -80,13 +71,13 @@ export default function AdminHargaTbsPage() {
       const p = { ...f, sampai_tanggal: f.sampai_tanggal || null };
       if (edit) { await api.admin.hargaTbs.update(edit.id, p); toast.success('Harga diperbarui'); }
       else { await api.admin.hargaTbs.create(p); toast.success('Harga ditambahkan'); }
-      setShow(false); api.admin.hargaTbs.list().then(setData).catch(() => {});
+      setShow(false); api.admin.hargaTbs.list().then(d => setData(d.data || [])).catch(() => {});
     } catch (err) { toast.error(err.message); } finally { setSub(false); }
   };
 
   const hapus = async () => {
     if (!del) return;
-    try { await api.admin.hargaTbs.delete(del.id); toast.success('Harga dihapus'); setDel(null); api.admin.hargaTbs.list().then(setData).catch(() => {}); }
+    try { await api.admin.hargaTbs.delete(del.id); toast.success('Harga dihapus'); setDel(null); api.admin.hargaTbs.list().then(d => setData(d.data || [])).catch(() => {}); }
     catch (err) { toast.error(err.message); }
   };
 
@@ -146,7 +137,7 @@ export default function AdminHargaTbsPage() {
                   <div className="text-2xl font-bold text-foreground tracking-tight mb-1">{rupiah(a.harga_per_kg)}</div>
                   <p className="text-[11px] text-gray-400 flex items-center gap-1">
                     <CalendarDaysIcon className="w-3 h-3" />
-                    {friendly(a.dari_tanggal)} — {a.sampai_tanggal ? friendly(a.sampai_tanggal) : '∞'}
+                    {formatDate(a.dari_tanggal)} — {a.sampai_tanggal ? formatDate(a.sampai_tanggal) : '∞'}
                   </p>
                   {a.keterangan && <p className="text-[10px] text-gray-400 mt-2 line-clamp-1">{a.keterangan}</p>}
                   <div className="flex gap-1.5 mt-3 pt-3 border-t border-border">
@@ -236,8 +227,8 @@ export default function AdminHargaTbsPage() {
           <div>
             <label className="block text-sm font-medium text-foreground/80 mb-1.5">Periode Berlaku</label>
             <div className="grid grid-cols-2 gap-3">
-              <Input label="Dari" type="date" value={f.dari_tanggal} onChange={(e) => setF({ ...f, dari_tanggal: e.target.value })} required />
-              <Input label="Sampai" type="date" value={f.sampai_tanggal} onChange={(e) => setF({ ...f, sampai_tanggal: e.target.value })} helperText="Kosongkan jika tak terbatas" />
+              <DatePicker label="Dari" value={f.dari_tanggal} onChange={(v) => setF({ ...f, dari_tanggal: v })} />
+              <DatePicker label="Sampai" value={f.sampai_tanggal} onChange={(v) => setF({ ...f, sampai_tanggal: v })} helperText="Kosongkan jika tak terbatas" />
             </div>
           </div>
           <Textarea label="Keterangan" rows={2} placeholder="Opsional" value={f.keterangan} onChange={(e) => setF({ ...f, keterangan: e.target.value })} />
@@ -257,7 +248,7 @@ export default function AdminHargaTbsPage() {
             </div>
             <p className="text-gray-700 font-medium">Hapus harga ini?</p>
             <p className="text-lg font-bold text-foreground mt-2">{rupiah(del.harga_per_kg)}</p>
-            <p className="text-xs text-gray-400 mt-1">{KELAS[del.kelas]} — {friendly(del.dari_tanggal)}{del.sampai_tanggal ? ` — ${friendly(del.sampai_tanggal)}` : ''}</p>
+            <p className="text-xs text-gray-400 mt-1">{KELAS[del.kelas]} — {formatDate(del.dari_tanggal)}{del.sampai_tanggal ? ` — ${formatDate(del.sampai_tanggal)}` : ''}</p>
           </div>
         )}
         <div className="flex gap-3 justify-center mt-4">

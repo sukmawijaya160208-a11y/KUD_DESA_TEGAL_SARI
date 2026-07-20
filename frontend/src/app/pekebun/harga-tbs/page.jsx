@@ -7,6 +7,7 @@ import {
   CurrencyDollarIcon, CalendarDaysIcon, CheckCircleIcon,
   ClockIcon, XCircleIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon,
 } from '@heroicons/react/24/outline';
+import { formatDate, formatDateShort, todayStr } from '@/lib/date';
 
 const KELAS_DISPLAY = {
   A: { label: 'Tandan Buah Segar A', desc: 'Kualitas premium', gradient: 'from-emerald-500 via-emerald-600 to-emerald-700', shadow: 'shadow-emerald-200/50', ring: 'ring-emerald-500/20' },
@@ -15,25 +16,9 @@ const KELAS_DISPLAY = {
 };
 
 function formatRp(n) {
-  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
-}
-
-function formatDate(d) {
-  if (!d) return '';
-  const date = new Date(d);
-  if (isNaN(date)) return d;
-  return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-}
-
-function formatDateShort(d) {
-  if (!d) return '';
-  const date = new Date(d);
-  if (isNaN(date)) return d;
-  return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-function todayStr() {
-  return new Date().toISOString().split('T')[0];
+  const num = Number(n);
+  if (isNaN(num)) return 'Rp0';
+  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
 }
 
 function getState(item) {
@@ -71,7 +56,7 @@ export default function PekebunHargaTbsPage() {
       api.hargaTbs.latest(),
     ])
       .then(([list, aktif]) => {
-        setAllData(list);
+        setAllData(list.data || list || []);
         setAktifMap(aktif || {});
       })
       .catch((e) => toast.error(e.message))
@@ -173,7 +158,7 @@ export default function PekebunHargaTbsPage() {
           {['A', 'B', 'C'].map((kelas) => {
             const items = grouped[kelas] || [];
             if (items.length < 2) return null;
-            const sorted = [...items].sort((a, b) => a.dari_tanggal.localeCompare(b.dari_tanggal));
+            const sorted = [...items].sort((a, b) => (a.dari_tanggal || '').localeCompare(b.dari_tanggal || ''));
             const prev = sorted[sorted.length - 2];
             const curr = sorted[sorted.length - 1];
             if (!prev || !curr) return null;

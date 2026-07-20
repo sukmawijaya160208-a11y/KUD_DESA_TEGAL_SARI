@@ -7,6 +7,7 @@ import { api } from '@/lib/api';
 import { useLogo } from '@/hooks/useLogo';
 import FloatingOrbs from '@/components/auth/FloatingOrbs';
 import FloatingInput from '@/components/auth/FloatingInput';
+import DatePicker from '@/components/ui/DatePicker';
 import PasswordStrength from '@/components/auth/PasswordStrength';
 import { BENEFITS } from '@/components/auth/benefits';
 
@@ -186,7 +187,7 @@ export default function AuthPage() {
           <div className="relative z-10">
             <div className="w-20 h-auto max-h-20 max-w-[160px] rounded-2xl overflow-hidden bg-white/10 backdrop-blur border border-white/10 shadow-lg flex items-center justify-center mb-6 px-2 py-2">
               {logoUrl ? (
-                <img src={logoUrl} alt="KUD Desa Tegal Sari" className="w-full h-full max-h-16 object-contain" />
+                <img src={logoUrl} alt="KUD Desa Sari Subur" className="w-full h-full max-h-16 object-contain" />
               ) : (
                 <span className="text-white font-heading font-bold text-2xl px-3 py-1">K</span>
               )}
@@ -194,7 +195,7 @@ export default function AuthPage() {
             <h1 className="font-heading font-bold text-3xl lg:text-4xl text-white leading-tight mb-2">
               KUD Desa<br />
               <span className="bg-gradient-to-r from-primary-light via-blue-200 to-accent bg-clip-text text-transparent">
-                Tegal Sari
+                Sari Subur
               </span>
             </h1>
             <p className="text-white/50 text-sm mb-8 max-w-xs leading-relaxed">
@@ -446,7 +447,7 @@ export default function AuthPage() {
                       <Checkbox id="agree-terms" label={
                         <span>Saya menyetujui <button type="button" onClick={() => router.push('/syarat-ketentuan')}
                           className="text-primary hover:underline font-medium">Syarat & Ketentuan</button> dan <button type="button" onClick={() => router.push('/kebijakan-privasi')}
-                          className="text-primary hover:underline font-medium">Kebijakan Privasi</button> KUD Desa Tegal Sari</span>
+                          className="text-primary hover:underline font-medium">Kebijakan Privasi</button> KUD Desa Sari Subur</span>
                       } checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} required />
                       <button type="button" onClick={() => setRegStep(2)}
                         className="relative overflow-hidden w-full py-3 rounded-xl bg-primary text-white font-semibold text-base hover:bg-primary-dark active:scale-[0.98] transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-primary/20">
@@ -489,8 +490,8 @@ export default function AuthPage() {
                           onChange={updateReg('tempat_lahir')} required />
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <FloatingInput id="reg-tgl-lahir" label="Tanggal Lahir" type="date"
-                          value={reg.tanggal_lahir} onChange={updateReg('tanggal_lahir')} required />
+                        <DatePicker id="reg-tgl-lahir" label="Tanggal Lahir"
+                          value={reg.tanggal_lahir} onChange={(v) => setReg({ ...reg, tanggal_lahir: v })} />
                         <FloatingInput id="reg-wa" label="No. WhatsApp" value={reg.no_whatsapp}
                           onChange={updateReg('no_whatsapp')} required />
                       </div>

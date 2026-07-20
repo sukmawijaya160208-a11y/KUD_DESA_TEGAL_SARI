@@ -1,9 +1,9 @@
 ---
-name: kud-desa-tegal-sari
-description: Panduan pengembangan sistem KUD Desa Tegal Sari — full stack
+name: kud-desa-sari-subur
+description: Panduan pengembangan sistem KUD Desa Sari Subur — full stack
 ---
 
-# KUD Desa Tegal Sari
+# KUD Desa Sari Subur
 
 ## Stack
 - **Frontend**: Next.js 16 + React + JavaScript + Tailwind CSS v4

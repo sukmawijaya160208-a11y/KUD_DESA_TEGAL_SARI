@@ -5,11 +5,13 @@ import { api } from '@/lib/api';
 import * as XLSX from 'xlsx';
 import { useLogo } from '@/hooks/useLogo';
 import { useToast } from '@/components/ToastProvider';
+import { formatDate, formatRelative } from '@/lib/date';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import Modal from '@/components/ui/Modal';
+import DateRangePicker from '@/components/ui/DateRangePicker';
 import Badge from '@/components/ui/Badge';
 import { TableSkeleton } from '@/components/ui/Skeleton';
 import {
@@ -35,24 +37,6 @@ const STATUS_BADGE = {
 const STATUS_LABEL = { verified: 'Terverifikasi', rejected: 'Ditolak', pending: 'Menunggu', default: '-' };
 
 const PAGE_SIZES = [10, 25, 50, 100];
-
-function formatDate(d) {
-  if (!d) return '-';
-  return new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-function relativeTime(d) {
-  if (!d) return '';
-  const diff = Date.now() - new Date(d).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'baru saja';
-  if (mins < 60) return `${mins} menit lalu`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours} jam lalu`;
-  const days = Math.floor(hours / 24);
-  if (days < 30) return `${days} hari lalu`;
-  return formatDate(d);
-}
 
 function avatarColor(name) {
   let hash = 0;
@@ -99,6 +83,7 @@ export default function AdminUsersPage() {
   const [filterStatus, setFilterStatus] = useState('');
   const [filterDateFrom, setFilterDateFrom] = useState('');
   const [filterDateTo, setFilterDateTo] = useState('');
+  const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
   // --- Sort ---
   const [sortKey, setSortKey] = useState('created_at');
@@ -148,7 +133,7 @@ export default function AdminUsersPage() {
   useEffect(() => {
     let cancelled = false;
     api.admin.users.list()
-      .then(d => { if (!cancelled) { setData(d); setDataError(null); } })
+      .then(d => { if (!cancelled) { setData(d.data || []); setDataError(null); } })
       .catch((e) => { if (!cancelled) { setDataError(e.message); toast.error(e.message); } })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
@@ -538,10 +523,7 @@ export default function AdminUsersPage() {
             <option value="pending">Menunggu</option>
             <option value="rejected">Ditolak</option>
           </Select>
-          <input type="date" value={filterDateFrom} onChange={(e) => { setFilterDateFrom(e.target.value); setPage(1); }}
-            className="px-3 py-2.5 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all" title="Dari tanggal" />
-          <input type="date" value={filterDateTo} onChange={(e) => { setFilterDateTo(e.target.value); setPage(1); }}
-            className="px-3 py-2.5 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all" title="Sampai tanggal" />
+          <DateRangePicker value={dateRange} onChange={(v) => { setDateRange(v); setFilterDateFrom(v.start); setFilterDateTo(v.end); setPage(1); }} placeholder="Filter tanggal" className="min-w-[240px]" />
           <Button variant="outline" size="sm" onClick={() => { setImportData(null); setImportFile(null); setImportResult(null); setImportModal(true); }} className="whitespace-nowrap">
             <DocumentArrowDownIcon className="w-4 h-4 rotate-180" /> Import
           </Button>
@@ -664,7 +646,7 @@ export default function AdminUsersPage() {
                       {u.pekebun ? (
                         <div className="flex flex-col gap-0.5">
                           {STATUS_BADGE[u.pekebun.status] || <Badge status="pending" />}
-                          {u.pekebun.verified_at && <span className="text-[10px] text-gray-400">{relativeTime(u.pekebun.verified_at)}</span>}
+                          {u.pekebun.verified_at && <span className="text-[10px] text-gray-400">{formatRelative(u.pekebun.verified_at)}</span>}
                         </div>
                       ) : <span className="text-gray-400 text-xs">-</span>}
                     </td>
@@ -720,7 +702,7 @@ export default function AdminUsersPage() {
                     <td className="py-3 px-3 text-xs text-gray-500">
                       <div className="flex flex-col">
                         <span>{formatDate(u.created_at)}</span>
-                        <span className="text-[10px] text-gray-400">{relativeTime(u.created_at)}</span>
+                        <span className="text-[10px] text-gray-400">{formatRelative(u.created_at)}</span>
                       </div>
                     </td>
                     <td className="py-3 px-3">

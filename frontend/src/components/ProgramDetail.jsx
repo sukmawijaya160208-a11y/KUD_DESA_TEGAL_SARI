@@ -6,6 +6,7 @@ import {
   CheckCircleIcon, ChevronRightIcon, PhotoIcon,
   PencilSquareIcon,
 } from '@heroicons/react/24/outline';
+import { formatDate, formatDateShort } from '@/lib/date';
 
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',
@@ -140,10 +141,10 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
                   <p className="text-[10px] font-semibold text-blue-600/60 uppercase tracking-wider">Tanggal</p>
                   <p className="text-sm font-bold text-foreground mt-0.5">
                     {program.tanggal_mulai
-                      ? new Date(program.tanggal_mulai).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+                      ? formatDate(program.tanggal_mulai, 'dd MMM')
                       : '-'}
                     {program.tanggal_selesai &&
-                      ` - ${new Date(program.tanggal_selesai).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}`}
+                      ` - ${formatDateShort(program.tanggal_selesai)}`}
                   </p>
                 </div>
               </div>

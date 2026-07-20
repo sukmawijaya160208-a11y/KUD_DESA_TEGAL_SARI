@@ -6,6 +6,7 @@ const BACKEND_PORT = process.env.BACKEND_PORT || '8000';
 const PROD_DOMAIN = process.env.PROD_DOMAIN || '';
 
 const nextConfig: NextConfig = {
+  output: process.env.NODE_ENV === 'production' ? 'standalone' : undefined,
   turbopack: {
     root: process.cwd(),
   },

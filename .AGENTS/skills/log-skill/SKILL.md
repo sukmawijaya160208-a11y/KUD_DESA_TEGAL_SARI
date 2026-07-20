@@ -1,9 +1,9 @@
 ---
 name: log-skill
-description: Catat progres, keputusan arsitektur, dan konteks project KUD Desa Tegal Sari
+description: Catat progres, keputusan arsitektur, dan konteks project KUD Desa Sari Subur
 ---
 
-# Log Skill — KUD Desa Tegal Sari
+# Log Skill — KUD Desa Sari Subur
 
 Gunakan skill ini untuk mencatat atau membaca progres development.
 

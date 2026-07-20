@@ -32,7 +32,8 @@ class DatabaseSeeder extends Seeder
 
         Pengaturan::create(['key' => 'nama_ketua', 'value' => '']);
         Pengaturan::create(['key' => 'tahun_anggaran', 'value' => date('Y')]);
-        Pengaturan::create(['key' => 'nama_kud', 'value' => 'KUD Desa Tegal Sari']);
+        Pengaturan::create(['key' => 'nama_kud', 'value' => 'KUD Desa Sari Subur']);
+        Pengaturan::create(['key' => 'logo_kud', 'value' => '/storage/profil/logo.jpeg']);
 
         $this->call(BlogSeeder::class);
     }

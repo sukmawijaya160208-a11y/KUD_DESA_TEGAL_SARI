@@ -71,7 +71,7 @@ export default function PekebunTentangAplikasiPage() {
               <div className="mt-8 w-16 h-0.5 bg-white/20 rounded-full mx-auto lg:mx-0" />
 
               <p className="mt-8 text-white/60 text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
-                {data.teks ? data.teks.split('\n')[0] : 'Membangun ekosistem digital untuk KUD Desa Tegal Sari.'}
+                {data.teks ? data.teks.split('\n')[0] : 'Membangun ekosistem digital untuk KUD Desa Sari Subur.'}
               </p>
 
               <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 justify-center lg:justify-start text-sm animate-slide-up-fade animate-delay-300">
@@ -202,7 +202,7 @@ export default function PekebunTentangAplikasiPage() {
           <p className="text-gray-400 text-sm italic">Wassalamu&apos;alaikum, Wr.Wb</p>
           <div className="flex items-center justify-center gap-1.5 mt-3 text-gray-400 text-xs">
             <SparklesIcon className="w-3.5 h-3.5" />
-            <span>KUD Desa Tegal Sari</span>
+            <span>KUD Desa Sari Subur</span>
           </div>
         </div>
       </section>

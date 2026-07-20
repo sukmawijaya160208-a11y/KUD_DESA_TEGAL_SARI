@@ -8,6 +8,7 @@ import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import { TableSkeleton } from '@/components/ui/Skeleton';
+import { formatDate } from '@/lib/date';
 import {
   BookOpenIcon, EyeIcon, CheckCircleIcon, XCircleIcon,
   XMarkIcon, ChevronDownIcon, ChevronUpIcon, TrashIcon,
@@ -32,7 +33,7 @@ export default function AdminPendaftaranPage() {
 
   const load = () => {
     api.admin.pendaftaran.list()
-      .then((d) => setData(d.map((item) => ({ ...item, data: typeof item.data === 'string' ? (() => { try { return JSON.parse(item.data); } catch { return item.data; } })() : item.data }))))
+      .then((d) => setData((d.data || []).map((item) => ({ ...item, data: typeof item.data === 'string' ? (() => { try { return JSON.parse(item.data); } catch { return item.data; } })() : item.data }))))
       .catch((e) => toast.error(e.message))
       .finally(() => setLoading(false));
   };
@@ -111,7 +112,7 @@ export default function AdminPendaftaranPage() {
                       <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
                         <span>{d.programKud?.nama}</span>
                         <span className="text-gray-300">|</span>
-                        <span className="flex items-center gap-1"><ClockIcon className="w-3 h-3" />{new Date(d.created_at).toLocaleDateString('id-ID')}</span>
+                        <span className="flex items-center gap-1"><ClockIcon className="w-3 h-3" />{formatDate(d.created_at)}</span>
                       </div>
                     </div>
                   </div>

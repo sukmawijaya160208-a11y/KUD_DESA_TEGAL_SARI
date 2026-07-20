@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\HargaTbs;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class HargaTbsController extends Controller
@@ -13,6 +14,11 @@ class HargaTbsController extends Controller
     {
         if ($data instanceof Collection) {
             return $data->map(fn ($item) => $item ? $this->formatItem($item) : $item);
+        }
+
+        if ($data instanceof LengthAwarePaginator) {
+            $data->getCollection()->transform(fn ($item) => $item ? $this->formatItem($item) : $item);
+            return $data;
         }
 
         return $this->formatItem($data);

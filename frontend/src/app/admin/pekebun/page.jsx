@@ -10,12 +10,14 @@ import Select from '@/components/ui/Select';
 import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import PrintButton from '@/components/PrintButton';
+import DatePicker from '@/components/ui/DatePicker';
 import { motion } from 'framer-motion';
 import {
   PencilSquareIcon, TrashIcon, PlusIcon, EyeIcon, XMarkIcon,
   MagnifyingGlassIcon, UsersIcon, CheckCircleIcon, ClockIcon,
   PhotoIcon, IdentificationIcon, DevicePhoneMobileIcon,
 } from '@heroicons/react/24/outline';
+import { formatDate } from '@/lib/date';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -251,7 +253,7 @@ export default function AdminPekebunPage() {
         </div>
         <div className="flex items-center gap-2">
           <PrintButton
-            title="Data Pekebun - KUD Desa Tegal Sari"
+            title="Data Pekebun - KUD Desa Sari Subur"
             fetchAll={() => api.admin.pekebun.list({ per_page: 9999 }).then((res) => res.data || res)}
             renderContent={(items) => `
               <table class="print-table">
@@ -388,7 +390,7 @@ export default function AdminPekebunPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Input label="Tempat Lahir" value={form.tempat_lahir} onChange={(e) => setForm({ ...form, tempat_lahir: e.target.value })} required />
-            <Input label="Tanggal Lahir" type="date" value={form.tanggal_lahir} onChange={(e) => setForm({ ...form, tanggal_lahir: e.target.value })} required />
+            <DatePicker label="Tanggal Lahir" value={form.tanggal_lahir} onChange={(v) => setForm({ ...form, tanggal_lahir: v })} />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Input label="No. WhatsApp" value={form.no_whatsapp} onChange={(e) => setForm({ ...form, no_whatsapp: e.target.value })} required placeholder="08xxxxxxxxxx" />
@@ -426,7 +428,7 @@ export default function AdminPekebunPage() {
                 ['NIK', detailModal.nik],
                 ['No. KK', detailModal.no_kk],
                 ['Tempat Lahir', detailModal.tempat_lahir],
-                ['Tanggal Lahir', detailModal.tanggal_lahir ? new Date(detailModal.tanggal_lahir).toLocaleDateString('id-ID') : '-'],
+                ['Tanggal Lahir', detailModal.tanggal_lahir ? formatDate(detailModal.tanggal_lahir) : '-'],
                 ['WhatsApp', detailModal.no_whatsapp],
                 ['Lahan', `${detailModal.lahan?.length || 0} lahan`],
                 ['Alamat', detailModal.alamat],
@@ -485,7 +487,7 @@ export default function AdminPekebunPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Input label="Tempat Lahir" value={editModal?.tempat_lahir || ''} onChange={(e) => setEditModal({ ...editModal, tempat_lahir: e.target.value })} required />
-            <Input label="Tanggal Lahir" type="date" value={editModal?.tanggal_lahir || ''} onChange={(e) => setEditModal({ ...editModal, tanggal_lahir: e.target.value })} required />
+            <DatePicker label="Tanggal Lahir" value={editModal?.tanggal_lahir || ''} onChange={(v) => setEditModal({ ...editModal, tanggal_lahir: v })} />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Input label="No. WhatsApp" value={editModal?.no_whatsapp || ''} onChange={(e) => setEditModal({ ...editModal, no_whatsapp: e.target.value })} />

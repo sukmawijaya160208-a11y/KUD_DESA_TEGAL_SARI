@@ -3,7 +3,7 @@
 # Aktifkan: systemctl daemon-reload && systemctl enable --now kud-nextjs
 
 [Unit]
-Description=KUD Desa Tegal Sari — Next.js Frontend
+Description=KUD Desa Sari Subur — Next.js Frontend
 After=network.target
 
 [Service]

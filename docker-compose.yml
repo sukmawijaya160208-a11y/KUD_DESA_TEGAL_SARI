@@ -1,0 +1,59 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kud-backend
+    restart: unless-stopped
+    volumes:
+      - backend-storage:/app/storage
+      - backend-database:/app/database
+      - ./backend/.env:/app/.env
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_CONNECTION=sqlite
+    ports:
+      - "8000:8000"
+    networks:
+      - kud-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: kud-frontend
+    restart: unless-stopped
+    environment:
+      - BACKEND_URL=http://backend:8000
+      - NEXT_PUBLIC_API_URL=/api
+      - NEXT_TELEMETRY_DISABLED=1
+    ports:
+      - "3000:3000"
+    networks:
+      - kud-network
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: kud-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - backend-storage:/var/www/storage:ro
+    networks:
+      - kud-network
+    depends_on:
+      - backend
+      - frontend
+
+networks:
+  kud-network:
+    driver: bridge
+
+volumes:
+  backend-storage:
+  backend-database:

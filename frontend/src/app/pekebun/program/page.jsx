@@ -7,6 +7,7 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import ProgramDetail from '@/components/ProgramDetail';
+import { formatDate, formatDateShort } from '@/lib/date';
 import {
   ClipboardDocumentListIcon, CheckCircleIcon, CalendarDaysIcon, UsersIcon,
   XMarkIcon, ChevronRightIcon, DocumentTextIcon, ArrowLeftIcon,
@@ -45,8 +46,8 @@ export default function PekebunProgramPage() {
   const load = () => {
     Promise.all([api.pekebun.programTersedia(), api.pekebun.programSaya()])
       .then(([t, s]) => {
-        setTersedia(t.map(formatProgram));
-        setProgramSaya(s.map(formatReg));
+        setTersedia((t.data || t || []).map(formatProgram));
+        setProgramSaya((s.data || s || []).map(formatReg));
       })
       .catch((e) => toast.error(e.message))
       .finally(() => setLoading(false));
@@ -174,8 +175,8 @@ export default function PekebunProgramPage() {
                     {p.tanggal_mulai && (
                       <span className="flex items-center gap-1">
                         <CalendarDaysIcon className="w-3.5 h-3.5" />
-                        {new Date(p.tanggal_mulai).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
-                        {p.tanggal_selesai && ` - ${new Date(p.tanggal_selesai).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}`}
+                        {formatDate(p.tanggal_mulai, 'dd MMM')}
+                        {p.tanggal_selesai && ` - $                        {formatDateShort(p.tanggal_selesai)}`}
                       </span>
                     )}
                     {p.kuota && (
@@ -312,7 +313,7 @@ export default function PekebunProgramPage() {
                         onChange={(e) => setSelectedLahan(e.target.value)} className="accent-primary" />
                       <div>
                         <p className="font-medium text-sm text-foreground">{l.alamat_lahan}</p>
-                        <p className="text-xs text-gray-500">{l.jenis_surat} — {Number(l.luas_lahan_m2).toLocaleString()} M²</p>
+                        <p className="text-xs text-gray-500">{l.jenis_surat} — {Number(l.luas_lahan_m2 || 0).toLocaleString()} M²</p>
                       </div>
                     </div>
                   </label>

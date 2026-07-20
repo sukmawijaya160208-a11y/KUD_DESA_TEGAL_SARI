@@ -67,7 +67,7 @@ export default function Home() {
     { q: 'Dulu verifikasi data butuh waktu berminggu-minggu. Sekarang cukup upload dari rumah, 2 hari sudah terverifikasi. Mantab!', n: 'Bambang', r: 'Pekebun Sawit, Tugu Sari' },
   ];
   const faqData = [
-    { q: 'Apa itu KUD Desa Tegal Sari?', a: 'KUD (Koperasi Unit Desa) Tegal Sari adalah lembaga koperasi yang bergerak di bidang perkebunan kelapa sawit, melayani pekebun di Kecamatan Megang Sakti dan sekitarnya dalam pengelolaan lahan, program PSR, dan pemasaran TBS.' },
+    { q: 'Apa itu KUD Desa Sari Subur?', a: 'KUD (Koperasi Unit Desa) Sari Subur adalah lembaga koperasi yang bergerak di bidang perkebunan kelapa sawit, melayani pekebun di Kecamatan Megang Sakti dan sekitarnya dalam pengelolaan lahan, program PSR, dan pemasaran TBS.' },
     { q: 'Siapa yang bisa mendaftar jadi anggota?', a: 'Setiap pekebun kelapa sawit yang berdomisili di wilayah Kecamatan Megang Sakti, Kabupaten Musi Rawas, dan sekitarnya dapat mendaftar menjadi anggota KUD dengan melengkapi data diri, KTP, KK, dan dokumen pendukung lainnya.' },
     { q: 'Apa itu Program PSR?', a: 'PSR (Peremajaan Sawit Rakyat) adalah program pemerintah untuk meremajakan tanaman sawit pekebun yang sudah tua atau tidak produktif. KUD membantu pekebun dalam proses pendaftaran, verifikasi, dan pencairan bantuan.' },
     { q: 'Bagaimana cara cek harga TBS terkini?', a: 'Harga TBS (Tandan Buah Segar) diperbarui secara berkala oleh KUD dan dapat diakses melalui aplikasi di menu Harga TBS. Harga dibedakan berdasarkan kelas mutu A, B, dan C sesuai standar yang berlaku.' },
@@ -138,9 +138,9 @@ export default function Home() {
               <motion.div whileHover={{ rotate: 5 }}
                 className={'flex items-center justify-center overflow-hidden transition-all h-10 max-w-[160px] rounded-lg ' + (scrolled ? 'bg-white shadow-sm px-1' : 'bg-white/15 backdrop-blur-sm px-0.5')}
               >
-                {logoUrl ? <img src={logoUrl} alt="KUD Desa Tegal Sari" className="h-full w-auto max-h-10 object-contain" /> : <span className="font-heading font-bold text-lg text-white px-2">K</span>}
+                {logoUrl ? <img src={logoUrl} alt="KUD Desa Sari Subur" className="h-full w-auto max-h-10 object-contain" /> : <span className="font-heading font-bold text-lg text-white px-2">K</span>}
               </motion.div>
-              <span className={'font-heading font-bold tracking-tight transition-colors ' + (scrolled ? 'text-foreground' : 'text-white')}>KUD Tegal Sari</span>
+              <span className={'font-heading font-bold tracking-tight transition-colors ' + (scrolled ? 'text-foreground' : 'text-white')}>KUD Sari Subur</span>
             </motion.button>
             <div className="hidden md:flex items-center gap-1">
               {NAV_LINKS.map((item) => {
@@ -215,7 +215,7 @@ export default function Home() {
                 <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
                   {logoUrl ? <img src={logoUrl} alt="" className="w-full h-full object-contain p-0.5" /> : <span className="font-heading font-bold text-sm text-white">K</span>}
                 </div>
-                <span className="font-heading font-bold text-foreground text-sm">KUD Tegal Sari</span>
+                <span className="font-heading font-bold text-foreground text-sm">KUD Sari Subur</span>
               </div>
               <button onClick={() => setMobileOpen(false)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 cursor-pointer">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -249,7 +249,7 @@ export default function Home() {
                 className="w-full py-2.5 rounded-xl bg-primary text-white font-semibold text-sm cursor-pointer shadow-sm">
                 Daftar / Masuk
               </motion.button>
-              <p className="text-center text-[10px] text-gray-400">KUD Desa Tegal Sari &copy; {new Date().getFullYear()}</p>
+              <p className="text-center text-[10px] text-gray-400">KUD Desa Sari Subur &copy; {new Date().getFullYear()}</p>
             </div>
           </div>
         </motion.div>
@@ -288,7 +288,7 @@ export default function Home() {
               ))}
             </motion.h1>
             <motion.p variants={heroItemVariants} className="text-lg md:text-xl text-white/60 max-w-3xl mx-auto mb-3 leading-relaxed">
-              KUD Desa Tegal Sari menghadirkan sistem informasi terpadu untuk pengelolaan data anggota,
+              KUD Desa Sari Subur menghadirkan sistem informasi terpadu untuk pengelolaan data anggota,
               lahan sawit, program PSR, dan hasil panen TBS secara digital. Daftar sekarang dan nikmati
               kemudahan layanan koperasi berbasis teknologi tanpa harus bolak-balik ke kantor.
             </motion.p>
@@ -327,7 +327,7 @@ export default function Home() {
                 TIM MANAJEMEN
               </div>
               <h2 className="font-heading font-bold text-white text-2xl md:text-3xl mb-6">
-                Pengurus <span className="bg-gradient-to-r from-primary-light to-blue-300 bg-clip-text text-transparent">KUD Tegal Sari</span>
+                Pengurus <span className="bg-gradient-to-r from-primary-light to-blue-300 bg-clip-text text-transparent">KUD Sari Subur</span>
               </h2>
               <HeroCards />
             </motion.div>
@@ -364,7 +364,7 @@ export default function Home() {
               Kenapa <span className="text-accent">Bergabung</span> dengan KUD?
             </h2>
             <p className="text-gray-500 max-w-3xl mx-auto">
-              Nikmati berbagai kemudahan dan keuntungan dengan menjadi anggota aktif KUD Desa Tegal Sari.
+              Nikmati berbagai kemudahan dan keuntungan dengan menjadi anggota aktif KUD Desa Sari Subur.
             </p>
           </motion.div>
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }}
@@ -403,7 +403,7 @@ export default function Home() {
             Koperasi <span className="text-primary">Modern</span> untuk Pekebun Sawit
           </h2>
           <p className="text-gray-500 max-w-3xl mx-auto leading-relaxed">
-            KUD Desa Tegal Sari didirikan pada tahun 2010 dengan tujuan meningkatkan kesejahteraan pekebun sawit
+            KUD Desa Sari Subur didirikan pada tahun 2010 dengan tujuan meningkatkan kesejahteraan pekebun sawit
             di Kecamatan Megang Sakti melalui pelayanan koperasi yang transparan, profesional, dan berbasis teknologi.
           </p>
         </motion.div>
@@ -419,7 +419,7 @@ export default function Home() {
               Sejarah Singkat
             </h3>
             <p className="text-gray-600 text-sm leading-relaxed mb-4 relative">
-              Berawal dari perkumpulan pekebun sawit binaan CV. Sumatera Multi Jaya, KUD Desa Tegal Sari resmi
+              Berawal dari perkumpulan pekebun sawit binaan CV. Sumatera Multi Jaya, KUD Desa Sari Subur resmi
               berdiri pada 12 Juli 2010. Dengan modal awal 50 anggota, koperasi ini terus berkembang hingga kini
               memiliki lebih dari 1.250 anggota aktif.
             </p>
@@ -692,7 +692,7 @@ export default function Home() {
           </motion.div>
           <h2 className="text-3xl lg:text-4xl font-heading font-bold text-white mb-4">
             Siap Bergabung dengan{' '}
-            <span className="text-primary-light">KUD Desa Tegal Sari</span>?
+            <span className="text-primary-light">KUD Desa Sari Subur</span>?
           </h2>
           <p className="text-white/70 max-w-2xl mx-auto mb-4 leading-relaxed">
             Lebih dari <strong className="text-white">1.250 pekebun</strong> telah merasakan manfaat layanan digital KUD.
@@ -721,9 +721,9 @@ export default function Home() {
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-10 max-w-[160px] rounded-lg bg-white/10 flex items-center justify-center overflow-hidden px-1">
-                  {logoUrl ? <img src={logoUrl} alt="KUD Desa Tegal Sari" className="h-full w-auto max-h-10 object-contain" /> : <span className="font-heading font-bold text-white text-lg px-2">K</span>}
+                  {logoUrl ? <img src={logoUrl} alt="KUD Desa Sari Subur" className="h-full w-auto max-h-10 object-contain" /> : <span className="font-heading font-bold text-white text-lg px-2">K</span>}
                 </div>
-                <span className="font-heading font-bold text-white">KUD Tegal Sari</span>
+                <span className="font-heading font-bold text-white">KUD Sari Subur</span>
               </div>
               <p className="text-gray-500 text-xs leading-relaxed mb-4 max-w-xs">
                 Koperasi Unit Digital yang melayani pekebun sawit di Kabupaten Musi Rawas, Sumatera Selatan.
@@ -755,7 +755,7 @@ export default function Home() {
           </div>
           <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-gray-500 text-xs">
-              &copy; {new Date().getFullYear()} KUD Desa Tegal Sari — CV. Sumatera Multi Jaya. All rights reserved.
+              &copy; {new Date().getFullYear()} KUD Desa Sari Subur — CV. Sumatera Multi Jaya. All rights reserved.
             </p>
             <p className="text-gray-600 text-[10px]">
               Developer: M. Sukma Wijaya | UX Designer: Dedek Sulaiman

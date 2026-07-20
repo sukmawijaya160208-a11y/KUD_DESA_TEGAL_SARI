@@ -101,8 +101,8 @@ Beasiswa BPDPKS memberikan kuliah gratis bagi mahasiswa yang lolos seleksi. Fasi
             [
                 'title' => 'Kunjungan dan Pengawasan Dinas Perkebunan Mura terhadap Program PSR KUD Sari Subur',
                 'slug' => 'kunjungan-dinas-perkebunan-psr-kud-sari-subur',
-                'excerpt' => 'Kunjungan dan pengawasan dari Dinas Perkebunan Kabupaten Musi Rawas terhadap pelaksanaan program PSR KUD Sari Subur Desa Tegal Sari.',
-                'content' => 'Kunjungan dan pengawasan dari Dinas Perkebunan Kabupaten Musi Rawas terhadap pelaksanaan program PSR KUD Sari Subur Desa Tegal Sari. Kegiatan ini merupakan bagian dari monitoring dan evaluasi program Peremajaan Sawit Rakyat (PSR) yang sedang berjalan di wilayah Kecamatan Megang Sakti.
+                'excerpt' => 'Kunjungan dan pengawasan dari Dinas Perkebunan Kabupaten Musi Rawas terhadap pelaksanaan program PSR KUD Sari Subur Desa Sari Subur.',
+                'content' => 'Kunjungan dan pengawasan dari Dinas Perkebunan Kabupaten Musi Rawas terhadap pelaksanaan program PSR KUD Sari Subur Desa Sari Subur. Kegiatan ini merupakan bagian dari monitoring dan evaluasi program Peremajaan Sawit Rakyat (PSR) yang sedang berjalan di wilayah Kecamatan Megang Sakti.
 
 Program PSR (Peremajaan Sawit Rakyat) adalah program pemerintah untuk meremajakan tanaman sawit pekebun yang sudah tua atau tidak produktif. KUD membantu pekebun dalam proses pendaftaran, verifikasi, dan pencairan bantuan. Dengan adanya kunjungan langsung dari Dinas Perkebunan, diharapkan program PSR dapat berjalan sesuai dengan ketentuan dan tepat sasaran.',
                 'category' => 'PSR',
@@ -112,10 +112,10 @@ Program PSR (Peremajaan Sawit Rakyat) adalah program pemerintah untuk meremajaka
             [
                 'title' => 'MoU Tumbang Chiping Program PSR KUD Sari Subur dengan PT. Anggoro Lestari',
                 'slug' => 'mou-tumbang-chiping-psr-kud-sari-subur',
-                'excerpt' => 'Penandatanganan MoU Tumbang Chiping program PSR KUD Sari Subur Desa Tegal Sari dengan PT. Anggoro Lestari di Dinas Perkebunan Kabupaten Musi Rawas.',
-                'content' => 'MoU Tumbang Chiping program PSR KUD Sari Subur Desa Tegalsari Kecamatan Megang Sakti Kabupaten Musi Rawas dengan PT. Anggoro Lestari di Dinas Perkebunan Kabupaten Musi Rawas. Kerjasama ini merupakan langkah strategis dalam pelaksanaan program Peremajaan Sawit Rakyat (PSR) di wilayah Kabupaten Musi Rawas.
+                'excerpt' => 'Penandatanganan MoU Tumbang Chiping program PSR KUD Sari Subur Desa Sari Subur dengan PT. Anggoro Lestari di Dinas Perkebunan Kabupaten Musi Rawas.',
+                'content' => 'MoU Tumbang Chiping program PSR KUD Sari Subur Desa Sarisubur Kecamatan Megang Sakti Kabupaten Musi Rawas dengan PT. Anggoro Lestari di Dinas Perkebunan Kabupaten Musi Rawas. Kerjasama ini merupakan langkah strategis dalam pelaksanaan program Peremajaan Sawit Rakyat (PSR) di wilayah Kabupaten Musi Rawas.
 
-Dengan adanya kerjasama ini, diharapkan proses tumbang chiping (penumbangan dan pengecekan) tanaman sawit tua dapat berjalan dengan lancar dan sesuai dengan standar operasional prosedur yang telah ditetapkan, sehingga program PSR dapat memberikan manfaat yang optimal bagi pekebun sawit di Desa Tegal Sari dan sekitarnya.',
+Dengan adanya kerjasama ini, diharapkan proses tumbang chiping (penumbangan dan pengecekan) tanaman sawit tua dapat berjalan dengan lancar dan sesuai dengan standar operasional prosedur yang telah ditetapkan, sehingga program PSR dapat memberikan manfaat yang optimal bagi pekebun sawit di Desa Sari Subur dan sekitarnya.',
                 'category' => 'PSR',
                 'featured' => false,
                 'media' => ['/images/blog/IMG_20191206_170602.jpg'],

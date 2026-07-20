@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useCallback, memo, startTransition, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { formatDate } from '@/lib/date';
 import { api } from '@/lib/api';
+import { useToast } from '@/components/ToastProvider';
 import Card from '@/components/ui/Card';
 import {
   ClockIcon, CheckCircleIcon, XCircleIcon,
@@ -53,7 +55,7 @@ const RiwayatRow = memo(function RiwayatRow({ d }) {
       </td>
       <td className="py-3 px-3 text-sm text-foreground font-medium">{d.user?.name}</td>
       <td className="py-3 px-3 text-sm text-gray-500 max-w-[300px] truncate">{d.catatan || '-'}</td>
-      <td className="py-3 px-3 text-sm text-gray-500">{new Date(d.created_at).toLocaleDateString('id-ID')}</td>
+      <td className="py-3 px-3 text-sm text-gray-500">{formatDate(d.created_at)}</td>
     </motion.tr>
   );
 });
@@ -66,6 +68,7 @@ export default function VerifikatorRiwayatPage() {
   const [search, setSearch] = useState('');
   const [filterTindakan, setFilterTindakan] = useState('');
   const [page, setPage] = useState(1);
+  const toast = useToast();
   const searchTimer = useRef(null);
 
   const fetchData = useCallback(() => {
@@ -79,13 +82,13 @@ export default function VerifikatorRiwayatPage() {
           setData(res.data);
           setMeta({ currentPage: res.current_page, lastPage: res.last_page, total: res.total });
         } else {
-          setData(res);
-          setMeta({ currentPage: 1, lastPage: 1, total: res.length });
+          setData(Array.isArray(res) ? res : []);
+          setMeta(Array.isArray(res) ? { currentPage: 1, lastPage: 1, total: res.length } : null);
         }
       }))
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [page, search, filterTindakan]);
+  }, [page, search, filterTindakan, toast]);
 
   const fetchStats = useCallback(() => {
     api.verifikator.statsRiwayat()

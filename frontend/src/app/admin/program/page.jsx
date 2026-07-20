@@ -9,7 +9,9 @@ import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import Textarea from '@/components/ui/Textarea';
 import Modal from '@/components/ui/Modal';
+import DatePicker from '@/components/ui/DatePicker';
 import ProgramDetail from '@/components/ProgramDetail';
+import { formatDate, formatDateShort } from '@/lib/date';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ClipboardDocumentListIcon, PlusIcon, PencilSquareIcon, TrashIcon,
@@ -108,8 +110,8 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
           {program.tanggal_mulai && (
             <span className="flex items-center gap-1">
               <CalendarDaysIcon className="w-3.5 h-3.5" />
-              {new Date(program.tanggal_mulai).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-              {program.tanggal_selesai && ` - ${new Date(program.tanggal_selesai).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}`}
+              {formatDate(program.tanggal_mulai)}
+              {program.tanggal_selesai && ` - ${formatDate(program.tanggal_selesai)}`}
             </span>
           )}
           {kuota && (
@@ -196,7 +198,7 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
                               <td className="py-1.5 pr-2 text-foreground">{pp.pekebun?.nama || '-'}</td>
                               <td className="py-1.5 pr-2 text-gray-500">{pp.pekebun?.nik || '-'}</td>
                               <td className="py-1.5 pr-2 text-gray-500">
-                                {new Date(pp.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                                {formatDate(pp.created_at, 'dd MMM')}
                               </td>
                               <td className="py-1.5">
                                 <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-bold ${STATUS_CLASS[pp.status] || 'text-gray-500 bg-gray-50'}`}>
@@ -280,8 +282,8 @@ export default function AdminProgramPage() {
     p.per_page = params.per_page || 20;
     api.admin.program.list(Object.keys(p).length ? p : undefined)
       .then((res) => {
-        setData(res.data || res);
-        setMeta(res.meta || null);
+        setData(res.data || []);
+        setMeta(res.last_page > 1 ? { current_page: res.current_page, last_page: res.last_page } : null);
       })
       .catch((e) => toast.error(e.message))
       .finally(() => setLoading(false));
@@ -463,87 +465,67 @@ export default function AdminProgramPage() {
         </select>
       </motion.div>
 
-      <AnimatePresence>
-        {showForm && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden mb-6"
-          >
-            <Card className="border border-primary/20 shadow-md shadow-primary/5">
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
-                <h2 className="font-bold text-foreground flex items-center gap-2">
-                  {editing ? <PencilSquareIcon className="w-5 h-5 text-primary" /> : <PlusIcon className="w-5 h-5 text-primary" />}
-                  {editing ? 'Edit Program' : 'Tambah Program Baru'}
-                </h2>
-                <button onClick={resetForm} className="p-1 text-gray-400 hover:text-foreground transition-colors cursor-pointer">
-                  <XMarkIcon className="w-5 h-5" />
+      <Modal open={showForm} onClose={resetForm} title={editing ? 'Edit Program' : 'Tambah Program Baru'} maxWidth="max-w-2xl">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input label="Nama Program" value={form.nama} onChange={(e) => setForm({ ...form, nama: e.target.value })} required placeholder="PSR - Peremajaan Sawit Rakyat" />
+            <Select label="Jenis" value={form.jenis} onChange={(e) => setForm({ ...form, jenis: e.target.value })}>
+              {JENIS_OPTIONS.map((j) => (<option key={j} value={j}>{j}</option>))}
+            </Select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-foreground/80 mb-2">Foto Program</label>
+            <div className="flex flex-wrap gap-3">
+              {form.foto.map((url, idx) => (
+                <div key={idx} className="relative w-24 h-24 rounded-xl overflow-hidden border border-border bg-muted group">
+                  <img src={url} alt="" className="w-full h-full object-cover" />
+                  <button type="button" onClick={() => removeFoto(idx)}
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-destructive text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-lg">
+                    <XMarkIcon className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+              <label className="w-24 h-24 rounded-xl border-2 border-dashed border-border bg-muted/50 flex items-center justify-center cursor-pointer hover:bg-muted hover:border-primary/40 transition-all">
+                <div className="flex flex-col items-center gap-1">
+                  <PhotoIcon className="w-6 h-6 text-gray-300" />
+                  <span className="text-[10px] text-gray-400">Tambah</span>
+                </div>
+                <input type="file" className="hidden" accept="image/*" onChange={handleFotoUpload} />
+              </label>
+            </div>
+          </div>
+
+          <Textarea label="Deskripsi Program" value={form.deskripsi} onChange={(e) => setForm({ ...form, deskripsi: e.target.value })} rows={3} placeholder="Deskripsi lengkap program..." />
+
+          <div>
+            <label className="block text-sm font-medium text-foreground/80 mb-2">Persyaratan Dokumen</label>
+            <div className="flex flex-wrap gap-2">
+              {ALL_PERSYARATAN.map((p) => (
+                <button key={p.value} type="button" onClick={() => togglePersyaratan(p.value)}
+                  className={`px-3 py-1.5 rounded-xl text-sm font-medium border transition-all cursor-pointer ${form.persyaratan.includes(p.value) ? 'bg-primary text-white border-primary shadow-sm' : 'bg-white text-gray-600 border-border hover:border-primary/40'}`}>
+                  {form.persyaratan.includes(p.value) && <CheckCircleIcon className="w-3.5 h-3.5 inline mr-1" />}
+                  {p.label}
                 </button>
-              </div>
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input label="Nama Program" value={form.nama} onChange={(e) => setForm({ ...form, nama: e.target.value })} required placeholder="PSR - Peremajaan Sawit Rakyat" />
-                  <Select label="Jenis" value={form.jenis} onChange={(e) => setForm({ ...form, jenis: e.target.value })}>
-                    {JENIS_OPTIONS.map((j) => (<option key={j} value={j}>{j}</option>))}
-                  </Select>
-                </div>
+              ))}
+            </div>
+          </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-foreground/80 mb-2">Foto Program</label>
-                  <div className="flex flex-wrap gap-3">
-                    {form.foto.map((url, idx) => (
-                      <div key={idx} className="relative w-24 h-24 rounded-xl overflow-hidden border border-border bg-muted group">
-                        <img src={url} alt="" className="w-full h-full object-cover" />
-                        <button type="button" onClick={() => removeFoto(idx)}
-                          className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-destructive text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-lg">
-                          <XMarkIcon className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ))}
-                    <label className="w-24 h-24 rounded-xl border-2 border-dashed border-border bg-muted/50 flex items-center justify-center cursor-pointer hover:bg-muted hover:border-primary/40 transition-all">
-                      <div className="flex flex-col items-center gap-1">
-                        <PhotoIcon className="w-6 h-6 text-gray-300" />
-                        <span className="text-[10px] text-gray-400">Tambah</span>
-                      </div>
-                      <input type="file" className="hidden" accept="image/*" onChange={handleFotoUpload} />
-                    </label>
-                  </div>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <DatePicker label="Tanggal Mulai" value={form.tanggal_mulai} onChange={(v) => setForm({ ...form, tanggal_mulai: v })} />
+            <DatePicker label="Tanggal Selesai" value={form.tanggal_selesai} onChange={(v) => setForm({ ...form, tanggal_selesai: v })} />
+            <Input label="Kuota Pendaftar" type="number" min="0" value={form.kuota} onChange={(e) => setForm({ ...form, kuota: e.target.value })} placeholder="Maksimal peserta" />
+          </div>
 
-                <Textarea label="Deskripsi Program" value={form.deskripsi} onChange={(e) => setForm({ ...form, deskripsi: e.target.value })} rows={3} placeholder="Deskripsi lengkap program..." />
-
-                <div>
-                  <label className="block text-sm font-medium text-foreground/80 mb-2">Persyaratan Dokumen</label>
-                  <div className="flex flex-wrap gap-2">
-                    {ALL_PERSYARATAN.map((p) => (
-                      <button key={p.value} type="button" onClick={() => togglePersyaratan(p.value)}
-                        className={`px-3 py-1.5 rounded-xl text-sm font-medium border transition-all cursor-pointer ${form.persyaratan.includes(p.value) ? 'bg-primary text-white border-primary shadow-sm' : 'bg-white text-gray-600 border-border hover:border-primary/40'}`}>
-                        {form.persyaratan.includes(p.value) && <CheckCircleIcon className="w-3.5 h-3.5 inline mr-1" />}
-                        {p.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Input label="Tanggal Mulai" type="date" value={form.tanggal_mulai} onChange={(e) => setForm({ ...form, tanggal_mulai: e.target.value })} />
-                  <Input label="Tanggal Selesai" type="date" value={form.tanggal_selesai} onChange={(e) => setForm({ ...form, tanggal_selesai: e.target.value })} />
-                  <Input label="Kuota Pendaftar" type="number" min="0" value={form.kuota} onChange={(e) => setForm({ ...form, kuota: e.target.value })} placeholder="Maksimal peserta" />
-                </div>
-
-                <div className="flex gap-2 justify-end pt-2">
-                  <Button variant="secondary" type="button" onClick={resetForm}>Batal</Button>
-                  <Button type="submit" loading={submitting}>
-                    {editing ? <PencilSquareIcon className="w-4 h-4" /> : <PlusIcon className="w-4 h-4" />}
-                    {editing ? 'Simpan Perubahan' : 'Simpan Program'}
-                  </Button>
-                </div>
-              </form>
-            </Card>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <div className="flex gap-2 justify-end pt-2">
+            <Button variant="secondary" type="button" onClick={resetForm}>Batal</Button>
+            <Button type="submit" loading={submitting}>
+              {editing ? <PencilSquareIcon className="w-4 h-4" /> : <PlusIcon className="w-4 h-4" />}
+              {editing ? 'Simpan Perubahan' : 'Simpan Program'}
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {data.length === 0 && !search && !filterJenis ? (
         <motion.div variants={fadeUp} className="text-center py-20">

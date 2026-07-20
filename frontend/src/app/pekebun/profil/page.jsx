@@ -7,8 +7,10 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
+import DatePicker from '@/components/ui/DatePicker';
 import { CardSkeleton } from '@/components/ui/Skeleton';
 import { UserIcon } from '@heroicons/react/24/outline';
+import { formatDate } from '@/lib/date';
 
 function UploadField({ label, current, folder, onUpload }) {
   const toast = useToast();
@@ -76,21 +78,6 @@ export default function PekebunProfilPage() {
 
   if (loading) return <div className="p-6"><CardSkeleton /></div>;
 
-  const uploadHandler = (folder) => async (url) => {
-    const field = folder === 'foto-pekebun' ? 'foto_pekebun' : folder === 'ktp' ? 'upload_ktp' : 'upload_kk';
-    const updated = { ...form, [field]: url };
-    setForm(updated);
-    try {
-      await api.pekebun.updateProfil(updated);
-      toast.success(`${field} berhasil disimpan`);
-      load();
-    } catch (err) {
-      toast.error('Gagal menyimpan: ' + err.message);
-    }
-  };
-
-  if (loading) return <div className="p-6"><CardSkeleton count={3} /></div>;
-
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -107,7 +94,7 @@ export default function PekebunProfilPage() {
               <Input label="No. KK" value={form.no_kk || ''} onChange={(e) => setForm({ ...form, no_kk: e.target.value })} required />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Input label="Tempat Lahir" value={form.tempat_lahir || ''} onChange={(e) => setForm({ ...form, tempat_lahir: e.target.value })} required />
-                <Input label="Tanggal Lahir" type="date" value={form.tanggal_lahir ? form.tanggal_lahir.split('T')[0] : ''} onChange={(e) => setForm({ ...form, tanggal_lahir: e.target.value })} required />
+                <DatePicker label="Tanggal Lahir" value={form.tanggal_lahir ? form.tanggal_lahir.split('T')[0] : ''} onChange={(v) => setForm({ ...form, tanggal_lahir: v })} />
               </div>
               <Input label="No. WhatsApp" value={form.no_whatsapp || ''} onChange={(e) => setForm({ ...form, no_whatsapp: e.target.value })} />
               <Textarea label="Alamat" value={form.alamat || ''} onChange={(e) => setForm({ ...form, alamat: e.target.value })} rows={2} />
@@ -131,7 +118,7 @@ export default function PekebunProfilPage() {
               </div>
               {profil ? [
                 ['NIK', profil.nik], ['No. KK', profil.no_kk], ['Tempat Lahir', profil.tempat_lahir],
-                ['Tanggal Lahir', profil.tanggal_lahir ? new Date(profil.tanggal_lahir).toLocaleDateString('id-ID') : '-'],
+                ['Tanggal Lahir', profil.tanggal_lahir ? formatDate(profil.tanggal_lahir) : '-'],
                 ['No. WhatsApp', profil.no_whatsapp], ['Alamat', profil.alamat],
               ].map(([label, value]) => (
                 <div key={label} className="flex border-b border-gray-50 pb-2">

@@ -51,7 +51,7 @@ const PekebunRow = memo(function PekebunRow({ d, onPreview, onVerifikasi }) {
             {d.foto_pekebun ? (
               <img src={d.foto_pekebun} alt="" className="w-full h-full object-cover cursor-pointer" onClick={() => onPreview(d.foto_pekebun)} />
             ) : (
-              <span className="text-white font-bold text-sm">{d.nama?.charAt(0)}</span>
+              <span className="text-white font-bold text-sm">{d.nama?.charAt(0) || '?'}</span>
             )}
           </div>
           <div>
@@ -139,8 +139,8 @@ export default function VerifikatorPage() {
           setData(res.data);
           setMeta({ currentPage: res.current_page, lastPage: res.last_page, total: res.total });
         } else {
-          setData(res);
-          setMeta({ currentPage: 1, lastPage: 1, total: res.length });
+          setData(Array.isArray(res) ? res : []);
+          setMeta(Array.isArray(res) ? { currentPage: 1, lastPage: 1, total: res.length } : null);
         }
       }))
       .catch((e) => toast.error(e.message))
