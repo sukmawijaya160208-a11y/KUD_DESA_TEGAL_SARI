@@ -10,8 +10,8 @@ import HeroCards from '@/components/HeroCards';
 import TeamSection from '@/components/TeamSection';
 import MapSection from '@/components/MapSection';
 import {
-  Squares2X2Icon, InformationCircleIcon,
-  QuestionMarkCircleIcon
+  Squares2X2Icon, InformationCircleIcon, ChatBubbleLeftRightIcon,
+  QuestionMarkCircleIcon, NewspaperIcon
 } from '@heroicons/react/24/outline';
 
 const Hero3DScene = dynamic(() => import('@/components/Hero3DScene'), { ssr: false });
