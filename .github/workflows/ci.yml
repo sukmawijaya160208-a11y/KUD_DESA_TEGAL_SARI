@@ -64,3 +64,25 @@ jobs:
 
       - name: PHPUnit Tests
         run: php artisan test
+
+  deploy:
+    name: Deploy to VPS
+    needs: [frontend, backend]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/kud-desa-sari-subur
+            git pull origin main
+            docker compose down
+            docker compose up -d --build
+            docker system prune -f
