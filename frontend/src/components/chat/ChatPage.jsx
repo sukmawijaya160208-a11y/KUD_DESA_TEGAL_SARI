@@ -127,7 +127,7 @@ function ChatPageInner() {
     <>
       <IncomingCall />
       <CallScreen />
-      <div className="flex h-screen">
+      <div className="flex h-dvh overflow-hidden">
         <div className={`${mobileView === 'chat' ? 'hidden lg:flex' : 'flex'} lg:w-[400px] xl:w-[420px] border-r border-border bg-white flex-col w-full`}>
           <ConversationList
             conversations={conversations}
