@@ -1,0 +1,28 @@
+# === KUD Next.js Service ===
+# Letak: /etc/systemd/system/kud-nextjs.service
+# Aktifkan: systemctl daemon-reload && systemctl enable --now kud-nextjs
+
+[Unit]
+Description=KUD Desa Tegal Sari — Next.js Frontend
+After=network.target
+
+[Service]
+Type=exec
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/kud/frontend
+ExecStart=/usr/bin/node /var/www/kud/frontend/node_modules/.bin/next start -p 3000
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+Environment=NEXT_TELEMETRY_DISABLED=1
+
+# Security
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateDevices=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

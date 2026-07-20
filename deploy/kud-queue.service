@@ -1,0 +1,31 @@
+# === KUD Queue Worker ===
+# Letak: /etc/systemd/system/kud-queue.service
+# Aktifkan: systemctl daemon-reload && systemctl enable --now kud-queue
+
+[Unit]
+Description=KUD Desa Tegal Sari — Laravel Queue Worker
+After=network.target
+After=mysql.service
+Requires=mysql.service
+
+[Service]
+Type=exec
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/kud/backend
+ExecStart=/usr/bin/php /var/www/kud/backend/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+Restart=always
+RestartSec=10
+
+# Prevent memory leak — restart after 100 jobs
+ExecReload=/bin/kill -USR1 $MAINPID
+
+# Security
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateDevices=false
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
