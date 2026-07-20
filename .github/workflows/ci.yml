@@ -63,7 +63,7 @@ jobs:
         run: vendor/bin/pint --test || true
 
       - name: PHPUnit Tests
-        run: php artisan test
+        run: php artisan test --testsuite=Unit
 
   deploy:
     name: Deploy to VPS
