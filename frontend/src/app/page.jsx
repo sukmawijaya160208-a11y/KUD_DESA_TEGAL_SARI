@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLogo } from '@/hooks/useLogo';
-import dynamic from 'next/dynamic';
 import Timeline from '@/components/Timeline';
 import HeroCards from '@/components/HeroCards';
 import TeamSection from '@/components/TeamSection';
@@ -13,8 +12,6 @@ import {
   Squares2X2Icon, InformationCircleIcon, ChatBubbleLeftRightIcon,
   QuestionMarkCircleIcon, NewspaperIcon
 } from '@heroicons/react/24/outline';
-
-const Hero3DScene = dynamic(() => import('@/components/Hero3DScene'), { ssr: false });
 
 export default function Home() {
   const router = useRouter();
@@ -254,21 +251,20 @@ export default function Home() {
           </div>
         </motion.div>
       </motion.nav>
-      <section ref={heroRef} className="relative min-h-screen flex items-center bg-gradient-to-br from-slate-900 via-primary/90 to-slate-800 overflow-hidden">
-        <Hero3DScene />
-        <div className="absolute inset-0 z-0 opacity-[0.04]"
-          style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.8) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <svg className="w-full h-full opacity-[0.03]" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <img src="/images/hero-bg.jpeg" alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
+        </div>
+        <div className="absolute inset-0 z-[1] opacity-[0.06]"
+          style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.8) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+        <div className="absolute inset-0 z-[1]">
+          <svg className="w-full h-full opacity-[0.04]" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 450 Q 360 200, 720 450 T 1440 450" stroke="white" strokeWidth="0.5" />
             <path d="M0 500 Q 360 250, 720 500 T 1440 500" stroke="white" strokeWidth="0.3" />
             <path d="M0 400 Q 360 650, 720 400 T 1440 400" stroke="white" strokeWidth="0.3" />
           </svg>
         </div>
-        <div className="absolute rounded-full bg-primary-light top-10 left-10 w-72 h-72 opacity-15 animate-pulse" style={{ animationDuration: '7s' }} />
-        <div className="absolute rounded-full bg-accent top-1/3 right-10 w-56 h-56 opacity-15 animate-pulse" style={{ animationDuration: '9s' }} />
-        <div className="absolute rounded-full bg-primary-light bottom-1/4 left-1/3 w-44 h-44 opacity-10 animate-pulse" style={{ animationDuration: '6s' }} />
-        <div className="absolute rounded-full bg-accent bottom-10 right-1/4 w-64 h-64 opacity-10 animate-pulse" style={{ animationDuration: '8s' }} />
         <div className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-12 pt-28 pb-20">
           <motion.div ref={heroTextRef} variants={heroTextVariants} initial="hidden" animate="visible" className="text-center">
             <motion.div variants={heroItemVariants}
