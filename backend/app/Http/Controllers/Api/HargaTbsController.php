@@ -30,10 +30,11 @@ class HargaTbsController extends Controller
         return $arr;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = min((int) ($request->per_page ?? 50), 100);
         return response()->json(
-            $this->formatResponse(HargaTbs::orderBy('kelas')->latest('dari_tanggal')->get())
+            $this->formatResponse(HargaTbs::orderBy('kelas')->latest('dari_tanggal')->paginate($perPage))
         );
     }
 

@@ -46,11 +46,12 @@ class CallController extends Controller
     public function pending(Request $request)
     {
         $user = $request->user();
+        $perPage = min((int) ($request->per_page ?? 20), 50);
         $calls = Call::where('receiver_id', $user->id)
             ->where('status', 'ringing')
             ->with(['caller', 'conversation.users'])
             ->latest()
-            ->get();
+            ->paginate($perPage);
 
         return response()->json($calls);
     }

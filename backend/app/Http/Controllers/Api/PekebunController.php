@@ -123,9 +123,10 @@ class PekebunController extends Controller
     }
 
     // === PROGRAM ===
-    public function programTersedia()
+    public function programTersedia(Request $request)
     {
-        return response()->json(ProgramKud::where('aktif', true)->withCount('pendaftaranProgram')->get());
+        $perPage = min((int) ($request->per_page ?? 20), 50);
+        return response()->json(ProgramKud::where('aktif', true)->withCount('pendaftaranProgram')->paginate($perPage));
     }
 
     public function daftarProgram(Request $request)
@@ -190,24 +191,26 @@ class PekebunController extends Controller
         }
     }
 
-    public function programSaya()
+    public function programSaya(Request $request)
     {
-        $pekebun = request()->user()->pekebun;
+        $pekebun = $request->user()->pekebun;
+        $perPage = min((int) ($request->per_page ?? 20), 50);
 
         return response()->json(
             PendaftaranProgram::where('pekebun_id', $pekebun->id)
                 ->with('programKud', 'lahan')
                 ->latest()
-                ->get()
+                ->paginate($perPage)
         );
     }
 
     // === TBS SYNC ===
-    public function tbsIndex()
+    public function tbsIndex(Request $request)
     {
-        $pekebun = request()->user()->pekebun;
+        $pekebun = $request->user()->pekebun;
+        $perPage = min((int) ($request->per_page ?? 20), 50);
 
-        return response()->json(TbsSync::where('pekebun_id', $pekebun->id)->latest()->get());
+        return response()->json(TbsSync::where('pekebun_id', $pekebun->id)->latest()->paginate($perPage));
     }
 
     public function tbsStore(Request $request)

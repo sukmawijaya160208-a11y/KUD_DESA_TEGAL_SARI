@@ -20,7 +20,7 @@ class BackupController extends Controller
         'pendaftaran_program',
         'tbs_sync',
         'verifikasi_log',
-        'notifications',
+                'notifikasi',
     ];
 
     public function backup()
@@ -57,7 +57,7 @@ class BackupController extends Controller
             'data.pendaftaran_program' => 'sometimes|array',
             'data.tbs_sync' => 'sometimes|array',
             'data.verifikasi_log' => 'sometimes|array',
-            'data.notifications' => 'sometimes|array',
+            'data.notifikasi' => 'sometimes|array',
         ]);
 
         $data = $request->data;
@@ -118,7 +118,7 @@ class BackupController extends Controller
 
         try {
             $deleteOrder = [
-                'notifications',
+        'notifikasi',
                 'verifikasi_log',
                 'pendaftaran_program',
                 'tbs_sync',

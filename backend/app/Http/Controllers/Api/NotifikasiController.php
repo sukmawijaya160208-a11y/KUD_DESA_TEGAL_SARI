@@ -10,10 +10,11 @@ class NotifikasiController extends Controller
 {
     public function index(Request $request)
     {
+        $perPage = min((int) ($request->per_page ?? 20), 50);
         return response()->json(
             Notifikasi::where('user_id', $request->user()->id)
                 ->latest()
-                ->get()
+                ->paginate($perPage)
         );
     }
 
