@@ -19,11 +19,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --no-progress --optimize-autoloader
+RUN composer install --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts
 
 COPY . .
 
-RUN php artisan storage:link && \
+RUN php artisan package:discover --ansi && \
+    php artisan storage:link && \
     php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache

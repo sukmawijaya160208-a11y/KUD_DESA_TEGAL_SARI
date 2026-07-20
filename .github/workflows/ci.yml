@@ -78,10 +78,10 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
+          username: root
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /home/ubuntu/kud-desa-sari-subur
+            cd /home/projek/KUD_DESA_TEGAL_SARI
             git pull origin main
             docker compose down
             docker compose up -d --build
