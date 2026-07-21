@@ -82,10 +82,13 @@ export default function ExportDropdown({ title, fetchAll, filename, pdfUrl, csvU
     setOpen(false);
   };
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
+
   const handleDownload = async (url, format) => {
     setLoading(format);
     try {
-      const res = await fetch(url, { headers: { Authorization: 'Bearer ' + (localStorage.getItem('token') || '') } });
+      const fullUrl = `${API_URL}${url}`;
+      const res = await fetch(fullUrl, { headers: { Authorization: 'Bearer ' + (localStorage.getItem('token') || '') } });
       if (!res.ok) throw new Error('Gagal mengunduh');
       const blob = await res.blob();
       const a = document.createElement('a');
