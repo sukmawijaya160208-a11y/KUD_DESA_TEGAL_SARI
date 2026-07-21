@@ -5,10 +5,24 @@ import { useRouter } from 'next/navigation';
 import confetti from 'canvas-confetti';
 import { api } from '@/lib/api';
 import { useLogo } from '@/hooks/useLogo';
+import FloatingOrbs from '@/components/auth/FloatingOrbs';
 import FloatingInput from '@/components/auth/FloatingInput';
 import DatePicker from '@/components/ui/DatePicker';
 import PasswordStrength from '@/components/auth/PasswordStrength';
 import { BENEFITS } from '@/components/auth/benefits';
+
+function MeshGradient() {
+  return (
+    <div className="fixed inset-0 z-[1] pointer-events-none overflow-hidden">
+      <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-[0.08]"
+        style={{ background: 'radial-gradient(circle, #4CAF50, transparent 70%)' }} />
+      <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full opacity-[0.06]"
+        style={{ background: 'radial-gradient(circle, #FFD700, transparent 70%)' }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full opacity-[0.05]"
+        style={{ background: 'radial-gradient(circle, #2E7D32, transparent 70%)' }} />
+    </div>
+  );
+}
 
 function Checkbox({ id, label, checked, onChange, required }) {
   return (
@@ -155,11 +169,9 @@ export default function AuthPage() {
 
   return (
     <div ref={pageRef}
-      className="min-h-screen flex items-center justify-center p-3 md:p-6 overflow-hidden font-sans relative">
-      <div className="fixed inset-0 z-0">
-        <img src="/images/login-bg.jpeg" alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-black/60" />
-      </div>
+      className="min-h-screen bg-gradient-to-br from-emerald-950 via-emerald-900 to-slate-900 flex items-center justify-center p-3 md:p-6 overflow-hidden font-sans relative">
+      <FloatingOrbs />
+      <MeshGradient />
       <div className="fixed inset-0 z-[1] pointer-events-none opacity-[0.03]"
         style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
 

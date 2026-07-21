@@ -251,21 +251,21 @@ export default function Home() {
           </div>
         </motion.div>
       </motion.nav>
-      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img src="/images/hero-bg.jpeg" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
-        </div>
-        <div className="absolute inset-0 z-[1] opacity-[0.06]"
+      <section ref={heroRef} className="relative min-h-screen flex items-center bg-gradient-to-br from-emerald-950 via-emerald-900 to-slate-900 overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-[0.05]"
           style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.8) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-        <div className="absolute inset-0 z-[1]">
-          <svg className="w-full h-full opacity-[0.04]" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div className="absolute inset-0 z-0">
+          <svg className="w-full h-full opacity-[0.03]" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 450 Q 360 200, 720 450 T 1440 450" stroke="white" strokeWidth="0.5" />
             <path d="M0 500 Q 360 250, 720 500 T 1440 500" stroke="white" strokeWidth="0.3" />
             <path d="M0 400 Q 360 650, 720 400 T 1440 400" stroke="white" strokeWidth="0.3" />
           </svg>
         </div>
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-12 pt-28 pb-20">
+        <div className="absolute rounded-full bg-emerald-500/20 top-10 left-10 w-72 h-72 opacity-20 animate-pulse" style={{ animationDuration: '7s' }} />
+        <div className="absolute rounded-full bg-kud-gold/10 top-1/3 right-10 w-56 h-56 opacity-20 animate-pulse" style={{ animationDuration: '9s' }} />
+        <div className="absolute rounded-full bg-emerald-500/15 bottom-1/4 left-1/3 w-44 h-44 opacity-15 animate-pulse" style={{ animationDuration: '6s' }} />
+        <div className="absolute rounded-full bg-kud-gold/10 bottom-10 right-1/4 w-64 h-64 opacity-15 animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-12 pt-24 pb-14">
           <motion.div ref={heroTextRef} variants={heroTextVariants} initial="hidden" animate="visible" className="text-center">
             <motion.div variants={heroItemVariants}
               className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white/90 px-4 py-1.5 rounded-full text-sm mb-6 border border-white/10 mx-auto w-fit">
@@ -295,7 +295,7 @@ export default function Home() {
             </motion.p>
 
             {/* Value proposition row */}
-            <motion.div variants={heroItemVariants} className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-14 max-w-2xl mx-auto">
+            <motion.div variants={heroItemVariants} className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8 max-w-2xl mx-auto">
               {[
                 { icon: 'M3.75 9h16.5m-16.5 6h16.5M4.5 3h15a1.5 1.5 0 011.5 1.5v15A1.5 1.5 0 0119.5 21h-15A1.5 1.5 0 013 19.5V4.5A1.5 1.5 0 014.5 3z', t: 'Daftar Program', d: 'PSR, Intensifikasi & Beasiswa' },
                 { icon: 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z', t: 'Pantau Harga', d: 'Update TBS real-time per kelas' },
@@ -328,7 +328,7 @@ export default function Home() {
               <HeroCards />
             </motion.div>
 
-            <motion.div variants={heroItemVariants} className="flex flex-col sm:flex-row gap-4 mt-10 justify-center">
+            <motion.div variants={heroItemVariants} className="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
               <motion.button whileHover={{ scale: 1.04, boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }} whileTap={{ scale: 0.96 }}
                 onClick={() => router.push('/login')}
                 className="px-8 py-3.5 bg-white text-primary rounded-xl font-heading font-bold text-lg hover:bg-gray-100 transition-all shadow-xl shadow-black/10 inline-flex items-center gap-2 cursor-pointer">
@@ -351,10 +351,10 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-      <section id="keuntungan" className="py-20 lg:py-28 bg-muted/50 px-6 lg:px-12">
+      <section id="keuntungan" className="py-14 lg:py-20 bg-muted/50 px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-            className="text-center mb-14">
+            className="text-center mb-8">
             <span className="inline-block px-4 py-1.5 bg-accent/10 text-accent rounded-full text-xs font-semibold mb-4">KEUNTUNGAN</span>
             <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
               Kenapa <span className="text-accent">Bergabung</span> dengan KUD?
@@ -391,9 +391,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="tentang" className="py-20 lg:py-28 px-6 lg:px-12 max-w-7xl mx-auto">
+      <section id="tentang" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto">
         <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-          className="text-center mb-14">
+          className="text-center mb-8">
           <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">TENTANG KUD</span>
           <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-4">
             Koperasi <span className="text-primary">Modern</span> untuk Pekebun Sawit
@@ -403,7 +403,7 @@ export default function Home() {
             di Kecamatan Megang Sakti melalui pelayanan koperasi yang transparan, profesional, dan berbasis teknologi.
           </p>
         </motion.div>
-        <div className="grid md:grid-cols-2 gap-8 mb-14">
+        <div className="grid md:grid-cols-2 gap-8 mb-8">
           <motion.div initial={{ x: -30, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
             className="bg-white rounded-2xl border border-border p-8 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary to-primary-light rounded-l-2xl" />
@@ -468,10 +468,10 @@ export default function Home() {
       </section>
       <Timeline />
 
-      <section className="py-20 lg:py-28 bg-gradient-to-br from-slate-900 via-primary/90 to-slate-800 px-6 lg:px-12">
+      <section className="py-14 lg:py-20 bg-gradient-to-br from-emerald-950 via-emerald-900 to-slate-900 px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-            className="text-center mb-14">
+            className="text-center mb-8">
             <span className="inline-block px-4 py-1.5 bg-white/10 text-white/90 rounded-full text-xs font-semibold mb-4 border border-white/10">CAPAIAN KAMI</span>
             <h2 className="text-3xl lg:text-4xl font-heading font-bold text-white mb-3">
               KUD dalam <span className="text-primary-light">Angka</span>
@@ -492,9 +492,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section id="fitur" className="py-20 lg:py-28 px-6 lg:px-12 max-w-7xl mx-auto">
+      <section id="fitur" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto">
         <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-          className="text-center mb-14">
+          className="text-center mb-8">
           <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">FITUR UNGGULAN</span>
           <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
             Semua Kebutuhan <span className="text-primary">Dalam Satu Aplikasi</span>
@@ -544,10 +544,10 @@ export default function Home() {
           ))}
         </motion.div>
       </section>
-      <section id="cara-kerja" className="py-20 lg:py-28 bg-muted/50 px-6 lg:px-12">
+      <section id="cara-kerja" className="py-14 lg:py-20 bg-muted/50 px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-            className="text-center mb-14">
+            className="text-center mb-8">
             <span className="inline-block px-4 py-1.5 bg-accent/10 text-accent rounded-full text-xs font-semibold mb-4">CARA KERJA</span>
             <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
               Mulai Dalam <span className="text-accent">3 Langkah Mudah</span>
@@ -584,9 +584,9 @@ export default function Home() {
       </section>
       <TeamSection />
 
-      <section id="testimoni" className="py-20 lg:py-28 px-6 lg:px-12 max-w-7xl mx-auto">
+      <section id="testimoni" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto">
         <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-          className="text-center mb-14">
+          className="text-center mb-8">
           <span className="inline-block px-4 py-1.5 bg-accent/10 text-accent rounded-full text-xs font-semibold mb-4">TESTIMONI</span>
           <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
             Apa Kata <span className="text-accent">Pekebun</span>
@@ -633,9 +633,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section id="faq" className="py-20 lg:py-28 px-6 lg:px-12 max-w-3xl mx-auto">
+      <section id="faq" className="py-14 lg:py-20 px-6 lg:px-12 max-w-3xl mx-auto">
         <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-          className="text-center mb-14">
+          className="text-center mb-8">
           <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">FAQ</span>
           <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
             Pertanyaan <span className="text-primary">Umum</span>
@@ -673,7 +673,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <section className="py-20 lg:py-28 bg-gradient-to-br from-primary to-primary-dark px-6 lg:px-12 relative overflow-hidden">
+      <section className="py-14 lg:py-20 bg-gradient-to-br from-emerald-800 to-emerald-950 px-6 lg:px-12 relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
           <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
@@ -711,7 +711,7 @@ export default function Home() {
       </section>
       <MapSection />
 
-      <footer className="bg-slate-900 border-t border-white/5 px-6 lg:px-12 py-16">
+      <footer className="bg-slate-900 border-t border-white/5 px-6 lg:px-12 py-12">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-2 md:col-span-1">

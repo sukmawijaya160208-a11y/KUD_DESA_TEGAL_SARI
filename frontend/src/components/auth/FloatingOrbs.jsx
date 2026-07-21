@@ -1,14 +1,14 @@
 'use client';
 
 const ORBS = [
-  { size: 400, blur: 'blur-3xl', opacity: 0.12, bg: 'var(--color-primary-light)' },
-  { size: 320, blur: 'blur-3xl', opacity: 0.10, bg: 'var(--color-accent)' },
-  { size: 360, blur: 'blur-3xl', opacity: 0.08, bg: '#8B5CF6' },
-  { size: 280, blur: 'blur-3xl', opacity: 0.10, bg: '#3B82F6' },
-  { size: 240, blur: 'blur-3xl', opacity: 0.06, bg: '#F59E0B' },
-  { size: 200, blur: 'blur-3xl', opacity: 0.07, bg: '#EC4899' },
-  { size: 180, blur: 'blur-3xl', opacity: 0.05, bg: '#10B981' },
-  { size: 160, blur: 'blur-3xl', opacity: 0.06, bg: '#6366F1' },
+  { size: 400, blur: 'blur-3xl', opacity: 0.12, bg: '#4CAF50' },
+  { size: 320, blur: 'blur-3xl', opacity: 0.10, bg: '#FFD700' },
+  { size: 360, blur: 'blur-3xl', opacity: 0.08, bg: '#2E7D32' },
+  { size: 280, blur: 'blur-3xl', opacity: 0.10, bg: '#1B5E20' },
+  { size: 240, blur: 'blur-3xl', opacity: 0.06, bg: '#FFC107' },
+  { size: 200, blur: 'blur-3xl', opacity: 0.07, bg: '#66BB6A' },
+  { size: 180, blur: 'blur-3xl', opacity: 0.05, bg: '#A5D6A7' },
+  { size: 160, blur: 'blur-3xl', opacity: 0.06, bg: '#FFD54F' },
 ];
 
 const positions = [
