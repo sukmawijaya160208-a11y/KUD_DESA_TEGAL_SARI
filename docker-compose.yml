@@ -11,7 +11,6 @@ services:
       - ./backend/.env:/app/.env
     environment:
       - APP_ENV=production
-      - APP_DEBUG=false
       - DB_CONNECTION=sqlite
     ports:
       - "8000:8000"
