@@ -176,7 +176,7 @@ export default function AdminPendaftaranPage() {
                           <div className="text-sm space-y-1 text-gray-600">
                             <p><span className="text-gray-400">Alamat:</span> {d.lahan.alamat_lahan}</p>
                             <p><span className="text-gray-400">Surat:</span> {d.lahan.jenis_surat} - {d.lahan.nomor_surat}</p>
-                            <p><span className="text-gray-400">Luas:</span> {Number(d.lahan.luas_lahan_m2).toLocaleString()} M²</p>
+                            <p><span className="text-gray-400">Luas:</span> {Number(d.lahan.luas_lahan_m2).toLocaleString()} MÂ²</p>
                           </div>
                         ) : <p className="text-sm text-gray-400">Tidak ada data lahan</p>}
                       </div>
