@@ -63,6 +63,42 @@ composer run test    # PHPUnit via artisan (in-memory SQLite)
 - **`use cache`** replaces `unstable_` cache APIs; `cacheLife`/`cacheTag` are stable.
 - **Node.js 20.9+** required.
 
+## Deployment
+
+- **Domain**: `kud-sari-subur.my.id` (pointing ke VPS)
+- **VPS**: `ssh root@31.97.50.22` — Ubuntu 24.04, KVM 1
+- **Nginx config**: `deploy/nginx-kud.conf` → `/etc/nginx/sites-available/kud-sari-subur.my.id`
+- **SSL**: Let's Encrypt via Certbot (`/etc/letsencrypt/live/kud-sari-subur.my.id/`)
+- **Backend**: Laravel di `/var/www/kud/backend`, serve via PHP-FPM
+- **Frontend**: Next.js di `/var/www/kud/frontend`, build → `npm run build`, serve via Nginx reverse proxy
+- **Queue**: `php artisan queue:work` via supervisor/systemd
+- **Database**: SQLite di `/var/www/kud/backend/database/database.sqlite`
+
+### Deploy commands
+```bash
+# SSH & pull
+ssh root@31.97.50.22
+cd /var/www/kud
+git pull origin main
+
+# Backend
+cd backend
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Frontend
+cd ../frontend
+npm ci --omit=dev
+npm run build
+
+# Restart services
+systemctl reload nginx
+systemctl restart kud-queue  # if supervisor/systemd
+```
+
 ## Matt Pocock Skills (`.opencode/skills/`)
 
 19 engineering skills from [mattpocock/skills](https://github.com/mattpocock/skills) (OpenCode fork). Load via `skill({ name: "..." })`.
