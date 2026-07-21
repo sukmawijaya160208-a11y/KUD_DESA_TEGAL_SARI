@@ -319,13 +319,14 @@ function HargaTbsCards({ data }) {
 }
 
 function ProgramAktifCards({ stats, pendaftaranPerProgram }) {
-  if (!stats || !stats.aktif) return <p className="text-sm text-gray-400 py-8 text-center">Tidak ada program aktif</p>;
   const countPerProgram = useMemo(() => {
     if (!pendaftaranPerProgram) return {};
     const map = {};
     pendaftaranPerProgram.forEach((p) => { map[p.program_kud_id] = Number(p.total); });
     return map;
   }, [pendaftaranPerProgram]);
+
+  if (!stats || !stats.aktif) return <p className="text-sm text-gray-400 py-8 text-center">Tidak ada program aktif</p>;
 
   return (
     <div className="grid grid-cols-2 gap-2">
