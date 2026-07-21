@@ -1,86 +1,157 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const KONTEN = [
   {
     id: 'konten1',
     title: 'Rapat Koordinasi & Sosialisasi',
-    deskripsi: 'Kegiatan rapat koordinasi antara pihak KUD, pekebun, dan stakeholder dalam rangka sosialisasi program dan kebijakan terbaru.',
-    images: Array.from({ length: 6 }, (_, i) => `/images/kegiatan/konten1/${i + 1}.jpeg`),
+    cards: [
+      {
+        src: '/images/kegiatan/konten1/1.jpeg',
+        title: 'Rapat Koordinasi & Sosialisasi',
+        desc: 'Suasana rapat koordinasi antara pengurus KUD, pekebun, dan stakeholder dalam merumuskan program kerja.',
+      },
+      {
+        src: '/images/kegiatan/konten1/2.jpeg',
+        title: 'Sosialisasi Program KUD',
+        desc: 'Penyampaian program dan kebijakan terbaru KUD kepada para pekebun sawit.',
+      },
+      {
+        src: '/images/kegiatan/konten1/3.jpeg',
+        title: 'Diskusi Kelompok Tani',
+        desc: 'Sesi diskusi kelompok tani dalam rangka meningkatkan produktivitas sawit.',
+      },
+      {
+        src: '/images/kegiatan/konten1/4.jpeg',
+        title: 'Pemaparan Materi',
+        desc: 'Pemaparan materi teknis budidaya sawit oleh tim pendamping KUD.',
+      },
+      {
+        src: '/images/kegiatan/konten1/5.jpeg',
+        title: 'Tanya Jawab',
+        desc: 'Sesi tanya jawab antara pekebun dan narasumber mengenai program KUD.',
+      },
+      {
+        src: '/images/kegiatan/konten1/6.jpeg',
+        title: 'Dokumentasi Peserta',
+        desc: 'Foto bersama seluruh peserta rapat koordinasi dan sosialisasi KUD.',
+      },
+    ],
   },
   {
     id: 'konten2',
     title: 'Pendampingan Program PSR',
-    deskripsi: 'Pendampingan teknis kepada pekebun dalam proses peremajaan sawit rakyat (PSR), dari pendaftaran hingga verifikasi lapangan.',
-    images: Array.from({ length: 6 }, (_, i) => `/images/kegiatan/konten2/${i + 1}.jpeg`),
+    cards: [
+      {
+        src: '/images/kegiatan/konten2/1.jpeg',
+        title: 'Sosialisasi PSR',
+        desc: 'Sosialisasi program Peremajaan Sawit Rakyat (PSR) kepada pekebun.',
+      },
+      {
+        src: '/images/kegiatan/konten2/2.jpeg',
+        title: 'Pendaftaran Peserta PSR',
+        desc: 'Proses pendaftaran dan verifikasi awal calon peserta program PSR.',
+      },
+      {
+        src: '/images/kegiatan/konten2/3.jpeg',
+        title: 'Verifikasi Lahan',
+        desc: 'Tim KUD melakukan verifikasi data lahan sawit milik pekebun.',
+      },
+      {
+        src: '/images/kegiatan/konten2/4.jpeg',
+        title: 'Pendataan Lapangan',
+        desc: 'Pendataan langsung ke lapangan untuk memastikan kelayakan lahan PSR.',
+      },
+      {
+        src: '/images/kegiatan/konten2/5.jpeg',
+        title: 'Koordinasi Tim',
+        desc: 'Koordinasi tim pendamping PSR dalam menyusun jadwal verifikasi.',
+      },
+      {
+        src: '/images/kegiatan/konten2/6.jpeg',
+        title: 'Dokumentasi PSR',
+        desc: 'Foto bersama tim pendamping dan peserta program PSR.',
+      },
+    ],
   },
   {
     id: 'konten3',
     title: 'Kegiatan Lapangan & Verifikasi',
-    deskripsi: 'Tim KUD melakukan verifikasi lapangan dan pendataan lahan sawit pekebun untuk memastikan data yang akurat dan terpercaya.',
-    images: Array.from({ length: 6 }, (_, i) => `/images/kegiatan/konten3/${i + 1}.jpeg`),
+    cards: [
+      {
+        src: '/images/kegiatan/konten3/1.jpeg',
+        title: 'Verifikasi Lapangan',
+        desc: 'Tim KUD melakukan verifikasi lapangan untuk mengecek kondisi kebun sawit.',
+      },
+      {
+        src: '/images/kegiatan/konten3/2.jpeg',
+        title: 'Pendataan Lahan',
+        desc: 'Pendataan luas lahan dan jumlah pohon sawit milik pekebun.',
+      },
+      {
+        src: '/images/kegiatan/konten3/3.jpeg',
+        title: 'Survey Lokasi',
+        desc: 'Survey lokasi perkebunan sawit untuk pemetaan data yang akurat.',
+      },
+      {
+        src: '/images/kegiatan/konten3/4.jpeg',
+        title: 'Monitoring Tanaman',
+        desc: 'Monitoring kondisi tanaman sawit dan identifikasi kebutuhan perawatan.',
+      },
+      {
+        src: '/images/kegiatan/konten3/5.jpeg',
+        title: 'Koordinasi Lapangan',
+        desc: 'Koordinasi tim lapangan dalam pelaksanaan verifikasi data pekebun.',
+      },
+      {
+        src: '/images/kegiatan/konten3/6.jpeg',
+        title: 'Dokumentasi Lapangan',
+        desc: 'Foto dokumentasi kegiatan verifikasi lapangan bersama pekebun.',
+      },
+    ],
   },
 ];
 
-function BentoGrid({ images, onImageClick, kontenIdx }) {
-  const photos = images.slice(0, 6);
-
-  const layouts = [
-    { span: 'md:col-span-2 md:row-span-2', aspect: 'aspect-[4/5] md:aspect-[3/4]' },
-    { span: 'md:col-span-1 md:row-span-1', aspect: 'aspect-[4/3]' },
-    { span: 'md:col-span-1 md:row-span-1', aspect: 'aspect-[4/3]' },
-    { span: 'md:col-span-1 md:row-span-1', aspect: 'aspect-[4/3]' },
-    { span: 'md:col-span-1 md:row-span-1', aspect: 'aspect-[4/3]' },
-    { span: 'md:col-span-1 md:row-span-1', aspect: 'aspect-[4/3]' },
-  ];
-
+function BlogCard({ card, index, onClick }) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 auto-rows-auto">
-      {photos.map((src, i) => {
-        const layout = layouts[i % layouts.length];
-        return (
-          <motion.button
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-30px' }}
-            transition={{ duration: 0.35, delay: i * 0.06 }}
-            whileHover={{ scale: 1.015, zIndex: 10 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => onImageClick(i)}
-            className={`relative group overflow-hidden rounded-xl bg-slate-100 cursor-pointer ${layout.span}`}
-          >
-            <div className={`relative w-full ${layout.aspect} overflow-hidden`}>
-              <img
-                src={src}
-                alt={`Kegiatan ${i + 1}`}
-                className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <span className="text-white text-xs font-medium bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full">
-                  Foto {i + 1}
-                </span>
-              </div>
-              {i === 0 && (
-                <div className="absolute top-2 left-2">
-                  <span className="text-[10px] font-bold text-white bg-primary/80 backdrop-blur-sm px-2 py-0.5 rounded-full">
-                    Unggulan
-                  </span>
-                </div>
-              )}
-            </div>
-          </motion.button>
-        );
-      })}
-    </div>
+    <motion.button
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-30px' }}
+      transition={{ duration: 0.4, delay: index * 0.08 }}
+      whileHover={{ y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+      className="group text-left w-full cursor-pointer"
+    >
+      <div className="bg-white rounded-xl border border-border overflow-hidden shadow-sm hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
+        <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
+          <img
+            src={card.src}
+            alt={card.title}
+            className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </div>
+        <div className="p-4">
+          <h3 className="text-sm font-semibold text-foreground mb-1.5 line-clamp-2 group-hover:text-primary transition-colors duration-200">
+            {card.title}
+          </h3>
+          <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+            {card.desc}
+          </p>
+        </div>
+      </div>
+    </motion.button>
   );
 }
 
-function LightboxModal({ images, currentIdx, onClose, onNavigate }) {
+function LightboxModal({ cards, currentIdx, onClose, onNavigate }) {
+  const card = cards[currentIdx];
+
   const touchStart = { x: 0 };
   const handleTouchStart = (e) => { touchStart.x = e.touches[0].clientX; };
   const handleTouchEnd = (e) => {
@@ -121,7 +192,7 @@ function LightboxModal({ images, currentIdx, onClose, onNavigate }) {
       </button>
 
       <div
-        className="relative w-full h-full max-w-6xl max-h-[90vh] m-4"
+        className="relative w-full h-full max-w-6xl max-h-[90vh] m-4 flex flex-col items-center justify-center"
         onClick={(e) => e.stopPropagation()}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -133,14 +204,19 @@ function LightboxModal({ images, currentIdx, onClose, onNavigate }) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            src={images[currentIdx]}
-            alt=""
-            className="w-full h-full object-contain"
+            src={card.src}
+            alt={card.title}
+            className="w-full h-full max-h-[75vh] object-contain rounded-lg"
           />
         </AnimatePresence>
 
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full">
-          {images.map((_, i) => (
+        <div className="mt-4 text-center max-w-2xl">
+          <h3 className="text-white text-lg font-semibold mb-1">{card.title}</h3>
+          <p className="text-white/60 text-sm">{card.desc}</p>
+        </div>
+
+        <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full">
+          {cards.map((_, i) => (
             <button
               key={i}
               onClick={() => onNavigate(i - currentIdx)}
@@ -151,7 +227,7 @@ function LightboxModal({ images, currentIdx, onClose, onNavigate }) {
           ))}
         </div>
 
-        {images.length > 1 && (
+        {cards.length > 1 && (
           <>
             <button
               onClick={() => onNavigate(-1)}
@@ -182,6 +258,7 @@ export default function KegiatanGallery() {
   const [modalIdx, setModalIdx] = useState(0);
 
   const konten = KONTEN[kontenIdx];
+  const cards = konten.cards;
 
   const openModal = useCallback((idx) => {
     setModalIdx(idx);
@@ -191,11 +268,11 @@ export default function KegiatanGallery() {
   const handleNavigate = useCallback((dir) => {
     setModalIdx((prev) => {
       const next = prev + dir;
-      if (next < 0) return konten.images.length - 1;
-      if (next >= konten.images.length) return 0;
+      if (next < 0) return cards.length - 1;
+      if (next >= cards.length) return 0;
       return next;
     });
-  }, [konten]);
+  }, [cards]);
 
   return (
     <section className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto">
@@ -232,20 +309,16 @@ export default function KegiatanGallery() {
         ))}
       </div>
 
-      <BentoGrid
-        images={konten.images}
-        onImageClick={openModal}
-        kontenIdx={kontenIdx}
-      />
-
-      <p className="text-center text-xs text-gray-400 mt-4">
-        Klik foto untuk melihat lebih detail
-      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {cards.map((card, i) => (
+          <BlogCard key={i} card={card} index={i} onClick={() => openModal(i)} />
+        ))}
+      </div>
 
       <AnimatePresence>
         {modalOpen && (
           <LightboxModal
-            images={konten.images}
+            cards={cards}
             currentIdx={modalIdx}
             onClose={() => setModalOpen(false)}
             onNavigate={handleNavigate}

@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import confetti from 'canvas-confetti';
 import { api } from '@/lib/api';
@@ -87,6 +87,18 @@ export default function AuthPage() {
   const [regErrors, setRegErrors] = useState({});
 
   const pageRef = useRef(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const role = user.role;
+      if (role === 'admin') router.replace('/admin');
+      else if (role === 'verifikator') router.replace('/verifikator');
+      else if (role === 'pekebun') router.replace('/pekebun');
+    } catch (_) {}
+  }, [router]);
 
   const switchTab = (t) => {
     if (t === tab) return;
