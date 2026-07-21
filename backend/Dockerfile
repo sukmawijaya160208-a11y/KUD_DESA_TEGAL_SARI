@@ -1,4 +1,4 @@
-FROM php:8.2-cli-alpine AS base
+FROM php:8.2-fpm-alpine AS base
 
 RUN apk add --no-cache \
     curl \
@@ -7,12 +7,18 @@ RUN apk add --no-cache \
     libzip-dev \
     oniguruma-dev \
     sqlite-dev \
+    nginx \
+    supervisor \
     && docker-php-ext-install -j$(nproc) \
     pdo_mysql \
     pdo_sqlite \
     mbstring \
     zip \
     bcmath
+
+COPY docker-php.ini /usr/local/etc/php/conf.d/99-upload.ini
+COPY docker-nginx.conf /etc/nginx/http.d/default.conf
+COPY supervisord.conf /etc/supervisord.conf
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -33,4 +39,4 @@ RUN chown -R www-data:www-data storage bootstrap/cache && \
 
 EXPOSE 8000
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD ["supervisord", "-c", "/etc/supervisord.conf", "-n"]

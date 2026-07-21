@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
 @theme inline {
@@ -23,9 +25,9 @@
   --color-kud-green-light: #4CAF50;
   --color-kud-gold: #FFD700;
   --color-kud-green-dark: #0D3B0F;
+  --font-sans: 'Open Sans', system-ui, sans-serif;
 
-  --font-sans: var(--font-open-sans), 'Open Sans', system-ui, sans-serif;
-  --font-heading: var(--font-poppins), 'Poppins', system-ui, sans-serif;
+  --font-heading: 'Poppins', system-ui, sans-serif;
 
   --animate-fade-in: fadeIn 0.5s ease-out;
   --animate-slide-in: slideIn 0.4s ease-out;
