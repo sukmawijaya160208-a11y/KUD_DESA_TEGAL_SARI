@@ -12,7 +12,7 @@ export default function NotifikasiPage() {
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  const load = () => api.notifikasi.list().then(setNotifs).catch(() => setError('Gagal memuat notifikasi')).finally(() => setLoading(false));
+  const load = () => api.notifikasi.list().then((res) => setNotifs(res.data || res)).catch(() => setError('Gagal memuat notifikasi')).finally(() => setLoading(false));
   useEffect(() => { load(); }, []);
 
   const handleMarkAll = async () => {

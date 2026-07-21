@@ -15,7 +15,7 @@ export default function NotifDropdown() {
   const refresh = useCallback(async () => {
     try {
       const [d, c] = await Promise.all([api.notifikasi.list(), api.notifikasi.countUnread()]);
-      queueMicrotask(() => { setNotifs(d); setCount(c.count); });
+      queueMicrotask(() => { setNotifs(d.data || d); setCount(c.count); });
     } catch {}
   }, []);
 
