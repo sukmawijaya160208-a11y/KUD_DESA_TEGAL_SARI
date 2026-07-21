@@ -19,6 +19,8 @@ RUN apk add --no-cache \
 COPY docker-php.ini /usr/local/etc/php/conf.d/99-upload.ini
 COPY docker-nginx.conf /etc/nginx/http.d/default.conf
 COPY supervisord.conf /etc/supervisord.conf
+COPY startup.sh /startup.sh
+RUN chmod +x /startup.sh
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -30,13 +32,11 @@ RUN composer install --no-dev --no-interaction --no-progress --optimize-autoload
 COPY . .
 
 RUN php artisan package:discover --ansi && \
-    php artisan storage:link && \
-    php artisan config:cache && \
-    php artisan route:cache
+    php artisan storage:link
 
 RUN chown -R www-data:www-data storage bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8000
 
-CMD ["supervisord", "-c", "/etc/supervisord.conf", "-n"]
+CMD ["/startup.sh"]
