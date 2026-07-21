@@ -149,6 +149,9 @@ export const api = {
     tentangAplikasi: {
       update: (data) => request('/admin/tentang-aplikasi', { method: 'PUT', body: JSON.stringify(data) }),
     },
+    videos: {
+      list: () => request('/admin/videos/list'),
+    },
     laporan: () => request('/admin/laporan'),
     tbs: {
       list: () => request('/admin/tbs'),

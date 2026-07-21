@@ -2,25 +2,23 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
-  XMarkIcon,
-  CameraIcon,
-  CheckCircleIcon,
-  ArrowUpTrayIcon,
-  TrashIcon,
+  XMarkIcon, CameraIcon, CheckCircleIcon,
+  ArrowUpTrayIcon, TrashIcon, FilmIcon,
 } from '@heroicons/react/24/outline';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 
-export default function EditModal({ show, onClose, data, onSave, onUploadFoto, onUploadVideo, onRemoveVideo, saving, uploadingVideo }) {
+export default function EditModal({ show, onClose, data, onSave, onUploadFoto, onUploadVideo, onRemoveVideo, saving, uploadingVideo, videos: propVideos }) {
   const fileFotoRef = useRef(null);
   const fileVideoRef = useRef(null);
   const [edit, setEdit] = useState({});
+  const [showFolderPicker, setShowFolderPicker] = useState(false);
+  const [folderFiles, setFolderFiles] = useState([]);
+  const [loadingFolder, setLoadingFolder] = useState(false);
 
   useEffect(() => {
-    if (data) {
-      setEdit({ ...data });
-    }
+    if (data) setEdit({ ...data });
   }, [data]);
 
   const upd = (key) => (e) => setEdit((prev) => ({ ...prev, [key]: e.target.value }));
@@ -29,33 +27,48 @@ export default function EditModal({ show, onClose, data, onSave, onUploadFoto, o
     if (onSave) onSave(edit);
   };
 
-  const handleFotoClick = () => {
-    fileFotoRef.current?.click();
-  };
+  const handleFotoClick = () => fileFotoRef.current?.click();
 
   const handleFotoChange = (e) => {
     const file = e.target.files?.[0];
-    if (file && onUploadFoto) {
-      onUploadFoto(file);
-    }
+    if (file && onUploadFoto) onUploadFoto(file);
     e.target.value = '';
   };
 
   const handleVideoUpload = (e) => {
     const file = e.target.files?.[0];
-    if (file && onUploadVideo) {
-      onUploadVideo(file);
-    }
+    if (file && onUploadVideo) onUploadVideo(file);
     e.target.value = '';
   };
 
   const handleVideoRemove = () => {
-    if (onRemoveVideo) {
-      onRemoveVideo();
-    }
+    if (onRemoveVideo) onRemoveVideo();
+  };
+
+  const openFolderPicker = () => {
+    setShowFolderPicker(true);
+    setLoadingFolder(true);
+    fetch('/api/admin/videos/list', {
+      headers: { Accept: 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
+      .then((r) => r.json())
+      .then((data) => setFolderFiles(Array.isArray(data) ? data : []))
+      .catch(() => setFolderFiles([]))
+      .finally(() => setLoadingFolder(false));
+  };
+
+  const pickFromFolder = (url) => {
+    if (onUploadVideo) onUploadVideo(null, url);
+    setShowFolderPicker(false);
+  };
+
+  const removeVideoAt = (idx) => {
+    if (onRemoveVideo) onRemoveVideo(idx);
   };
 
   if (!show) return null;
+
+  const videos = Array.isArray(edit.videos) ? edit.videos : [];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -100,13 +113,7 @@ export default function EditModal({ show, onClose, data, onSave, onUploadFoto, o
                 <p className="font-medium text-gray-700">Klik untuk upload foto</p>
                 <p>JPG, PNG. Maks. 2MB</p>
               </div>
-              <input
-                ref={fileFotoRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFotoChange}
-                className="hidden"
-              />
+              <input ref={fileFotoRef} type="file" accept="image/*" onChange={handleFotoChange} className="hidden" />
             </div>
           </div>
 
@@ -147,62 +154,103 @@ export default function EditModal({ show, onClose, data, onSave, onUploadFoto, o
           {/* Video Profil */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">Video Profil</label>
-            {edit.url_video ? (
-              <div className="space-y-3">
-                {uploadingVideo && (
-                  <div className="flex items-center gap-2 text-sm text-emerald-600 mb-2">
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+
+            {uploadingVideo && (
+              <div className="flex items-center gap-2 text-sm text-emerald-600 mb-3">
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                Mengupload video...
+              </div>
+            )}
+
+            {videos.length > 0 && (
+              <div className="space-y-3 mb-4">
+                {videos.map((url, i) => (
+                  <div key={i} className="flex items-center gap-3 p-2 rounded-lg bg-gray-50 border border-gray-200">
+                    <FilmIcon className="w-5 h-5 text-gray-400 shrink-0" />
+                    <span className="text-sm text-gray-600 truncate flex-1">{url.split('/').pop()}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeVideoAt(i)}
+                      className="text-red-500 hover:text-red-700 p-1"
+                    >
+                      <TrashIcon className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => fileVideoRef.current?.click()}
+                className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+              >
+                <ArrowUpTrayIcon className="w-4 h-4" />
+                Upload Video
+              </button>
+              <button
+                type="button"
+                onClick={openFolderPicker}
+                className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+              >
+                <FilmIcon className="w-4 h-4" />
+                Dari Folder Server
+              </button>
+              {videos.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setEdit((prev) => ({ ...prev, videos: [] }))}
+                  className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
+                >
+                  <TrashIcon className="w-4 h-4" />
+                  Hapus Semua
+                </button>
+              )}
+            </div>
+
+            <input ref={fileVideoRef} type="file" accept="video/*" onChange={handleVideoUpload} className="hidden" />
+
+            {showFolderPicker && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-4 p-4 rounded-xl bg-gray-50 border border-gray-200"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-medium text-gray-700">Video dari Folder Server</p>
+                  <button type="button" onClick={() => setShowFolderPicker(false)} className="text-gray-400 hover:text-gray-600 text-sm">Tutup</button>
+                </div>
+
+                {loadingFolder ? (
+                  <div className="flex items-center justify-center py-6">
+                    <svg className="animate-spin h-6 w-6 text-gray-400" viewBox="0 0 24 24" fill="none">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
-                    Mengupload video...
+                  </div>
+                ) : folderFiles.length === 0 ? (
+                  <p className="text-gray-400 text-sm text-center py-4">Belum ada video di folder server</p>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-60 overflow-y-auto">
+                    {folderFiles.map((f) => (
+                      <button
+                        key={f.name}
+                        type="button"
+                        onClick={() => pickFromFolder(f.url)}
+                        className="flex flex-col items-center gap-1 p-3 rounded-lg bg-white hover:bg-gray-100 border border-gray-200 hover:border-emerald-400 transition-all text-left group"
+                      >
+                        <FilmIcon className="w-8 h-8 text-gray-400 group-hover:text-emerald-500 transition-colors" />
+                        <span className="text-gray-600 text-xs text-center leading-tight truncate w-full">{f.name}</span>
+                      </button>
+                    ))}
                   </div>
                 )}
-                <video
-                  src={edit.url_video}
-                  controls
-                  preload="metadata"
-                  playsInline
-                  className="w-full rounded-xl border border-gray-200 max-h-48"
-                >
-                  <source src={edit.url_video} type="video/mp4" />
-                </video>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => fileVideoRef.current?.click()}
-                    className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                  >
-                    <ArrowUpTrayIcon className="w-4 h-4" />
-                    Ganti Video
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleVideoRemove}
-                    className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
-                  >
-                    <TrashIcon className="w-4 h-4" />
-                    Hapus Video
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div
-                onClick={() => fileVideoRef.current?.click()}
-                className="flex flex-col items-center justify-center gap-2 p-6 rounded-xl border-2 border-dashed border-gray-300 hover:border-primary cursor-pointer bg-gray-50 transition-colors"
-              >
-                <ArrowUpTrayIcon className="w-8 h-8 text-gray-400" />
-                <p className="text-sm font-medium text-gray-600">Upload Video Profil</p>
-                <p className="text-xs text-gray-400">MP4, WebM</p>
-              </div>
+              </motion.div>
             )}
-            <input
-              ref={fileVideoRef}
-              type="file"
-              accept="video/*"
-              onChange={handleVideoUpload}
-              className="hidden"
-            />
           </div>
 
           {/* Teks */}
@@ -218,17 +266,10 @@ export default function EditModal({ show, onClose, data, onSave, onUploadFoto, o
         </div>
 
         <div className="sticky bottom-0 flex items-center justify-end gap-3 px-6 py-4 bg-white border-t border-gray-200 rounded-b-2xl">
-          <Button variant="ghost" onClick={onClose}>
-            Batal
-          </Button>
+          <Button variant="ghost" onClick={onClose}>Batal</Button>
           <Button variant="primary" onClick={handleSave} loading={saving} disabled={saving}>
-            {saving ? (
-              'Menyimpan...'
-            ) : (
-              <>
-                <CheckCircleIcon className="w-4 h-4" />
-                Simpan
-              </>
+            {saving ? 'Menyimpan...' : (
+              <><CheckCircleIcon className="w-4 h-4" /> Simpan</>
             )}
           </Button>
         </div>

@@ -16,6 +16,7 @@ use App\Models\VerifikasiLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -562,6 +563,14 @@ class AdminController extends Controller
 
     public function tentangAplikasiIndex()
     {
+        $raw = $this->getPengaturan('videos');
+        $videos = $raw ? array_values(array_filter(json_decode($raw, true) ?? [])) : [];
+
+        $url_video = $this->getPengaturan('url_video');
+        if (empty($videos) && !empty($url_video)) {
+            $videos = [$url_video];
+        }
+
         return response()->json([
             'teks' => $this->getPengaturan('tentang_aplikasi'),
             'foto_pengembang' => $this->getPengaturan('foto_pengembang'),
@@ -576,7 +585,8 @@ class AdminController extends Controller
             'bank' => $this->getPengaturan('bank', 'Allo Bank'),
             'rekening' => $this->getPengaturan('rekening', '082227283416'),
             'rekening_an' => $this->getPengaturan('rekening_an', 'DEDEK SULAIMAN'),
-            'url_video' => $this->getPengaturan('url_video'),
+            'url_video' => $url_video,
+            'videos' => $videos,
         ]);
     }
 
@@ -585,7 +595,7 @@ class AdminController extends Controller
         $fields = [
             'teks', 'foto_pengembang', 'developer_name', 'developer_role',
             'kontak', 'email', 'instagram', 'facebook', 'alamat', 'website',
-            'bank', 'rekening', 'rekening_an', 'url_video',
+            'bank', 'rekening', 'rekening_an', 'url_video', 'videos',
         ];
         $rules = [];
         foreach ($fields as $f) {
@@ -595,6 +605,9 @@ class AdminController extends Controller
             }
             if ($f === 'website') {
                 $rule = 'nullable|url';
+            }
+            if ($f === 'videos') {
+                $rule = 'nullable|json';
             }
             $rules[$f] = $rule;
         }
@@ -619,6 +632,31 @@ class AdminController extends Controller
 
             return response()->json(['message' => 'Gagal menyimpan: '.$e->getMessage()], 500);
         }
+    }
+
+    // === VIDEO LIST ===
+    public function videoList()
+    {
+        $path = public_path('videos');
+        $files = [];
+
+        if (is_dir($path)) {
+            $scan = array_diff(scandir($path), ['.', '..', '.gitkeep']);
+            foreach ($scan as $file) {
+                $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                if (in_array($ext, ['mp4', 'webm', 'mov', 'avi', 'mkv'])) {
+                    $files[] = [
+                        'name' => $file,
+                        'url' => "/videos/{$file}",
+                        'size' => filesize("{$path}/{$file}"),
+                    ];
+                }
+            }
+        }
+
+        usort($files, fn($a, $b) => strcasecmp($a['name'], $b['name']));
+
+        return response()->json($files);
     }
 
     // === BLOG CRUD ===

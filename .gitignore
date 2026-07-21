@@ -38,3 +38,7 @@ backend/bootstrap/cache/*.php
 
 # OpenCode
 .opencode/
+vidio/
+foto_untuk penganti hero leanding page/
+logo/
+backend/debug_login*.php

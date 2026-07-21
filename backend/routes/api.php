@@ -125,6 +125,8 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::get('/pendaftaran', [AdminController::class, 'pendaftaranIndex']);
         Route::put('/pendaftaran/{pendaftaranProgram}/verifikasi', [AdminController::class, 'pendaftaranVerifikasi']);
         Route::delete('/pendaftaran/{pendaftaranProgram}', [AdminController::class, 'pendaftaranDestroy']);
+        // Video list
+        Route::get('/videos/list', [AdminController::class, 'videoList']);
         // Tentang Aplikasi
         Route::put('/tentang-aplikasi', [AdminController::class, 'tentangAplikasiUpdate']);
         // Blog

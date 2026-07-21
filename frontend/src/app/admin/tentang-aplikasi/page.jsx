@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import { SparklesIcon } from '@heroicons/react/24/outline';
 import HeroDeveloper from '@/components/tentang-aplikasi/HeroDeveloper';
-import VideoSection from '@/components/tentang-aplikasi/VideoSection';
+import VideoGallery from '@/components/tentang-aplikasi/VideoGallery';
 import AboutSection from '@/components/tentang-aplikasi/AboutSection';
 import InfoCards from '@/components/tentang-aplikasi/InfoCards';
 import DonasiCard from '@/components/tentang-aplikasi/DonasiCard';
@@ -35,18 +35,34 @@ export default function AdminTentangAplikasiPage() {
     } catch (err) { toast.error('Upload gagal: ' + err.message); }
   }, [toast]);
 
-  const handleUploadVideo = useCallback(async (file) => {
+  const handleUploadVideo = useCallback(async (file, folderUrl) => {
+    if (folderUrl) {
+      setEdit((prev) => {
+        const next = [...(Array.isArray(prev.videos) ? prev.videos : []), folderUrl];
+        return { ...prev, videos: next };
+      });
+      toast.success('Video ditambahkan dari folder');
+      return;
+    }
+    if (!file) return;
     setUploadingVideo(true);
     try {
       const res = await api.upload('/upload/video-tentang-aplikasi', file);
-      setEdit((prev) => ({ ...prev, url_video: res.url }));
+      setEdit((prev) => {
+        const next = [...(Array.isArray(prev.videos) ? prev.videos : []), res.url];
+        return { ...prev, videos: next };
+      });
       toast.success('Video berhasil diupload');
     } catch (err) { toast.error('Upload video gagal: ' + err.message); }
     setUploadingVideo(false);
   }, [toast]);
 
-  const handleRemoveVideo = useCallback(() => {
-    setEdit((prev) => ({ ...prev, url_video: '' }));
+  const handleRemoveVideo = useCallback((idx) => {
+    setEdit((prev) => {
+      const next = Array.isArray(prev.videos) ? [...prev.videos] : [];
+      if (typeof idx === 'number') next.splice(idx, 1);
+      return { ...prev, videos: next };
+    });
   }, []);
 
   const handleSave = useCallback(async (editData) => {
@@ -71,11 +87,11 @@ export default function AdminTentangAplikasiPage() {
   return (
     <div>
       <HeroDeveloper data={data} admin onEdit={() => setShowModal(true)} />
-      <VideoSection
-        urlVideo={data.url_video}
+      <VideoGallery
+        videos={edit.videos || data.videos}
         isAdmin
         onUpload={handleUploadVideo}
-        onRemove={handleRemoveVideo}
+        onRemoveVideo={handleRemoveVideo}
         uploading={uploadingVideo}
       />
       <AboutSection teks={data.teks} />
@@ -101,6 +117,7 @@ export default function AdminTentangAplikasiPage() {
         onUploadFoto={handleEditFoto}
         onUploadVideo={handleUploadVideo}
         onRemoveVideo={handleRemoveVideo}
+        videos={edit.videos || data.videos}
         saving={saving}
         uploadingVideo={uploadingVideo}
       />

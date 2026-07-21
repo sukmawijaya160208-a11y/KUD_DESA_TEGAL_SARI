@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import { SparklesIcon } from '@heroicons/react/24/outline';
 import HeroDeveloper from '@/components/tentang-aplikasi/HeroDeveloper';
-import VideoSection from '@/components/tentang-aplikasi/VideoSection';
+import VideoGallery from '@/components/tentang-aplikasi/VideoGallery';
 import AboutSection from '@/components/tentang-aplikasi/AboutSection';
 import InfoCards from '@/components/tentang-aplikasi/InfoCards';
 import DonasiCard from '@/components/tentang-aplikasi/DonasiCard';
@@ -33,7 +33,7 @@ export default function PekebunTentangAplikasiPage() {
   return (
     <div>
       <HeroDeveloper data={data} />
-      <VideoSection urlVideo={data.url_video} />
+      <VideoGallery videos={data.videos} />
       <AboutSection teks={data.teks} />
       <InfoCards data={data} />
       <DonasiCard data={data} />
