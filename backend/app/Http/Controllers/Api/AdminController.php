@@ -607,7 +607,7 @@ class AdminController extends Controller
                 $rule = 'nullable|url';
             }
             if ($f === 'videos') {
-                $rule = 'nullable|json';
+                $rule = 'nullable';
             }
             $rules[$f] = $rule;
         }
@@ -617,7 +617,11 @@ class AdminController extends Controller
         try {
             foreach ($fields as $f) {
                 if (array_key_exists($f, $validated)) {
-                    $value = is_string($validated[$f]) ? strip_tags($validated[$f]) : $validated[$f];
+                    if ($f === 'videos') {
+                        $value = is_array($validated[$f]) ? json_encode($validated[$f]) : $validated[$f];
+                    } else {
+                        $value = is_string($validated[$f]) ? strip_tags($validated[$f]) : $validated[$f];
+                    }
                     Pengaturan::updateOrCreate(
                         ['key' => $f === 'teks' ? 'tentang_aplikasi' : $f],
                         ['value' => $value ?? '']
