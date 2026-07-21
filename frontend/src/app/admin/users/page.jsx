@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { api } from '@/lib/api';
@@ -22,6 +22,7 @@ import {
   UsersIcon, UserIcon, PhoneIcon, PhotoIcon, ShieldCheckIcon,
   CheckCircleIcon, MapPinIcon, ClipboardDocumentListIcon, ChartBarIcon,
 } from '@heroicons/react/24/outline';
+import ExportDropdown from '@/components/ExportDropdown';
 
   const ROLE_STYLES = {
     admin: 'bg-blue-100 text-blue-700 ring-blue-300',
@@ -479,6 +480,43 @@ export default function AdminUsersPage() {
             <p className="text-sm text-gray-500 mt-0.5">Kelola semua akun pengguna</p>
           </div>
         </div>
+          <ExportDropdown
+            title="Data Users"
+            fetchAll={() => api.admin.users.list().then((res) => res.data || res)}
+            pdfUrl={api.admin.export.usersPdf()}
+            csvUrl={api.admin.export.usersCsv()}
+            filename="data-users"
+            renderPrintContent={(items) => `
+              <table class="print-table">
+                <thead>
+                  <tr>
+                    <th style="width:36px">No</th>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status Pekebun</th>
+                    <th>NIK</th>
+                    <th>No WhatsApp</th>
+                    <th>Tanggal Daftar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${items.map((d, i) => `
+                    <tr>
+                      <td>${i + 1}</td>
+                      <td><strong>${d.name}</strong></td>
+                      <td>${d.email}</td>
+                      <td>${d.role}</td>
+                      <td>${d.pekebun?.status || '-'}</td>
+                      <td>${d.pekebun?.nik || '-'}</td>
+                      <td>${d.pekebun?.no_whatsapp || '-'}</td>
+                      <td>${d.created_at ? new Date(d.created_at).toLocaleDateString('id-ID') : '-'}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `}
+          />
         <Button onClick={() => setCreateModal(true)}>+ Tambah User</Button>
       </div>
 
@@ -528,9 +566,6 @@ export default function AdminUsersPage() {
           <DateRangePicker value={dateRange} onChange={(v) => { setDateRange(v); setFilterDateFrom(v.start); setFilterDateTo(v.end); setPage(1); }} placeholder="Filter tanggal" className="min-w-[240px]" />
           <Button variant="outline" size="sm" onClick={() => { setImportData(null); setImportFile(null); setImportResult(null); setImportModal(true); }} className="whitespace-nowrap">
             <DocumentArrowDownIcon className="w-4 h-4 rotate-180" /> Import
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => exportToExcel(sorted)} className="whitespace-nowrap">
-            <DocumentArrowDownIcon className="w-4 h-4" /> Excel
           </Button>
         </div>
 
@@ -846,7 +881,7 @@ export default function AdminUsersPage() {
           </div>
           <div className="flex items-center gap-2">
             <button disabled={safePage <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}
-              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">« Prev</button>
+              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Â« Prev</button>
             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
               let pageNum;
               if (totalPages <= 7) pageNum = i + 1;
@@ -861,7 +896,7 @@ export default function AdminUsersPage() {
               );
             })}
             <button disabled={safePage >= totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Next »</button>
+              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Next Â»</button>
             <div className="flex items-center gap-1 ml-2">
               <span className="text-xs text-gray-400">Go:</span>
               <input type="number" min={1} max={totalPages} value={gotoPage} onChange={(e) => setGotoPage(e.target.value)}

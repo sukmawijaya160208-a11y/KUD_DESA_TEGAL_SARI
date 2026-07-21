@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { api } from '@/lib/api';
@@ -14,6 +14,7 @@ import {
   ClockIcon, EyeIcon, ChevronDownIcon, ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { formatDate, formatRelative } from '@/lib/date';
+import ExportDropdown from '@/components/ExportDropdown';
 
 const TINDAKAN_OPTIONS = [
   { value: '', label: 'Semua Tindakan' },
@@ -187,6 +188,40 @@ export default function VerifikasiLogPage() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">Verifikasi Log</h1>
           <p className="text-sm text-gray-500 mt-0.5">Riwayat verifikasi oleh semua verifikator</p>
+
+          <ExportDropdown
+            title="Log Verifikasi"
+            fetchAll={() => api.admin.verifikasiLog.list().then((res) => res.data || res)}
+            pdfUrl={api.admin.export.verifikasiLogPdf()}
+            csvUrl={api.admin.export.verifikasiLogCsv()}
+            filename="log-verifikasi"
+            renderPrintContent={(items) => `
+              <table class="print-table">
+                <thead>
+                  <tr>
+                    <th style="width:36px">No</th>
+                    <th>Waktu</th>
+                    <th>Verifikator</th>
+                    <th style="width:80px">Tindakan</th>
+                    <th style="width:120px">Target</th>
+                    <th>Catatan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${items.map((v, i) => `
+                    <tr>
+                      <td>${i + 1}</td>
+                      <td>${v.created_at ? new Date(v.created_at).toLocaleDateString('id-ID') + ' ' + new Date(v.created_at).toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'}) : '-'}</td>
+                      <td>${v.user?.name || '-'}</td>
+                      <td><span class="badge badge-${v.tindakan}">${v.tindakan}</span></td>
+                      <td>${v.verifiable_type ? v.verifiable_type.split('\\').pop() + ' #' + v.verifiable_id : '-'}</td>
+                      <td>${v.catatan || '-'}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `}
+          />
         </div>
       </div>
 
@@ -387,7 +422,7 @@ export default function VerifikasiLogPage() {
           </div>
           <div className="flex items-center gap-2">
             <button disabled={safePage <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}
-              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">« Prev</button>
+              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Â« Prev</button>
             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
               let pageNum;
               if (totalPages <= 7) pageNum = i + 1;
@@ -402,7 +437,7 @@ export default function VerifikasiLogPage() {
               );
             })}
             <button disabled={safePage >= totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Next »</button>
+              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Next Â»</button>
             <div className="flex items-center gap-1 ml-2">
               <span className="text-xs text-gray-400">Go:</span>
               <input type="number" min={1} max={totalPages} value={gotoPage} onChange={(e) => setGotoPage(e.target.value)}
@@ -455,3 +490,4 @@ export default function VerifikasiLogPage() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState, useRef, useCallback, memo, startTransition } from 'react';
 import { api } from '@/lib/api';
@@ -9,7 +9,7 @@ import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
-import PrintButton from '@/components/PrintButton';
+import ExportDropdown from '@/components/ExportDropdown';
 import DatePicker from '@/components/ui/DatePicker';
 import { motion } from 'framer-motion';
 import {
@@ -252,10 +252,13 @@ export default function AdminPekebunPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <PrintButton
-            title="Data Pekebun - KUD Desa Sari Subur"
+          <ExportDropdown
+            title="Data Pekebun"
             fetchAll={() => api.admin.pekebun.list({ per_page: 9999 }).then((res) => res.data || res)}
-            renderContent={(items) => `
+            pdfUrl={api.admin.export.pekebunPdf()}
+            csvUrl={api.admin.export.pekebunCsv()}
+            filename="data-pekebun"
+            renderPrintContent={(items) => `
               <table class="print-table">
                 <thead>
                   <tr>

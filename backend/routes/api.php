@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BackupController;
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\CallController;
 use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\ExportController;
 use App\Http\Controllers\Api\HargaTbsController;
 use App\Http\Controllers\Api\NotifikasiController;
 use App\Http\Controllers\Api\PasswordResetController;
@@ -145,6 +146,24 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::get('/backup', [BackupController::class, 'backup']);
         Route::post('/restore', [BackupController::class, 'restore']);
         Route::post('/reset-data', [BackupController::class, 'resetData']);
+
+        // === EXPORT ===
+        Route::prefix('export')->group(function () {
+            Route::get('/pekebun/pdf', [ExportController::class, 'pekebunPdf']);
+            Route::get('/pekebun/csv', [ExportController::class, 'pekebunCsv']);
+            Route::get('/users/pdf', [ExportController::class, 'usersPdf']);
+            Route::get('/users/csv', [ExportController::class, 'usersCsv']);
+            Route::get('/lahan/pdf', [ExportController::class, 'lahanPdf']);
+            Route::get('/lahan/csv', [ExportController::class, 'lahanCsv']);
+            Route::get('/pendaftaran/pdf', [ExportController::class, 'pendaftaranPdf']);
+            Route::get('/pendaftaran/csv', [ExportController::class, 'pendaftaranCsv']);
+            Route::get('/verifikasi-log/pdf', [ExportController::class, 'verifikasiLogPdf']);
+            Route::get('/verifikasi-log/csv', [ExportController::class, 'verifikasiLogCsv']);
+            Route::get('/program/pdf', [ExportController::class, 'programPdf']);
+            Route::get('/program/csv', [ExportController::class, 'programCsv']);
+            Route::get('/laporan/pdf', [ExportController::class, 'laporanPdf']);
+            Route::get('/laporan/csv', [ExportController::class, 'laporanCsv']);
+        });
     });
 
     // === VERIFIKATOR ===

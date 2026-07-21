@@ -204,6 +204,22 @@ export const api = {
       createCategory: (name) => request('/admin/blog/categories', { method: 'POST', body: JSON.stringify({ name }) }),
       deleteCategory: (name) => request(`/admin/blog/categories/${encodeURIComponent(name)}`, { method: 'DELETE' }),
     },
+    export: {
+      pekebunPdf: (params) => '/admin/export/pekebun/pdf?' + new URLSearchParams(params || {}).toString(),
+      pekebunCsv: (params) => '/admin/export/pekebun/csv?' + new URLSearchParams(params || {}).toString(),
+      usersPdf: () => '/admin/export/users/pdf',
+      usersCsv: () => '/admin/export/users/csv',
+      lahanPdf: () => '/admin/export/lahan/pdf',
+      lahanCsv: () => '/admin/export/lahan/csv',
+      pendaftaranPdf: () => '/admin/export/pendaftaran/pdf',
+      pendaftaranCsv: () => '/admin/export/pendaftaran/csv',
+      verifikasiLogPdf: () => '/admin/export/verifikasi-log/pdf',
+      verifikasiLogCsv: () => '/admin/export/verifikasi-log/csv',
+      programPdf: () => '/admin/export/program/pdf',
+      programCsv: () => '/admin/export/program/csv',
+      laporanPdf: () => '/admin/export/laporan/pdf',
+      laporanCsv: () => '/admin/export/laporan/csv',
+    },
     backupRestore: {
       backup: () => request('/admin/backup'),
       restore: (data) => request('/admin/restore', { method: 'POST', body: JSON.stringify(data) }),
@@ -283,3 +299,4 @@ export const api = {
     },
   },
 };
+

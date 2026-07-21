@@ -14,6 +14,7 @@ import {
   XMarkIcon, ChevronDownIcon, ChevronUpIcon, TrashIcon,
   ClockIcon
 } from '@heroicons/react/24/outline';
+import ExportDropdown from '@/components/ExportDropdown';
 
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',
@@ -81,6 +82,39 @@ export default function AdminPendaftaranPage() {
             <p className="text-sm text-gray-500 mt-0.5">Kelola pendaftaran peserta program KUD</p>
           </div>
         </div>
+        <ExportDropdown
+          title="Data Pendaftaran Program"
+          fetchAll={() => api.admin.pendaftaran.list().then((res) => res.data || res)}
+          pdfUrl={api.admin.export.pendaftaranPdf()}
+          csvUrl={api.admin.export.pendaftaranCsv()}
+          filename="data-pendaftaran"
+          renderPrintContent={(items) => `
+              <table class="print-table">
+                <thead>
+                  <tr>
+                    <th style="width:36px">No</th>
+                    <th>Pekebun</th>
+                    <th>NIK</th>
+                    <th>Program</th>
+                    <th style="width:80px">Status</th>
+                    <th>Tanggal Daftar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${items.map((p, i) => `
+                    <tr>
+                      <td>${i + 1}</td>
+                      <td><strong>${p.pekebun?.nama || '-'}</strong></td>
+                      <td>${p.pekebun?.nik || '-'}</td>
+                      <td>${p.program_kud?.nama || '-'}</td>
+                      <td><span class="badge badge-${p.status}">${p.status}</span></td>
+                      <td>${p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID') : '-'}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `}
+          />
         <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all">
           <option value="">Semua Status</option>
@@ -142,7 +176,7 @@ export default function AdminPendaftaranPage() {
                           <div className="text-sm space-y-1 text-gray-600">
                             <p><span className="text-gray-400">Alamat:</span> {d.lahan.alamat_lahan}</p>
                             <p><span className="text-gray-400">Surat:</span> {d.lahan.jenis_surat} - {d.lahan.nomor_surat}</p>
-                            <p><span className="text-gray-400">Luas:</span> {Number(d.lahan.luas_lahan_m2).toLocaleString()} MÂ²</p>
+                            <p><span className="text-gray-400">Luas:</span> {Number(d.lahan.luas_lahan_m2).toLocaleString()} M²</p>
                           </div>
                         ) : <p className="text-sm text-gray-400">Tidak ada data lahan</p>}
                       </div>

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState, useRef, useCallback, memo, startTransition } from 'react';
 import { api } from '@/lib/api';
@@ -13,6 +13,7 @@ import DatePicker from '@/components/ui/DatePicker';
 import ProgramDetail from '@/components/ProgramDetail';
 import { formatDate, formatDateShort } from '@/lib/date';
 import { motion, AnimatePresence } from 'framer-motion';
+import ExportDropdown from '@/components/ExportDropdown';
 import {
   ClipboardDocumentListIcon, PlusIcon, PencilSquareIcon, TrashIcon,
   XMarkIcon, PhotoIcon, CalendarDaysIcon, UsersIcon,
@@ -38,9 +39,9 @@ const SORT_OPTIONS = [
 
 
 const STATUS_MAP = {
-  verified: '✓',
-  pending: '◐',
-  rejected: '✗',
+  verified: 'âœ“',
+  pending: 'â—',
+  rejected: 'âœ—',
 };
 const STATUS_CLASS = {
   verified: 'text-green-600 bg-green-50',
@@ -423,6 +424,43 @@ export default function AdminProgramPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <ExportDropdown
+            title="Data Program KUD"
+            fetchAll={() => api.admin.program.list({ per_page: 9999 }).then((res) => res.data || res)}
+            pdfUrl={api.admin.export.programPdf()}
+            csvUrl={api.admin.export.programCsv()}
+            filename="data-program"
+            renderPrintContent={(items) => `
+              <table class="print-table">
+                <thead>
+                  <tr>
+                    <th style="width:36px">No</th>
+                    <th>Nama Program</th>
+                    <th>Jenis</th>
+                    <th style="width:70px">Status</th>
+                    <th style="width:50px;text-align:center">Kuota</th>
+                    <th style="width:50px;text-align:center">Daftar</th>
+                    <th>Mulai</th>
+                    <th>Selesai</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${items.map((p, i) => `
+                    <tr>
+                      <td>${i + 1}</td>
+                      <td><strong>${p.nama}</strong></td>
+                      <td>${p.jenis}</td>
+                      <td><span class="badge badge-${p.aktif ? 'aktif' : 'nonaktif'}">${p.aktif ? 'Aktif' : 'Nonaktif'}</span></td>
+                      <td style="text-align:center">${p.kuota ?? '-'}</td>
+                      <td style="text-align:center">${p.pendaftaran_program_count || 0}</td>
+                      <td>${p.tanggal_mulai ? new Date(p.tanggal_mulai).toLocaleDateString('id-ID') : '-'}</td>
+                      <td>${p.tanggal_selesai ? new Date(p.tanggal_selesai).toLocaleDateString('id-ID') : '-'}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `}
+          />
           <Button onClick={() => { resetForm(); setShowForm(true); }}>
             <PlusIcon className="w-4 h-4" /> Tambah Program
           </Button>
@@ -578,7 +616,7 @@ export default function AdminProgramPage() {
         {deleteModal?.pendaftaran_program_count > 0 && (
           <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl">
             <p className="text-xs text-amber-700">
-              ⚠️ Program ini memiliki <strong>{deleteModal.pendaftaran_program_count} pendaftaran</strong> yang juga akan dihapus.
+              âš ï¸ Program ini memiliki <strong>{deleteModal.pendaftaran_program_count} pendaftaran</strong> yang juga akan dihapus.
             </p>
           </div>
         )}
@@ -597,3 +635,4 @@ export default function AdminProgramPage() {
     </motion.div>
   );
 }
+
