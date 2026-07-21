@@ -7,6 +7,7 @@ use App\Models\Pengaturan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class UploadController extends Controller
 {
@@ -16,7 +17,7 @@ class UploadController extends Controller
             Storage::disk('public')->makeDirectory($folder);
         }
 
-        $filename = md5(uniqid().random_int(0, 999999)).'.'.$file->getClientOriginalExtension();
+        $filename = Str::uuid().'.'.$file->getClientOriginalExtension();
         $file->storeAs($folder, $filename, 'public');
 
         return [
@@ -193,7 +194,7 @@ class UploadController extends Controller
     public function chatUpload(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:jpg,jpeg,png,gif,webp,pdf,doc,docx,xls,xlsx,zip,mp3,wav,ogg,m4a,mp4,mov,webm|max:20480',
+            'file' => 'required|file|mimes:jpg,jpeg,png,gif,webp,pdf,mp4,mov,webm|max:20480',
         ]);
         try {
             $result = $this->storeFile($request->file('file'), 'chat-attachments');

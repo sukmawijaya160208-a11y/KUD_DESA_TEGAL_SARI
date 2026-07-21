@@ -61,9 +61,10 @@ class AuthController extends Controller
 
             $token = $user->createToken('auth-token')->plainTextToken;
 
+            $user->load('pekebun');
             return response()->json([
                 'message' => 'Registrasi berhasil',
-                'user' => $user->load('pekebun'),
+                'user' => $user->makeHidden(['google_id', 'remember_token', 'email_verified_at', 'created_at', 'updated_at']),
                 'token' => $token,
             ], 201);
         } catch (ValidationException $e) {
@@ -71,8 +72,7 @@ class AuthController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),
-                'file' => $e->getFile() . ':' . $e->getLine(),
+                'message' => config('app.debug') ? $e->getMessage() : 'Registrasi gagal. Silakan coba lagi.',
             ], 500);
         }
     }
@@ -106,7 +106,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Login berhasil',
-            'user' => $user,
+            'user' => $user->makeHidden(['google_id', 'remember_token', 'email_verified_at', 'created_at', 'updated_at']),
             'token' => $token,
         ]);
     }
@@ -180,6 +180,6 @@ class AuthController extends Controller
             $user->load('pekebun.lahan');
         }
 
-        return response()->json($user);
+        return response()->json($user->makeHidden(['google_id', 'remember_token', 'email_verified_at', 'created_at', 'updated_at']));
     }
 }

@@ -13,7 +13,7 @@ class PasswordResetController extends Controller
 {
     public function forgot(Request $request)
     {
-        $request->validate(['email' => 'required|email|exists:users,email']);
+        $request->validate(['email' => 'required|email']);
 
         $token = Str::random(60);
         DB::table('password_reset_tokens')->updateOrInsert(
@@ -29,7 +29,7 @@ class PasswordResetController extends Controller
     public function reset(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:users,email',
+            'email' => 'required|email',
             'token' => 'required|string',
             'password' => 'required|string|min:6|confirmed',
         ]);
