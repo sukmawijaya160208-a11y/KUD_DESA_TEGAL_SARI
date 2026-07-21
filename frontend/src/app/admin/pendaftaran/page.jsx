@@ -72,7 +72,7 @@ export default function AdminPendaftaranPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
             <BookOpenIcon className="w-6 h-6 text-primary" />
@@ -114,7 +114,9 @@ export default function AdminPendaftaranPage() {
                 </tbody>
               </table>
             `}
-          />
+        />
+      </div>
+      <div className="flex items-center gap-3 mb-6">
         <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all">
           <option value="">Semua Status</option>

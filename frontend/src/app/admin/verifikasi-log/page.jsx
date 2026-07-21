@@ -181,21 +181,23 @@ export default function VerifikasiLogPage() {
 
   return (
     <div>
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center shadow-sm">
-          <ShieldExclamationIcon className="w-5 h-5 text-primary" />
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center shadow-sm">
+            <ShieldExclamationIcon className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Verifikasi Log</h1>
+            <p className="text-sm text-gray-500 mt-0.5">Riwayat verifikasi oleh semua verifikator</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Verifikasi Log</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Riwayat verifikasi oleh semua verifikator</p>
-
-          <ExportDropdown
-            title="Log Verifikasi"
-            fetchAll={() => api.admin.verifikasiLog.list().then((res) => res.data || res)}
-            pdfUrl={api.admin.export.verifikasiLogPdf()}
-            csvUrl={api.admin.export.verifikasiLogCsv()}
-            filename="log-verifikasi"
-            renderPrintContent={(items) => `
+        <ExportDropdown
+          title="Log Verifikasi"
+          fetchAll={() => api.admin.verifikasiLog.list().then((res) => res.data || res)}
+          pdfUrl={api.admin.export.verifikasiLogPdf()}
+          csvUrl={api.admin.export.verifikasiLogCsv()}
+          filename="log-verifikasi"
+          renderPrintContent={(items) => `
               <table class="print-table">
                 <thead>
                   <tr>
@@ -221,8 +223,7 @@ export default function VerifikasiLogPage() {
                 </tbody>
               </table>
             `}
-          />
-        </div>
+        />
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
