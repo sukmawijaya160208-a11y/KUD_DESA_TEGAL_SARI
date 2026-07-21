@@ -103,7 +103,7 @@ function BrandPanel({ logoUrl, showBenefits, onToggleBenefits }) {
                 <span className="text-white font-heading font-bold text-xl lg:text-3xl px-2">K</span>
               )}
             </div>
-            <h1 className="text-white font-heading font-bold text-lg lg:text-3xl lg:mt-3 lg:leading-tight hidden xs:block lg:block">
+            <h1 className="text-white font-heading font-bold text-lg lg:text-3xl lg:mt-3 lg:leading-tight">
               KUD<br className="hidden lg:block" />
               <span className="bg-gradient-to-r from-primary-light via-blue-200 to-accent bg-clip-text text-transparent">
                 Sari Subur
