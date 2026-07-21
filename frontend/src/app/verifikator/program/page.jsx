@@ -11,9 +11,9 @@ import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
 import {
   DocumentTextIcon, EyeIcon, XMarkIcon, MapPinIcon,
-  ChevronDownIcon, ChevronUpIcon, MagnifyingGlassIcon,
+  ChevronDownIcon, ChevronRightIcon, MagnifyingGlassIcon,
   CheckCircleIcon, XCircleIcon, ClockIcon,
-  FunnelIcon, ArrowUpIcon, ArrowDownIcon
+  FunnelIcon
 } from '@heroicons/react/24/outline';
 
 const PERSYARATAN_LABEL = {
