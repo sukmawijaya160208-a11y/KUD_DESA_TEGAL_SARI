@@ -177,7 +177,7 @@ function TabNav({ tab, onSwitch }) {
           className={`relative flex-1 py-2.5 text-sm font-semibold rounded-lg transition-colors duration-200 cursor-pointer ${
             tab === t ? 'text-primary' : 'text-gray-400 hover:text-gray-600'
           }`}>
-          {tab === 'login' ? 'Masuk' : 'Daftar'}
+          {t === 'login' ? 'Masuk' : 'Daftar'}
           {tab === t && (
             <motion.div layoutId="tab-bg" className="absolute inset-0 bg-white rounded-lg shadow-sm -z-10"
               transition={{ type: 'spring', stiffness: 400, damping: 30 }} />
