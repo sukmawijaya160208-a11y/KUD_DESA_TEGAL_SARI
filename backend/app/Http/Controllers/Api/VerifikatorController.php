@@ -138,7 +138,7 @@ class VerifikatorController extends Controller
 
     public function riwayat(Request $request)
     {
-        $query = VerifikasiLog::with('user');
+        $query = VerifikasiLog::with(['user', 'verifiable']);
 
         if ($request->filled('tindakan')) {
             $query->where('tindakan', $request->tindakan);
@@ -150,6 +150,14 @@ class VerifikatorController extends Controller
                 $q->where('catatan', 'like', "%{$s}%")
                   ->orWhereHas('user', function ($q2) use ($s) {
                       $q2->where('name', 'like', "%{$s}%");
+                  })
+                  ->orWhereHasMorph('verifiable', ['App\Models\Pekebun'], function ($q3) use ($s) {
+                      $q3->where('nama', 'like', "%{$s}%");
+                  })
+                  ->orWhereHasMorph('verifiable', ['App\Models\PendaftaranProgram'], function ($q4) use ($s) {
+                      $q4->whereHas('programKud', function ($q5) use ($s) {
+                          $q5->where('nama', 'like', "%{$s}%");
+                      });
                   });
             });
         }
