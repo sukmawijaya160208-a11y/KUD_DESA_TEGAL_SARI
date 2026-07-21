@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
+use App\Http\Controllers\Api\NotifikasiController;
+
 class AdminController extends Controller
 {
     public function dashboard()
@@ -127,6 +129,9 @@ class AdminController extends Controller
 
     public function pekebunDestroy(Pekebun $pekebun)
     {
+        $pekebun->lahan()->delete();
+        $pekebun->pendaftaranProgram()->delete();
+        $pekebun->tbsSyncs()->delete();
         $pekebun->user()->delete();
         $pekebun->delete();
 
@@ -710,7 +715,7 @@ class AdminController extends Controller
                 foreach ($request->media_urls as $i => $url) {
                     BlogMedia::create([
                         'blog_post_id' => $post->id,
-                        'type' => str_starts_with($url, '/storage/') ? 'image' : 'image',
+                        'type' => preg_match('/\.(mp4|webm|mov|avi)$/i', $url) ? 'video' : 'image',
                         'url' => $url,
                         'order' => $i,
                     ]);
@@ -740,7 +745,7 @@ class AdminController extends Controller
         ]);
 
         if (isset($validated['content'])) {
-            $validated['content'] = strip_tags($validated['content']);
+            $validated['content'] = $validated['content'];
         }
         $validated['updated_by'] = $request->user()->id;
 

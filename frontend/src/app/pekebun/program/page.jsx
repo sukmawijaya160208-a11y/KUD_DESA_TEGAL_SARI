@@ -176,7 +176,7 @@ export default function PekebunProgramPage() {
                       <span className="flex items-center gap-1">
                         <CalendarDaysIcon className="w-3.5 h-3.5" />
                         {formatDate(p.tanggal_mulai, 'dd MMM')}
-                        {p.tanggal_selesai && ` - $                        {formatDateShort(p.tanggal_selesai)}`}
+                        {p.tanggal_selesai && ` - ${formatDateShort(p.tanggal_selesai)}`}
                       </span>
                     )}
                     {p.kuota && (

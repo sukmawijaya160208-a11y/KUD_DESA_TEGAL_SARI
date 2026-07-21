@@ -53,6 +53,9 @@ class PekebunController extends Controller
     public function lahanIndex()
     {
         $pekebun = request()->user()->pekebun;
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
 
         return response()->json(Lahan::where('pekebun_id', $pekebun->id)->get());
     }
@@ -60,6 +63,9 @@ class PekebunController extends Controller
     public function lahanStore(Request $request)
     {
         $pekebun = $request->user()->pekebun;
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
         $validated = $request->validate([
             'alamat_lahan' => 'required|string',
             'jenis_surat' => 'required|in:SHM,SPPH,SKT',
@@ -132,6 +138,9 @@ class PekebunController extends Controller
     public function daftarProgram(Request $request)
     {
         $pekebun = $request->user()->pekebun;
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
         $validated = $request->validate([
             'program_kud_id' => 'required|exists:program_kud,id',
             'lahan_id' => 'nullable|exists:lahan,id',
@@ -194,6 +203,9 @@ class PekebunController extends Controller
     public function programSaya(Request $request)
     {
         $pekebun = $request->user()->pekebun;
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
         $perPage = min((int) ($request->per_page ?? 20), 50);
 
         return response()->json(
@@ -208,6 +220,9 @@ class PekebunController extends Controller
     public function tbsIndex(Request $request)
     {
         $pekebun = $request->user()->pekebun;
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
         $perPage = min((int) ($request->per_page ?? 20), 50);
 
         return response()->json(TbsSync::where('pekebun_id', $pekebun->id)->latest()->paginate($perPage));
@@ -216,6 +231,9 @@ class PekebunController extends Controller
     public function tbsStore(Request $request)
     {
         $pekebun = $request->user()->pekebun;
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
         $validated = $request->validate([
             'tanggal' => 'required|date',
             'jumlah_tbs' => 'required|numeric|min:0',
@@ -241,7 +259,11 @@ class PekebunController extends Controller
 
     public function tbsUpdate(Request $request, TbsSync $tbsSync)
     {
-        if ($tbsSync->pekebun_id !== $request->user()->pekebun->id) {
+        $pekebun = $request->user()->pekebun;
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
+        if ($tbsSync->pekebun_id !== $pekebun->id) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
         $validated = $request->validate([
@@ -259,7 +281,11 @@ class PekebunController extends Controller
 
     public function tbsDestroy(Request $request, TbsSync $tbsSync)
     {
-        if ($tbsSync->pekebun_id !== $request->user()->pekebun->id) {
+        $pekebun = $request->user()->pekebun;
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
+        if ($tbsSync->pekebun_id !== $pekebun->id) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
         $tbsSync->delete();

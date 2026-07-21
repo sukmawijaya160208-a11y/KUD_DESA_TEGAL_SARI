@@ -80,7 +80,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validated = $request->validate([
-            'email' => 'nullable|string',
+            'email' => 'nullable|string|email',
             'phone' => 'nullable|string',
             'password' => 'required|string',
         ]);
@@ -101,7 +101,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $user->tokens()->delete();
+        $user->tokens()->where('name', '!=', 'auth-token')->delete();
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([
@@ -158,7 +158,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $user->tokens()->delete();
+        $user->tokens()->where('name', '!=', 'auth-token')->delete();
         $token = $user->createToken('auth-token')->plainTextToken;
 
         $frontendUrl = env('FRONTEND_URL', 'http://localhost:3000');

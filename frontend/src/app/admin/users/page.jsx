@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { api } from '@/lib/api';
 import * as XLSX from 'xlsx';
 import { useLogo } from '@/hooks/useLogo';
@@ -127,8 +127,10 @@ export default function AdminUsersPage() {
   // --- Image Preview ---
   const [previewImage, setPreviewImage] = useState(null);
 
-  // === LOAD DATA ===
+    // === LOAD DATA ===
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const reload = useCallback(() => setRefreshKey(k => k + 1), []);
 
   useEffect(() => {
     let cancelled = false;
@@ -142,7 +144,7 @@ export default function AdminUsersPage() {
   const handleRetry = () => {
     setLoading(true);
     setDataError(null);
-    setRefreshKey(k => k + 1);
+    reload();
   };
 
   // === DERIVED DATA ===
@@ -295,7 +297,7 @@ export default function AdminUsersPage() {
     toast.success(`${success} user berhasil dihapus`);
     setBulkDeleteModal(false);
     clearSelection();
-    loadData();
+    reload();
     setSubmitting(false);
   };
 
@@ -309,25 +311,25 @@ export default function AdminUsersPage() {
     toast.success(`Role ${success} user berhasil diubah`);
     setBulkRoleModal(false);
     clearSelection();
-    loadData();
+    reload();
     setSubmitting(false);
   };
 
   // === CRUD HANDLERS ===
   const handleCreate = async (e) => {
     e.preventDefault(); setSubmitting(true);
-    try { await api.admin.users.create(form); toast.success('User berhasil ditambahkan'); setCreateModal(false); setForm({ name: '', email: '', password: '', role: 'pekebun' }); loadData(); } catch (err) { toast.error(err.message); }
+    try { await api.admin.users.create(form); toast.success('User berhasil ditambahkan'); setCreateModal(false); setForm({ name: '', email: '', password: '', role: 'pekebun' }); reload(); } catch (err) { toast.error(err.message); }
     setSubmitting(false);
   };
 
   const handleEdit = async (e) => {
     e.preventDefault(); setSubmitting(true);
-    try { await api.admin.users.update(editModal.id, editModal); toast.success('User berhasil diperbarui'); setEditModal(null); loadData(); } catch (err) { toast.error(err.message); }
+    try { await api.admin.users.update(editModal.id, editModal); toast.success('User berhasil diperbarui'); setEditModal(null); reload(); } catch (err) { toast.error(err.message); }
     setSubmitting(false);
   };
 
   const handleDelete = async () => {
-    try { await api.admin.users.delete(deleteModal.id); toast.success('User berhasil dihapus'); setDeleteModal(null); loadData(); } catch (err) { toast.error(err.message); }
+    try { await api.admin.users.delete(deleteModal.id); toast.success('User berhasil dihapus'); setDeleteModal(null); reload(); } catch (err) { toast.error(err.message); }
   };
 
   const handleImportFile = (e) => {
@@ -361,7 +363,7 @@ export default function AdminUsersPage() {
       setImportResult(res);
       if (res.created > 0) {
         toast.success(res.message);
-        loadData();
+        reload();
       }
       if (res.errors && res.errors.length) {
         res.errors.forEach(e => toast.error(e));

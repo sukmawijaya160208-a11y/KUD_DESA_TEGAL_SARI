@@ -8,6 +8,8 @@ use App\Models\PendaftaranProgram;
 use App\Models\VerifikasiLog;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\Api\NotifikasiController;
+
 class VerifikatorController extends Controller
 {
     public function pengajuanPekebun(Request $request)
