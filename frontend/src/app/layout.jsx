@@ -3,7 +3,7 @@ import ClientLayout from "@/components/ClientLayout";
 
 export const metadata = {
   title: "KUD Desa Sari Subur",
-  description: "Sistem Informasi Koperasi Unit Desa Tegal Sari",
+  description: "Sistem Informasi Koperasi Unit Desa Sari Subur",
 };
 
 export default function RootLayout({ children }) {
