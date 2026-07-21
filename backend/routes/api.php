@@ -51,6 +51,7 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::post('/upload/foto-kebun', [UploadController::class, 'fotoKebun']);
     Route::post('/upload/foto-pengembang', [UploadController::class, 'fotoPengembang']);
     Route::post('/upload/dokumen-program', [UploadController::class, 'dokumenProgram']);
+    Route::post('/upload/video-tentang-aplikasi', [UploadController::class, 'videoTentangAplikasi']);
     Route::post('/upload/chat', [UploadController::class, 'chatUpload']);
 
     // Notifikasi

@@ -18,8 +18,10 @@ async function request(endpoint, options = {}) {
     headers['Content-Type'] = 'application/json';
   }
 
+  const isUpload = endpoint.includes('/upload/');
+  const timeoutMs = isUpload ? 300000 : 30000;
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000);
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const res = await fetch(`${API_URL}${endpoint}`, {

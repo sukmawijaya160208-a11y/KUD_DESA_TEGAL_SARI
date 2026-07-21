@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLogo } from '@/hooks/useLogo';
 import Timeline from '@/components/Timeline';
-import HeroCards from '@/components/HeroCards';
+import KegiatanGallery from '@/components/KegiatanGallery';
 import TeamSection from '@/components/TeamSection';
 import MapSection from '@/components/MapSection';
 import {
@@ -182,12 +182,12 @@ export default function Home() {
                 <>
                   <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                     onClick={() => router.push('/login')}
-                    className={'px-4 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ' + (scrolled ? 'text-gray-600 hover:text-foreground' : 'text-white/80 hover:text-white')}>
+                    className={'px-3 lg:px-4 py-1.5 lg:py-2 rounded-xl text-xs lg:text-sm font-medium transition-all cursor-pointer ' + (scrolled ? 'text-gray-600 hover:text-foreground' : 'text-white/80 hover:text-white')}>
                     Masuk
                   </motion.button>
                   <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                     onClick={() => router.push('/login')}
-                    className={'px-5 py-2 rounded-xl font-semibold text-sm transition-all cursor-pointer ' + (scrolled ? 'bg-primary text-white hover:bg-primary-dark shadow-sm' : 'bg-white text-primary hover:bg-gray-100 shadow-lg')}>
+                    className={'px-3.5 lg:px-5 py-1.5 lg:py-2 rounded-xl font-semibold text-xs lg:text-sm transition-all cursor-pointer ' + (scrolled ? 'bg-primary text-white hover:bg-primary-dark shadow-sm' : 'bg-white text-primary hover:bg-gray-100 shadow-lg')}>
                     Daftar
                   </motion.button>
                 </>
@@ -272,26 +272,20 @@ export default function Home() {
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
               Koperasi Unit Digital — Kab. Musi Rawas
             </motion.div>
-            <motion.h1 variants={heroItemVariants} className="font-heading font-bold text-white leading-tight mb-6">
-              {['Majukan', 'Pekebun', 'Bersama', 'KUD'].map((w, i) => (
-                <span key={i} className="inline-block text-5xl md:text-7xl lg:text-8xl mr-3 md:mr-4">
-                  {w === 'Pekebun' ? (
-                    <span className="bg-gradient-to-r from-primary-light to-blue-300 bg-clip-text text-transparent">{w}</span>
-                  ) : (
-                    <span className={i === 3 ? 'text-white/90' : ''}>{w}</span>
-                  )}
+            <motion.h1 variants={heroItemVariants} className="font-heading font-bold text-white leading-tight mb-6 max-w-5xl mx-auto">
+              <span className="inline-block text-3xl md:text-5xl lg:text-6xl">
+                <span className="bg-gradient-to-r from-primary-light to-blue-300 bg-clip-text text-transparent">
+                  KOLABORASI MULTI-PIHAK
                 </span>
-              ))}
+              </span>
+              <span className="block text-2xl md:text-4xl lg:text-5xl mt-2 text-white/90">
+                MENUJU TATA KELOLA PERKEBUNAN SAWIT YANG BAIK DAN BERKELANJUTAN
+              </span>
             </motion.h1>
-            <motion.p variants={heroItemVariants} className="text-lg md:text-xl text-white/60 max-w-3xl mx-auto mb-3 leading-relaxed">
-              KUD Desa Sari Subur menghadirkan sistem informasi terpadu untuk pengelolaan data anggota,
-              lahan sawit, program PSR, dan hasil panen TBS secara digital. Daftar sekarang dan nikmati
-              kemudahan layanan koperasi berbasis teknologi tanpa harus bolak-balik ke kantor.
-            </motion.p>
-            <motion.p variants={heroItemVariants} className="text-base md:text-lg text-white/40 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Lebih dari <span className="text-white/80 font-semibold">1.250 pekebun</span> telah bergabung
-              dan merasakan manfaat dari layanan digital KUD — dari pendaftaran program hingga pemantauan
-              harga TBS secara real-time, semua dalam genggaman.
+            <motion.p variants={heroItemVariants} className="text-base md:text-lg text-white/50 max-w-4xl mx-auto mb-6 leading-relaxed">
+              KUD Sari Subur Kab. Musi Rawas Berkolaborasi dengan multi pihak dalam pengelolaan
+              data anggota, lahan sawit, program PSR, dan hasil panen TBS secara digital menuju
+              perkebunan jaya.
             </motion.p>
 
             {/* Value proposition row */}
@@ -314,18 +308,6 @@ export default function Home() {
                   </div>
                 </motion.div>
               ))}
-            </motion.div>
-
-            {/* Team section within hero */}
-            <motion.div variants={heroItemVariants} className="mb-8">
-              <div className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-sm text-white/70 px-3 py-1 rounded-full text-[10px] border border-white/5 mb-3">
-                <span className="w-1.5 h-1.5 bg-primary-light rounded-full" />
-                TIM MANAJEMEN
-              </div>
-              <h2 className="font-heading font-bold text-white text-2xl md:text-3xl mb-6">
-                Pengurus <span className="bg-gradient-to-r from-primary-light to-blue-300 bg-clip-text text-transparent">KUD Sari Subur</span>
-              </h2>
-              <HeroCards />
             </motion.div>
 
             <motion.div variants={heroItemVariants} className="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
@@ -351,7 +333,9 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-      <section id="keuntungan" className="py-14 lg:py-20 bg-muted/50 px-6 lg:px-12">
+      <KegiatanGallery />
+
+      <section id="keuntungan" className="py-14 lg:py-20 bg-muted/50 px-6 lg:px-12 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
             className="text-center mb-8">
@@ -391,7 +375,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="tentang" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto">
+      <section id="tentang" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-24">
         <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
           className="text-center mb-8">
           <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">TENTANG KUD</span>
@@ -492,7 +476,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section id="fitur" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto">
+      <section id="fitur" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-24">
         <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
           className="text-center mb-8">
           <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">FITUR UNGGULAN</span>
@@ -544,7 +528,7 @@ export default function Home() {
           ))}
         </motion.div>
       </section>
-      <section id="cara-kerja" className="py-14 lg:py-20 bg-muted/50 px-6 lg:px-12">
+      <section id="cara-kerja" className="py-14 lg:py-20 bg-muted/50 px-6 lg:px-12 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
             className="text-center mb-8">
@@ -584,7 +568,7 @@ export default function Home() {
       </section>
       <TeamSection />
 
-      <section id="testimoni" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto">
+      <section id="testimoni" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-24">
         <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
           className="text-center mb-8">
           <span className="inline-block px-4 py-1.5 bg-accent/10 text-accent rounded-full text-xs font-semibold mb-4">TESTIMONI</span>
@@ -633,7 +617,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section id="faq" className="py-14 lg:py-20 px-6 lg:px-12 max-w-3xl mx-auto">
+      <section id="faq" className="py-14 lg:py-20 px-6 lg:px-12 max-w-3xl mx-auto scroll-mt-24">
         <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
           className="text-center mb-8">
           <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">FAQ</span>

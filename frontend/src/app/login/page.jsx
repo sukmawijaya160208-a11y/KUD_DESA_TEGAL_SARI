@@ -179,12 +179,12 @@ export default function AuthPage() {
         style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}>
 
         {/* ─── BRAND SIDE — static ─── */}
-        <div className="lg:w-[38%] bg-gradient-to-br from-primary/30 via-primary/10 to-transparent p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden">
+        <div className="lg:w-[38%] bg-gradient-to-br from-primary/30 via-primary/10 to-transparent p-5 lg:p-10 flex flex-col justify-between relative overflow-hidden">
           <div className="absolute -top-20 -right-20 w-60 h-60 bg-primary-light/10 rounded-full blur-3xl" />
           <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-accent/10 rounded-full blur-3xl" />
 
           <div className="relative z-10">
-            <div className="w-20 h-auto max-h-20 max-w-[160px] rounded-2xl overflow-hidden bg-white/10 backdrop-blur border border-white/10 shadow-lg flex items-center justify-center mb-6 px-2 py-2">
+            <div className="w-14 lg:w-20 h-auto max-h-20 max-w-[160px] rounded-2xl overflow-hidden bg-white/10 backdrop-blur border border-white/10 shadow-lg flex items-center justify-center mb-4 lg:mb-6 px-2 py-2">
               {logoUrl ? (
                 <img src={logoUrl} alt="KUD Desa Sari Subur" className="w-full h-full max-h-16 object-contain" />
               ) : (
@@ -234,7 +234,7 @@ export default function AuthPage() {
         </div>
 
         {/* ─── AUTH CARD ─── */}
-        <div className="lg:w-[62%] bg-white/95 backdrop-blur-xl p-6 lg:p-8 flex flex-col max-h-[580px] lg:max-h-[620px]">
+        <div className="lg:w-[62%] bg-white/95 backdrop-blur-xl p-6 lg:p-8 flex flex-col max-h-[75vh] lg:max-h-[620px]">
           {/* Tab bar */}
           <div className="relative flex bg-gray-100 rounded-xl p-1 mb-4 shrink-0">
             {['login', 'register'].map((t) => (

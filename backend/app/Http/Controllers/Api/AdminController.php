@@ -576,6 +576,7 @@ class AdminController extends Controller
             'bank' => $this->getPengaturan('bank', 'Allo Bank'),
             'rekening' => $this->getPengaturan('rekening', '082227283416'),
             'rekening_an' => $this->getPengaturan('rekening_an', 'DEDEK SULAIMAN'),
+            'url_video' => $this->getPengaturan('url_video'),
         ]);
     }
 
@@ -584,7 +585,7 @@ class AdminController extends Controller
         $fields = [
             'teks', 'foto_pengembang', 'developer_name', 'developer_role',
             'kontak', 'email', 'instagram', 'facebook', 'alamat', 'website',
-            'bank', 'rekening', 'rekening_an',
+            'bank', 'rekening', 'rekening_an', 'url_video',
         ];
         $rules = [];
         foreach ($fields as $f) {

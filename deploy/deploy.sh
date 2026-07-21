@@ -152,14 +152,25 @@ systemctl enable --now kud-queue
 systemctl enable --now kud-nextjs
 log "Systemd services aktif"
 
-# --- Setup Nginx ---
+# --- Setup Nginx & PHP ---
 info ""
-info "--- Nginx Setup ---"
+info "--- Nginx & PHP Setup ---"
 
+# Nginx config
 ln -sf "$APP_DIR/deploy/nginx-kud.conf" /etc/nginx/sites-available/$DOMAIN
 ln -sf /etc/nginx/sites-available/$DOMAIN /etc/nginx/sites-enabled/
 nginx -t && systemctl reload nginx
 log "Nginx configured & reloaded"
+
+# PHP upload limit
+PHP_INI=$(php --ini 2>/dev/null | grep "Loaded Configuration" | awk -F': ' '{print $2}')
+if [ -n "$PHP_INI" ] && [ -f "$PHP_INI" ]; then
+    sed -i "s/^upload_max_filesize = .*/upload_max_filesize = 2G/" "$PHP_INI" 2>/dev/null || true
+    sed -i "s/^post_max_size = .*/post_max_size = 2G/" "$PHP_INI" 2>/dev/null || true
+    sed -i "s/^max_execution_time = .*/max_execution_time = 300/" "$PHP_INI" 2>/dev/null || true
+    log "PHP upload limit set to 2GB"
+    systemctl reload php$PHP_VERSION-fpm 2>/dev/null || systemctl reload php*-fpm 2>/dev/null || true
+fi
 
 # --- Output ---
 info ""

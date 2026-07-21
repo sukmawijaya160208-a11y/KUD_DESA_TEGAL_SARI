@@ -176,6 +176,20 @@ class UploadController extends Controller
         }
     }
 
+    public function videoTentangAplikasi(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:mp4,webm,mov|max:2048000',
+        ]);
+        try {
+            $result = $this->storeFile($request->file('file'), 'video-tentang-aplikasi');
+
+            return response()->json(['url' => $result['url']]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Upload video gagal: '.$e->getMessage()], 500);
+        }
+    }
+
     public function chatUpload(Request $request)
     {
         $request->validate([
