@@ -19,8 +19,9 @@ frontend/node_modules/
 frontend/.next/
 frontend/out/
 
-# Backend
+# Dependencies
 backend/vendor/
+vendor/
 backend/node_modules/
 backend/.phpunit.cache
 backend/storage/*.key
