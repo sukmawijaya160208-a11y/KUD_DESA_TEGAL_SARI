@@ -187,6 +187,13 @@ class VerifikatorController extends Controller
         ]);
     }
 
+    public function riwayatDestroy(VerifikasiLog $verifikasiLog)
+    {
+        $verifikasiLog->delete();
+
+        return response()->json(['message' => 'Log berhasil dihapus']);
+    }
+
     public function statsRiwayat()
     {
         return response()->json([

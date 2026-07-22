@@ -176,6 +176,7 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::get('/stats/pekebun', [VerifikatorController::class, 'statsPekebun']);
         Route::get('/stats/program', [VerifikatorController::class, 'statsProgram']);
         Route::get('/stats/riwayat', [VerifikatorController::class, 'statsRiwayat']);
+        Route::delete('/riwayat/{verifikasiLog}', [VerifikatorController::class, 'riwayatDestroy']);
     });
 
     // === PEKEBUN ===

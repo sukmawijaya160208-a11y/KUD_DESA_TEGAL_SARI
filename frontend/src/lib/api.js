@@ -275,6 +275,7 @@ export const api = {
       const qs = params ? '?' + new URLSearchParams(params).toString() : '';
       return request('/verifikator/riwayat' + qs);
     },
+    riwayatDelete: (id) => request(`/verifikator/riwayat/${id}`, { method: 'DELETE' }),
     statsPekebun: () => request('/verifikator/stats/pekebun'),
     statsProgram: () => request('/verifikator/stats/program'),
     statsRiwayat: () => request('/verifikator/stats/riwayat'),

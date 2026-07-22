@@ -76,7 +76,7 @@ class UploadController extends Controller
 
     public function suratTanah(Request $request)
     {
-        $request->validate(['file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048']);
+        $request->validate(['file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120']);
         try {
             $result = $this->storeFile($request->file('file'), 'surat-tanah');
 
@@ -88,7 +88,7 @@ class UploadController extends Controller
 
     public function suratKeterangan(Request $request)
     {
-        $request->validate(['file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048']);
+        $request->validate(['file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120']);
         try {
             $result = $this->storeFile($request->file('file'), 'surat-keterangan');
 

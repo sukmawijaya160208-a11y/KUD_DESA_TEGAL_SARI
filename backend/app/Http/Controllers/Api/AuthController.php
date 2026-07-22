@@ -104,6 +104,10 @@ class AuthController extends Controller
         $user->tokens()->where('name', '!=', 'auth-token')->delete();
         $token = $user->createToken('auth-token')->plainTextToken;
 
+        if ($user->role === 'pekebun') {
+            $user->load('pekebun');
+        }
+
         return response()->json([
             'message' => 'Login berhasil',
             'user' => $user->makeHidden(['google_id', 'remember_token', 'email_verified_at', 'created_at', 'updated_at']),

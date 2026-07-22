@@ -19,8 +19,8 @@ const iconMap = {
   Dashboard: HomeIcon, 'Data Pekebun': UsersIcon, 'Program KUD': ClipboardDocumentListIcon,
   Pengaturan: Cog6ToothIcon, Laporan: ChartBarIcon, 'Verifikasi Pekebun': CheckBadgeIcon,
   'Verifikasi Program': DocumentTextIcon, Riwayat: ClockIcon, 'Profil Saya': UserIcon,
-  'Data Lahan': DocumentTextIcon, 'TBS Sync': ChartBarIcon,
-  'Data TBS': ChartBarIcon, 'Data Lahan Admin': MapPinIcon,
+  'Data Lahan': DocumentTextIcon,
+  'Data Lahan Admin': MapPinIcon,
   'Verifikasi Log': ShieldExclamationIcon, 'Manajemen User': UserGroupIcon,
   Pendaftaran: BookOpenIcon,
   'Harga TBS': CurrencyDollarIcon,
@@ -35,7 +35,6 @@ const menuTheme = {
   'Data Pekebun': 'from-blue-500 to-indigo-600',
   'Program KUD': 'from-purple-500 to-purple-600',
   'Data Lahan Admin': 'from-orange-500 to-orange-600',
-  'Data TBS': 'from-cyan-500 to-cyan-600',
   'Harga TBS': 'from-emerald-500 to-emerald-600',
   Pendaftaran: 'from-pink-500 to-pink-600',
   'Manajemen User': 'from-slate-600 to-slate-700',
@@ -51,7 +50,6 @@ const menuTheme = {
   Riwayat: 'from-amber-500 to-amber-600',
   'Profil Saya': 'from-blue-400 to-blue-600',
   'Data Lahan': 'from-orange-500 to-orange-600',
-  'TBS Sync': 'from-cyan-500 to-cyan-600',
 };
 
 const menuItems = {
@@ -60,7 +58,6 @@ const menuItems = {
     { label: 'Data Pekebun', href: '/admin/pekebun' },
     { label: 'Program KUD', href: '/admin/program' },
     { label: 'Data Lahan Admin', href: '/admin/lahan' },
-    { label: 'Data TBS', href: '/admin/tbs' },
     { label: 'Harga TBS', href: '/admin/harga-tbs' },
     { label: 'Pendaftaran', href: '/admin/pendaftaran' },
     { label: 'Manajemen User', href: '/admin/users' },
@@ -84,7 +81,6 @@ const menuItems = {
     { label: 'Profil Saya', href: '/pekebun/profil' },
     { label: 'Data Lahan', href: '/pekebun/lahan' },
     { label: 'Program KUD', href: '/pekebun/program' },
-    { label: 'TBS Sync', href: '/pekebun/tbs' },
     { label: 'Harga TBS', href: '/pekebun/harga-tbs' },
     { label: 'Pesan', href: '/pekebun/pesan' },
     { label: 'Tentang Aplikasi', href: '/pekebun/tentang-aplikasi' },

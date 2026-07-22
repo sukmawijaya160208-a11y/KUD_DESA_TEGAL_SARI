@@ -131,6 +131,13 @@ class PekebunController extends Controller
     // === PROGRAM ===
     public function programTersedia(Request $request)
     {
+        $pekebun = request()->user()->pekebun;
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
+        if ($pekebun->status !== 'verified') {
+            return response()->json(['message' => 'Profil Anda belum diverifikasi. Silakan tunggu verifikasi dari verifikator terlebih dahulu.'], 403);
+        }
         $perPage = min((int) ($request->per_page ?? 20), 50);
         return response()->json(ProgramKud::where('aktif', true)->withCount('pendaftaranProgram')->paginate($perPage));
     }
@@ -140,6 +147,9 @@ class PekebunController extends Controller
         $pekebun = $request->user()->pekebun;
         if (! $pekebun) {
             return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
+        if ($pekebun->status !== 'verified') {
+            return response()->json(['message' => 'Profil Anda belum diverifikasi. Silakan tunggu verifikasi dari verifikator terlebih dahulu.'], 403);
         }
         $validated = $request->validate([
             'program_kud_id' => 'required|exists:program_kud,id',
@@ -205,6 +215,9 @@ class PekebunController extends Controller
         $pekebun = $request->user()->pekebun;
         if (! $pekebun) {
             return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
+        if ($pekebun->status !== 'verified') {
+            return response()->json(['message' => 'Profil Anda belum diverifikasi.'], 403);
         }
         $perPage = min((int) ($request->per_page ?? 20), 50);
 

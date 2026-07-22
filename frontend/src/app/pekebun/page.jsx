@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
-import { UserIcon, DocumentTextIcon, ClipboardDocumentListIcon, ChartBarIcon } from '@heroicons/react/24/outline';
+import { UserIcon, DocumentTextIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
 
 export default function PekebunDashboard() {
   const router = useRouter();
@@ -59,7 +59,6 @@ export default function PekebunDashboard() {
         {[
           { icon: DocumentTextIcon, label: 'Data Lahan', desc: `${profil?.lahan?.length || 0} lahan terdaftar`, href: '/pekebun/lahan', gradient: 'from-orange-400 to-orange-600' },
           { icon: ClipboardDocumentListIcon, label: 'Program KUD', desc: 'Daftar & ikuti program', href: '/pekebun/program', gradient: 'from-purple-500 to-purple-600' },
-          { icon: ChartBarIcon, label: 'TBS Sync', desc: 'Catat hasil TBS', href: '/pekebun/tbs', gradient: 'from-cyan-500 to-cyan-600' },
         ].map((item) => {
           const Icon = item.icon;
           return (

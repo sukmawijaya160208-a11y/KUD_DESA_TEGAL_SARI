@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo, startTransition } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Card from '@/components/ui/Card';
@@ -10,7 +10,7 @@ import ProgramDetail from '@/components/ProgramDetail';
 import { formatDate, formatDateShort } from '@/lib/date';
 import {
   ClipboardDocumentListIcon, CheckCircleIcon, CalendarDaysIcon, UsersIcon,
-  XMarkIcon, ChevronRightIcon, DocumentTextIcon, ArrowLeftIcon,
+  XMarkIcon, ChevronRightIcon, ArrowLeftIcon,
   PhotoIcon, DocumentIcon
 } from '@heroicons/react/24/outline';
 

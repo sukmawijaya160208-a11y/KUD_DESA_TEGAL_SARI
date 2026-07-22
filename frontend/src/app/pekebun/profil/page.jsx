@@ -8,23 +8,59 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 import DatePicker from '@/components/ui/DatePicker';
+import Modal from '@/components/ui/Modal';
 import { CardSkeleton } from '@/components/ui/Skeleton';
 import { UserIcon } from '@heroicons/react/24/outline';
 import { formatDate } from '@/lib/date';
 
-function UploadField({ label, current, folder, onUpload }) {
+async function compressImage(file, maxSizeMB = 2, maxWidth = 1920) {
+  if (file.size <= maxSizeMB * 1024 * 1024) return file;
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const canvas = document.createElement('canvas');
+      let { width, height } = img;
+      if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob((blob) => {
+        const compressed = new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() });
+        resolve(compressed.size < file.size ? compressed : file);
+      }, 'image/jpeg', 0.8);
+    };
+    img.src = url;
+  });
+}
+
+function formatSize(bytes) {
+  if (!bytes) return '';
+  const mb = bytes / (1024 * 1024);
+  return mb.toFixed(2) + ' MB';
+}
+
+function UploadField({ label, current, folder, onUpload, onDelete }) {
   const toast = useToast();
   const [uploading, setUploading] = useState(false);
   const [localUrl, setLocalUrl] = useState('');
+  const [fileInfo, setFileInfo] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const displayUrl = localUrl || current || '';
+
   const handleFile = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setUploading(true);
     try {
+      const originalSize = file.size;
+      const compressed = await compressImage(file);
+      const compressedSize = compressed.size;
       const endpoint = `/upload/${folder}`;
-      const res = await api.upload(endpoint, file);
+      const res = await api.upload(endpoint, compressed);
       setLocalUrl(res.url);
+      setFileInfo({ name: file.name, originalSize, compressedSize });
       onUpload(res.url);
       toast.success(`${label} berhasil diupload`);
     } catch (err) {
@@ -33,19 +69,50 @@ function UploadField({ label, current, folder, onUpload }) {
     setUploading(false);
   };
 
+  const handleDeleteConfirm = async () => {
+    setConfirmDelete(false);
+    if (onDelete) {
+      await onDelete();
+      setLocalUrl('');
+      setFileInfo(null);
+    }
+  };
+
+  const wasCompressed = fileInfo && fileInfo.compressedSize < fileInfo.originalSize;
+
   return (
     <div className="mb-3">
       <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
       {displayUrl && (
         /* eslint-disable-next-line @next/next/no-img-element */
-        <a href={displayUrl} target="_blank"><img src={displayUrl} alt={label} className="w-full h-32 object-cover rounded-xl border border-border mb-2 hover:opacity-90 transition-opacity cursor-pointer" /></a>
+        <a href={displayUrl} target="_blank" rel="noopener noreferrer"><img src={displayUrl} alt={label} className="w-full h-32 object-cover rounded-xl border border-border mb-2 hover:opacity-90 transition-opacity cursor-pointer" /></a>
+      )}
+      {fileInfo && (
+        <div className="text-xs text-gray-500 mb-2 space-y-0.5">
+          <span className="block">Ukuran: {formatSize(wasCompressed ? fileInfo.compressedSize : fileInfo.originalSize)}</span>
+          {wasCompressed && (
+            <span className="text-green-600">Terkompres dari {formatSize(fileInfo.originalSize)} ke {formatSize(fileInfo.compressedSize)}</span>
+          )}
+        </div>
       )}
       <div className="flex items-center gap-3">
         <label className="px-4 py-2 bg-gray-100 rounded-xl text-sm text-gray-600 cursor-pointer hover:bg-gray-200 transition-all">
           {uploading ? 'Uploading...' : displayUrl ? 'Ganti File' : 'Pilih File'}
           <input type="file" className="hidden" accept="image/*" onChange={handleFile} disabled={uploading} />
         </label>
-        {displayUrl && <a href={displayUrl} target="_blank" className="text-xs text-primary hover:underline">Lihat Fullsize</a>}
+        {displayUrl && <a href={displayUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline">Lihat Fullsize</a>}
+        {displayUrl && onDelete && (
+          <>
+            <button onClick={() => setConfirmDelete(true)} className="text-xs text-red-600 hover:text-red-700 font-medium hover:underline">Hapus</button>
+            <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} title="Hapus Dokumen" maxWidth="max-w-sm">
+              <p className="text-sm text-gray-600 mb-4">Yakin ingin menghapus {label.toLowerCase()}?</p>
+              <div className="flex justify-end gap-2">
+                <Button variant="ghost" size="sm" onClick={() => setConfirmDelete(false)}>Batal</Button>
+                <Button variant="danger" size="sm" onClick={handleDeleteConfirm}>Hapus</Button>
+              </div>
+            </Modal>
+          </>
+        )}
       </div>
     </div>
   );
@@ -67,6 +134,17 @@ export default function PekebunProfilPage() {
       setForm((prev) => ({ ...prev, foto_pekebun: url }));
     } else {
       setForm((prev) => ({ ...prev, [`upload_${folder}`]: url }));
+    }
+  };
+
+  const handleDelete = async (field) => {
+    try {
+      await api.pekebun.updateProfil({ [field]: null });
+      setForm((prev) => ({ ...prev, [field]: '' }));
+      toast.success('Dokumen berhasil dihapus');
+      load();
+    } catch (err) {
+      toast.error(err.message);
     }
   };
 
@@ -114,7 +192,7 @@ export default function PekebunProfilPage() {
                 <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center overflow-hidden">
                   {profil?.foto_pekebun ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
-                    <a href={profil.foto_pekebun} target="_blank"><img src={profil.foto_pekebun} alt="" className="w-full h-full object-cover" /></a>
+                    <a href={profil.foto_pekebun} target="_blank" rel="noopener noreferrer"><img src={profil.foto_pekebun} alt="" className="w-full h-full object-cover" /></a>
                   ) : (
                     <UserIcon className="w-8 h-8 text-primary" />
                   )}
@@ -140,9 +218,9 @@ export default function PekebunProfilPage() {
 
         <div className="space-y-4">
           <Card title="Upload Dokumen">
-            <UploadField label="Foto Pekebun" current={form.foto_pekebun || ''} folder="foto-pekebun" onUpload={uploadHandler('foto-pekebun')} />
-            <UploadField label="Upload KTP" current={form.upload_ktp || ''} folder="ktp" onUpload={uploadHandler('ktp')} />
-            <UploadField label="Upload KK" current={form.upload_kk || ''} folder="kk" onUpload={uploadHandler('kk')} />
+            <UploadField label="Foto Pekebun" current={form.foto_pekebun || ''} folder="foto-pekebun" onUpload={uploadHandler('foto-pekebun')} onDelete={() => handleDelete('foto_pekebun')} />
+            <UploadField label="Upload KTP" current={form.upload_ktp || ''} folder="ktp" onUpload={uploadHandler('ktp')} onDelete={() => handleDelete('upload_ktp')} />
+            <UploadField label="Upload KK" current={form.upload_kk || ''} folder="kk" onUpload={uploadHandler('kk')} onDelete={() => handleDelete('upload_kk')} />
           </Card>
         </div>
       </div>
