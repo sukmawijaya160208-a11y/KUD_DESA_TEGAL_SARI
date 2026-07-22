@@ -166,8 +166,37 @@ Jika Anda mulai mendekati batas konteks:
 Available via `skill({ name: "..." })`:
 
 | Skill | Fungsi |
-|---|---|
+|---|---|---|
 | `brainstorm` | Generate ide / solusi untuk masalah |
 | `plan` | Breakdown task besar → sub-task kecil |
 | `subagent-work` | Delegasi task ke sub-agent paralel |
 | `review` | Review hasil kerja sebelum final |
+
+## Git & Secret Management
+
+`opencode.json` contains real secrets (GitHub PAT, Stitch API key).
+NEVER commit this file with real values — GitHub Push Protection will block it.
+
+### Workflow
+1. **Local development**: `opencode.json` boleh berisi secrets asli (biar MCP jalan)
+2. **Before commit**: Ganti secrets jadi placeholder (`YOUR_GITHUB_PAT`, `YOUR_STITCH_API_KEY`)
+3. **Push**: Aman karna cuma placeholder yang di-commit
+4. **Deploy VPS**: SSH, git pull, lalu langsung inject secrets ke `/var/www/kud/opencode.json`
+
+### Git commands
+```bash
+# === COMMIT (safe - skip opencode.json) ===
+git add AGENTS.md frontend/ backend/ deploy/ docker/ docker-compose.yml
+git commit -m "pesan"
+
+# === DEPLOY VPS ===
+ssh root@31.97.50.22
+cd /var/www/kud
+git pull
+sed -i 's/YOUR_GITHUB_PAT/real_token/' opencode.json
+sed -i 's/YOUR_STITCH_API_KEY/real_key/' opencode.json
+systemctl restart kud-frontend kud-backend kud-queue
+```
+
+### Current secrets
+Real values disimpan di memory AI (opencode-mem). Kalo butuh deploy, tinggal bilang "deploy VPS" — AI tau inject secretnya.
