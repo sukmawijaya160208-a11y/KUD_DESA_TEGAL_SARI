@@ -6,11 +6,10 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
-import { motion, useTransform, animate } from 'framer-motion';
+import { motion, animate } from 'framer-motion';
 import {
-  AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
+  AreaChart, Area, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  Legend
 } from 'recharts';
 import { formatDate, formatRelative, todayStr } from '@/lib/date';
 import {

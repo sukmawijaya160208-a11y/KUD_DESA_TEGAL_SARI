@@ -74,7 +74,7 @@ export default function SyaratKetentuanPage() {
 
           <h2>7. Batasan Tanggung Jawab</h2>
           <p>
-            Aplikasi disediakan "sebagaimana adanya" (as is). KUD tidak bertanggung jawab atas kerugian langsung maupun tidak langsung yang timbul dari penggunaan Aplikasi. KUD tidak menjamin Aplikasi bebas dari gangguan, kesalahan, atau virus.
+            Aplikasi disediakan &quot;sebagaimana adanya&quot; (as is). KUD tidak bertanggung jawab atas kerugian langsung maupun tidak langsung yang timbul dari penggunaan Aplikasi. KUD tidak menjamin Aplikasi bebas dari gangguan, kesalahan, atau virus.
           </p>
 
           <h2>8. Perubahan Ketentuan</h2>
