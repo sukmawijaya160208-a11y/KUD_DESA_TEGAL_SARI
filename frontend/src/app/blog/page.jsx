@@ -42,6 +42,11 @@ function formatViews(n) {
   return n;
 }
 
+function imgUrl(url) {
+  if (!url) return null;
+  return url.replace(/ /g, '%20');
+}
+
 function SkeletonCard() {
   return (
     <div className="bg-surface rounded-2xl border border-border overflow-hidden animate-pulse">
@@ -163,19 +168,19 @@ export default function BlogPage() {
   const openLightbox = (media, index) => {
     setLightboxMedia(media);
     setLightboxIndex(index);
-    setLightbox(media[index]?.url);
+    setLightbox(imgUrl(media[index]?.url));
   };
 
   const lightboxPrev = () => {
     const i = lightboxIndex > 0 ? lightboxIndex - 1 : lightboxMedia.length - 1;
     setLightboxIndex(i);
-    setLightbox(lightboxMedia[i].url);
+    setLightbox(imgUrl(lightboxMedia[i].url));
   };
 
   const lightboxNext = () => {
     const i = lightboxIndex < lightboxMedia.length - 1 ? lightboxIndex + 1 : 0;
     setLightboxIndex(i);
-    setLightbox(lightboxMedia[i].url);
+    setLightbox(imgUrl(lightboxMedia[i].url));
   };
 
   const share = async (post) => {
@@ -323,60 +328,60 @@ export default function BlogPage() {
                   variants={fadeUp}
                   id={`post-${post.id}`}
                   ref={isExpanded ? expandedRef : null}
-                  className={`bg-surface rounded-2xl border border-border overflow-hidden transition-all duration-300 ${
-                    isExpanded ? 'md:col-span-2 lg:col-span-3 shadow-xl' : 'hover:shadow-lg hover:-translate-y-1'
+                  className={`bg-surface rounded-2xl border border-border overflow-hidden transition-all duration-300 group ${
+                    isExpanded ? 'md:col-span-2 lg:col-span-3 shadow-xl' : 'hover:shadow-xl hover:-translate-y-1.5'
                   }`}
                 >
                   {/* Collapsed Card */}
                   {!isExpanded && (
                     <div>
-                      <div className="relative aspect-[16/9] overflow-hidden bg-gray-100">
+                      <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
                         {thumb ? (
-                          <img src={thumb} alt={post.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                          <>
+                            <img src={imgUrl(thumb)} alt={post.title} className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-[1deg]" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                          </>
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10">
-                            <NewspaperIcon className="w-12 h-12 text-primary/20" />
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
+                            <NewspaperIcon className="w-12 h-12 text-primary/30" />
                           </div>
                         )}
-                        {hasVideo && (
-                          <div className="absolute top-2 left-2 bg-black/60 text-white px-2 py-0.5 rounded text-[10px] flex items-center gap-1 backdrop-blur-sm">
-                            <VideoCameraIcon className="w-3 h-3" /> Video
-                          </div>
-                        )}
-                        <div className="absolute top-2 right-2">
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${catColor.bg} ${catColor.text} backdrop-blur-sm`}>
+                        <div className="absolute top-3 left-3">
+                          <span className={`px-2.5 py-1 rounded-lg text-[11px] font-bold shadow-lg ${catColor.bg} ${catColor.text} backdrop-blur-md bg-opacity-90`}>
                             {post.category}
                           </span>
                         </div>
-                        <div className="absolute bottom-2 left-2 flex items-center gap-2 text-[10px] text-white/80 bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">
+                        <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-white/90 px-2 py-1 rounded-lg text-[11px]">
                           <EyeIcon className="w-3 h-3" />
-                          <span>{formatViews(post.views || 0)}</span>
+                          {formatViews(post.views || 0)}
                         </div>
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-heading font-bold text-foreground text-sm leading-snug mb-1.5 line-clamp-2">
-                          {post.title}
-                        </h3>
-                        <p className="text-xs text-gray-500 leading-relaxed line-clamp-2 mb-3">
-                          {post.excerpt || (post.content ?? '').slice(0, 120) + '...'}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2 text-[10px] text-gray-400">
+                        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 text-[11px] text-white/80 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
                             <ClockIcon className="w-3 h-3" />
                             {time} menit
-                            {post.media?.length > 0 && (
-                              <>
-                                <span className="text-gray-300">|</span>
-                                <PhotoIcon className="w-3 h-3" />
-                                {post.media.length}
-                              </>
-                            )}
+                          </div>
+                          <div className="text-[11px] text-white/80 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                            {formatDateLong(post.published_at || post.created_at)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="p-4 md:p-5">
+                        <h3 className="font-heading font-bold text-foreground text-sm md:text-base leading-snug mb-1.5 line-clamp-2 group-hover:text-primary transition-colors">
+                          {post.title}
+                        </h3>
+                        <p className="text-xs md:text-[13px] text-gray-500 leading-relaxed line-clamp-2 mb-3">
+                          {post.excerpt || (post.content ?? '').slice(0, 120) + '...'}
+                        </p>
+                        <div className="flex items-center justify-between pt-2 border-t border-border/50">
+                          <div className="flex items-center gap-2 text-[11px] text-gray-400">
+                            <PhotoIcon className="w-3 h-3" />
+                            {post.media?.length || 0} foto
                           </div>
                           <button
                             onClick={() => handleExpand(post)}
-                            className="text-xs font-semibold text-primary hover:text-primary-dark transition-colors flex items-center gap-1 cursor-pointer"
+                            className="text-xs font-semibold text-primary hover:text-primary-dark transition-all flex items-center gap-1 cursor-pointer hover:gap-1.5"
                           >
-                            Baca <ChevronDownIcon className="w-3 h-3" />
+                            Baca <ChevronDownIcon className="w-3 h-3 transition-transform group-hover:translate-y-0.5" />
                           </button>
                         </div>
                       </div>
@@ -438,7 +443,7 @@ export default function BlogPage() {
                                 </div>
                               ) : (
                                 <>
-                                  <img src={m.url} alt={m.caption || ''} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                  <img src={imgUrl(m.url)} alt={m.caption || ''} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                                 </>
                               )}
@@ -546,7 +551,7 @@ export default function BlogPage() {
                                 >
                                   <div className="aspect-[16/9] bg-gray-100 overflow-hidden">
                                     {rp.media?.[0]?.url ? (
-                                      <img src={rp.media[0].url} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                      <img src={imgUrl(rp.media[0].url)} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                     ) : (
                                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10">
                                         <NewspaperIcon className="w-8 h-8 text-primary/20" />
@@ -651,7 +656,7 @@ export default function BlogPage() {
               transition={{ duration: 0.2 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <img src={lightbox} alt="" className="max-w-full max-h-[90vh] rounded-2xl shadow-2xl" />
+              <img src={imgUrl(lightbox)} alt="" className="max-w-full max-h-[90vh] rounded-2xl shadow-2xl" />
             </motion.div>
           </motion.div>
         )}
