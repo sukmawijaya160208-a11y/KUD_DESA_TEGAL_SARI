@@ -16,25 +16,17 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - name: Setup SSH key
+      - name: Test connectivity
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+          ping -c 3 ${{ secrets.VPS_HOST }} || true
+          nc -zv -w5 ${{ secrets.VPS_HOST }} ${{ secrets.VPS_PORT }} || true
 
       - name: Deploy via SSH
         run: |
-          ssh -i ~/.ssh/deploy_key \
-              -o StrictHostKeyChecking=no \
-              -p ${{ secrets.VPS_PORT }} \
-              ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            "set -e
-             cd /var/www/kud
-             git pull origin main
-             git checkout -- docker-compose.yml
-             docker compose build
-             docker compose up -d
-             docker exec kud-backend php artisan migrate --force
-             docker exec kud-backend php artisan optimize:clear
-             echo '=== DEPLOY SELESAI ==='"
+          apt-get update -qq && apt-get install -y -qq sshpass 2>/dev/null
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" ssh \
+            -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null \
+            -p ${{ secrets.VPS_PORT }} \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            "cd /var/www/kud && git pull origin main && git checkout -- docker-compose.yml && docker compose up -d --build && docker exec kud-backend php artisan migrate --force && echo '=== DEPLOY SELESAI ==='"
