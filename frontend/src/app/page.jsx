@@ -213,11 +213,11 @@ export default function Home() {
   const filteredBlogs = blogCategory === 'Semua' ? BLOG_POSTS : BLOG_POSTS.filter((b) => b.category === blogCategory);
 
   const navLinks = [
-    { href: '#fitur', label: 'Fitur', icon: Squares2X2Icon },
-    { href: '#tentang', label: 'Tentang', icon: InformationCircleIcon },
+    { href: '#blog', label: 'Blog', icon: NewspaperIcon },
+    { href: '#program', label: 'Program', icon: Squares2X2Icon },
+    { href: '#fitur', label: 'Fitur', icon: ChartBarIcon },
     { href: '#testimoni', label: 'Testimoni', icon: ChatBubbleLeftRightIcon },
     { href: '#faq', label: 'FAQ', icon: QuestionMarkCircleIcon },
-    { href: '#blog', label: 'Blog', icon: NewspaperIcon },
   ];
 
   return (
@@ -297,8 +297,11 @@ export default function Home() {
             Maju Bersama{' '}
             <span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD Sari Subur</span>
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-4 sm:mt-6 text-sm sm:text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed px-2">
-            Koperasi petani kelapa sawit yang berkomitmen meningkatkan kesejahteraan anggota melalui kemitraan berkelanjutan, inovasi, dan gotong royong.
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-4 sm:mt-6 text-sm sm:text-lg md:text-xl text-white/70 max-w-3xl mx-auto leading-relaxed px-2">
+            Koperasi petani kelapa sawit yang berkomitmen meningkatkan kesejahteraan anggota melalui kemitraan berkelanjutan, inovasi, dan gotong royong. Berdiri sejak 2019, KUD Sari Subur telah melayani lebih dari 371 pekebun aktif dengan total lahan kelola 850 hektar dan produksi TBS mencapai 5.000 ton per tahun.
+          </motion.p>
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.8 }} className="mt-3 text-xs sm:text-sm md:text-base text-white/50 max-w-2xl mx-auto leading-relaxed px-2 italic">
+            Berbadan hukum, terverifikasi Dinas Koperasi & UKM, dan berkomitmen pada prinsip transparansi, akuntabilitas, serta kemandirian anggota.
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4">
             <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => router.push('/login?tab=register')} className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center justify-center gap-2 text-sm sm:text-base">
@@ -324,26 +327,9 @@ export default function Home() {
 
 
 
-      {/* ===== KUD DALAM ANGKA ===== */}
-      <section className="py-16 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Statistik" title="KUD dalam Angka" subtitle="Capaian dan dampak nyata KUD Desa Sari Subur bagi petani kelapa sawit di wilayah Kecamatan Tegal Sari." />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
-            <Counter end={371} suffix="+" label="Anggota Aktif" />
-            <Counter end={850} suffix="+" label="Hektar Lahan" />
-            <Counter end={5000} suffix=" Ton" label="TBS per Tahun" />
-            <Counter end={7} suffix="+" label="Tahun Berdiri" />
-          </div>
-        </div>
-      </section>
 
-      {/* ===== KEGIATAN GALLERY ===== */}
-      <section className="py-14 md:py-28 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Dokumentasi" title="Kegiatan Kami" subtitle="Dokumentasi berbagai kegiatan dan program yang telah dilaksanakan KUD Desa Sari Subur." />
-        </div>
-        <KegiatanGallery />
-      </section>
+
+
 
       {/* ===== VIDEO KUD ===== */}
       <section className="py-14 md:py-28 bg-gradient-to-b from-white via-emerald-50/20 to-white">
@@ -387,8 +373,9 @@ export default function Home() {
             {filteredBlogs.filter((b) => !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase())).length > 0 ? (
               filteredBlogs.filter((b) => !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase())).map((post, idx) => (
                 <motion.article key={post.slug} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -5 }} className="group rounded-xl overflow-hidden bg-white shadow-card border border-gray-100 hover:shadow-card-hover transition-all cursor-pointer" onClick={() => router.push(`/blog/${post.slug}`)}>
-                  <div className="relative h-44 bg-gradient-to-br from-emerald-100 to-teal-50 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-[1]" />
+                  <div className="relative h-44 overflow-hidden">
+                    <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-[1]" />
                     <div className="absolute top-3 left-3 z-[2] px-2.5 py-1 rounded-md text-xs font-semibold bg-white/90 backdrop-blur-sm text-foreground">{post.category}</div>
                     <div className="absolute bottom-3 left-3 z-[2] flex items-center gap-2 text-xs text-white">
                       <CalendarDaysIcon className="w-3.5 h-3.5" />{post.date}
@@ -407,62 +394,6 @@ export default function Home() {
             ) : (
               <div className="col-span-full text-center py-12 text-muted-foreground">Tidak ada artikel ditemukan.</div>
             )}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== TENTANG ===== */}
-      <section id="tentang" className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 via-white to-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
-              <SectionBadge>Tentang Kami</SectionBadge>
-              <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-foreground leading-tight">Koperasi yang <span className="text-primary">Berkembang</span> Bersama Petani</h2>
-              <p className="mt-6 text-muted-foreground leading-relaxed">
-                KUD Desa Sari Subur didirikan pada tahun 2019 oleh sekelompok petani kelapa sawit di Kecamatan Megang Sakti. Berawal dari keprihatinan terhadap praktik tengkulak yang merugikan petani, koperasi ini hadir sebagai solusi untuk meningkatkan posisi tawar petani dalam rantai pasok kelapa sawit.
-              </p>
-              <p className="mt-4 text-muted-foreground leading-relaxed">
-                Kini, KUD Sari Subur telah berkembang menjadi koperasi yang melayani lebih dari 532 petani anggota. Dengan semangat gotong royong dan transparansi, kami terus berinovasi untuk memberikan pelayanan terbaik bagi anggota.
-              </p>
-              <div className="mt-8 grid grid-cols-2 gap-4">
-                {[
-                  { icon: EyeIcon, label: 'Visi', text: 'Menjadi koperasi petani sawit terdepan dan mandiri.' },
-                  { icon: HeartIcon, label: 'Misi', text: 'Mensejahterakan anggota melalui kemitraan berkelanjutan.' },
-                ].map((item, idx) => {
-                  const Icn = item.icon;
-                  return (
-                    <div key={idx} className="p-4 rounded-xl bg-emerald-50/50 border border-emerald-100/50">
-                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-2"><Icn className="w-4 h-4 text-primary" /></div>
-                      <h4 className="font-semibold text-foreground text-sm">{item.label}</h4>
-                      <p className="text-xs text-muted-foreground mt-1">{item.text}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
-                <img src="/images/foto.jpg" alt="Kegiatan KUD Sari Subur" className="w-full h-full object-cover" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/40 to-transparent z-[1]" />
-                <div className="absolute bottom-6 left-6 right-6 z-[2]">
-                  <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">K</div>
-                      <div>
-                        <div className="font-semibold text-foreground text-sm">KUD Sari Subur</div>
-                        <div className="text-xs text-muted-foreground">Berkembang Bersama Petani</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center hidden lg:flex">
-                <div className="text-center">
-                  <div className="text-2xl font-bold font-heading text-primary">7+</div>
-                  <div className="text-[10px] text-muted-foreground">Tahun</div>
-                </div>
-              </div>
-            </motion.div>
           </div>
         </div>
       </section>
@@ -500,31 +431,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== KEUNTUNGAN ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(16,185,129,0.15),transparent_50%)]" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Mengapa KUD" title="Keuntungan Bergabung" subtitle="Rasakan manfaat nyata menjadi bagian dari keluarga besar KUD Desa Sari Subur." light />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: CurrencyDollarIcon, title: 'Harga TBS Kompetitif', desc: 'Harga terbaik untuk TBS anggota dengan sistem bagi hasil yang transparan dan adil.' },
-              { icon: AcademicCapIcon, title: 'Pendampingan Teknis', desc: 'Tim ahli siap mendampingi petani dalam teknik budidaya sawit yang baik dan benar.' },
-              { icon: ShieldCheckIcon, title: 'Jaminan Pembelian', desc: 'KUD menjamin pembelian seluruh hasil panen anggota dengan harga pasar yang wajar.' },
-              { icon: UserGroupIcon, title: 'Komunitas Solid', desc: 'Bergabung dengan komunitas petani yang solid, saling mendukung, dan berbagai pengalaman.' },
-            ].map((item, idx) => {
-              const Icn = item.icon;
-              return (
-                <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="group p-5 sm:p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform"><Icn className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-300" /></div>
-                  <h3 className="text-base sm:text-lg font-bold font-heading text-white">{item.title}</h3>
-                  <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/60">{item.desc}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* ===== FITUR ===== */}
       <section id="fitur" className="py-14 md:py-28 bg-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -548,14 +454,6 @@ export default function Home() {
               );
             })}
           </div>
-        </div>
-      </section>
-
-      {/* ===== KALKULATOR TBS ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Kalkulator" title="Kalkulator TBS" subtitle="Simulasi pendapatan Anda dari hasil kebun kelapa sawit." />
-          <TbsCalculator />
         </div>
       </section>
 
@@ -609,6 +507,19 @@ export default function Home() {
         <TeamSection />
       </section>
 
+      {/* ===== KUD DALAM ANGKA ===== */}
+      <section className="py-16 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Statistik" title="KUD dalam Angka" subtitle="Capaian dan dampak nyata KUD Desa Sari Subur bagi petani kelapa sawit di wilayah Kecamatan Tegal Sari." />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
+            <Counter end={371} suffix="+" label="Anggota Aktif" />
+            <Counter end={850} suffix="+" label="Hektar Lahan" />
+            <Counter end={5000} suffix=" Ton" label="TBS per Tahun" />
+            <Counter end={7} suffix="+" label="Tahun Berdiri" />
+          </div>
+        </div>
+      </section>
+
       {/* ===== SERTIFIKASI & PENGHARGAAN ===== */}
       <section className="py-14 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -645,6 +556,106 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ===== KEGIATAN GALLERY ===== */}
+      <section className="py-14 md:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Dokumentasi" title="Kegiatan Kami" subtitle="Dokumentasi berbagai kegiatan dan program yang telah dilaksanakan KUD Desa Sari Subur." />
+        </div>
+        <KegiatanGallery />
+      </section>
+
+      {/* ===== TENTANG ===== */}
+      <section id="tentang" className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 via-white to-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+              <SectionBadge>Tentang Kami</SectionBadge>
+              <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-foreground leading-tight">Koperasi yang <span className="text-primary">Berkembang</span> Bersama Petani</h2>
+              <p className="mt-6 text-muted-foreground leading-relaxed">
+                KUD Desa Sari Subur didirikan pada tahun 2019 oleh sekelompok petani kelapa sawit di Kecamatan Megang Sakti, Kabupaten Musi Rawas. Berawal dari keprihatinan terhadap praktik tengkulak yang merugikan petani, koperasi ini hadir sebagai solusi untuk meningkatkan posisi tawar petani dalam rantai pasok kelapa sawit.
+              </p>
+              <p className="mt-4 text-muted-foreground leading-relaxed">
+                Kini, KUD Sari Subur telah berkembang menjadi koperasi yang melayani lebih dari 371 petani anggota dengan total lahan kelola 850 hektar dan produksi TBS mencapai 5.000 ton per tahun. Kami mengelola 6 program unggulan: Kemitraan Petani, Simpan Pinjam, Pelatihan & Penyuluhan, Distribusi & Logistik, Asuransi Tani, dan Koperasi Konsumsi.
+              </p>
+              <p className="mt-4 text-muted-foreground leading-relaxed">
+                Dengan semangat gotong royong dan transparansi, kami terus berinovasi untuk memberikan pelayanan terbaik bagi anggota. KUD Sari Subur telah terverifikasi dan berbadan hukum resmi melalui Dinas Koperasi & UKM, serta berkomitmen pada prinsip-prinsip koperasi yang mandiri, profesional, dan berkelanjutan.
+              </p>
+              <div className="mt-8 grid grid-cols-2 gap-4">
+                {[
+                  { icon: EyeIcon, label: 'Visi', text: 'Menjadi koperasi petani sawit terdepan dan mandiri.' },
+                  { icon: HeartIcon, label: 'Misi', text: 'Mensejahterakan anggota melalui kemitraan berkelanjutan.' },
+                ].map((item, idx) => {
+                  const Icn = item.icon;
+                  return (
+                    <div key={idx} className="p-4 rounded-xl bg-emerald-50/50 border border-emerald-100/50">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-2"><Icn className="w-4 h-4 text-primary" /></div>
+                      <h4 className="font-semibold text-foreground text-sm">{item.label}</h4>
+                      <p className="text-xs text-muted-foreground mt-1">{item.text}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="relative">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
+                <img src="/images/foto.jpg" alt="Kegiatan KUD Sari Subur" className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/40 to-transparent z-[1]" />
+                <div className="absolute bottom-6 left-6 right-6 z-[2]">
+                  <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">K</div>
+                      <div>
+                        <div className="font-semibold text-foreground text-sm">KUD Sari Subur</div>
+                        <div className="text-xs text-muted-foreground">Berkembang Bersama Petani</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center hidden lg:flex">
+                <div className="text-center">
+                  <div className="text-2xl font-bold font-heading text-primary">7+</div>
+                  <div className="text-[10px] text-muted-foreground">Tahun</div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== KEUNTUNGAN ===== */}
+      <section className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(16,185,129,0.15),transparent_50%)]" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Mengapa KUD" title="Keuntungan Bergabung" subtitle="Rasakan manfaat nyata menjadi bagian dari keluarga besar KUD Desa Sari Subur." light />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: CurrencyDollarIcon, title: 'Harga TBS Kompetitif', desc: 'Harga terbaik untuk TBS anggota dengan sistem bagi hasil yang transparan dan adil.' },
+              { icon: AcademicCapIcon, title: 'Pendampingan Teknis', desc: 'Tim ahli siap mendampingi petani dalam teknik budidaya sawit yang baik dan benar.' },
+              { icon: ShieldCheckIcon, title: 'Jaminan Pembelian', desc: 'KUD menjamin pembelian seluruh hasil panen anggota dengan harga pasar yang wajar.' },
+              { icon: UserGroupIcon, title: 'Komunitas Solid', desc: 'Bergabung dengan komunitas petani yang solid, saling mendukung, dan berbagai pengalaman.' },
+            ].map((item, idx) => {
+              const Icn = item.icon;
+              return (
+                <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="group p-5 sm:p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform"><Icn className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-300" /></div>
+                  <h3 className="text-base sm:text-lg font-bold font-heading text-white">{item.title}</h3>
+                  <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/60">{item.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== KALKULATOR TBS ===== */}
+      <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Kalkulator" title="Kalkulator TBS" subtitle="Simulasi pendapatan Anda dari hasil kebun kelapa sawit." />
+          <TbsCalculator />
         </div>
       </section>
 
