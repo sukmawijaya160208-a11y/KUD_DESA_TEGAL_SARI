@@ -16,9 +16,6 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
       - name: Build & Deploy
         working-directory: /var/www/kud
         run: |
