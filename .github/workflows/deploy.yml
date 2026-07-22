@@ -16,9 +16,17 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - name: Build & Deploy
-        working-directory: /var/www/kud
+      - name: Cek direktori & env
         run: |
+          pwd
+          ls -la /var/www/kud/.git/HEAD
+          whoami
+          id
+          echo "PATH=$PATH"
+          which git
+      - name: Build & Deploy
+        run: |
+          cd /var/www/kud
           git fetch origin main
           git reset --hard origin/main
           docker compose up -d --build
