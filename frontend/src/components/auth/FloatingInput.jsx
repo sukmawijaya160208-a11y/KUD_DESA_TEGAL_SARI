@@ -3,7 +3,7 @@
 export default function FloatingInput({
   id, label, icon, type = 'text', value, onChange,
   required, minLength, maxLength, placeholder,
-  error, valid, disabled,
+  error, valid, disabled, inputMode,
 }) {
   const hasError = error && value?.length > 0;
   const isValid = valid && value?.length > 0 && !error;
@@ -30,7 +30,7 @@ export default function FloatingInput({
       <input
         id={id} type={type} value={value} onChange={onChange}
         required={required} minLength={minLength} maxLength={maxLength}
-        disabled={disabled}
+        disabled={disabled} inputMode={inputMode}
         placeholder={placeholder || ' '}
         className={`peer w-full rounded-xl border bg-white text-sm outline-none transition-all duration-200 ${borderColor} ${
           icon ? 'pt-5 pb-2 pl-10 pr-9' : 'pt-5 pb-2 px-4'

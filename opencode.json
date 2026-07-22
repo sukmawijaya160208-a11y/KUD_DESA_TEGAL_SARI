@@ -51,6 +51,26 @@
         "--username", "root"
       ],
       "enabled": true
+    },
+    "mcp-sqlite": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-sqlite",
+        "--db-path",
+        "backend/database/database.sqlite"
+      ],
+      "enabled": true
+    },
+    "puppeteer": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "puppeteer-mcp-server"
+      ],
+      "enabled": true
     }
   }
 }

@@ -89,28 +89,28 @@ function isPhone(v) {
 
 function BrandPanel({ logoUrl, showBenefits, onToggleBenefits }) {
   return (
-    <div className="relative bg-gradient-to-br from-primary/30 via-primary/5 to-transparent overflow-hidden">
+    <div className="relative md:w-[38%] bg-gradient-to-br from-primary/30 via-primary/5 to-transparent overflow-hidden">
       <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary-light/10 rounded-full blur-3xl" />
       <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-accent/10 rounded-full blur-3xl" />
 
-      <div className="relative z-10 h-full flex flex-col p-4 lg:p-8">
-        <div className="flex items-center justify-between lg:block">
-          <div className="flex items-center gap-3 lg:block">
-            <div className="w-10 h-10 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl overflow-hidden bg-white/10 backdrop-blur border border-white/10 shadow-lg flex items-center justify-center shrink-0">
+      <div className="relative z-10 h-full flex flex-col p-4 md:p-6 lg:p-8">
+        <div className="flex items-center justify-between md:block">
+          <div className="flex items-center gap-3 md:block">
+            <div className="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl overflow-hidden bg-white/10 backdrop-blur border border-white/10 shadow-lg flex items-center justify-center shrink-0">
               {logoUrl ? (
-                <img src={logoUrl} alt="KUD Desa Sari Subur" className="w-full h-full object-contain p-1.5 lg:p-2" />
+                <img src={logoUrl} alt="KUD Desa Sari Subur" className="w-full h-full object-contain p-1.5 md:p-2" />
               ) : (
-                <span className="text-white font-heading font-bold text-xl lg:text-3xl px-2">K</span>
+                <span className="text-white font-heading font-bold text-xl md:text-3xl px-2">K</span>
               )}
             </div>
-            <h1 className="text-white font-heading font-bold text-lg lg:text-3xl lg:mt-3 lg:leading-tight">
-              KUD<br className="hidden lg:block" />
+            <h1 className="text-white font-heading font-bold text-lg md:text-3xl md:mt-3 md:leading-tight">
+              KUD<br className="hidden md:block" />
               <span className="bg-gradient-to-r from-primary-light via-blue-200 to-accent bg-clip-text text-transparent">
                 Sari Subur
               </span>
             </h1>
           </div>
-          <button onClick={onToggleBenefits} className="lg:hidden text-white/50 hover:text-white p-1 cursor-pointer" aria-label="Toggle info">
+          <button onClick={onToggleBenefits} className="md:hidden text-white/50 hover:text-white p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded-lg" aria-label="Toggle info">
             <svg className={`w-5 h-5 transition-transform duration-200 ${showBenefits ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
             </svg>
@@ -124,23 +124,23 @@ function BrandPanel({ logoUrl, showBenefits, onToggleBenefits }) {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="overflow-hidden lg:overflow-visible"
+              className="overflow-hidden md:overflow-visible"
             >
-              <div className="pt-3 lg:pt-0">
-                <p className="text-white/50 text-xs lg:text-sm mt-0 lg:mt-4 max-w-xs leading-relaxed hidden lg:block">
+              <div className="pt-3 md:pt-0">
+                <p className="text-white/50 text-xs md:text-sm mt-0 md:mt-4 max-w-xs leading-relaxed hidden md:block">
                   Koperasi modern untuk pekebun sawit — digital, transparan, dan terpercaya.
                 </p>
-                <div className="space-y-2 mt-3 lg:mt-6">
+                <div className="space-y-2 mt-3 md:mt-6">
                   {BENEFITS.slice(0, 3).map((b, i) => (
                     <motion.div
                       key={i}
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: i * 0.08 }}
-                      className="flex items-start gap-2.5 bg-white/5 rounded-lg lg:rounded-xl p-2.5 lg:p-3 border border-white/5"
+                      className="flex items-start gap-2.5 bg-white/5 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-white/5"
                     >
-                      <div className="w-6 h-6 lg:w-8 lg:h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
-                        <svg className="w-3 h-3 lg:w-4 lg:h-4 text-primary-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                        <svg className="w-3 h-3 md:w-4 md:h-4 text-primary-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d={b.icon} />
                         </svg>
                       </div>
@@ -148,15 +148,15 @@ function BrandPanel({ logoUrl, showBenefits, onToggleBenefits }) {
                     </motion.div>
                   ))}
                 </div>
-                <div className="flex items-center gap-4 lg:gap-6 mt-4 lg:mt-6 pt-4 lg:pt-6 border-t border-white/10">
+                <div className="flex items-center gap-4 md:gap-6 mt-4 md:mt-6 pt-4 md:pt-6 border-t border-white/10">
                   {[
                     { label: 'Pekebun', value: '1,250+' },
                     { label: 'Hektar', value: '3,200+' },
                     { label: 'Desa', value: '5' },
                   ].map((s, i) => (
                     <div key={i} className="text-center flex-1">
-                      <p className="text-white font-heading font-bold text-sm lg:text-lg">{s.value}</p>
-                      <p className="text-white/40 text-[9px] lg:text-[10px] uppercase tracking-wider mt-0.5">{s.label}</p>
+                      <p className="text-white font-heading font-bold text-sm md:text-lg">{s.value}</p>
+                      <p className="text-white/40 text-[9px] md:text-[10px] uppercase tracking-wider mt-0.5">{s.label}</p>
                     </div>
                   ))}
                 </div>
@@ -174,7 +174,7 @@ function TabNav({ tab, onSwitch }) {
     <div className="relative flex bg-gray-100 rounded-xl p-1 shrink-0">
       {(['login', 'register']).map((t) => (
         <button key={t} onClick={() => onSwitch(t)}
-          className={`relative flex-1 py-2.5 text-sm font-semibold rounded-lg transition-colors duration-200 cursor-pointer ${
+          className={`relative flex-1 py-3 sm:py-2.5 text-sm font-semibold rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 ${
             tab === t ? 'text-primary' : 'text-gray-400 hover:text-gray-600'
           }`}>
           {t === 'login' ? 'Masuk' : 'Daftar'}
@@ -208,13 +208,14 @@ function ErrorBanner({ message }) {
 function LoginForm({ login, setLogin, loginErrors, loading, onSubmit, onForgotPassword, onBack, showPassword, setShowPassword, rememberMe, setRememberMe }) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-0 h-full">
-      <div className="mb-3 lg:mb-5">
-        <h2 className="font-heading font-bold text-xl lg:text-2xl text-foreground">Selamat Datang</h2>
-        <p className="text-gray-400 text-xs lg:text-sm mt-0.5 lg:mt-1">Masuk ke akun Anda untuk melanjutkan</p>
+      <div className="mb-3 md:mb-5">
+        <h2 className="font-heading font-bold text-xl md:text-2xl text-foreground">Selamat Datang</h2>
+        <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">Masuk ke akun Anda untuk melanjutkan</p>
       </div>
 
-      <div className="space-y-3 lg:space-y-4">
+      <div className="space-y-3 md:space-y-4">
         <FloatingInput id="login-email" label="Email / Nomor HP" type="text"
+          inputMode="email"
           icon="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
           value={login.email} onChange={(e) => setLogin({ ...login, email: e.target.value })}
           required error={loginErrors.email} valid={login.email && (validateEmail(login.email) || isPhone(login.email))} />
@@ -244,7 +245,8 @@ function LoginForm({ login, setLogin, loginErrors, loading, onSubmit, onForgotPa
               Password
             </label>
             <button type="button" onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 transition-colors cursor-pointer z-10">
+              className="absolute right-1 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-colors cursor-pointer z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-lg"
+              aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}>
               {showPassword ? (
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round"
@@ -268,13 +270,13 @@ function LoginForm({ login, setLogin, loginErrors, loading, onSubmit, onForgotPa
           <Checkbox id="remember-me" label="Ingat Saya" checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)} />
           <button type="button" onClick={onForgotPassword}
-            className="text-xs text-primary hover:underline cursor-pointer font-medium">Lupa Password?</button>
+            className="text-xs text-primary hover:underline cursor-pointer font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1">Lupa Password?</button>
         </div>
       </div>
 
-      <div className="mt-auto pt-3 lg:pt-5 space-y-2">
+      <div className="mt-auto pt-3 md:pt-5 space-y-2">
         <button type="submit" disabled={loading}
-          className={`relative overflow-hidden w-full py-3 rounded-xl font-semibold text-sm lg:text-base transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer shadow-lg ${
+          className={`relative overflow-hidden w-full min-h-[52px] py-3 rounded-xl font-semibold text-sm lg:text-base transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
             loading
               ? 'bg-primary/70 text-white shadow-primary/10'
               : 'bg-primary text-white hover:bg-primary-dark hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98] shadow-primary/20'
@@ -299,15 +301,15 @@ function LoginForm({ login, setLogin, loginErrors, loading, onSubmit, onForgotPa
 function RegisterForm({ reg, setReg, updateReg, regErrors, regStep, setRegStep, regMethod, setRegMethod, loading, agreeTerms, setAgreeTerms, onSubmit, onSwitchTab, onBack, showRegPassword, setShowRegPassword }) {
   return (
     <div className="flex flex-col gap-0 h-full">
-      <div className="mb-3 lg:mb-4">
-        <h2 className="font-heading font-bold text-xl lg:text-2xl text-foreground">Bergabung Sekarang</h2>
-        <p className="text-gray-400 text-xs lg:text-sm mt-0.5 lg:mt-1">Daftar sebagai pekebun dan nikmati layanan digital KUD</p>
+      <div className="mb-3 md:mb-4">
+        <h2 className="font-heading font-bold text-xl md:text-2xl text-foreground">Bergabung Sekarang</h2>
+        <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">Daftar sebagai pekebun dan nikmati layanan digital KUD</p>
       </div>
 
       <div className="flex items-center gap-3 mb-3">
         {[1, 2].map((s) => (
           <div key={s} className="flex items-center gap-3 flex-1 last:flex-none">
-            <div className={`w-7 h-7 lg:w-8 lg:h-8 rounded-full flex items-center justify-center text-[11px] lg:text-xs font-bold shrink-0 transition-all duration-300 ${
+            <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center text-[11px] md:text-xs font-bold shrink-0 transition-all duration-300 ${
               regStep >= s ? 'bg-primary text-white shadow-md shadow-primary/30' : 'bg-gray-200 text-gray-400'
             }`}>
               {regStep > s ? (
@@ -325,7 +327,7 @@ function RegisterForm({ reg, setReg, updateReg, regErrors, regStep, setRegStep, 
           </div>
         ))}
       </div>
-      <div className="hidden sm:flex justify-between text-[11px] lg:text-xs text-gray-400 mb-3 lg:mb-4 px-1">
+      <div className="hidden sm:flex justify-between text-[11px] md:text-xs text-gray-400 mb-3 md:mb-4 px-1">
         <span className={regStep === 1 ? 'text-primary font-semibold' : ''}>Akun Login</span>
         <span className={regStep === 2 ? 'text-primary font-semibold' : ''}>Data Pekebun</span>
       </div>
@@ -333,10 +335,10 @@ function RegisterForm({ reg, setReg, updateReg, regErrors, regStep, setRegStep, 
       <form onSubmit={onSubmit} className="flex flex-col gap-0 flex-1">
         <AnimatePresence mode="wait">
           {regStep === 1 && (
-            <motion.div key="step1" {...fadeUp} transition={{ duration: 0.2 }} className="space-y-3 lg:space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
+            <motion.div key="step1" {...fadeUp} transition={{ duration: 0.2 }} className="space-y-3 md:space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                 <FloatingInput id="reg-name" label="Nama Lengkap" value={reg.name}
-                  onChange={updateReg('name')} required error={regErrors.name} valid={reg.name.trim().length > 0} />
+                  onChange={updateReg('name')} required error={regErrors.name} valid={reg.name.trim().length > 0} inputMode="text" />
                 <div>
                   <div className="flex items-center gap-1 mb-1.5">
                     <button type="button" onClick={() => setRegMethod('email')}
@@ -349,15 +351,15 @@ function RegisterForm({ reg, setReg, updateReg, regErrors, regStep, setRegStep, 
                       }`}>Nomor HP</button>
                   </div>
                   {regMethod === 'email' ? (
-                    <FloatingInput id="reg-email" label="Email" type="email" value={reg.email}
+                    <FloatingInput id="reg-email" label="Email" type="email" inputMode="email" value={reg.email}
                       onChange={updateReg('email')} required error={regErrors.email} valid={validateEmail(reg.email)} />
                   ) : (
-                    <FloatingInput id="reg-phone" label="Nomor HP (contoh: 08123456789)" type="tel" value={reg.phone}
+                    <FloatingInput id="reg-phone" label="Nomor HP (contoh: 08123456789)" type="tel" inputMode="tel" value={reg.phone}
                       onChange={updateReg('phone')} required error={regErrors.phone} valid={isPhone(reg.phone)} />
                   )}
                 </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                 <div>
                   <div className="relative">
                     <input id="reg-password" type={showRegPassword ? 'text' : 'password'}
@@ -406,7 +408,7 @@ function RegisterForm({ reg, setReg, updateReg, regErrors, regStep, setRegStep, 
                   className="text-primary hover:underline font-medium">Kebijakan Privasi</button> KUD Desa Sari Subur</span>
               } checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} required />
               <button type="button" onClick={() => setRegStep(2)}
-                className="relative overflow-hidden w-full py-3 rounded-xl bg-primary text-white font-semibold text-sm lg:text-base hover:bg-primary-dark active:scale-[0.98] transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-primary/20">
+                className="relative overflow-hidden w-full min-h-[52px] py-3 rounded-xl bg-primary text-white font-semibold text-sm lg:text-base hover:bg-primary-dark active:scale-[0.98] transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                 Lanjut ke Data Pekebun
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -422,7 +424,7 @@ function RegisterForm({ reg, setReg, updateReg, regErrors, regStep, setRegStep, 
                   if (res?.url) window.location.href = res.url;
                 } catch (err) { /* ignore */ }
               }}
-                className="w-full py-2.5 rounded-xl border-2 border-gray-200 hover:border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                className="w-full min-h-[48px] py-2.5 rounded-xl border-2 border-gray-200 hover:border-gray-300 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                 <svg className="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                 Google
               </button>
@@ -430,36 +432,36 @@ function RegisterForm({ reg, setReg, updateReg, regErrors, regStep, setRegStep, 
           )}
 
           {regStep === 2 && (
-            <motion.div key="step2" {...fadeUp} transition={{ duration: 0.2 }} className="space-y-3 lg:space-y-4">
-              <p className="text-[11px] lg:text-xs text-gray-400">Lengkapi data diri Anda untuk verifikasi anggota KUD.</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
+            <motion.div key="step2" {...fadeUp} transition={{ duration: 0.2 }} className="space-y-3 md:space-y-4">
+              <p className="text-[11px] md:text-xs text-gray-400">Lengkapi data diri Anda untuk verifikasi anggota KUD.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                 <FloatingInput id="reg-nama" label="Nama Pekebun" value={reg.nama}
                   onChange={updateReg('nama')} required error={regErrors.nama} valid={reg.nama.trim().length > 0} />
-                <FloatingInput id="reg-nik" label="NIK" value={reg.nik}
+                <FloatingInput id="reg-nik" label="NIK" inputMode="numeric" value={reg.nik}
                   onChange={updateReg('nik')} required maxLength={16}
                   error={regErrors.nik} valid={validateNIK(reg.nik)} />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
-                <FloatingInput id="reg-no-kk" label="No. KK" value={reg.no_kk} onChange={updateReg('no_kk')} required />
-                <FloatingInput id="reg-tempat-lahir" label="Tempat Lahir" value={reg.tempat_lahir} onChange={updateReg('tempat_lahir')} required />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                <FloatingInput id="reg-no-kk" label="No. KK" inputMode="numeric" value={reg.no_kk} onChange={updateReg('no_kk')} required />
+                <FloatingInput id="reg-tempat-lahir" label="Tempat Lahir" inputMode="text" value={reg.tempat_lahir} onChange={updateReg('tempat_lahir')} required />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                 <DatePicker id="reg-tgl-lahir" label="Tanggal Lahir"
                   value={reg.tanggal_lahir} onChange={(v) => setReg({ ...reg, tanggal_lahir: v })} />
-                <FloatingInput id="reg-wa" label="No. WhatsApp" value={reg.no_whatsapp}
+                <FloatingInput id="reg-wa" label="No. WhatsApp" inputMode="tel" value={reg.no_whatsapp}
                   onChange={updateReg('no_whatsapp')} required />
               </div>
               <FloatingInput id="reg-alamat" label="Alamat" value={reg.alamat} onChange={updateReg('alamat')} required />
               <div className="flex gap-3 pt-1">
                 <button type="button" onClick={() => setRegStep(1)}
-                  className="relative overflow-hidden flex-1 py-3 rounded-xl border-2 border-primary text-primary font-semibold text-sm hover:bg-primary hover:text-white active:scale-[0.98] transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer">
+                  className="relative overflow-hidden flex-1 min-h-[52px] py-3 rounded-xl border-2 border-primary text-primary font-semibold text-sm hover:bg-primary hover:text-white active:scale-[0.98] transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                   </svg>
                   Kembali
                 </button>
                 <button type="submit" disabled={loading}
-                  className={`relative overflow-hidden flex-1 py-3 rounded-xl font-semibold text-sm transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer shadow-lg ${
+                  className={`relative overflow-hidden flex-1 min-h-[52px] py-3 rounded-xl font-semibold text-sm transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
                     loading
                       ? 'bg-accent/70 text-white shadow-accent/10'
                       : 'bg-accent text-white hover:bg-accent-hover hover:shadow-xl hover:shadow-accent/30 active:scale-[0.98] shadow-accent/20'
@@ -482,7 +484,7 @@ function RegisterForm({ reg, setReg, updateReg, regErrors, regStep, setRegStep, 
           )}
         </AnimatePresence>
 
-        <div className="mt-auto pt-3 lg:pt-4 text-center">
+        <div className="mt-auto pt-3 md:pt-4 text-center">
           <p className="text-xs text-gray-400">
             Sudah punya akun?{' '}
             <button type="button" onClick={() => onSwitchTab('login')}
@@ -509,7 +511,9 @@ export default function AuthPage() {
   const [showRegPassword, setShowRegPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
-  const [showBenefits, setShowBenefits] = useState(false);
+  const [showBenefits, setShowBenefits] = useState(
+    typeof window !== 'undefined' ? window.matchMedia('(min-width: 768px)').matches : false
+  );
 
   const [login, setLogin] = useState({ email: '', password: '' });
   const [loginErrors, setLoginErrors] = useState({});
@@ -606,8 +610,7 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const mq = window.matchMedia('(min-width: 1024px)');
-    setShowBenefits(mq.matches);
+    const mq = window.matchMedia('(min-width: 768px)');
     const handler = (e) => setShowBenefits(e.matches);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
@@ -627,12 +630,12 @@ export default function AuthPage() {
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
-        className="relative z-10 w-full max-w-5xl flex flex-col lg:flex-row rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-white/10 backdrop-blur-sm"
+        className="relative z-10 w-full max-w-5xl flex flex-col md:flex-row rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-white/10 backdrop-blur-sm"
         style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}
       >
         <BrandPanel logoUrl={logoUrl} showBenefits={showBenefits} onToggleBenefits={toggleBenefits} />
 
-        <motion.div layout className="lg:w-[62%] bg-white/95 backdrop-blur-xl p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col min-h-0">
+        <motion.div layout className="md:w-[62%] bg-white/95 backdrop-blur-xl p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col min-h-0">
           <TabNav tab={tab} onSwitch={switchTab} />
 
           <AnimatePresence mode="wait">

@@ -1,14 +1,16 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+
 const ORBS = [
-  { size: 400, blur: 'blur-3xl', opacity: 0.12, bg: '#4CAF50' },
-  { size: 320, blur: 'blur-3xl', opacity: 0.10, bg: '#FFD700' },
-  { size: 360, blur: 'blur-3xl', opacity: 0.08, bg: '#2E7D32' },
-  { size: 280, blur: 'blur-3xl', opacity: 0.10, bg: '#1B5E20' },
-  { size: 240, blur: 'blur-3xl', opacity: 0.06, bg: '#FFC107' },
-  { size: 200, blur: 'blur-3xl', opacity: 0.07, bg: '#66BB6A' },
-  { size: 180, blur: 'blur-3xl', opacity: 0.05, bg: '#A5D6A7' },
-  { size: 160, blur: 'blur-3xl', opacity: 0.06, bg: '#FFD54F' },
+  { size: 400, blur: 80, opacity: 0.12, bg: '#15803D' },
+  { size: 320, blur: 64, opacity: 0.10, bg: '#FFD700' },
+  { size: 360, blur: 72, opacity: 0.08, bg: '#166534' },
+  { size: 280, blur: 56, opacity: 0.10, bg: '#14532D' },
+  { size: 240, blur: 48, opacity: 0.06, bg: '#FFC107' },
+  { size: 200, blur: 40, opacity: 0.07, bg: '#22C55E' },
+  { size: 180, blur: 36, opacity: 0.05, bg: '#4ADE80' },
+  { size: 160, blur: 32, opacity: 0.06, bg: '#FBBF24' },
 ];
 
 const positions = [
@@ -23,6 +25,21 @@ const positions = [
 ];
 
 export default function FloatingOrbs() {
+  const prefersReduced = useRef(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    prefersReduced.current = mq.matches;
+  }, []);
+
+  if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return (
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
       {ORBS.map((orb, i) => (
@@ -32,7 +49,7 @@ export default function FloatingOrbs() {
           style={{
             width: orb.size,
             height: orb.size,
-            filter: orb.blur,
+            filter: `blur(${orb.blur}px)`,
             opacity: orb.opacity,
             background: orb.bg,
             top: positions[i].top,
