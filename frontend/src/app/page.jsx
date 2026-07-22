@@ -74,13 +74,22 @@ const LAYANAN = [
 ];
 
 const MITRA = [
-  { name: 'Dinas Pertanian', logo: '???' },
-  { name: 'PTPN V', logo: '??' },
-  { name: 'Bank BRI', logo: '??' },
-  { name: 'Universitas Riau', logo: '??' },
-  { name: 'LSM Swadaya', logo: '??' },
-  { name: 'Kementan RI', logo: '??' },
+  { name: 'Dinas Pertanian', logo: '🏛️' },
+  { name: 'PTPN V', logo: '🏭' },
+  { name: 'Bank BRI', logo: '🏦' },
+  { name: 'Universitas Riau', logo: '🎓' },
+  { name: 'LSM Swadaya', logo: '🤝' },
+  { name: 'Kementan RI', logo: '🌾' },
 ];
+
+const PROGRAM_COLORS = {
+  emerald: { bg: 'bg-emerald-50', icon: 'text-emerald-600' },
+  blue: { bg: 'bg-blue-50', icon: 'text-blue-600' },
+  amber: { bg: 'bg-amber-50', icon: 'text-amber-600' },
+  purple: { bg: 'bg-purple-50', icon: 'text-purple-600' },
+  rose: { bg: 'bg-rose-50', icon: 'text-rose-600' },
+  teal: { bg: 'bg-teal-50', icon: 'text-teal-600' },
+};
 
 function SectionBadge({ children }) {
   return (
@@ -138,28 +147,28 @@ function Counter({ end, suffix, label, duration = 2000, prefix }) {
 }
 
 function ProgramModal({ program, onClose }) {
-  if (!program) return null;
-  const Icon = program.icon;
   return (
     <AnimatePresence>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-        <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 30 }} transition={{ type: 'spring', damping: 25 }} className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 md:p-8 relative overflow-hidden" onClick={(e) => e.stopPropagation()}>
-          <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors"><XMarkIcon className="w-5 h-5" /></button>
-          <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4"><Icon className="w-7 h-7 text-primary" /></div>
-          <h3 className="text-2xl font-bold font-heading text-foreground mb-2">{program.title}</h3>
-          <p className="text-muted-foreground mb-6">{program.desc}</p>
-          <h4 className="font-semibold text-foreground mb-3">Manfaat Program:</h4>
-          <ul className="space-y-2.5">
-            {program.manfaat.map((m, idx) => (
-              <li key={idx} className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold mt-0.5">{idx + 1}</span>
-                <span className="text-foreground/80">{m}</span>
-              </li>
-            ))}
-          </ul>
-          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="mt-6 w-full py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary/90 transition-colors">Daftar Program</motion.button>
+      {program && (
+        <motion.div key={program.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+          <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 30 }} transition={{ type: 'spring', damping: 25 }} className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 md:p-8 relative overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors"><XMarkIcon className="w-5 h-5" /></button>
+            <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4"><program.icon className="w-7 h-7 text-primary" /></div>
+            <h3 className="text-2xl font-bold font-heading text-foreground mb-2">{program.title}</h3>
+            <p className="text-muted-foreground mb-6">{program.desc}</p>
+            <h4 className="font-semibold text-foreground mb-3">Manfaat Program:</h4>
+            <ul className="space-y-2.5">
+              {program.manfaat.map((m, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold mt-0.5">{idx + 1}</span>
+                  <span className="text-foreground/80">{m}</span>
+                </li>
+              ))}
+            </ul>
+            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="mt-6 w-full py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary/90 transition-colors">Daftar Program</motion.button>
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
     </AnimatePresence>
   );
 }
@@ -167,12 +176,14 @@ function ProgramModal({ program, onClose }) {
 function VideoModal({ videoId, onClose }) {
   return (
     <AnimatePresence>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-4xl aspect-video rounded-2xl overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
-          <button onClick={onClose} className="absolute top-3 right-3 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"><XMarkIcon className="w-5 h-5" /></button>
-          <iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1`} allow="autoplay; encrypted-media" allowFullScreen className="w-full h-full" />
+      {videoId && (
+        <motion.div key={videoId} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-4xl aspect-video rounded-2xl overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <button onClick={onClose} className="absolute top-3 right-3 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"><XMarkIcon className="w-5 h-5" /></button>
+            <iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1`} allow="autoplay; encrypted-media" allowFullScreen className="w-full h-full" />
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
     </AnimatePresence>
   );
 }
@@ -192,7 +203,6 @@ export default function Home() {
   const [blogCategory, setBlogCategory] = useState('Semua');
   const [showBackTop, setShowBackTop] = useState(false);
   const heroRef = useRef(null);
-  const heroTextRef = useRef(null);
 
   useEffect(() => { setMounted(true); setLoggedIn(!!localStorage.getItem('token')); }, []);
   useEffect(() => {
@@ -243,7 +253,7 @@ export default function Home() {
         </div>
         <AnimatePresence>
           {mobileOpen && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden border-t border-white/10 bg-white/95 backdrop-blur-xl overflow-hidden">
+            <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="md:hidden border-t border-white/10 bg-white/95 backdrop-blur-xl overflow-hidden">
               <div className="px-4 py-4 space-y-1">
                 {navLinks.map((link) => (
                   <a key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground/70 hover:text-primary hover:bg-primary/5 transition-colors">
@@ -272,7 +282,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.3),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(6,182,212,0.2),transparent_50%)]" />
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl animate-pulse animation-delay-2000" />
+          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl animate-pulse animate-delay-700" />
           {[...Array(20)].map((_, i) => (
             <motion.div key={i} className="absolute w-1 h-1 bg-white/20 rounded-full" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }} animate={{ y: [0, -30, 0], opacity: [0, 1, 0], }} transition={{ duration: 3 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 3 }} />
           ))}
@@ -283,7 +293,7 @@ export default function Home() {
               Koperasi Unit Desa Tegal Sari
             </motion.span>
           </motion.div>
-          <motion.h1 ref={heroTextRef} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold font-heading text-white leading-tight max-w-5xl mx-auto">
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold font-heading text-white leading-tight max-w-5xl mx-auto">
             Maju Bersama{' '}
             <span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD Sari Subur</span>
           </motion.h1>
@@ -320,7 +330,7 @@ export default function Home() {
               <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center"><CurrencyDollarIcon className="w-5 h-5 text-emerald-600" /></div>
               <div>
                 <h3 className="font-bold font-heading text-foreground">Harga TBS Hari Ini</h3>
-                <p className="text-xs text-muted-foreground">Update terakhir: 22 Juli 2025</p>
+                <p className="text-xs text-muted-foreground">Update terakhir: {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
               </div>
             </div>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
@@ -340,7 +350,7 @@ export default function Home() {
                 <div className="flex items-center gap-1 mt-1">
                   <span className="text-xs text-muted-foreground">/{item.kg}</span>
                   <span className={`text-xs font-medium flex items-center gap-0.5 ${item.up ? 'text-green-600' : 'text-red-500'}`}>
-                    {item.up ? '?' : '?'} {item.change}
+                    {item.up ? '\u2191' : '\u2193'} {item.change}
                   </span>
                 </div>
               </motion.div>
@@ -508,8 +518,8 @@ export default function Home() {
               const Icon = program.icon;
               return (
                 <motion.div key={program.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -6 }} className="group relative bg-white rounded-2xl border border-gray-100 p-6 shadow-card hover:shadow-card-hover transition-all cursor-pointer" onClick={() => setProgramModal(program)}>
-                  <div className={`w-12 h-12 rounded-xl bg-${program.color}-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <Icon className={`w-6 h-6 text-${program.color}-600`} />
+                  <div className={`w-12 h-12 rounded-xl ${PROGRAM_COLORS[program.color].bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                    <Icon className={`w-6 h-6 ${PROGRAM_COLORS[program.color].icon}`} />
                   </div>
                   <h3 className="text-lg font-bold font-heading text-foreground">{program.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{program.desc}</p>
@@ -789,7 +799,7 @@ export default function Home() {
               </div>
               <p className="text-sm leading-relaxed">Koperasi Unit Desa Sari Subur berkomitmen meningkatkan kesejahteraan petani kelapa sawit melalui kemitraan berkelanjutan.</p>
               <div className="flex items-center gap-3 mt-5">
-                {['??', '??', '??'].map((emoji, idx) => (
+                {['🌐', '📱', '📧'].map((emoji, idx) => (
                   <div key={idx} className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-sm hover:bg-white/10 hover:text-white transition-all cursor-pointer">{emoji}</div>
                 ))}
               </div>
