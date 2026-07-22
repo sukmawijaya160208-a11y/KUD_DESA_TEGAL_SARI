@@ -16,5 +16,5 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - name: Build & Deploy
-        run: bash /opt/actions-runner/deploy.sh
+      - name: Test script execution
+        run: bash /opt/actions-runner/test.sh
