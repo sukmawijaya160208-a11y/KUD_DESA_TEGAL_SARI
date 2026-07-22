@@ -6,12 +6,11 @@ on:
       - main
     paths-ignore:
       - '**.md'
-      - '.github/**'
 
 jobs:
   deploy:
     name: Build & Deploy
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     concurrency:
       group: vps-deploy
       cancel-in-progress: false
@@ -20,28 +19,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          timeout: 60s
-          command_timeout: 30m
-          script: |
-            set -e
-
-            # Stop old systemd services (pre-Docker migration) that block ports
-            systemctl stop kud-backend kud-frontend kud-queue 2>/dev/null || true
-            systemctl disable kud-backend kud-frontend kud-queue 2>/dev/null || true
-
-            # Free ports if anything else is listening
-            fuser -k 8000/tcp 2>/dev/null || true
-            fuser -k 3000/tcp 2>/dev/null || true
-
-            cd /var/www/kud
-            git fetch origin main
-            git reset --hard origin/main
-            docker compose up -d --build
-            echo "=== Deploy selesai ==="
+      - name: Build & Deploy
+        working-directory: /var/www/kud
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+          docker compose up -d --build
+          echo "=== Deploy selesai ==="

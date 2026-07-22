@@ -318,7 +318,7 @@ export default function Home() {
           </motion.div>
         </div>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="hidden sm:block absolute bottom-8 left-1/2 -translate-x-1/2">
-          <motion.a href="#tentang" animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }} className="flex flex-col items-center gap-1 text-white/50 hover:text-white/80 transition-colors text-xs">
+          <motion.a href="#" onClick={(e) => { e.preventDefault(); document.getElementById('tentang')?.scrollIntoView({ behavior: 'smooth' }); }} className="flex flex-col items-center gap-1 text-white/50 hover:text-white/80 transition-colors text-xs">
             <span>Scroll</span>
             <ChevronDownIcon className="w-4 h-4" />
           </motion.a>
