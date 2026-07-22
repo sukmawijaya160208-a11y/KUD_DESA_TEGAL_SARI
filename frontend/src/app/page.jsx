@@ -277,7 +277,7 @@ export default function Home() {
       </motion.nav>
 
       {/* ===== HERO SECTION ===== */}
-      <section ref={heroRef} className="relative min-h-[80vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900">
+      <section ref={heroRef} className="relative min-h-[60vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.3),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(6,182,212,0.2),transparent_50%)]" />
@@ -315,49 +315,14 @@ export default function Home() {
           </motion.div>
         </div>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="hidden sm:block absolute bottom-8 left-1/2 -translate-x-1/2">
-          <motion.a href="#harga" animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }} className="flex flex-col items-center gap-1 text-white/50 hover:text-white/80 transition-colors text-xs">
+          <motion.a href="#tentang" animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }} className="flex flex-col items-center gap-1 text-white/50 hover:text-white/80 transition-colors text-xs">
             <span>Scroll</span>
             <ChevronDownIcon className="w-4 h-4" />
           </motion.a>
         </motion.div>
       </section>
 
-      {/* ===== HARGA TBS LIVE ===== */}
-      <section id="harga" className="relative md:-mt-20 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="bg-white rounded-2xl shadow-card border border-gray-100 p-4 sm:p-6 md:p-8">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center"><CurrencyDollarIcon className="w-5 h-5 text-emerald-600" /></div>
-              <div>
-                <h3 className="font-bold font-heading text-foreground">Harga TBS Hari Ini</h3>
-                <p className="text-xs text-muted-foreground">Update terakhir: {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-              </div>
-            </div>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />Live
-            </span>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { grade: 'TBS Super', price: 'Rp 2.850', kg: 'kg', change: '+50', up: true },
-              { grade: 'TBS Grade A', price: 'Rp 2.650', kg: 'kg', change: '+30', up: true },
-              { grade: 'TBS Grade B', price: 'Rp 2.450', kg: 'kg', change: '-20', up: false },
-              { grade: 'TBS Grade C', price: 'Rp 2.250', kg: 'kg', change: '+10', up: true },
-            ].map((item, idx) => (
-              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="relative p-3 sm:p-4 rounded-xl bg-gradient-to-br from-gray-50 to-white border border-gray-100 hover:border-primary/20 hover:shadow-md transition-all">
-                <div className="text-[10px] sm:text-xs text-muted-foreground mb-0.5 sm:mb-1">{item.grade}</div>
-                <div className="text-xl sm:text-2xl font-bold font-heading text-foreground">{item.price}</div>
-                <div className="flex items-center gap-1 mt-1">
-                  <span className="text-xs text-muted-foreground">/{item.kg}</span>
-                  <span className={`text-xs font-medium flex items-center gap-0.5 ${item.up ? 'text-green-600' : 'text-red-500'}`}>
-                    {item.up ? '\u2191' : '\u2193'} {item.change}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
+
 
       {/* ===== KUD DALAM ANGKA ===== */}
       <section className="py-16 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
