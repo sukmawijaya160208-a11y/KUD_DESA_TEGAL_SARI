@@ -1,19 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Work+Sans:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 @import "tailwindcss";
 
 @theme inline {
   --color-primary: #059669;
   --color-primary-dark: #047857;
+  --color-primary-darker: #065F46;
   --color-primary-light: #A7F3D0;
   --color-primary-lighter: #D1FAE5;
   --color-on-primary: #FFFFFF;
   --color-secondary: #0D9488;
   --color-accent: #F59E0B;
   --color-accent-hover: #D97706;
-  --color-background: #F8FAFC;
+  --color-accent-light: #FEF3C7;
+  --color-background: #F0FDF4;
   --color-foreground: #0F172A;
   --color-muted: #F1F5F9;
+  --color-muted-foreground: #64748B;
   --color-border: #E2E8F0;
   --color-destructive: #DC2626;
   --color-destructive-hover: #B91C1C;
@@ -24,16 +27,23 @@
 
   --color-kud-green: #065F46;
   --color-kud-green-light: #34D399;
+  --color-kud-green-lighter: #A7F3D0;
   --color-kud-gold: #FCD34D;
   --color-kud-green-dark: #064E3B;
+  --color-kud-cream: #FEFCE8;
+  --color-kud-brown: #78350F;
 
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-sans: 'Work Sans', system-ui, sans-serif;
+  --font-heading: 'Outfit', system-ui, sans-serif;
 
   --shadow-card: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
   --shadow-card-hover: 0 10px 30px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
   --shadow-glass: 0 8px 32px rgba(0,0,0,0.06);
+  --shadow-glass-lg: 0 16px 48px rgba(0,0,0,0.08);
   --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.1);
+  --shadow-primary: 0 4px 14px rgba(5,150,105,0.25);
+  --shadow-primary-lg: 0 8px 30px rgba(5,150,105,0.3);
 
   --animate-fade-in: fadeIn 0.5s ease-out;
   --animate-slide-in: slideIn 0.4s ease-out;
@@ -41,6 +51,8 @@
   --animate-scale-in: scaleIn 0.3s ease-out;
   --animate-spin: spin 0.8s linear infinite;
   --animate-shimmer: shimmer 2s linear infinite;
+  --animate-float-slow: float 6s ease-in-out infinite;
+  --animate-float-med: float 4s ease-in-out infinite;
 }
 
 @theme inline {
@@ -68,6 +80,8 @@
 .animate-pulse-recording { animation: pulse-recording 1.5s ease-in-out infinite; }
 .animate-call-pulse { animation: call-pulse 2s ease-in-out infinite; }
 .animate-gradient { animation: gradientShift 8s ease infinite; background-size: 200% 200%; }
+.animate-float-slow { animation: float 6s ease-in-out infinite; }
+.animate-float-med { animation: float 4s ease-in-out infinite; }
 
 .animate-delay-100 { animation-delay: 0.1s; animation-fill-mode: backwards; }
 .animate-delay-200 { animation-delay: 0.2s; animation-fill-mode: backwards; }
@@ -128,6 +142,13 @@ body {
   border: 1px solid rgba(255,255,255,0.3);
 }
 
+.glass-dark {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
 .gradient-border {
   position: relative;
 }
@@ -141,6 +162,10 @@ body {
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
+}
+
+.gradient-border-emerald::before {
+  background: linear-gradient(135deg, #059669, #0D9488, #34D399);
 }
 
 .bg-chat-pattern {
@@ -170,4 +195,31 @@ body {
   height: 12px;
   background: #ffffff;
   clip-path: path('M 12,0 Q 12,12 0,12 L 0,0 Z');
+}
+
+.text-balance { text-wrap: balance; }
+
+.gradient-text-emerald {
+  background: linear-gradient(135deg, #059669, #0D9488, #34D399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-bg-emerald {
+  background: linear-gradient(135deg, #059669, #047857, #065F46);
+}
+
+.gradient-bg-emerald-light {
+  background: linear-gradient(135deg, #D1FAE5, #A7F3D0, #6EE7B7);
+}
+
+.hero-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  pointer-events: none;
 }

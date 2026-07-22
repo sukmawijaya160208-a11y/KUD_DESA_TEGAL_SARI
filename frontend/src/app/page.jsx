@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLogo } from '@/hooks/useLogo';
@@ -23,6 +23,34 @@ import {
   DocumentTextIcon, BuildingOfficeIcon, GlobeAltIcon,
   TruckIcon, EyeIcon, BellAlertIcon, FolderIcon
 } from '@heroicons/react/24/outline';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.9 },
+  show: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
+};
+
+const PalmLogo = () => (
+  <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full p-1">
+    <path d="M4 28Q16 14 28 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M8 23Q14 19 16 21Q13 21.5 9 23Z" fill="currentColor"/>
+    <path d="M12 18Q18 14 20 16Q17 16.5 13 18Z" fill="currentColor"/>
+    <path d="M16 13Q22 9 24 11Q21 11.5 17 13Z" fill="currentColor"/>
+    <path d="M20 8Q26 4 27 6Q25 6.5 21 8Z" fill="currentColor"/>
+    <path d="M10 24Q8 21 10 20Q11 22 11 23.5Z" fill="currentColor"/>
+    <path d="M14 19Q12 16 14 15Q15 17 15 18.5Z" fill="currentColor"/>
+    <path d="M18 14Q16 11 18 10Q19 12 19 13.5Z" fill="currentColor"/>
+  </svg>
+);
 
 const YT_VIDEOS = [
   { id: 'o7k3SZ0sIVQ', title: 'Profil KUD Desa Sari Subur' },
@@ -82,6 +110,31 @@ const MITRA = [
   { name: 'Kementan RI', logo: '🌾' },
 ];
 
+const heroParticles = Array.from({ length: 30 }, (_, i) => ({
+  left: ((i * 53 + 17) % 97) + 1,
+  top: ((i * 83 + 31) % 97) + 1,
+  offsetY: ((i * 11 + 7) % 30) + 10,
+  offsetX: ((i * 19 + 13) % 20) - 10,
+  duration: 4 + (i % 5),
+  delay: (i * 0.3) % 4,
+}));
+
+const heroShapes = Array.from({ length: 6 }, (_, i) => ({
+  size: 20 + (i * 17) % 40,
+  left: 10 + (i * 23) % 80,
+  top: 10 + (i * 29) % 80,
+  duration: 6 + (i % 4),
+  delay: (i * 0.5),
+}));
+
+const ctaShapes = Array.from({ length: 8 }, (_, i) => ({
+  size: 10 + (i * 13) % 30,
+  left: 10 + (i * 19) % 80,
+  top: 10 + (i * 23) % 80,
+  duration: 5 + (i % 3),
+  delay: (i * 0.4),
+}));
+
 const PROGRAM_COLORS = {
   emerald: { bg: 'bg-emerald-50', icon: 'text-emerald-600' },
   blue: { bg: 'bg-blue-50', icon: 'text-blue-600' },
@@ -93,8 +146,8 @@ const PROGRAM_COLORS = {
 
 function SectionBadge({ children }) {
   return (
-    <motion.span initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
-      {children}
+    <motion.span initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 overflow-hidden">
+      <span className="relative z-10">{children}</span>
     </motion.span>
   );
 }
@@ -151,21 +204,22 @@ function ProgramModal({ program, onClose }) {
     <AnimatePresence>
       {program && (
         <motion.div key={program.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-          <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 30 }} transition={{ type: 'spring', damping: 25 }} className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 md:p-8 relative overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors"><XMarkIcon className="w-5 h-5" /></button>
-            <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4"><program.icon className="w-7 h-7 text-primary" /></div>
-            <h3 className="text-2xl font-bold font-heading text-foreground mb-2">{program.title}</h3>
-            <p className="text-muted-foreground mb-6">{program.desc}</p>
-            <h4 className="font-semibold text-foreground mb-3">Manfaat Program:</h4>
-            <ul className="space-y-2.5">
+          <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 30 }} transition={{ type: 'spring', damping: 25 }} className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl max-w-lg w-full p-6 md:p-8 relative overflow-hidden border border-white/50" onClick={(e) => e.stopPropagation()}>
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/30 to-transparent pointer-events-none" />
+            <button onClick={onClose} className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-gray-100 transition-colors shadow-sm"><XMarkIcon className="w-5 h-5" /></button>
+            <div className="relative z-10 w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/20"><program.icon className="w-7 h-7 text-white" /></div>
+            <h3 className="relative z-10 text-2xl font-bold font-heading text-foreground mb-2">{program.title}</h3>
+            <p className="relative z-10 text-muted-foreground mb-6">{program.desc}</p>
+            <h4 className="relative z-10 font-semibold text-foreground mb-3">Manfaat Program:</h4>
+            <ul className="relative z-10 space-y-2.5">
               {program.manfaat.map((m, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold mt-0.5">{idx + 1}</span>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-white flex items-center justify-center text-xs font-bold mt-0.5 shadow-sm">{idx + 1}</span>
                   <span className="text-foreground/80">{m}</span>
                 </li>
               ))}
             </ul>
-            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="mt-6 w-full py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary/90 transition-colors">Daftar Program</motion.button>
+            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="relative z-10 mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-lg shadow-emerald-500/30">Daftar Program</motion.button>
           </motion.div>
         </motion.div>
       )}
@@ -177,9 +231,9 @@ function VideoModal({ videoId, onClose }) {
   return (
     <AnimatePresence>
       {videoId && (
-        <motion.div key={videoId} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-4xl aspect-video rounded-2xl overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <button onClick={onClose} className="absolute top-3 right-3 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"><XMarkIcon className="w-5 h-5" /></button>
+        <motion.div key={videoId} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl" onClick={onClose}>
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ type: 'spring', damping: 25 }} className="relative w-full max-w-4xl aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10" onClick={(e) => e.stopPropagation()}>
+            <button onClick={onClose} className="absolute top-3 right-3 z-10 p-2 rounded-full bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 transition-colors border border-white/20"><XMarkIcon className="w-5 h-5" /></button>
             <iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1`} allow="autoplay; encrypted-media" allowFullScreen className="w-full h-full" />
           </motion.div>
         </motion.div>
@@ -191,7 +245,7 @@ function VideoModal({ videoId, onClose }) {
 export default function Home() {
   const router = useRouter();
   const logoUrl = useLogo();
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(() => typeof window !== 'undefined' && !!localStorage.getItem('token'));
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [testiIdx, setTestiIdx] = useState(0);
@@ -204,7 +258,7 @@ export default function Home() {
   const [showBackTop, setShowBackTop] = useState(false);
   const heroRef = useRef(null);
 
-  useEffect(() => { setMounted(true); setLoggedIn(!!localStorage.getItem('token')); }, []);
+  useEffect(() => { setMounted(true); }, []);
   useEffect(() => {
     const onScroll = () => { setScrolled(window.scrollY > 50); setShowBackTop(window.scrollY > 500); };
     window.addEventListener('scroll', onScroll, { passive: true }); return () => window.removeEventListener('scroll', onScroll);
@@ -224,11 +278,11 @@ export default function Home() {
     <div className="overflow-x-hidden">
 
       {/* ===== NAVBAR ===== */}
-      <motion.nav initial={{ y: -80 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }} className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-xl shadow-glass border-b border-white/20' : 'bg-transparent'}`}>
+      <motion.nav initial={{ y: -80 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }} className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${scrolled ? 'bg-white/80 backdrop-blur-xl shadow-lg shadow-black/5 border-b border-white/30' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
             <div className="flex items-center gap-2 cursor-pointer flex-shrink-0 min-w-0" onClick={() => router.push('/')}>
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0">K</div>
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0 shadow-lg shadow-emerald-500/30"><PalmLogo /></div>
               <span className={`font-bold font-heading text-sm sm:text-lg truncate transition-colors ${scrolled ? 'text-foreground' : 'text-white'}`}>KUD Sari Subur</span>
             </div>
             <div className="hidden md:flex items-center gap-1">
@@ -239,11 +293,11 @@ export default function Home() {
               ))}
               {mounted && !loggedIn ? (
                 <div className="flex items-center gap-2 ml-3">
-                  <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push('/login')} className="px-4 py-2 rounded-lg text-sm font-bold border-2 border-emerald-500/50 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:border-emerald-500 transition-colors">Masuk</motion.button>
-                  <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push('/login?tab=register')} className="px-4 py-2 rounded-lg text-sm font-bold bg-emerald-600 text-white shadow-md hover:bg-emerald-700 transition-colors">Daftar</motion.button>
+                  <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => router.push('/login')} className="px-4 py-2 rounded-lg text-sm font-bold border-2 border-emerald-500/50 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:border-emerald-500 transition-all shadow-sm">Masuk</motion.button>
+                  <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => router.push('/login?tab=register')} className="px-4 py-2 rounded-lg text-sm font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-lg shadow-emerald-600/30 hover:shadow-xl hover:shadow-emerald-600/40 transition-all hover:from-emerald-700 hover:to-emerald-800">Daftar</motion.button>
                 </div>
               ) : mounted && loggedIn ? (
-                <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push('/dashboard')} className="ml-3 px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors shadow-md shadow-primary/20">Dashboard</motion.button>
+                <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => router.push('/dashboard')} className="ml-3 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-lg shadow-emerald-600/30">Dashboard</motion.button>
               ) : null}
             </div>
             <button onClick={() => setMobileOpen(!mobileOpen)} className={`md:hidden p-2 rounded-lg transition-colors ${scrolled ? 'text-foreground' : 'text-white'}`}>
@@ -253,18 +307,18 @@ export default function Home() {
         </div>
         <AnimatePresence>
           {mobileOpen && (
-            <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="md:hidden border-t border-white/10 bg-white/95 backdrop-blur-xl overflow-hidden">
+            <motion.div layout initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden border-t border-white/20 bg-white/95 backdrop-blur-xl overflow-hidden shadow-lg">
               <div className="px-4 py-4 space-y-1">
                 {navLinks.map((link) => (
-                  <a key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground/70 hover:text-primary hover:bg-primary/5 transition-colors">
+                  <motion.a key={link.href} href={link.href} onClick={() => setMobileOpen(false)} whileTap={{ scale: 0.98 }} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground/70 hover:text-primary hover:bg-primary/5 transition-colors">
                     <link.icon className="w-5 h-5" /><span className="font-medium">{link.label}</span>
-                  </a>
+                  </motion.a>
                 ))}
                 <div className="pt-3 border-t border-gray-100 flex gap-2">
                   {mounted && !loggedIn ? (
                     <>
-                      <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/login'); }} className="flex-1 py-2.5 rounded-lg border-2 border-emerald-500/50 bg-emerald-50 text-emerald-700 font-bold text-sm">Masuk</motion.button>
-                      <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/login?tab=register'); }} className="flex-1 py-2.5 rounded-lg bg-emerald-600 text-white font-bold text-sm">Daftar</motion.button>
+                      <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/login'); }} className="flex-1 py-2.5 rounded-lg border-2 border-emerald-500/50 bg-emerald-50 text-emerald-700 font-bold text-sm shadow-sm">Masuk</motion.button>
+                      <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/login?tab=register'); }} className="flex-1 py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/30">Daftar</motion.button>
                     </>
                   ) : mounted && loggedIn ? (
                     <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/dashboard'); }} className="w-full py-2.5 rounded-lg bg-primary text-white font-semibold text-sm">Dashboard</motion.button>
@@ -279,12 +333,18 @@ export default function Home() {
       {/* ===== HERO SECTION ===== */}
       <section ref={heroRef} className="relative min-h-[60vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.3),transparent_50%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(6,182,212,0.2),transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.4),transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(6,182,212,0.3),transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(5,150,105,0.15),transparent_70%)]" />
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl animate-pulse" />
           <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl animate-pulse animate-delay-700" />
-          {[...Array(20)].map((_, i) => (
-            <motion.div key={i} className="absolute w-1 h-1 bg-white/20 rounded-full" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }} animate={{ y: [0, -30, 0], opacity: [0, 1, 0], }} transition={{ duration: 3 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 3 }} />
+          <div className="absolute top-1/3 right-1/3 w-48 h-48 bg-green-400/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-cyan-400/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+          {heroParticles.map((p, i) => (
+            <motion.div key={i} className="absolute w-1 h-1 bg-white/20 rounded-full" style={{ left: `${p.left}%`, top: `${p.top}%` }} animate={{ y: [0, -40 - p.offsetY, 0], x: [0, p.offsetX, 0], opacity: [0, 0.8, 0] }} transition={{ duration: p.duration, repeat: Infinity, delay: p.delay }} />
+          ))}
+          {heroShapes.map((s, i) => (
+            <motion.div key={`shape-${i}`} className="absolute border border-white/5 rounded-lg backdrop-blur-sm" style={{ width: s.size, height: s.size, left: `${s.left}%`, top: `${s.top}%` }} animate={{ y: [0, -20, 0], rotate: [0, 10, 0, -10, 0], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: s.duration, repeat: Infinity, delay: s.delay }} />
           ))}
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 pb-10 md:pt-24 md:pb-16">
@@ -304,11 +364,13 @@ export default function Home() {
             Berbadan hukum, terverifikasi Dinas Koperasi & UKM, dan berkomitmen pada prinsip transparansi, akuntabilitas, serta kemandirian anggota.
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4">
-            <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => router.push('/login?tab=register')} className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center justify-center gap-2 text-sm sm:text-base">
-              Jadi Anggota <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => router.push('/login?tab=register')} className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center justify-center gap-2 text-sm sm:text-base overflow-hidden">
+              <span className="absolute inset-0 bg-gradient-to-r from-emerald-100 via-white to-emerald-100 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span className="relative z-10">Jadi Anggota</span> <ArrowRightIcon className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 transition-transform" />
             </motion.button>
-            <motion.a whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} href="#tentang" className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-sm sm:text-base backdrop-blur-sm">
-              Pelajari Lebih Lanjut <ChevronDownIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} href="#tentang" className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-sm sm:text-base backdrop-blur-sm overflow-hidden">
+              <span className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span className="relative z-10">Pelajari Lebih Lanjut</span> <ChevronDownIcon className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-y-0.5 transition-transform" />
             </motion.a>
           </motion.div>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-4 sm:mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:gap-10 text-white/60 text-sm">
@@ -334,11 +396,12 @@ export default function Home() {
       
 
 {/* ===== TIMELINE ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/30 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(16,185,129,0.05),transparent_50%)]" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Perjalanan" title="Sejarah & Perjalanan KUD" subtitle="Dari 50 pekebun hingga 371+ anggota — perjalanan KUD Sari Subur membangun koperasi sawit yang mandiri dan profesional." />
         </div>
-        <Timeline />
+        <div className="relative z-10"><Timeline /></div>
       </section>
 
       
@@ -347,24 +410,27 @@ export default function Home() {
       <section id="program" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Program" title="Program Unggulan" subtitle="Berbagai program dirancang khusus untuk meningkatkan kesejahteraan dan produktivitas petani." />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PROGRAMS.map((program, idx) => {
               const Icon = program.icon;
               return (
-                <motion.div key={program.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -6 }} className="group relative bg-white rounded-2xl border border-gray-100 p-6 shadow-card hover:shadow-card-hover transition-all cursor-pointer" onClick={() => setProgramModal(program)}>
-                  <div className={`w-12 h-12 rounded-xl ${PROGRAM_COLORS[program.color].bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                <motion.div key={program.id} variants={itemVariants} whileHover={{ y: -8, scale: 1.02 }} className="group relative rounded-2xl p-6 cursor-pointer overflow-hidden bg-white/70 backdrop-blur-xl border border-white/40 shadow-lg hover:shadow-xl hover:border-white/60 transition-all" onClick={() => setProgramModal(program)}>
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent pointer-events-none" />
+                  <div className={`relative z-10 w-12 h-12 rounded-xl ${PROGRAM_COLORS[program.color].bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-sm`}>
                     <Icon className={`w-6 h-6 ${PROGRAM_COLORS[program.color].icon}`} />
                   </div>
-                  <h3 className="text-lg font-bold font-heading text-foreground">{program.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{program.desc}</p>
-                  <div className="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">{program.manfaat.length} Manfaat</span>
-                    <span className="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">Detail <ArrowRightIcon className="w-4 h-4" /></span>
+                  <div className="relative z-10">
+                    <h3 className="text-lg font-bold font-heading text-foreground">{program.title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{program.desc}</p>
+                    <div className="mt-4 pt-4 border-t border-white/20 flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">{program.manfaat.length} Manfaat</span>
+                      <span className="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">Detail <ArrowRightIcon className="w-4 h-4" /></span>
+                    </div>
                   </div>
                 </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -396,9 +462,9 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="flex-shrink-0 relative z-10 md:absolute md:left-1/2 md:-translate-x-1/2">
-                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs md:text-sm shadow-lg shadow-primary/30">
+                      <motion.div whileHover={{ scale: 1.1 }} className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center font-bold text-xs md:text-sm shadow-lg shadow-emerald-500/30 border-2 border-emerald-400/30">
                         <Icn className="w-4 h-4 md:w-5 md:h-5" />
-                      </div>
+                      </motion.div>
                     </div>
                     <div className="md:hidden flex-1 min-w-0">
                       <h4 className="font-bold font-heading text-foreground text-sm sm:text-lg">{item.title}</h4>
@@ -415,11 +481,12 @@ export default function Home() {
       
 
 {/* ===== TEAM ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/30 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.05),transparent_50%)]" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Pengurus" title="Tim Pengurus KUD" subtitle="Kenali pengurus KUD Desa Sari Subur yang berdedikasi melayani anggota." />
         </div>
-        <TeamSection />
+        <div className="relative z-10"><TeamSection /></div>
       </section>
 
       
@@ -428,7 +495,7 @@ export default function Home() {
       <section className="py-14 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Pengakuan" title="Sertifikasi & Penghargaan" subtitle="Berbagai sertifikasi dan penghargaan yang telah diraih KUD Desa Sari Subur." />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
               { icon: ShieldCheckIcon, title: 'ISO 9001:2015', desc: 'Sistem Manajemen Mutu' },
               { icon: GlobeAltIcon, title: 'ISPO', desc: 'Indonesian Sustainable Palm Oil' },
@@ -437,21 +504,23 @@ export default function Home() {
             ].map((item, idx) => {
               const Icn = item.icon;
               return (
-                <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="p-4 sm:p-6 rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-emerald-50/30 text-center hover:shadow-md transition-all">
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-primary/5 flex items-center justify-center mx-auto mb-2 sm:mb-3"><Icn className="w-5 h-5 sm:w-7 sm:h-7 text-primary" /></div>
-                  <h4 className="font-bold font-heading text-foreground">{item.title}</h4>
-                  <p className="text-xs text-muted-foreground mt-1">{item.desc}</p>
+                <motion.div key={idx} variants={scaleIn} whileHover={{ y: -4, scale: 1.02 }} className="group relative p-4 sm:p-6 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all text-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent pointer-events-none" />
+                  <div className="relative z-10 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-md shadow-emerald-500/20"><Icn className="w-5 h-5 sm:w-7 sm:h-7 text-white" /></div>
+                  <h4 className="relative z-10 font-bold font-heading text-foreground">{item.title}</h4>
+                  <p className="relative z-10 text-xs text-muted-foreground mt-1">{item.desc}</p>
+                  <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-emerald-400/0 via-emerald-400/50 to-emerald-400/0 scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
                 </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       
 
 {/* ===== KEGIATAN GALLERY ===== */}
-      <section className="py-14 md:py-28 bg-white">
+      <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Dokumentasi" title="Kegiatan Kami" subtitle="Dokumentasi berbagai kegiatan dan program yang telah dilaksanakan KUD Desa Sari Subur." />
         </div>
@@ -483,11 +552,11 @@ export default function Home() {
                 ].map((item, idx) => {
                   const Icn = item.icon;
                   return (
-                    <div key={idx} className="p-4 rounded-xl bg-emerald-50/50 border border-emerald-100/50">
-                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-2"><Icn className="w-4 h-4 text-primary" /></div>
+                    <motion.div key={idx} whileHover={{ y: -3, scale: 1.02 }} className="group p-4 rounded-xl bg-white/70 backdrop-blur-sm border border-emerald-100/60 shadow-md hover:shadow-lg transition-all">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-2 shadow-md shadow-emerald-500/20"><Icn className="w-4 h-4 text-white" /></div>
                       <h4 className="font-semibold text-foreground text-sm">{item.label}</h4>
                       <p className="text-xs text-muted-foreground mt-1">{item.text}</p>
-                    </div>
+                    </motion.div>
                   );
                 })}
               </div>
@@ -499,7 +568,7 @@ export default function Home() {
                 <div className="absolute bottom-6 left-6 right-6 z-[2]">
                   <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">K</div>
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-500/30"><PalmLogo /></div>
                       <div>
                         <div className="font-semibold text-foreground text-sm">KUD Sari Subur</div>
                         <div className="text-xs text-muted-foreground">Berkembang Bersama Petani</div>
@@ -508,12 +577,12 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center hidden lg:flex">
+              <motion.div initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.5, type: 'spring' }} className="absolute -bottom-6 -right-6 w-32 h-32 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 border-2 border-emerald-400/30 flex items-center justify-center hidden lg:flex shadow-xl shadow-emerald-500/30">
                 <div className="text-center">
-                  <div className="text-2xl font-bold font-heading text-primary">7+</div>
-                  <div className="text-[10px] text-muted-foreground">Tahun</div>
+                  <div className="text-2xl font-bold font-heading text-white">7+</div>
+                  <div className="text-[10px] text-emerald-200">Tahun</div>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -525,13 +594,14 @@ export default function Home() {
       <section className="py-14 md:py-28 bg-gradient-to-b from-white via-emerald-50/20 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Multimedia" title="Video KUD Sari Subur" subtitle="Tonton berbagai kegiatan, profil, dan informasi seputar KUD Desa Sari Subur." />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {YT_VIDEOS.map((video, idx) => (
-              <motion.div key={video.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -6 }} className="group cursor-pointer rounded-xl overflow-hidden bg-white shadow-card hover:shadow-card-hover transition-all" onClick={() => setVideoModal(video.id)}>
+              <motion.div key={video.id} variants={itemVariants} whileHover={{ y: -6, scale: 1.02 }} className="group cursor-pointer rounded-xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all" onClick={() => setVideoModal(video.id)}>
                 <div className="relative aspect-video bg-gray-200 overflow-hidden">
                   <img src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/40 transition-colors">
-                    <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"><PlayIcon className="w-6 h-6 text-emerald-700 ml-0.5" /></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-white transition-all"><PlayIcon className="w-6 h-6 text-emerald-700 ml-0.5" /></div>
                   </div>
                 </div>
                 <div className="p-4">
@@ -540,7 +610,7 @@ export default function Home() {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -551,7 +621,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(16,185,129,0.15),transparent_50%)]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Mengapa KUD" title="Keuntungan Bergabung" subtitle="Rasakan manfaat nyata menjadi bagian dari keluarga besar KUD Desa Sari Subur." light />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { icon: CurrencyDollarIcon, title: 'Harga TBS Kompetitif', desc: 'Harga terbaik untuk TBS anggota dengan sistem bagi hasil yang transparan dan adil.' },
               { icon: AcademicCapIcon, title: 'Pendampingan Teknis', desc: 'Tim ahli siap mendampingi petani dalam teknik budidaya sawit yang baik dan benar.' },
@@ -560,14 +630,16 @@ export default function Home() {
             ].map((item, idx) => {
               const Icn = item.icon;
               return (
-                <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="group p-5 sm:p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform"><Icn className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-300" /></div>
-                  <h3 className="text-base sm:text-lg font-bold font-heading text-white">{item.title}</h3>
-                  <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/60">{item.desc}</p>
+                <motion.div key={idx} variants={itemVariants} whileHover={{ y: -6, scale: 1.03 }} className="group relative p-5 sm:p-6 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all shadow-lg shadow-black/10">
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/5 to-transparent pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-400/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+                  <div className="relative z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 group-hover:bg-white/20 transition-all border border-white/10"><Icn className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-300" /></div>
+                  <h3 className="relative z-10 text-base sm:text-lg font-bold font-heading text-white">{item.title}</h3>
+                  <p className="relative z-10 mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/60">{item.desc}</p>
                 </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -577,7 +649,9 @@ export default function Home() {
       <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kalkulator" title="Kalkulator TBS" subtitle="Simulasi pendapatan Anda dari hasil kebun kelapa sawit." />
-          <TbsCalculator />
+          <div className="rounded-2xl bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg p-6 md:p-8">
+            <TbsCalculator />
+          </div>
         </div>
       </section>
 
@@ -598,10 +672,10 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredBlogs.filter((b) => !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase())).length > 0 ? (
               filteredBlogs.filter((b) => !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase())).map((post, idx) => (
-                <motion.article key={post.slug} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -5 }} className="group rounded-xl overflow-hidden bg-white shadow-card border border-gray-100 hover:shadow-card-hover transition-all cursor-pointer" onClick={() => router.push(`/blog/${post.slug}`)}>
+                <motion.article key={post.slug} variants={itemVariants} whileHover={{ y: -5, scale: 1.02 }} className="group rounded-xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all cursor-pointer" onClick={() => router.push(`/blog/${post.slug}`)}>
                   <div className="relative h-44 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 to-emerald-50 z-0" />
                     <img src={post.image} alt={post.title} className="relative w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-[1]" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
@@ -624,7 +698,7 @@ export default function Home() {
             ) : (
               <div className="col-span-full text-center py-12 text-muted-foreground">Tidak ada artikel ditemukan.</div>
             )}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -634,7 +708,7 @@ export default function Home() {
       <section id="fitur" className="py-14 md:py-28 bg-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Layanan Digital" title="Fitur Aplikasi KUD" subtitle="Nikmati kemudahan akses informasi dan layanan KUD melalui aplikasi digital kami." />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { icon: ChartBarIcon, title: 'Pantau Harga', desc: 'Cek harga TBS terkini secara real-time langsung dari smartphone Anda.' },
               { icon: DocumentTextIcon, title: 'Riwayat Transaksi', desc: 'Akses riwayat setoran TBS, penjualan, dan peminjaman kapan saja.' },
@@ -644,15 +718,18 @@ export default function Home() {
               { icon: ChatBubbleLeftRightIcon, title: 'Konsultasi Online', desc: 'Tanya langsung ke tim penyuluh KUD lewat fitur chat terintegrasi.' },
             ].map((item, idx) => {
               const Icn = item.icon;
+              const bento = idx === 0 ? 'lg:col-span-2 lg:row-span-1' : '';
               return (
-                <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -5 }} className="group p-6 rounded-2xl bg-white border border-gray-100 shadow-card hover:shadow-card-hover transition-all">
-                  <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-primary/10 transition-all"><Icn className="w-6 h-6 text-primary" /></div>
+                <motion.div key={idx} variants={itemVariants} whileHover={{ y: -6, scale: 1.02 }} className={`group relative p-6 rounded-2xl overflow-hidden bg-gradient-to-br from-white to-emerald-50/40 border border-emerald-100/60 shadow-md hover:shadow-xl transition-all ${bento}`}>
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-200/20 to-transparent rounded-bl-full" />
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all shadow-md shadow-emerald-500/20"><Icn className="w-6 h-6 text-white" /></div>
                   <h3 className="text-lg font-bold font-heading text-foreground">{item.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{item.desc}</p>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400/0 via-emerald-400/40 to-emerald-400/0 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -663,10 +740,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Statistik" title="KUD dalam Angka" subtitle="Capaian dan dampak nyata KUD Desa Sari Subur bagi petani kelapa sawit di wilayah Kecamatan Tegal Sari." />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
-            <Counter end={371} suffix="+" label="Anggota Aktif" />
-            <Counter end={850} suffix="+" label="Hektar Lahan" />
-            <Counter end={5000} suffix=" Ton" label="TBS per Tahun" />
-            <Counter end={7} suffix="+" label="Tahun Berdiri" />
+            {[
+              { end: 371, suffix: '+', label: 'Anggota Aktif' },
+              { end: 850, suffix: '+', label: 'Hektar Lahan' },
+              { end: 5000, suffix: ' Ton', label: 'TBS per Tahun' },
+              { end: 7, suffix: '+', label: 'Tahun Berdiri' },
+            ].map((item, idx) => (
+              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="relative p-4 sm:p-6 rounded-2xl bg-white/70 backdrop-blur-sm border border-white/40 shadow-md text-center group hover:shadow-lg transition-all">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent rounded-2xl pointer-events-none" />
+                <Counter end={item.end} suffix={item.suffix} label={item.label} />
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -677,14 +761,15 @@ export default function Home() {
       <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kolaborasi" title="Mitra & Kolaborasi" subtitle="Kemitraan strategis dengan berbagai lembaga untuk mendukung kemajuan KUD." />
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-4 sm:gap-6">
+          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-3 md:grid-cols-6 gap-4 sm:gap-6">
             {MITRA.map((mitra, idx) => (
-              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.08 }} className="p-4 sm:p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all text-center group">
-                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">{mitra.logo}</div>
-                <div className="text-xs font-medium text-foreground/70">{mitra.name}</div>
+              <motion.div key={idx} variants={scaleIn} whileHover={{ y: -4, scale: 1.05 }} className="group relative p-4 sm:p-6 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-lg transition-all text-center">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-emerald-50/30 pointer-events-none" />
+                <div className="relative z-10 text-4xl mb-2 group-hover:scale-110 transition-transform">{mitra.logo}</div>
+                <div className="relative z-10 text-xs font-medium text-foreground/70">{mitra.name}</div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -692,11 +777,15 @@ export default function Home() {
 
 {/* ===== TESTIMONI ===== */}
       <section id="testimoni" className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden scroll-mt-16 md:scroll-mt-20">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.15),transparent_50%)]" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.15),transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(6,182,212,0.1),transparent_50%)]" />
+          <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-emerald-400/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 left-1/4 w-48 h-48 bg-teal-400/5 rounded-full blur-3xl" />
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Testimoni" title="Apa Kata Anggota?" subtitle="Pengalaman nyata dari para anggota yang telah merasakan manfaat bergabung dengan KUD." light />
           <div className="relative max-w-4xl mx-auto">
-            <motion.div key={testiIdx} initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} transition={{ duration: 0.5 }} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 md:p-12 text-center">
+            <motion.div key={testiIdx} initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} transition={{ duration: 0.5 }} className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 md:p-12 text-center overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400/0 via-emerald-400/60 to-emerald-400/0" />
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">
                 {TESTIMONI[testiIdx].nama.charAt(0)}
               </div>
@@ -730,19 +819,20 @@ export default function Home() {
       <section id="layanan" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kontak" title="Layanan & Dukungan" subtitle="Hubungi kami melalui berbagai saluran yang tersedia." />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {LAYANAN.map((item, idx) => {
               const Icn = item.icon;
               return (
-                <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-card hover:shadow-card-hover transition-all text-center group">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary/5 flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform"><Icn className="w-6 h-6 sm:w-7 sm:h-7 text-primary" /></div>
-                  <h4 className="font-bold font-heading text-foreground text-sm sm:text-base">{item.title}</h4>
-                  <p className="text-sm text-muted-foreground mt-2">{item.desc}</p>
-                  <p className="text-sm font-semibold text-primary mt-3">{item.contact}</p>
+                <motion.div key={idx} variants={itemVariants} whileHover={{ y: -5, scale: 1.02 }} className="group relative p-5 sm:p-6 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all text-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-emerald-50/30 pointer-events-none" />
+                  <div className="relative z-10 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20"><Icn className="w-6 h-6 sm:w-7 sm:h-7 text-white" /></div>
+                  <h4 className="relative z-10 font-bold font-heading text-foreground text-sm sm:text-base">{item.title}</h4>
+                  <p className="relative z-10 text-sm text-muted-foreground mt-2">{item.desc}</p>
+                  <p className="relative z-10 text-sm font-semibold text-primary mt-3">{item.contact}</p>
                 </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -754,7 +844,7 @@ export default function Home() {
           <SectionHeader badge="Tanya Jawab" title="Pertanyaan Umum" subtitle="Temukan jawaban atas pertanyaan yang sering diajukan tentang KUD Desa Sari Subur." />
           <div className="space-y-3">
             {FAQ_DATA.map((faq, idx) => (
-              <motion.div key={idx} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.05 }} className="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <motion.div key={idx} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.05 }} className="rounded-xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-lg transition-all">
                 <button onClick={() => setFaqOpen(faqOpen === idx ? null : idx)} className="w-full flex items-center justify-between p-4 md:p-5 text-left">
                   <span className="font-medium text-foreground text-sm md:text-base pr-4">{faq.q}</span>
                   <ChevronDownIcon className={`w-5 h-5 flex-shrink-0 text-muted-foreground transition-transform duration-300 ${faqOpen === idx ? 'rotate-180 text-primary' : ''}`} />
@@ -762,7 +852,7 @@ export default function Home() {
                 <AnimatePresence>
                   {faqOpen === idx && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
-                      <div className="px-4 md:px-5 pb-4 md:pb-5 text-sm text-muted-foreground leading-relaxed border-t border-gray-50 pt-3">{faq.a}</div>
+                      <div className="px-4 md:px-5 pb-4 md:pb-5 text-sm text-muted-foreground leading-relaxed border-t border-white/10 pt-3">{faq.a}</div>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -775,7 +865,7 @@ export default function Home() {
       
 
 {/* ===== MAP ===== */}
-      <section className="py-14 md:py-28 bg-white">
+      <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/20 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Lokasi" title="Temukan Kami" subtitle="Kunjungi kantor KUD Desa Sari Subur untuk informasi lebih lanjut." />
         </div>
@@ -787,6 +877,12 @@ export default function Home() {
 {/* ===== NEWSLETTER CTA ===== */}
       <section className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.2),transparent_60%)]" />
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(6,182,212,0.1),transparent_50%)]" />
+        {ctaShapes.map((s, i) => (
+          <motion.div key={`cta-shape-${i}`} className="absolute border border-white/5 rounded-full" style={{ width: s.size, height: s.size, left: `${s.left}%`, top: `${s.top}%` }} animate={{ y: [0, -15, 0], opacity: [0.2, 0.5, 0.2] }} transition={{ duration: s.duration, repeat: Infinity, delay: s.delay }} />
+        ))}
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.span initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-6">
             Tetap Terhubung
@@ -798,8 +894,8 @@ export default function Home() {
             Berlangganan newsletter kami untuk mendapatkan update harga TBS, program, dan kegiatan KUD.
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="mt-8 max-w-md mx-auto flex flex-col sm:flex-row gap-3 px-4 sm:px-0">
-            <input type="email" placeholder="Masukkan email Anda" className="w-full sm:flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 backdrop-blur-sm" />
-            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-emerald-900 font-bold shadow-xl hover:shadow-2xl transition-all text-sm">Langganan</motion.button>
+            <input type="email" placeholder="Masukkan email Anda" className="w-full sm:flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/30 focus:border-emerald-400/50 backdrop-blur-sm transition-all" />
+            <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold shadow-xl shadow-emerald-600/30 hover:shadow-2xl hover:shadow-emerald-600/40 transition-all text-sm hover:from-emerald-600 hover:to-emerald-700">Langganan</motion.button>
           </motion.div>
         </div>
       </section>
@@ -810,7 +906,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-sm">K</div>
+                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-500/30"><PalmLogo /></div>
                 <span className="font-bold font-heading text-lg text-white">KUD Sari Subur</span>
               </div>
               <p className="text-sm leading-relaxed">Koperasi Unit Desa Sari Subur berkomitmen meningkatkan kesejahteraan petani kelapa sawit melalui kemitraan berkelanjutan.</p>
@@ -858,7 +954,7 @@ export default function Home() {
       {/* ===== BACK TO TOP ===== */}
       <AnimatePresence>
         {showBackTop && (
-          <motion.button initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="fixed bottom-20 right-4 md:right-6 z-40 w-11 h-11 rounded-full bg-primary text-white shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all flex items-center justify-center">
+          <motion.button initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }} whileHover={{ scale: 1.1 }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="fixed bottom-20 right-4 md:right-6 z-40 w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all flex items-center justify-center border border-emerald-400/30">
             <ArrowUpIcon className="w-5 h-5" />
           </motion.button>
         )}

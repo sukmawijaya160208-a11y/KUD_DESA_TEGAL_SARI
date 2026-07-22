@@ -45,7 +45,7 @@ const PekebunRow = memo(function PekebunRow({ d, onPreview, onVerifikasi, isSele
       </td>
       <td className="py-3 px-3">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
             {d.foto_pekebun ? (
               <img src={d.foto_pekebun} alt="" className="w-full h-full object-cover cursor-pointer" onClick={() => onPreview(d.foto_pekebun)} />
             ) : (
@@ -54,11 +54,11 @@ const PekebunRow = memo(function PekebunRow({ d, onPreview, onVerifikasi, isSele
           </div>
           <div>
             <p className="text-sm font-semibold text-foreground">{d.nama}</p>
-            <p className="text-[11px] text-gray-400">NIK: {d.nik}</p>
+            <p className="text-[11px] text-muted-foreground">NIK: {d.nik}</p>
           </div>
         </div>
       </td>
-      <td className="py-3 px-3 text-sm text-gray-600">{d.no_whatsapp}</td>
+      <td className="py-3 px-3 text-sm text-muted-foreground">{d.no_whatsapp}</td>
       <td className="py-3 px-3">
         <div className="flex items-center gap-1">
           {d.foto_pekebun && (
@@ -77,14 +77,14 @@ const PekebunRow = memo(function PekebunRow({ d, onPreview, onVerifikasi, isSele
             </button>
           )}
           {(!d.foto_pekebun && !d.upload_ktp && !d.upload_kk) && (
-            <span className="text-[11px] text-gray-400 italic">-</span>
+            <span className="text-[11px] text-muted-foreground italic">-</span>
           )}
         </div>
       </td>
       <td className="py-3 px-3">
         <div className="flex items-center gap-1.5">
           {d.lahan?.length > 0 && (
-            <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{d.lahan.length} Lahan</span>
+            <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{d.lahan.length} Lahan</span>
           )}
         </div>
       </td>
@@ -104,7 +104,7 @@ const PekebunRow = memo(function PekebunRow({ d, onPreview, onVerifikasi, isSele
             </button>
           </div>
         ) : (
-          <span className="text-[11px] text-gray-400 italic">-</span>
+          <span className="text-[11px] text-muted-foreground italic">-</span>
         )}
       </td>
     </motion.tr>
@@ -214,12 +214,12 @@ export default function VerifikatorPage() {
     <motion.div variants={containerAnim} initial="hidden" animate="show">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-sm">
             <CheckBadgeIcon className="w-6 h-6 text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Verifikasi Pekebun</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Setujui atau tolak pendaftaran pekebun baru</p>
+            <p className="text-sm text-muted-foreground mt-0.5">Setujui atau tolak pendaftaran pekebun baru</p>
           </div>
         </div>
       </div>
@@ -230,10 +230,10 @@ export default function VerifikatorPage() {
           { label: 'Disetujui', value: stats.verified, icon: CheckCircleIcon, color: 'bg-emerald-500', shadow: 'shadow-emerald-500/20' },
           { label: 'Ditolak', value: stats.rejected, icon: XCircleIcon, color: 'bg-rose-500', shadow: 'shadow-rose-500/20' },
         ].map((s, i) => (
-          <div key={i} className={`bg-surface rounded-2xl border border-border p-4 ${s.shadow} transition-all duration-200`}>
+          <div key={i} className={`bg-surface rounded-2xl border border-border p-4 shadow-sm ${s.shadow} transition-all duration-200`}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-gray-400 font-medium">{s.label}</span>
-              <div className={`w-8 h-8 rounded-lg ${s.color} flex items-center justify-center`}>
+              <span className="text-xs text-muted-foreground font-medium">{s.label}</span>
+              <div className={`w-8 h-8 rounded-lg ${s.color} flex items-center justify-center shadow-sm`}>
                 <s.icon className="w-4 h-4 text-white" />
               </div>
             </div>
@@ -242,7 +242,7 @@ export default function VerifikatorPage() {
         ))}
       </div>
 
-      <div className="bg-surface rounded-2xl border border-border mb-4">
+      <div className="bg-surface rounded-2xl border border-border mb-4 shadow-sm">
         <div className="p-4 border-b border-border flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
             <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -260,7 +260,7 @@ export default function VerifikatorPage() {
 
         {hasActiveFilters && (
           <div className="flex flex-wrap items-center gap-2 px-4 pb-3">
-            <span className="text-xs text-gray-400 font-medium"><FunnelIcon className="w-3 h-3 inline mr-1" />Filter:</span>
+            <span className="text-xs text-muted-foreground font-medium"><FunnelIcon className="w-3 h-3 inline mr-1" />Filter:</span>
             {search && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
                 Cari: {search}
@@ -274,22 +274,22 @@ export default function VerifikatorPage() {
               </span>
             )}
             <button onClick={() => { setSearch(''); setFilterStatus('pending'); setPage(1); }}
-              className="text-xs text-gray-400 hover:text-foreground underline cursor-pointer ml-1">Clear all</button>
+              className="text-xs text-muted-foreground hover:text-foreground underline cursor-pointer ml-1">Clear all</button>
           </div>
         )}
       </div>
 
-      <div className="bg-surface rounded-2xl border border-border">
+      <div className="bg-surface rounded-2xl border border-border shadow-sm">
         <div className="overflow-x-auto">
           {loading ? (
-            <div className="p-8 text-center text-gray-400">
+            <div className="p-8 text-center text-muted-foreground">
               <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto mb-2" />
               Memuat data...
             </div>
           ) : data.length === 0 ? (
             <div className="p-8 text-center">
               <CheckBadgeIcon className="w-12 h-12 text-gray-200 mx-auto mb-3" />
-              <p className="text-gray-400">Tidak ada data pekebun</p>
+              <p className="text-muted-foreground">Tidak ada data pekebun</p>
             </div>
           ) : (
             <table className="w-full text-sm">
@@ -340,14 +340,14 @@ export default function VerifikatorPage() {
                     ['Status', d.status],
                   ].map(([label, value]) => (
                     <div key={label} className={label === 'Alamat' ? 'sm:col-span-2 lg:col-span-3' : ''}>
-                      <span className="text-gray-400 text-[11px] block mb-0.5">{label}</span>
+                      <span className="text-muted-foreground text-[11px] block mb-0.5">{label}</span>
                       <span className="font-medium text-foreground text-sm">{value || '-'}</span>
                     </div>
                   ))}
                 </div>
                 {(d.foto_pekebun || d.upload_ktp || d.upload_kk) && (
                   <div className="mt-3 pt-3 border-t border-border">
-                    <span className="text-gray-400 text-[11px] block mb-2">Dokumen</span>
+                    <span className="text-muted-foreground text-[11px] block mb-2">Dokumen</span>
                     <div className="flex flex-wrap gap-2">
                       {d.foto_pekebun && (
                         <button onClick={() => setPreviewImage(d.foto_pekebun)}
@@ -372,12 +372,12 @@ export default function VerifikatorPage() {
                 )}
                 {d.lahan?.length > 0 && (
                   <div className="mt-3 pt-3 border-t border-border">
-                    <span className="text-gray-400 text-[11px] block mb-2">Data Lahan</span>
+                    <span className="text-muted-foreground text-[11px] block mb-2">Data Lahan</span>
                     <div className="space-y-2">
                       {d.lahan.map(l => (
                         <div key={l.id} className="p-2.5 rounded-lg border border-border bg-white">
                           <p className="text-sm font-medium text-foreground">{l.alamat_lahan}</p>
-                          <p className="text-xs text-gray-500 mt-0.5">{Number(l.luas_lahan_m2).toLocaleString()} M² — {l.jenis_surat}{l.nomor_surat ? ` (${l.nomor_surat})` : ''}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">{Number(l.luas_lahan_m2).toLocaleString()} M² — {l.jenis_surat}{l.nomor_surat ? ` (${l.nomor_surat})` : ''}</p>
                         </div>
                       ))}
                     </div>
@@ -390,7 +390,7 @@ export default function VerifikatorPage() {
 
         {meta.lastPage > 1 && (
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 border-t border-border">
-            <div className="flex items-center gap-3 text-sm text-gray-500">
+            <div className="flex items-center gap-3 text-sm text-muted-foreground">
               <span>Halaman {meta.currentPage} dari {meta.lastPage} (Total: {meta.total})</span>
               <div className="flex items-center gap-1">
                 <span className="text-xs">per halaman:</span>
@@ -411,7 +411,7 @@ export default function VerifikatorPage() {
                 else pageNum = meta.currentPage - 3 + i;
                 return (
                   <button key={pageNum} onClick={() => setPage(pageNum)}
-                    className={`w-8 h-8 rounded-lg text-xs font-medium transition-all cursor-pointer ${meta.currentPage === pageNum ? 'bg-primary text-white shadow-sm' : 'border border-border hover:bg-muted text-gray-600'}`}>
+                    className={`w-8 h-8 rounded-lg text-xs font-medium transition-all cursor-pointer ${meta.currentPage === pageNum ? 'bg-primary text-white shadow-sm' : 'border border-border hover:bg-muted text-muted-foreground'}`}>
                     {pageNum}
                   </button>
                 );
@@ -419,7 +419,7 @@ export default function VerifikatorPage() {
               <button disabled={meta.currentPage >= meta.lastPage} onClick={() => setPage(p => Math.min(meta.lastPage, p + 1))}
                 className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Next »</button>
               <div className="flex items-center gap-1 ml-2">
-                <span className="text-xs text-gray-400">Go:</span>
+                <span className="text-xs text-muted-foreground">Go:</span>
                 <input type="number" min={1} max={meta.lastPage} value={gotoPage} onChange={(e) => setGotoPage(e.target.value)}
                   onKeyDown={(e) => { if (e.key === 'Enter') { const v = parseInt(gotoPage); if (v >= 1 && v <= meta.lastPage) setPage(v); setGotoPage(''); } }}
                   className="w-14 px-2 py-1 rounded-lg border border-border text-xs bg-white focus:ring-ring/30 focus:border-primary outline-none" />
@@ -445,7 +445,7 @@ export default function VerifikatorPage() {
         onClose={() => setVerifModal(null)}
         title={verifModal?.action === 'verified' ? 'Setujui Pekebun' : 'Tolak Pekebun'}
       >
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           {verifModal?.action === 'verified'
             ? 'Konfirmasi persetujuan pekebun ini?'
             : 'Konfirmasi penolakan pekebun ini?'}
@@ -458,7 +458,7 @@ export default function VerifikatorPage() {
           rows={3}
         />
         <div className="flex items-center justify-end gap-2">
-          <Button variant="secondary" onClick={() => setVerifModal(null)}>Batal</Button>
+          <Button variant="ghost" onClick={() => setVerifModal(null)}>Batal</Button>
           <Button
             variant={verifModal?.action === 'verified' ? 'success' : 'danger'}
             loading={submitting}
