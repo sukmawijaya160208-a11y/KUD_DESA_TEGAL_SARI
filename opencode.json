@@ -21,5 +21,36 @@
       "command": ["vscode-json-language-server", "--stdio"],
       "extensions": [".json"]
     }
+  },
+  "mcp": {
+    "stitch": {
+      "type": "remote",
+      "url": "https://stitch.googleapis.com/mcp",
+      "enabled": true,
+      "headers": {
+        "X-Goog-Api-Key": "YOUR_STITCH_API_KEY"
+      }
+    },
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "enabled": true,
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer YOUR_GITHUB_PAT"
+      }
+    },
+    "ssh-mcp-server": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@fangjunjie/ssh-mcp-server",
+        "--host", "31.97.50.22",
+        "--port", "22",
+        "--username", "root"
+      ],
+      "enabled": true
+    }
   }
 }

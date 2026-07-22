@@ -63,40 +63,47 @@ composer run test    # PHPUnit via artisan (in-memory SQLite)
 - **`use cache`** replaces `unstable_` cache APIs; `cacheLife`/`cacheTag` are stable.
 - **Node.js 20.9+** required.
 
-## Deployment
+## Deployment (Docker)
 
-- **Domain**: `kud-sari-subur.my.id` (pointing ke VPS)
-- **VPS**: `ssh root@31.97.50.22` — Ubuntu 24.04, KVM 1
-- **Nginx config**: `deploy/nginx-kud.conf` → `/etc/nginx/sites-available/kud-sari-subur.my.id`
-- **SSL**: Let's Encrypt via Certbot (`/etc/letsencrypt/live/kud-sari-subur.my.id/`)
-- **Backend**: Laravel di `/var/www/kud/backend`, serve via PHP-FPM
-- **Frontend**: Next.js di `/var/www/kud/frontend`, build → `npm run build`, serve via Nginx reverse proxy
-- **Queue**: `php artisan queue:work` via supervisor/systemd
-- **Database**: SQLite di `/var/www/kud/backend/database/database.sqlite`
+### VPS Info
+- **Hostname**: `srv1842937.hstgr.cloud`
+- **IP**: `31.97.50.22` (IPv4) / `2a02:4780:59:2338::1` (IPv6)
+- **OS**: Ubuntu 24.04 LTS, KVM 1
+- **Akses**: `ssh root@31.97.50.22`
+- **SSH Public Key**: `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINN9AhWV1B0JS+pW2bu01lgkjaIQqG29S78ICITOlPvh sukmawijaya160208@gmail.com`
+- **Root password**: Ada di memory AI (mention aja "pake password VPS")
+- **Domain**: `kud-sari-subur.my.id`
+- **DNS Managed via**: Hosting panel (bukan di VPS)
+- **Nameserver**: `ns1.dns-parking.com` / `ns2.dns-parking.com`
+- **VPS Hostname**: `srv1842937.hstgr.cloud`
+- **A Record**: `31.97.50.22` → `kud-sari-subur.my.id`
 
-### Deploy commands
+### Docker Containers
+| Container | Image | Port | Status | RAM |
+|---|---|---|---|---|
+| `kud-backend` | Laravel 12 | `8000:8000` | Running | ~52MB |
+| `kud-frontend` | Next.js 16 | `3000:3000` | Running | ~32MB |
+
+Semua service jalan via Docker Compose (`docker compose`), bukan langsung di host.
+
+### Deploy commands (Docker)
+> **Note**: `docker-compose.yml` ada di VPS (bukan di repo). Cari dulu lokasinya setelah SSH.
+
 ```bash
-# SSH & pull
+# SSH
 ssh root@31.97.50.22
-cd /var/www/kud
+
+# Cari lokasi compose file
+find / -name "docker-compose*" -type f 2>/dev/null
+
+# Pull latest + rebuild
+cd /path/ke/compose
 git pull origin main
+docker compose up -d --build
 
-# Backend
-cd backend
-composer install --no-dev --optimize-autoloader
-php artisan migrate --force
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# Frontend
-cd ../frontend
-npm ci --omit=dev
-npm run build
-
-# Restart services
-systemctl reload nginx
-systemctl restart kud-queue  # if supervisor/systemd
+# Check status
+docker compose ps
+docker compose logs -f
 ```
 
 ## Matt Pocock Skills (`.opencode/skills/`)
@@ -109,3 +116,45 @@ systemctl restart kud-queue  # if supervisor/systemd
 | **Development** | `tdd`, `triage-issue`, `improve-codebase-architecture`, `migrate-to-shoehorn`, `scaffold-exercises` |
 | **Tooling** | `setup-pre-commit`, `git-guardrails-claude-code`, `github-triage`, `qa` |
 | **Writing** | `write-a-skill`, `edit-article`, `ubiquitous-language`, `obsidian-vault` |
+
+<!-- opencode-mem -->
+Gunakan `memory()` tool untuk manage memory secara manual:
+- `memory({ mode: "add", content: "..." })` — tambah memory
+- `memory({ mode: "search", query: "..." })` — cari memory
+- `memory({ mode: "list", limit: 10 })` — lihat memory terbaru
+- `memory({ mode: "profile" })` — lihat profil user
+
+Auto-capture + inject memories via opencode-mem plugin.
+<!-- /opencode-mem -->
+
+<!-- context-limit -->
+## Context Limit Protocol
+
+Jika Anda mulai mendekati batas konteks:
+
+1. **Simpan progress** ke opencode-mem:
+   ```js
+   memory({ mode: "add", content: "Task X progress: ..." })
+   ```
+
+2. **Buat continuation file** di `.opencode/continuations/<task-name>.cont.md`:
+   - State saat ini (file yang sudah diubah, yang belum)
+   - Daftar task pending + prioritas
+   - Konteks penting (stack, branch, env)
+   - Hasil command terakhir
+
+3. **Panggil task berikutnya** — continuation file akan di-load otomatis.
+
+4. **Gunakan Superpowers / Matt Pocock skills** untuk task kompleks yang perlu breakdown.
+<!-- /context-limit -->
+
+## Superpowers Skills (Plugin)
+
+Available via `skill({ name: "..." })`:
+
+| Skill | Fungsi |
+|---|---|
+| `brainstorm` | Generate ide / solusi untuk masalah |
+| `plan` | Breakdown task besar → sub-task kecil |
+| `subagent-work` | Delegasi task ke sub-agent paralel |
+| `review` | Review hasil kerja sebelum final |
