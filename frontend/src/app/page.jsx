@@ -221,7 +221,7 @@ export default function Home() {
   ];
 
   return (
-    <>
+    <div className="overflow-x-hidden">
 
       {/* ===== NAVBAR ===== */}
       <motion.nav initial={{ y: -80 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }} className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-xl shadow-glass border-b border-white/20' : 'bg-transparent'}`}>
@@ -239,8 +239,8 @@ export default function Home() {
               ))}
               {mounted && !loggedIn ? (
                 <div className="flex items-center gap-2 ml-3">
-                  <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push('/login')} className="px-4 py-2 rounded-lg text-sm font-semibold border border-primary text-primary hover:bg-primary/5 transition-colors">Masuk</motion.button>
-                  <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push('/login?tab=register')} className="px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors shadow-md shadow-primary/20">Daftar</motion.button>
+                  <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push('/login')} className="px-4 py-2 rounded-lg text-sm font-bold border-2 border-emerald-500/50 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:border-emerald-500 transition-colors">Masuk</motion.button>
+                  <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push('/login?tab=register')} className="px-4 py-2 rounded-lg text-sm font-bold bg-emerald-600 text-white shadow-md hover:bg-emerald-700 transition-colors">Daftar</motion.button>
                 </div>
               ) : mounted && loggedIn ? (
                 <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push('/dashboard')} className="ml-3 px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors shadow-md shadow-primary/20">Dashboard</motion.button>
@@ -263,8 +263,8 @@ export default function Home() {
                 <div className="pt-3 border-t border-gray-100 flex gap-2">
                   {mounted && !loggedIn ? (
                     <>
-                      <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/login'); }} className="flex-1 py-2.5 rounded-lg border border-primary text-primary font-semibold text-sm">Masuk</motion.button>
-                      <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/login?tab=register'); }} className="flex-1 py-2.5 rounded-lg bg-primary text-white font-semibold text-sm">Daftar</motion.button>
+                      <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/login'); }} className="flex-1 py-2.5 rounded-lg border-2 border-emerald-500/50 bg-emerald-50 text-emerald-700 font-bold text-sm">Masuk</motion.button>
+                      <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/login?tab=register'); }} className="flex-1 py-2.5 rounded-lg bg-emerald-600 text-white font-bold text-sm">Daftar</motion.button>
                     </>
                   ) : mounted && loggedIn ? (
                     <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/dashboard'); }} className="w-full py-2.5 rounded-lg bg-primary text-white font-semibold text-sm">Dashboard</motion.button>
@@ -277,7 +277,7 @@ export default function Home() {
       </motion.nav>
 
       {/* ===== HERO SECTION ===== */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900">
+      <section ref={heroRef} className="relative min-h-[80vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.3),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(6,182,212,0.2),transparent_50%)]" />
@@ -287,7 +287,7 @@ export default function Home() {
             <motion.div key={i} className="absolute w-1 h-1 bg-white/20 rounded-full" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }} animate={{ y: [0, -30, 0], opacity: [0, 1, 0], }} transition={{ duration: 3 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 3 }} />
           ))}
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24 pb-16">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 pb-10 md:pt-24 md:pb-16">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <motion.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-6">
               Koperasi Unit Desa Tegal Sari
@@ -308,13 +308,13 @@ export default function Home() {
               Pelajari Lebih Lanjut <ChevronDownIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.a>
           </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:gap-10 text-white/60 text-sm">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-4 sm:mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:gap-10 text-white/60 text-sm">
             <div className="flex items-center gap-2"><ShieldCheckIcon className="w-4 h-4 text-green-400" />Terpercaya</div>
             <div className="flex items-center gap-2"><UserGroupIcon className="w-4 h-4 text-green-400" />371+ Anggota</div>
             <div className="flex items-center gap-2"><HeartIcon className="w-4 h-4 text-green-400" />Ramah Lingkungan</div>
           </motion.div>
         </div>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="absolute bottom-8 left-1/2 -translate-x-1/2">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="hidden sm:block absolute bottom-8 left-1/2 -translate-x-1/2">
           <motion.a href="#harga" animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }} className="flex flex-col items-center gap-1 text-white/50 hover:text-white/80 transition-colors text-xs">
             <span>Scroll</span>
             <ChevronDownIcon className="w-4 h-4" />
@@ -323,7 +323,7 @@ export default function Home() {
       </section>
 
       {/* ===== HARGA TBS LIVE ===== */}
-      <section id="harga" className="relative -mt-10 md:-mt-20 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="harga" className="relative md:-mt-20 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="bg-white rounded-2xl shadow-card border border-gray-100 p-4 sm:p-6 md:p-8">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
@@ -404,7 +404,7 @@ export default function Home() {
       </section>
 
       {/* ===== BLOG TERBARU ===== */}
-      <section id="blog" className="py-20 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
+      <section id="blog" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Blog" title="Artikel & Berita Terbaru" subtitle="Informasi terkini seputar KUD, pertanian sawit, dan kegiatan anggota." />
           <div className="flex flex-col sm:flex-row items-center gap-3 mb-8">
@@ -447,7 +447,7 @@ export default function Home() {
       </section>
 
       {/* ===== TENTANG ===== */}
-      <section id="tentang" className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 via-white to-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
+      <section id="tentang" className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 via-white to-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
@@ -503,7 +503,7 @@ export default function Home() {
       </section>
 
       {/* ===== TIMELINE ===== */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
+      <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Perjalanan" title="Sejarah & Perjalanan KUD" subtitle="Dari 50 pekebun hingga 371+ anggota — perjalanan KUD Sari Subur membangun koperasi sawit yang mandiri dan profesional." />
         </div>
@@ -511,7 +511,7 @@ export default function Home() {
       </section>
 
       {/* ===== PROGRAM UNGGULAN ===== */}
-      <section id="program" className="py-20 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
+      <section id="program" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Program" title="Program Unggulan" subtitle="Berbagai program dirancang khusus untuk meningkatkan kesejahteraan dan produktivitas petani." />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -536,7 +536,7 @@ export default function Home() {
       </section>
 
       {/* ===== KEUNTUNGAN ===== */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
+      <section className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(16,185,129,0.15),transparent_50%)]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Mengapa KUD" title="Keuntungan Bergabung" subtitle="Rasakan manfaat nyata menjadi bagian dari keluarga besar KUD Desa Sari Subur." light />
@@ -561,7 +561,7 @@ export default function Home() {
       </section>
 
       {/* ===== FITUR ===== */}
-      <section id="fitur" className="py-20 md:py-28 bg-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
+      <section id="fitur" className="py-14 md:py-28 bg-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Layanan Digital" title="Fitur Aplikasi KUD" subtitle="Nikmati kemudahan akses informasi dan layanan KUD melalui aplikasi digital kami." />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -587,7 +587,7 @@ export default function Home() {
       </section>
 
       {/* ===== KALKULATOR TBS ===== */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
+      <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kalkulator" title="Kalkulator TBS" subtitle="Simulasi pendapatan Anda dari hasil kebun kelapa sawit." />
           <TbsCalculator />
@@ -595,7 +595,7 @@ export default function Home() {
       </section>
 
       {/* ===== ALUR 6 LANGKAH ===== */}
-      <section className="py-20 md:py-28 bg-white">
+      <section className="py-14 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Panduan" title="6 Langkah Jadi Anggota" subtitle="Proses mudah dan cepat untuk bergabung menjadi anggota KUD Desa Sari Subur." />
           <div className="relative">
@@ -637,7 +637,7 @@ export default function Home() {
       </section>
 
       {/* ===== TEAM ===== */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
+      <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Pengurus" title="Tim Pengurus KUD" subtitle="Kenali pengurus KUD Desa Sari Subur yang berdedikasi melayani anggota." />
         </div>
@@ -645,7 +645,7 @@ export default function Home() {
       </section>
 
       {/* ===== SERTIFIKASI & PENGHARGAAN ===== */}
-      <section className="py-20 md:py-28 bg-white">
+      <section className="py-14 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Pengakuan" title="Sertifikasi & Penghargaan" subtitle="Berbagai sertifikasi dan penghargaan yang telah diraih KUD Desa Sari Subur." />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -669,7 +669,7 @@ export default function Home() {
       </section>
 
       {/* ===== MITRA & KOLABORASI ===== */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
+      <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kolaborasi" title="Mitra & Kolaborasi" subtitle="Kemitraan strategis dengan berbagai lembaga untuk mendukung kemajuan KUD." />
           <div className="grid grid-cols-3 md:grid-cols-6 gap-4 sm:gap-6">
@@ -684,7 +684,7 @@ export default function Home() {
       </section>
 
       {/* ===== TESTIMONI ===== */}
-      <section id="testimoni" className="py-20 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden scroll-mt-16 md:scroll-mt-20">
+      <section id="testimoni" className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden scroll-mt-16 md:scroll-mt-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.15),transparent_50%)]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Testimoni" title="Apa Kata Anggota?" subtitle="Pengalaman nyata dari para anggota yang telah merasakan manfaat bergabung dengan KUD." light />
@@ -718,7 +718,7 @@ export default function Home() {
       </section>
 
       {/* ===== LAYANAN & DUKUNGAN ===== */}
-      <section id="layanan" className="py-20 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
+      <section id="layanan" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kontak" title="Layanan & Dukungan" subtitle="Hubungi kami melalui berbagai saluran yang tersedia." />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -738,7 +738,7 @@ export default function Home() {
       </section>
 
       {/* ===== FAQ ===== */}
-      <section id="faq" className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white scroll-mt-16 md:scroll-mt-20">
+      <section id="faq" className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Tanya Jawab" title="Pertanyaan Umum" subtitle="Temukan jawaban atas pertanyaan yang sering diajukan tentang KUD Desa Sari Subur." />
           <div className="space-y-3">
@@ -762,7 +762,7 @@ export default function Home() {
       </section>
 
       {/* ===== MAP ===== */}
-      <section className="py-20 md:py-28 bg-white">
+      <section className="py-14 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Lokasi" title="Temukan Kami" subtitle="Kunjungi kantor KUD Desa Sari Subur untuk informasi lebih lanjut." />
         </div>
@@ -770,7 +770,7 @@ export default function Home() {
       </section>
 
       {/* ===== NEWSLETTER CTA ===== */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
+      <section className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.2),transparent_60%)]" />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.span initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-6">
@@ -869,6 +869,6 @@ export default function Home() {
 
       {/* ===== VIDEO MODAL ===== */}
       <VideoModal videoId={videoModal} onClose={() => setVideoModal(null)} />
-    </>
+    </div>
   );
 }

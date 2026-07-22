@@ -15,7 +15,7 @@ const events = [
 
 export default function Timeline() {
   return (
-    <section className="py-20 lg:py-28 px-6 lg:px-12 max-w-7xl mx-auto" id="sejarah">
+    <section className="py-14 lg:py-28 px-6 lg:px-12 max-w-7xl mx-auto" id="sejarah">
       <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
         className="text-center mb-16">
         <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">SEJARAH KUD</span>
@@ -39,7 +39,7 @@ export default function Timeline() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className={`relative flex items-start gap-6 mb-10 md:mb-14 ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+              className={`relative flex items-start gap-3 md:gap-6 mb-10 md:mb-14 ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
 
               <div className="hidden md:flex flex-1 justify-end">
                 {isLeft ? (
@@ -81,7 +81,7 @@ export default function Timeline() {
 function TimelineCard({ item }) {
   return (
     <motion.div whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(37,99,235,0.08)' }}
-      className="bg-white rounded-2xl border border-border p-5 hover:border-primary/20 transition-all duration-300">
+      className="bg-white rounded-2xl border border-border p-4 md:p-5 hover:border-primary/20 transition-all duration-300">
       <div className="flex items-center gap-2 mb-2">
         <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold text-white ${item.color}`}>{item.year}</span>
         <h3 className="font-heading font-bold text-foreground text-sm">{item.title}</h3>
