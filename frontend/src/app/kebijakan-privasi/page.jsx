@@ -32,7 +32,7 @@ export default function KebijakanPrivasiPage() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="prose prose-sm md:prose-base max-w-none text-gray-700">
           <h2>1. Pendahuluan</h2>
           <p>
-            KUD Desa Sari Subur ("KUD", "kami", "kita") berkomitmen untuk melindungi privasi Pengguna aplikasi Sistem Informasi Koperasi Unit Desa Sari Subur ("Aplikasi"). Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, mengungkapkan, dan melindungi data pribadi Anda.
+            KUD Desa Sari Subur (&quot;KUD&quot;, &quot;kami&quot;, &quot;kita&quot;) berkomitmen untuk melindungi privasi Pengguna aplikasi Sistem Informasi Koperasi Unit Desa Sari Subur (&quot;Aplikasi&quot;). Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, mengungkapkan, dan melindungi data pribadi Anda.
           </p>
 
           <h2>2. Data yang Dikumpulkan</h2>

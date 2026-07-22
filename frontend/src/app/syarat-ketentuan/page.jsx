@@ -32,7 +32,7 @@ export default function SyaratKetentuanPage() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="prose prose-sm md:prose-base max-w-none text-gray-700">
           <h2>1. Penerimaan Ketentuan</h2>
           <p>
-            Dengan mengakses dan menggunakan aplikasi KUD Desa Sari Subur ("Aplikasi"), Anda menyatakan telah membaca, memahami, dan menyetujui untuk terikat oleh Syarat & Ketentuan ini. Jika Anda tidak menyetujui sebagian atau seluruh ketentuan, mohon untuk tidak menggunakan Aplikasi.
+            Dengan mengakses dan menggunakan aplikasi KUD Desa Sari Subur (&quot;Aplikasi&quot;), Anda menyatakan telah membaca, memahami, dan menyetujui untuk terikat oleh Syarat &amp; Ketentuan ini. Jika Anda tidak menyetujui sebagian atau seluruh ketentuan, mohon untuk tidak menggunakan Aplikasi.
           </p>
 
           <h2>2. Definisi</h2>

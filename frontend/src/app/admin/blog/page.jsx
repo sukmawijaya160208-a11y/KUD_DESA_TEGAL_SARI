@@ -10,7 +10,7 @@ import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import {
   NewspaperIcon, PlusIcon, PencilSquareIcon, TrashIcon,
-  MagnifyingGlassIcon, EyeIcon, XMarkIcon, PhotoIcon,
+  MagnifyingGlassIcon, XMarkIcon,
   VideoCameraIcon, StarIcon, ClockIcon, DocumentTextIcon,
   Cog6ToothIcon, BoltIcon, ArrowTopRightOnSquareIcon,
 } from '@heroicons/react/24/outline';
