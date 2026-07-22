@@ -61,10 +61,10 @@ const FAQ_DATA = [
 ];
 
 const BLOG_POSTS = [
-  { slug: 'panen-raya-sawit', title: 'Panen Raya Sawit di Desa Tegal Sari', excerpt: 'Musim panen tahun ini menghasilkan lebih dari 500 ton TBS berkualitas tinggi berkat program pemupukan berimbang.', date: '15 Mar 2025', author: 'Admin KUD', image: '/blog/panen-raya.jpg', category: 'Panen' },
-  { slug: 'pelatihan-budidaya', title: 'Pelatihan Budidaya Sawit Berkelanjutan', excerpt: 'KUD mengadakan pelatihan budidaya sawit berkelanjutan yang diikuti oleh 120 petani dari 5 desa sekitar.', date: '28 Feb 2025', author: 'Admin KUD', image: '/blog/pelatihan.jpg', category: 'Pelatihan' },
-  { slug: 'program-kemitraan-baru', title: 'Program Kemitraan Baru Tahun Ini', excerpt: 'KUD meluncurkan program kemitraan baru dengan skema bagi hasil yang lebih menguntungkan bagi petani.', date: '10 Feb 2025', author: 'Admin KUD', image: '/blog/kemitraan.jpg', category: 'Program' },
-  { slug: 'harga-tbs-januari', title: 'Update Harga TBS Januari 2025', excerpt: 'Berikut adalah daftar harga TBS terkini yang berlaku mulai 1 Januari 2025 berdasarkan Rapat Anggota.', date: '1 Jan 2025', author: 'Admin KUD', image: '/blog/harga.jpg', category: 'Info' },
+  { slug: 'tingkatkan-kompetensi-pekebun-sawit-kud-sari-subur-kirim-45-anggota', title: '45 Anggota Ikut Pelatihan Sawit BPDP di Palembang', excerpt: 'KUD Sari Subur kirim 45 anggota ikut pelatihan budidaya kelapa sawit yang diselenggarakan AKPY, BPDP dan Ditjenbun.', date: '21 Mei 2025', author: 'Admin KUD', image: '/images/blog/budidaya sawit 1.jpg', category: 'Pelatihan' },
+  { slug: 'kud-sari-subur-kirim-16-anggota-pelatihan-panen-pasca-panen', title: '16 Anggota Ikut Pelatihan Panen & Pasca Panen', excerpt: 'KUD kirim 16 anggota untuk mengikuti pelatihan panen dan pasca panen di Palembang guna meningkatkan kompetensi pekebun.', date: '16 Jun 2025', author: 'Admin KUD', image: '/images/blog/panen dan pasca 1.jpg', category: 'Pelatihan' },
+  { slug: 'anggota-kud-sari-subur-bpjs-ketenagakerjaan-dbh-sawit', title: '371 Anggota Terima BPJS Ketenagakerjaan', excerpt: 'Anggota KUD dapat perlindungan jaminan sosial BPJS Ketenagakerjaan dari DBH Sawit Sumsel sebanyak 371 orang.', date: '10 Jul 2025', author: 'Admin KUD', image: '/images/blog/image.png', category: 'Sosial' },
+  { slug: 'bupati-musi-rawas-lepas-52-mahasiswa-beasiswa-sdm-sawit-bpdpks', title: '52 Mahasiswa Terima Beasiswa SDM Sawit BPDPKS', excerpt: 'Bupati Musi Rawas lepas 52 calon mahasiswa penerima Beasiswa Pendidikan Pengembangan SDM Sawit dari BPDPKS.', date: '28 Agu 2024', author: 'Admin KUD', image: '/images/blog/beasiswa 1.jpg', category: 'Pendidikan' },
 ];
 
 const LAYANAN = [
@@ -103,7 +103,7 @@ function SectionHeader({ badge, title, subtitle, light }) {
   return (
     <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
       <SectionBadge>{badge}</SectionBadge>
-      <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1, duration: 0.6 }} className={`mt-4 text-3xl md:text-4xl lg:text-5xl font-bold font-heading ${light ? 'text-white' : 'text-foreground'}`}>
+      <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1, duration: 0.6 }} className={`mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading ${light ? 'text-white' : 'text-foreground'}`}>
         {title}
       </motion.h2>
       {subtitle && (
@@ -140,7 +140,7 @@ function Counter({ end, suffix, label, duration = 2000, prefix }) {
   }, [end, duration]);
   return (
     <div ref={ref} className="text-center">
-      <div className="text-4xl md:text-5xl font-bold font-heading text-primary">{prefix}{count.toLocaleString()}{suffix}</div>
+      <div className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-primary">{prefix}{count.toLocaleString()}{suffix}</div>
       <div className="mt-2 text-sm text-muted-foreground">{label}</div>
     </div>
   );
@@ -227,9 +227,9 @@ export default function Home() {
       <motion.nav initial={{ y: -80 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }} className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-xl shadow-glass border-b border-white/20' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
-            <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/')}>
-              <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-sm">K</div>
-              <span className={`font-bold font-heading text-lg transition-colors ${scrolled ? 'text-foreground' : 'text-white'}`}>KUD Sari Subur</span>
+            <div className="flex items-center gap-2 cursor-pointer flex-shrink-0 min-w-0" onClick={() => router.push('/')}>
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0">K</div>
+              <span className={`font-bold font-heading text-sm sm:text-lg truncate transition-colors ${scrolled ? 'text-foreground' : 'text-white'}`}>KUD Sari Subur</span>
             </div>
             <div className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => (
@@ -293,24 +293,24 @@ export default function Home() {
               Koperasi Unit Desa Tegal Sari
             </motion.span>
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold font-heading text-white leading-tight max-w-5xl mx-auto">
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold font-heading text-white leading-tight max-w-5xl mx-auto">
             Maju Bersama{' '}
             <span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD Sari Subur</span>
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-4 sm:mt-6 text-sm sm:text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed px-2">
             Koperasi petani kelapa sawit yang berkomitmen meningkatkan kesejahteraan anggota melalui kemitraan berkelanjutan, inovasi, dan gotong royong.
           </motion.p>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => router.push('/login?tab=register')} className="px-8 py-3.5 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center gap-2 text-base">
-              Jadi Anggota <ArrowRightIcon className="w-5 h-5" />
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4">
+            <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => router.push('/login?tab=register')} className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center justify-center gap-2 text-sm sm:text-base">
+              Jadi Anggota <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.button>
-            <motion.a whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} href="#tentang" className="px-8 py-3.5 rounded-xl border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center gap-2 text-base backdrop-blur-sm">
-              Pelajari Lebih Lanjut <ChevronDownIcon className="w-5 h-5" />
+            <motion.a whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} href="#tentang" className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-sm sm:text-base backdrop-blur-sm">
+              Pelajari Lebih Lanjut <ChevronDownIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </motion.a>
           </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-12 flex items-center justify-center gap-6 md:gap-10 text-white/60 text-sm">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:gap-10 text-white/60 text-sm">
             <div className="flex items-center gap-2"><ShieldCheckIcon className="w-4 h-4 text-green-400" />Terpercaya</div>
-            <div className="flex items-center gap-2"><UserGroupIcon className="w-4 h-4 text-green-400" />500+ Anggota</div>
+            <div className="flex items-center gap-2"><UserGroupIcon className="w-4 h-4 text-green-400" />371+ Anggota</div>
             <div className="flex items-center gap-2"><HeartIcon className="w-4 h-4 text-green-400" />Ramah Lingkungan</div>
           </motion.div>
         </div>
@@ -323,8 +323,8 @@ export default function Home() {
       </section>
 
       {/* ===== HARGA TBS LIVE ===== */}
-      <section id="harga" className="relative -mt-20 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="bg-white rounded-2xl shadow-card border border-gray-100 p-6 md:p-8">
+      <section id="harga" className="relative -mt-10 md:-mt-20 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="bg-white rounded-2xl shadow-card border border-gray-100 p-4 sm:p-6 md:p-8">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center"><CurrencyDollarIcon className="w-5 h-5 text-emerald-600" /></div>
@@ -344,9 +344,9 @@ export default function Home() {
               { grade: 'TBS Grade B', price: 'Rp 2.450', kg: 'kg', change: '-20', up: false },
               { grade: 'TBS Grade C', price: 'Rp 2.250', kg: 'kg', change: '+10', up: true },
             ].map((item, idx) => (
-              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="relative p-4 rounded-xl bg-gradient-to-br from-gray-50 to-white border border-gray-100 hover:border-primary/20 hover:shadow-md transition-all">
-                <div className="text-xs text-muted-foreground mb-1">{item.grade}</div>
-                <div className="text-2xl font-bold font-heading text-foreground">{item.price}</div>
+              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="relative p-3 sm:p-4 rounded-xl bg-gradient-to-br from-gray-50 to-white border border-gray-100 hover:border-primary/20 hover:shadow-md transition-all">
+                <div className="text-[10px] sm:text-xs text-muted-foreground mb-0.5 sm:mb-1">{item.grade}</div>
+                <div className="text-xl sm:text-2xl font-bold font-heading text-foreground">{item.price}</div>
                 <div className="flex items-center gap-1 mt-1">
                   <span className="text-xs text-muted-foreground">/{item.kg}</span>
                   <span className={`text-xs font-medium flex items-center gap-0.5 ${item.up ? 'text-green-600' : 'text-red-500'}`}>
@@ -360,20 +360,20 @@ export default function Home() {
       </section>
 
       {/* ===== KUD DALAM ANGKA ===== */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
+      <section className="py-16 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Statistik" title="KUD dalam Angka" subtitle="Capaian dan dampak nyata KUD Desa Sari Subur bagi petani kelapa sawit di wilayah Kecamatan Tegal Sari." />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-            <Counter end={532} suffix="+" label="Anggota Aktif" />
-            <Counter end={1250} suffix="+" label="Hektar Lahan" />
-            <Counter end={8500} suffix=" Ton" label="TBS per Tahun" />
-            <Counter end={15} suffix="+" label="Tahun Berdiri" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
+            <Counter end={371} suffix="+" label="Anggota Aktif" />
+            <Counter end={850} suffix="+" label="Hektar Lahan" />
+            <Counter end={5000} suffix=" Ton" label="TBS per Tahun" />
+            <Counter end={7} suffix="+" label="Tahun Berdiri" />
           </div>
         </div>
       </section>
 
       {/* ===== KEGIATAN GALLERY ===== */}
-      <section className="py-20 md:py-28 bg-white">
+      <section className="py-14 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Dokumentasi" title="Kegiatan Kami" subtitle="Dokumentasi berbagai kegiatan dan program yang telah dilaksanakan KUD Desa Sari Subur." />
         </div>
@@ -381,7 +381,7 @@ export default function Home() {
       </section>
 
       {/* ===== VIDEO KUD ===== */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-white via-emerald-50/20 to-white">
+      <section className="py-14 md:py-28 bg-gradient-to-b from-white via-emerald-50/20 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Multimedia" title="Video KUD Sari Subur" subtitle="Tonton berbagai kegiatan, profil, dan informasi seputar KUD Desa Sari Subur." />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -404,16 +404,16 @@ export default function Home() {
       </section>
 
       {/* ===== BLOG TERBARU ===== */}
-      <section id="blog" className="py-20 md:py-28 bg-white">
+      <section id="blog" className="py-20 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Blog" title="Artikel & Berita Terbaru" subtitle="Informasi terkini seputar KUD, pertanian sawit, dan kegiatan anggota." />
           <div className="flex flex-col sm:flex-row items-center gap-3 mb-8">
             <div className="relative flex-1 w-full max-w-md">
               <MagnifyingGlassIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <input type="text" placeholder="Cari artikel..." value={blogSearch} onChange={(e) => setBlogSearch(e.target.value)} className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" />
+              <input type="text" placeholder="Cari artikel..." value={blogSearch} onChange={(e) => setBlogSearch(e.target.value)} className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50/50 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" />
             </div>
-            <div className="flex gap-2 flex-wrap">
-              {['Semua', 'Panen', 'Pelatihan', 'Program', 'Info'].map((cat) => (
+            <div className="flex gap-2 overflow-x-auto pb-1 w-full sm:w-auto scrollbar-none">
+              {['Semua', 'Pelatihan', 'Sosial', 'Pendidikan'].map((cat) => (
                 <button key={cat} onClick={() => setBlogCategory(cat)} className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${blogCategory === cat ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-foreground/60 hover:bg-gray-200'}`}>{cat}</button>
               ))}
             </div>
@@ -447,17 +447,17 @@ export default function Home() {
       </section>
 
       {/* ===== TENTANG ===== */}
-      <section id="tentang" className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 via-white to-white overflow-hidden">
+      <section id="tentang" className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 via-white to-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
               <SectionBadge>Tentang Kami</SectionBadge>
-              <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-foreground leading-tight">Koperasi yang <span className="text-primary">Berkembang</span> Bersama Petani</h2>
+              <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-foreground leading-tight">Koperasi yang <span className="text-primary">Berkembang</span> Bersama Petani</h2>
               <p className="mt-6 text-muted-foreground leading-relaxed">
-                KUD Desa Sari Subur didirikan pada tahun 2010 oleh sekelompok petani kelapa sawit di Kecamatan Tegal Sari. Berawal dari keprihatinan terhadap praktik tengkulak yang merugikan petani, koperasi ini hadir sebagai solusi untuk meningkatkan posisi tawar petani dalam rantai pasok kelapa sawit.
+                KUD Desa Sari Subur didirikan pada tahun 2019 oleh sekelompok petani kelapa sawit di Kecamatan Megang Sakti. Berawal dari keprihatinan terhadap praktik tengkulak yang merugikan petani, koperasi ini hadir sebagai solusi untuk meningkatkan posisi tawar petani dalam rantai pasok kelapa sawit.
               </p>
               <p className="mt-4 text-muted-foreground leading-relaxed">
-                Kini, KUD Sari Subur telah berkembang menjadi koperasi yang melayani lebih dari 500 petani anggota. Dengan semangat gotong royong dan transparansi, kami terus berinovasi untuk memberikan pelayanan terbaik bagi anggota.
+                Kini, KUD Sari Subur telah berkembang menjadi koperasi yang melayani lebih dari 532 petani anggota. Dengan semangat gotong royong dan transparansi, kami terus berinovasi untuk memberikan pelayanan terbaik bagi anggota.
               </p>
               <div className="mt-8 grid grid-cols-2 gap-4">
                 {[
@@ -476,7 +476,8 @@ export default function Home() {
               </div>
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] bg-gradient-to-br from-emerald-200 via-green-100 to-teal-50">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
+                <img src="/images/foto.jpg" alt="Kegiatan KUD Sari Subur" className="w-full h-full object-cover" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/40 to-transparent z-[1]" />
                 <div className="absolute bottom-6 left-6 right-6 z-[2]">
                   <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4">
@@ -492,7 +493,7 @@ export default function Home() {
               </div>
               <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center hidden lg:flex">
                 <div className="text-center">
-                  <div className="text-2xl font-bold font-heading text-primary">15+</div>
+                  <div className="text-2xl font-bold font-heading text-primary">7+</div>
                   <div className="text-[10px] text-muted-foreground">Tahun</div>
                 </div>
               </div>
@@ -504,13 +505,13 @@ export default function Home() {
       {/* ===== TIMELINE ===== */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Perjalanan" title="Sejarah & Perjalanan KUD" subtitle="Dari awal berdiri hingga menjadi koperasi kebanggaan petani kelapa sawit di Tegal Sari." />
+          <SectionHeader badge="Perjalanan" title="Sejarah & Perjalanan KUD" subtitle="Dari 50 pekebun hingga 371+ anggota — perjalanan KUD Sari Subur membangun koperasi sawit yang mandiri dan profesional." />
         </div>
         <Timeline />
       </section>
 
       {/* ===== PROGRAM UNGGULAN ===== */}
-      <section id="program" className="py-20 md:py-28 bg-white">
+      <section id="program" className="py-20 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Program" title="Program Unggulan" subtitle="Berbagai program dirancang khusus untuk meningkatkan kesejahteraan dan produktivitas petani." />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -548,10 +549,10 @@ export default function Home() {
             ].map((item, idx) => {
               const Icn = item.icon;
               return (
-                <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="group p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all">
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><Icn className="w-6 h-6 text-emerald-300" /></div>
-                  <h3 className="text-lg font-bold font-heading text-white">{item.title}</h3>
-                  <p className="mt-2 text-sm text-white/60">{item.desc}</p>
+                <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="group p-5 sm:p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform"><Icn className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-300" /></div>
+                  <h3 className="text-base sm:text-lg font-bold font-heading text-white">{item.title}</h3>
+                  <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/60">{item.desc}</p>
                 </motion.div>
               );
             })}
@@ -560,7 +561,7 @@ export default function Home() {
       </section>
 
       {/* ===== FITUR ===== */}
-      <section id="fitur" className="py-20 md:py-28 bg-white overflow-hidden">
+      <section id="fitur" className="py-20 md:py-28 bg-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Layanan Digital" title="Fitur Aplikasi KUD" subtitle="Nikmati kemudahan akses informasi dan layanan KUD melalui aplikasi digital kami." />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -619,13 +620,13 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="flex-shrink-0 relative z-10 md:absolute md:left-1/2 md:-translate-x-1/2">
-                      <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shadow-lg shadow-primary/30">
-                        <Icn className="w-5 h-5" />
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs md:text-sm shadow-lg shadow-primary/30">
+                        <Icn className="w-4 h-4 md:w-5 md:h-5" />
                       </div>
                     </div>
-                    <div className="md:hidden flex-1">
-                      <h4 className="font-bold font-heading text-foreground text-lg">{item.title}</h4>
-                      <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
+                    <div className="md:hidden flex-1 min-w-0">
+                      <h4 className="font-bold font-heading text-foreground text-sm sm:text-lg">{item.title}</h4>
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">{item.desc}</p>
                     </div>
                   </motion.div>
                 );
@@ -656,8 +657,8 @@ export default function Home() {
             ].map((item, idx) => {
               const Icn = item.icon;
               return (
-                <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="p-6 rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-emerald-50/30 text-center hover:shadow-md transition-all">
-                  <div className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mx-auto mb-3"><Icn className="w-7 h-7 text-primary" /></div>
+                <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="p-4 sm:p-6 rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-emerald-50/30 text-center hover:shadow-md transition-all">
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-primary/5 flex items-center justify-center mx-auto mb-2 sm:mb-3"><Icn className="w-5 h-5 sm:w-7 sm:h-7 text-primary" /></div>
                   <h4 className="font-bold font-heading text-foreground">{item.title}</h4>
                   <p className="text-xs text-muted-foreground mt-1">{item.desc}</p>
                 </motion.div>
@@ -671,9 +672,9 @@ export default function Home() {
       <section className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kolaborasi" title="Mitra & Kolaborasi" subtitle="Kemitraan strategis dengan berbagai lembaga untuk mendukung kemajuan KUD." />
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-4 sm:gap-6">
             {MITRA.map((mitra, idx) => (
-              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.08 }} className="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all text-center group">
+              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.08 }} className="p-4 sm:p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all text-center group">
                 <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">{mitra.logo}</div>
                 <div className="text-xs font-medium text-foreground/70">{mitra.name}</div>
               </motion.div>
@@ -683,12 +684,12 @@ export default function Home() {
       </section>
 
       {/* ===== TESTIMONI ===== */}
-      <section id="testimoni" className="py-20 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
+      <section id="testimoni" className="py-20 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden scroll-mt-16 md:scroll-mt-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.15),transparent_50%)]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Testimoni" title="Apa Kata Anggota?" subtitle="Pengalaman nyata dari para anggota yang telah merasakan manfaat bergabung dengan KUD." light />
           <div className="relative max-w-4xl mx-auto">
-            <motion.div key={testiIdx} initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} transition={{ duration: 0.5 }} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 md:p-12 text-center">
+            <motion.div key={testiIdx} initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} transition={{ duration: 0.5 }} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 md:p-12 text-center">
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">
                 {TESTIMONI[testiIdx].nama.charAt(0)}
               </div>
@@ -697,7 +698,7 @@ export default function Home() {
                   <StarIcon key={i} className={`w-5 h-5 ${i < TESTIMONI[testiIdx].rating ? 'text-amber-400 fill-amber-400' : 'text-white/20'}`} />
                 ))}
               </div>
-              <p className="text-xl md:text-2xl text-white/90 leading-relaxed font-medium italic">"{TESTIMONI[testiIdx].quote}"</p>
+              <p className="text-base sm:text-xl md:text-2xl text-white/90 leading-relaxed font-medium italic">"{TESTIMONI[testiIdx].quote}"</p>
               <div className="mt-6 pt-6 border-t border-white/10">
                 <div className="font-bold text-white text-lg">{TESTIMONI[testiIdx].nama}</div>
                 <div className="text-white/50 text-sm">{TESTIMONI[testiIdx].asal}</div>
@@ -717,16 +718,16 @@ export default function Home() {
       </section>
 
       {/* ===== LAYANAN & DUKUNGAN ===== */}
-      <section id="layanan" className="py-20 md:py-28 bg-white">
+      <section id="layanan" className="py-20 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kontak" title="Layanan & Dukungan" subtitle="Hubungi kami melalui berbagai saluran yang tersedia." />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {LAYANAN.map((item, idx) => {
               const Icn = item.icon;
               return (
-                <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="p-6 rounded-2xl border border-gray-100 shadow-card hover:shadow-card-hover transition-all text-center group">
-                  <div className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform"><Icn className="w-7 h-7 text-primary" /></div>
-                  <h4 className="font-bold font-heading text-foreground">{item.title}</h4>
+                <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="p-5 sm:p-6 rounded-2xl border border-gray-100 shadow-card hover:shadow-card-hover transition-all text-center group">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary/5 flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform"><Icn className="w-6 h-6 sm:w-7 sm:h-7 text-primary" /></div>
+                  <h4 className="font-bold font-heading text-foreground text-sm sm:text-base">{item.title}</h4>
                   <p className="text-sm text-muted-foreground mt-2">{item.desc}</p>
                   <p className="text-sm font-semibold text-primary mt-3">{item.contact}</p>
                 </motion.div>
@@ -737,7 +738,7 @@ export default function Home() {
       </section>
 
       {/* ===== FAQ ===== */}
-      <section id="faq" className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
+      <section id="faq" className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Tanya Jawab" title="Pertanyaan Umum" subtitle="Temukan jawaban atas pertanyaan yang sering diajukan tentang KUD Desa Sari Subur." />
           <div className="space-y-3">
@@ -781,9 +782,9 @@ export default function Home() {
           <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="mt-4 text-white/70 text-lg max-w-xl mx-auto">
             Berlangganan newsletter kami untuk mendapatkan update harga TBS, program, dan kegiatan KUD.
           </motion.p>
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="mt-8 max-w-md mx-auto flex gap-3">
-            <input type="email" placeholder="Masukkan email Anda" className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 backdrop-blur-sm" />
-            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="px-6 py-3 rounded-xl bg-white text-emerald-900 font-bold shadow-xl hover:shadow-2xl transition-all text-sm">Langganan</motion.button>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="mt-8 max-w-md mx-auto flex flex-col sm:flex-row gap-3 px-4 sm:px-0">
+            <input type="email" placeholder="Masukkan email Anda" className="w-full sm:flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 backdrop-blur-sm" />
+            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-emerald-900 font-bold shadow-xl hover:shadow-2xl transition-all text-sm">Langganan</motion.button>
           </motion.div>
         </div>
       </section>
@@ -791,7 +792,7 @@ export default function Home() {
       {/* ===== FOOTER ===== */}
       <footer className="bg-foreground text-white/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-sm">K</div>
@@ -842,7 +843,7 @@ export default function Home() {
       {/* ===== BACK TO TOP ===== */}
       <AnimatePresence>
         {showBackTop && (
-          <motion.button initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="fixed bottom-24 right-4 md:right-6 z-40 w-11 h-11 rounded-full bg-primary text-white shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all flex items-center justify-center">
+          <motion.button initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="fixed bottom-20 right-4 md:right-6 z-40 w-11 h-11 rounded-full bg-primary text-white shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all flex items-center justify-center">
             <ArrowUpIcon className="w-5 h-5" />
           </motion.button>
         )}
