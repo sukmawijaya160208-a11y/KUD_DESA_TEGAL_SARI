@@ -38,6 +38,19 @@ composer run test    # PHPUnit via artisan (in-memory SQLite)
 - Backend CORS: set `FRONTEND_URL=http://localhost:3000` in `backend/.env`.
 - Backend first-time setup: copy `.env.example` → `.env`, run `composer run setup`.
 
+## Frontend pages
+- **`/`** — Landing page with hero, features, about, FAQ
+- **`/login`** — Combined login + register (tab-based, 2-step wizard)
+- **`/lupa-password`** — Forgot password
+- **`/reset-password`** — Reset password
+- **`/blog`** — Blog listing with filter, search, pagination, inline expand
+- **`/blog/[slug]`** — Blog detail page (hero, gallery, content, share, related)
+- **`/syarat-ketentuan`** — Terms & conditions
+- **`/kebijakan-privasi`** — Privacy policy
+- **`/admin/*`** — Admin dashboard & CRUD (pekebun, program, lahan, TBS, users, blog, etc.)
+- **`/verifikator/*`** — Verifikator dashboard & verifikasi flow
+- **`/pekebun/*`** — Pekebun dashboard & self-service (profil, lahan, program, TBS)
+
 ## Frontend quirks
 - **All pages use `.jsx`**, not `.tsx` (despite TypeScript being configured).
 - **Auth**: Bearer token stored in `localStorage` (`token`, `user`). The fetch wrapper in `src/lib/api.js` auto-redirects to `/login` on 401.
