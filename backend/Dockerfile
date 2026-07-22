@@ -31,8 +31,9 @@ RUN composer install --no-dev --no-interaction --no-progress --optimize-autoload
 
 COPY . .
 
-RUN php artisan package:discover --ansi && \
-    php artisan storage:link
+RUN mkdir -p storage/app/public public/storage && \
+    php artisan package:discover --ansi && \
+    php artisan storage:link --force || true
 
 RUN chown -R www-data:www-data storage bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache
