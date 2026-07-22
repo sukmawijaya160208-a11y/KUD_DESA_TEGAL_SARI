@@ -29,6 +29,15 @@ jobs:
           port: 22
           script: |
             set -e
+
+            # Stop old systemd services (pre-Docker migration) that block ports
+            systemctl stop kud-backend kud-frontend kud-queue 2>/dev/null || true
+            systemctl disable kud-backend kud-frontend kud-queue 2>/dev/null || true
+
+            # Free ports if anything else is listening
+            fuser -k 8000/tcp 2>/dev/null || true
+            fuser -k 3000/tcp 2>/dev/null || true
+
             cd /var/www/kud
             git pull --rebase origin main
             docker compose up -d --build
