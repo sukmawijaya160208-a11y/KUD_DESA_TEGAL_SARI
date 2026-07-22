@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
@@ -8,10 +8,174 @@ import Timeline from '@/components/Timeline';
 import KegiatanGallery from '@/components/KegiatanGallery';
 import TeamSection from '@/components/TeamSection';
 import MapSection from '@/components/MapSection';
+import TbsCalculator from '@/components/TbsCalculator';
+
 import {
   Squares2X2Icon, InformationCircleIcon, ChatBubbleLeftRightIcon,
-  QuestionMarkCircleIcon, NewspaperIcon
+  QuestionMarkCircleIcon, NewspaperIcon, ArrowRightIcon,
+  ChevronDownIcon, Bars3Icon, XMarkIcon, PhoneIcon,
+  PlayIcon, CalendarDaysIcon, UserGroupIcon,
+  MapPinIcon, AcademicCapIcon,
+  ShieldCheckIcon, HandRaisedIcon, CurrencyDollarIcon,
+  ChartBarIcon, CheckBadgeIcon,
+  StarIcon, HeartIcon, ArrowUpIcon,
+  ChevronLeftIcon, ChevronRightIcon, MagnifyingGlassIcon,
+  DocumentTextIcon, BuildingOfficeIcon, GlobeAltIcon,
+  TruckIcon, EyeIcon, BellAlertIcon, FolderIcon
 } from '@heroicons/react/24/outline';
+
+const YT_VIDEOS = [
+  { id: 'o7k3SZ0sIVQ', title: 'Profil KUD Desa Sari Subur' },
+  { id: 'GtjnnCBx5bY', title: 'Panen Raya Kelapa Sawit' },
+  { id: 'Q2WCqyTHYHk', title: 'Program Kemitraan Petani' },
+  { id: 'XS-ZFdyJNwg', title: 'Teknologi Pengolahan TBS' },
+  { id: 'JOAETvOj5OY', title: 'Wawancara Ketua KUD' },
+  { id: 'n3pzigELRcg', title: 'Kegiatan Sosial KUD' },
+];
+
+const TESTIMONI = [
+  { nama: 'Suparman', asal: 'Desa Tegal Sari', rating: 5, quote: 'Sejak bergabung dengan KUD, hasil kebun saya meningkat 40%. Pelayanan ramah dan harga TBS transparan.', warna: 'from-emerald-400 to-green-500' },
+  { nama: 'Rohmatiah', asal: 'Desa Sumber Makmur', rating: 5, quote: 'KUD benar-benar membantu petani kecil. Program kemitraannya sangat menguntungkan dan bibit berkualitas.', warna: 'from-blue-400 to-indigo-500' },
+  { nama: 'Karsono', asal: 'Desa Tegal Sari', rating: 4, quote: 'Saya sudah 10 tahun menjadi anggota. Alhamdulillah, KUD selalu tepat waktu dalam pembayaran TBS.', warna: 'from-amber-400 to-orange-500' },
+  { nama: 'Sri Mulyani', asal: 'Desa Marga Asih', rating: 5, quote: 'Program simpan pinjam KUD sangat membantu modal usaha tani saya. Bunganya ringan dan prosesnya cepat.', warna: 'from-pink-400 to-rose-500' },
+  { nama: 'H. Ahmad', asal: 'Desa Tegal Sari', rating: 5, quote: 'KUD membuktikan bahwa koperasi bisa maju. Pengurusnya amanah dan transparan. Saya percaya penuh.', warna: 'from-purple-400 to-violet-500' },
+  { nama: 'Wahyuni', asal: 'Desa Sumber Rejeki', rating: 4, quote: 'Pelatihan budidaya sawit dari KUD sangat bermanfaat. Sekarang saya bisa panen 2x lebih banyak.', warna: 'from-teal-400 to-cyan-500' },
+];
+
+const PROGRAMS = [
+  { id: 1, icon: Squares2X2Icon, title: 'Kemitraan Petani', desc: 'Program kemitraan berkelanjutan antara KUD dengan petani kelapa sawit di wilayah Kecamatan Tegal Sari.', manfaat: ['Bibit unggul bersertifikat', 'Pendampingan teknis rutin', 'Harga TBS kompetitif', 'Jaminan pembelian hasil panen', 'Akses pupuk bersubsidi'], color: 'emerald' },
+  { id: 2, icon: CurrencyDollarIcon, title: 'Simpan Pinjam', desc: 'Layanan simpan pinjam dengan bunga ringan untuk anggota KUD. Proses cepat dan persyaratan mudah.', manfaat: ['Bunga 0.5% per bulan', 'Plafon hingga Rp50 juta', 'Proses cair 1-3 hari', 'Tanpa agunan berat', 'Tenor fleksibel 6-24 bulan'], color: 'blue' },
+  { id: 3, icon: AcademicCapIcon, title: 'Pelatihan & Penyuluhan', desc: 'Program pelatihan rutin untuk meningkatkan kapasitas dan pengetahuan petani dalam budidaya sawit.', manfaat: ['Teknik budidaya modern', 'Manajemen keuangan', 'Pemasaran hasil panen', 'Pengendalian hama terpadu', 'Sertifikat pelatihan'], color: 'amber' },
+  { id: 4, icon: TruckIcon, title: 'Distribusi & Logistik', desc: 'Layanan distribusi TBS dari kebun ke pabrik pengolahan dengan armada truk yang memadai.', manfaat: ['Penjemputan TBS ke kebun', 'Armada terawat & tepat waktu', 'Tim pengangkut profesional', 'Tracking pengiriman real-time', 'Tarif kompetitif per kg'], color: 'purple' },
+  { id: 5, icon: ShieldCheckIcon, title: 'Asuransi Tani', desc: 'Perlindungan asuransi untuk lahan dan hasil panen petani dari risiko gagal panen dan bencana alam.', manfaat: ['Premi terjangkau', 'Santunan gagal panen', 'Perlindungan hama & penyakit', 'Bantuan bencana alam', 'Klaim cepat 7-14 hari'], color: 'rose' },
+  { id: 6, icon: BuildingOfficeIcon, title: 'Koperasi Konsumsi', desc: 'Unit usaha konsumsi yang menyediakan kebutuhan pokok dan sarana produksi pertanian dengan harga terjangkau.', manfaat: ['Sembako murah anggota', 'Pupuk & pestisida lengkap', 'Alat & mesin pertanian', 'Suku cadang tersedia', 'Beli grosir & eceran'], color: 'teal' },
+];
+
+const FAQ_DATA = [
+  { q: 'Apa itu KUD Desa Sari Subur?', a: 'KUD (Koperasi Unit Desa) Sari Subur adalah koperasi petani kelapa sawit di Desa Tegal Sari yang bertujuan meningkatkan kesejahteraan petani melalui berbagai program kemitraan, simpan pinjam, dan pelatihan.' },
+  { q: 'Bagaimana cara menjadi anggota?', a: 'Calon anggota dapat mendaftar ke kantor KUD dengan membawa KTP, KK, dan surat keterangan dari kepala desa. Setelah verifikasi data, calon anggota akan mengikuti masa orientasi selama 1 bulan.' },
+  { q: 'Berapa harga TBS saat ini?', a: 'Harga TBS (Tandan Buah Segar) diperbarui setiap minggu berdasarkan harga pasar dan kesepakatan Rapat Anggota. Cek halaman utama atau hubungi kantor KUD untuk harga terbaru.' },
+  { q: 'Apa saja syarat pinjaman?', a: 'Syarat pinjaman: anggota aktif minimal 6 bulan, memiliki agunan ringan, mengisi formulir permohonan, dan mendapatkan persetujuan dari 2 orang penjamin yang juga anggota KUD.' },
+  { q: 'Bagaimana cara menghubungi KUD?', a: 'Kantor KUD buka Senin-Jumat pukul 08.00-16.00 WITA. Alamat: Jl. Tegal Sari No. 123, Kec. Tegal Sari. Telepon/WA: 085169883337.' },
+  { q: 'Apakah ada program untuk pemuda tani?', a: 'Ya, KUD memiliki program Petani Muda Berdikari yang memberikan pelatihan, pendampingan, dan akses permodalan khusus untuk petani milenial usia 18-35 tahun.' },
+];
+
+const BLOG_POSTS = [
+  { slug: 'panen-raya-sawit', title: 'Panen Raya Sawit di Desa Tegal Sari', excerpt: 'Musim panen tahun ini menghasilkan lebih dari 500 ton TBS berkualitas tinggi berkat program pemupukan berimbang.', date: '15 Mar 2025', author: 'Admin KUD', image: '/blog/panen-raya.jpg', category: 'Panen' },
+  { slug: 'pelatihan-budidaya', title: 'Pelatihan Budidaya Sawit Berkelanjutan', excerpt: 'KUD mengadakan pelatihan budidaya sawit berkelanjutan yang diikuti oleh 120 petani dari 5 desa sekitar.', date: '28 Feb 2025', author: 'Admin KUD', image: '/blog/pelatihan.jpg', category: 'Pelatihan' },
+  { slug: 'program-kemitraan-baru', title: 'Program Kemitraan Baru Tahun Ini', excerpt: 'KUD meluncurkan program kemitraan baru dengan skema bagi hasil yang lebih menguntungkan bagi petani.', date: '10 Feb 2025', author: 'Admin KUD', image: '/blog/kemitraan.jpg', category: 'Program' },
+  { slug: 'harga-tbs-januari', title: 'Update Harga TBS Januari 2025', excerpt: 'Berikut adalah daftar harga TBS terkini yang berlaku mulai 1 Januari 2025 berdasarkan Rapat Anggota.', date: '1 Jan 2025', author: 'Admin KUD', image: '/blog/harga.jpg', category: 'Info' },
+];
+
+const LAYANAN = [
+  { icon: PhoneIcon, title: 'Call Center', desc: 'Hubungi kami setiap hari kerja pukul 08.00-16.00 WITA', contact: '085169883337' },
+  { icon: MapPinIcon, title: 'Kantor Pusat', desc: 'Jalan Tegal Sari No. 123, Kecamatan Tegal Sari', contact: 'Lihat di Google Maps' },
+  { icon: GlobeAltIcon, title: 'Layanan Online', desc: 'Pantau harga, jadwal, dan informasi terbaru lewat website', contact: 'kud-sari-subur.my.id' },
+];
+
+const MITRA = [
+  { name: 'Dinas Pertanian', logo: '???' },
+  { name: 'PTPN V', logo: '??' },
+  { name: 'Bank BRI', logo: '??' },
+  { name: 'Universitas Riau', logo: '??' },
+  { name: 'LSM Swadaya', logo: '??' },
+  { name: 'Kementan RI', logo: '??' },
+];
+
+function SectionBadge({ children }) {
+  return (
+    <motion.span initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
+      {children}
+    </motion.span>
+  );
+}
+
+function SectionHeader({ badge, title, subtitle, light }) {
+  return (
+    <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+      <SectionBadge>{badge}</SectionBadge>
+      <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1, duration: 0.6 }} className={`mt-4 text-3xl md:text-4xl lg:text-5xl font-bold font-heading ${light ? 'text-white' : 'text-foreground'}`}>
+        {title}
+      </motion.h2>
+      {subtitle && (
+        <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.6 }} className={`mt-4 text-lg ${light ? 'text-white/70' : 'text-muted-foreground'}`}>
+          {subtitle}
+        </motion.p>
+      )}
+    </div>
+  );
+}
+
+function Counter({ end, suffix, label, duration = 2000, prefix }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        const startTime = Date.now();
+        const animate = () => {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          setCount(Math.floor(eased * end));
+          if (progress < 1) requestAnimationFrame(animate);
+        };
+        requestAnimationFrame(animate);
+        observer.disconnect();
+      }
+    }, { threshold: 0.3 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [end, duration]);
+  return (
+    <div ref={ref} className="text-center">
+      <div className="text-4xl md:text-5xl font-bold font-heading text-primary">{prefix}{count.toLocaleString()}{suffix}</div>
+      <div className="mt-2 text-sm text-muted-foreground">{label}</div>
+    </div>
+  );
+}
+
+function ProgramModal({ program, onClose }) {
+  if (!program) return null;
+  const Icon = program.icon;
+  return (
+    <AnimatePresence>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+        <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 30 }} transition={{ type: 'spring', damping: 25 }} className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 md:p-8 relative overflow-hidden" onClick={(e) => e.stopPropagation()}>
+          <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors"><XMarkIcon className="w-5 h-5" /></button>
+          <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4"><Icon className="w-7 h-7 text-primary" /></div>
+          <h3 className="text-2xl font-bold font-heading text-foreground mb-2">{program.title}</h3>
+          <p className="text-muted-foreground mb-6">{program.desc}</p>
+          <h4 className="font-semibold text-foreground mb-3">Manfaat Program:</h4>
+          <ul className="space-y-2.5">
+            {program.manfaat.map((m, idx) => (
+              <li key={idx} className="flex items-start gap-3">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold mt-0.5">{idx + 1}</span>
+                <span className="text-foreground/80">{m}</span>
+              </li>
+            ))}
+          </ul>
+          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="mt-6 w-full py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primary/90 transition-colors">Daftar Program</motion.button>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+function VideoModal({ videoId, onClose }) {
+  return (
+    <AnimatePresence>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-4xl aspect-video rounded-2xl overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <button onClick={onClose} className="absolute top-3 right-3 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"><XMarkIcon className="w-5 h-5" /></button>
+          <iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1`} allow="autoplay; encrypted-media" allowFullScreen className="w-full h-full" />
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
 export default function Home() {
   const router = useRouter();
@@ -22,727 +186,678 @@ export default function Home() {
   const [testiIdx, setTestiIdx] = useState(0);
   const [faqOpen, setFaqOpen] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [programModal, setProgramModal] = useState(null);
+  const [videoModal, setVideoModal] = useState(null);
+  const [blogSearch, setBlogSearch] = useState('');
+  const [blogCategory, setBlogCategory] = useState('Semua');
+  const [showBackTop, setShowBackTop] = useState(false);
   const heroRef = useRef(null);
   const heroTextRef = useRef(null);
 
+  useEffect(() => { setMounted(true); setLoggedIn(!!localStorage.getItem('token')); }, []);
   useEffect(() => {
-    setMounted(true);
-    setLoggedIn(!!localStorage.getItem('token'));
+    const onScroll = () => { setScrolled(window.scrollY > 50); setShowBackTop(window.scrollY > 500); };
+    window.addEventListener('scroll', onScroll, { passive: true }); return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const filteredBlogs = blogCategory === 'Semua' ? BLOG_POSTS : BLOG_POSTS.filter((b) => b.category === blogCategory);
 
-  const heroTextVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.3 } },
-  };
-  const heroItemVariants = {
-    hidden: { y: 24, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
-  };
-
-  useEffect(() => {
-    const t = setInterval(() => setTestiIdx((i) => (i + 1) % 3), 4500);
-    return () => clearInterval(t);
-  }, []);
-
-  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  const NAV_LINKS = [
-    { label: 'Fitur', href: '#fitur', icon: Squares2X2Icon },
-    { label: 'Tentang', href: '#tentang', icon: InformationCircleIcon },
-    { label: 'Testimoni', href: '#testimoni', icon: ChatBubbleLeftRightIcon },
-    { label: 'FAQ', href: '#faq', icon: QuestionMarkCircleIcon },
-    { label: 'Blog', href: '/blog', icon: NewspaperIcon, external: true },
-  ];
-  const testiData = [
-    { q: 'Aplikasi ini sangat membantu saya mendaftar program PSR tanpa harus bolak-balik ke kantor KUD. Prosesnya cepat dan transparan!', n: 'Sutarno', r: 'Pekebun Sawit, Muara Kelingi' },
-    { q: 'Saya bisa pantau harga TBS setiap hari dan catat hasil panen langsung dari HP. Ini yang saya butuhkan sebagai pekebun modern.', n: 'Kartini', r: 'Pekebun Sawit, Megang Sakti' },
-    { q: 'Dulu verifikasi data butuh waktu berminggu-minggu. Sekarang cukup upload dari rumah, 2 hari sudah terverifikasi. Mantab!', n: 'Bambang', r: 'Pekebun Sawit, Tugu Sari' },
-  ];
-  const faqData = [
-    { q: 'Apa itu KUD Desa Sari Subur?', a: 'KUD (Koperasi Unit Desa) Sari Subur adalah lembaga koperasi yang bergerak di bidang perkebunan kelapa sawit, melayani pekebun di Kecamatan Megang Sakti dan sekitarnya dalam pengelolaan lahan, program PSR, dan pemasaran TBS.' },
-    { q: 'Siapa yang bisa mendaftar jadi anggota?', a: 'Setiap pekebun kelapa sawit yang berdomisili di wilayah Kecamatan Megang Sakti, Kabupaten Musi Rawas, dan sekitarnya dapat mendaftar menjadi anggota KUD dengan melengkapi data diri, KTP, KK, dan dokumen pendukung lainnya.' },
-    { q: 'Apa itu Program PSR?', a: 'PSR (Peremajaan Sawit Rakyat) adalah program pemerintah untuk meremajakan tanaman sawit pekebun yang sudah tua atau tidak produktif. KUD membantu pekebun dalam proses pendaftaran, verifikasi, dan pencairan bantuan.' },
-    { q: 'Bagaimana cara cek harga TBS terkini?', a: 'Harga TBS (Tandan Buah Segar) diperbarui secara berkala oleh KUD dan dapat diakses melalui aplikasi di menu Harga TBS. Harga dibedakan berdasarkan kelas mutu A, B, dan C sesuai standar yang berlaku.' },
-    { q: 'Apakah data saya aman di aplikasi ini?', a: 'Ya, seluruh data pribadi Anda dilindungi dengan enkripsi SSL dan hanya digunakan untuk keperluan administrasi KUD. Kami tidak akan membagikan data Anda kepada pihak ketiga tanpa persetujuan.' },
+  const navLinks = [
+    { href: '#fitur', label: 'Fitur', icon: Squares2X2Icon },
+    { href: '#tentang', label: 'Tentang', icon: InformationCircleIcon },
+    { href: '#testimoni', label: 'Testimoni', icon: ChatBubbleLeftRightIcon },
+    { href: '#faq', label: 'FAQ', icon: QuestionMarkCircleIcon },
+    { href: '#blog', label: 'Blog', icon: NewspaperIcon },
   ];
 
-  const containerVariants = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
-  const itemVariants = { hidden: { y: 24, opacity: 0 }, show: { y: 0, opacity: 1, transition: { duration: 0.5, ease: 'easeOut' } } };
-  function Counter({ v, s, l, color, icon, delay: d }) {
-    const [c, setC] = useState(0);
-    const ref = useRef(null);
-    const counted = useRef(false);
-    const icons = {
-      UserGroupIcon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z',
-      MapPinIcon: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0zM19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z',
-      ClipboardDocumentListIcon: 'M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z',
-      ChartBarIcon: 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z',
-      BuildingOfficeIcon: 'M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21',
-      CalendarDaysIcon: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' };
-    useEffect(() => {
-      const el = ref.current;
-      if (!el) return;
-      const obs = new IntersectionObserver(([e]) => {
-        if (e.isIntersecting && !counted.current) {
-          counted.current = true;
-          const steps = 40;
-          const inc = v / steps;
-          let cur = 0;
-          const t = setInterval(() => {
-            cur += inc;
-            if (cur >= v) { setC(v); clearInterval(t); }
-            else setC(Math.floor(cur));
-          }, 2000 / steps);
-        }
-      }, { threshold: 0.5 });
-      obs.observe(el);
-      return () => obs.disconnect();
-    }, [v]);
-    return (
-      <motion.div ref={ref} initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: d }}>
-        <div className={'w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 ' + color}>
-          <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d={icons[icon]} />
-          </svg>
-        </div>
-        <div className="text-2xl lg:text-3xl font-extrabold text-white mb-1 font-heading">{c.toLocaleString()}{s}</div>
-        <div className="text-white/50 text-xs uppercase tracking-wider">{l}</div>
-        <motion.div className="h-1 bg-white/10 rounded-full mt-3 overflow-hidden">
-          <motion.div className={'h-full rounded-full ' + color.replace('/80', '')} initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5 + d }} style={{ transformOrigin: 'left' }} />
-        </motion.div>
-      </motion.div>
-    );
-  }
   return (
-    <div className="min-h-screen bg-background">
-      <motion.nav
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-        className={'fixed top-0 left-0 right-0 z-50 transition-all duration-300 ' + (scrolled ? 'bg-white/80 backdrop-blur-xl shadow-sm border-b border-border/50' : 'bg-transparent')}
-      >
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="flex items-center gap-3 cursor-pointer"
-            >
-              <motion.div whileHover={{ rotate: 5 }}
-                className={'flex items-center justify-center overflow-hidden transition-all h-10 max-w-[160px] rounded-lg ' + (scrolled ? 'bg-white shadow-sm px-1' : 'bg-white/15 backdrop-blur-sm px-0.5')}
-              >
-                {logoUrl ? <img src={logoUrl} alt="KUD Desa Sari Subur" className="h-full w-auto max-h-10 object-contain" /> : <span className="font-heading font-bold text-lg text-white px-2">K</span>}
-              </motion.div>
-              <span className={'font-heading font-bold tracking-tight transition-colors ' + (scrolled ? 'text-foreground' : 'text-white')}>KUD Sari Subur</span>
-            </motion.button>
+    <>
+
+      {/* ===== NAVBAR ===== */}
+      <motion.nav initial={{ y: -80 }} animate={{ y: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }} className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-xl shadow-glass border-b border-white/20' : 'bg-transparent'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/')}>
+              <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-sm">K</div>
+              <span className={`font-bold font-heading text-lg transition-colors ${scrolled ? 'text-foreground' : 'text-white'}`}>KUD Sari Subur</span>
+            </div>
             <div className="hidden md:flex items-center gap-1">
-              {NAV_LINKS.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button key={item.label}
-                    onClick={() => item.external ? router.push(item.href) : scrollTo(item.href.replace('#', ''))}
-                    className={'group flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ' + (scrolled ? 'text-gray-600 hover:text-foreground hover:bg-gray-100/50' : 'text-white/70 hover:text-white hover:bg-white/10')}
-                  >
-                    <Icon className={'w-4 h-4 transition-transform duration-200 ' + (scrolled ? 'group-hover:rotate-6' : 'group-hover:rotate-6')} />
-                    {item.label}
-                    {item.external && (
-                      <svg className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                      </svg>
-                    )}
-                  </button>
-                );
-              })}
+              {navLinks.map((link) => (
+                <a key={link.href} href={link.href} className={`px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-primary/10 hover:text-primary flex items-center gap-1.5 ${scrolled ? 'text-foreground/70' : 'text-white/80'}`}>
+                  <link.icon className="w-4 h-4" />{link.label}
+                </a>
+              ))}
+              {mounted && !loggedIn ? (
+                <div className="flex items-center gap-2 ml-3">
+                  <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push('/login')} className="px-4 py-2 rounded-lg text-sm font-semibold border border-primary text-primary hover:bg-primary/5 transition-colors">Masuk</motion.button>
+                  <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push('/login?tab=register')} className="px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors shadow-md shadow-primary/20">Daftar</motion.button>
+                </div>
+              ) : mounted && loggedIn ? (
+                <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => router.push('/dashboard')} className="ml-3 px-4 py-2 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors shadow-md shadow-primary/20">Dashboard</motion.button>
+              ) : null}
             </div>
-            {/* Mobile hamburger */}
-            <motion.button whileTap={{ scale: 0.9 }}
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className={'md:hidden p-2 rounded-lg transition-colors cursor-pointer ' + (scrolled ? 'text-foreground hover:bg-gray-100' : 'text-white hover:bg-white/10')}>
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                {mobileOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                )}
-              </svg>
-            </motion.button>
-            {/* Mobile drawer */}
-            <div className="flex items-center gap-3">
-              {loggedIn ? (
-                <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                  onClick={() => router.push('/login')}
-                  className={'px-5 py-2 rounded-xl font-semibold text-sm transition-all cursor-pointer ' + (scrolled ? 'bg-primary text-white hover:bg-primary-dark shadow-sm' : 'bg-white text-primary hover:bg-gray-100 shadow-lg')}>
-                  Dashboard
-                </motion.button>
-              ) : (
-                <>
-                  <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                    onClick={() => router.push('/login')}
-                    className={'px-3 lg:px-4 py-1.5 lg:py-2 rounded-xl text-xs lg:text-sm font-medium transition-all cursor-pointer ' + (scrolled ? 'text-gray-600 hover:text-foreground' : 'text-white/80 hover:text-white')}>
-                    Masuk
-                  </motion.button>
-                  <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                    onClick={() => router.push('/login')}
-                    className={'px-3.5 lg:px-5 py-1.5 lg:py-2 rounded-xl font-semibold text-xs lg:text-sm transition-all cursor-pointer ' + (scrolled ? 'bg-primary text-white hover:bg-primary-dark shadow-sm' : 'bg-white text-primary hover:bg-gray-100 shadow-lg')}>
-                    Daftar
-                  </motion.button>
-                </>
-              )}
-            </div>
+            <button onClick={() => setMobileOpen(!mobileOpen)} className={`md:hidden p-2 rounded-lg transition-colors ${scrolled ? 'text-foreground' : 'text-white'}`}>
+              {mobileOpen ? <XMarkIcon className="w-6 h-6" /> : <Bars3Icon className="w-6 h-6" />}
+            </button>
           </div>
         </div>
-        {/* Mobile drawer overlay */}
         <AnimatePresence>
           {mobileOpen && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              onClick={() => setMobileOpen(false)}
-              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden" />
-          )}
-        </AnimatePresence>
-        {/* Mobile drawer */}
-        <motion.div initial={{ x: '100%' }} animate={{ x: mobileOpen ? 0 : '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 250 }}
-          className="fixed top-0 right-0 bottom-0 w-72 z-50 bg-white/95 backdrop-blur-xl border-l border-border shadow-2xl md:hidden">
-          <div className="flex flex-col h-full p-6">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                  {logoUrl ? <img src={logoUrl} alt="" className="w-full h-full object-contain p-0.5" /> : <span className="font-heading font-bold text-sm text-white">K</span>}
-                </div>
-                <span className="font-heading font-bold text-foreground text-sm">KUD Sari Subur</span>
-              </div>
-              <button onClick={() => setMobileOpen(false)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 cursor-pointer">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-            </div>
-            <nav className="flex-1 space-y-1">
-              {NAV_LINKS.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button key={item.label}
-                    onClick={() => {
-                      if (item.external) { router.push(item.href); setMobileOpen(false); }
-                      else { scrollTo(item.href.replace('#', '')); setMobileOpen(false); }
-                    }}
-                    className="w-full text-left px-4 py-3 rounded-xl text-foreground font-medium text-sm hover:bg-primary/5 hover:text-primary transition-all cursor-pointer flex items-center gap-3"
-                  >
-                    <Icon className="w-4 h-4 text-primary/60" />
-                    {item.label}
-                    {item.external && (
-                      <svg className="w-3 h-3 ml-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                      </svg>
-                    )}
-                  </button>
-                );
-              })}
-            </nav>
-            <div className="pt-4 border-t border-border space-y-2">
-              <motion.button whileTap={{ scale: 0.97 }}
-                onClick={() => { router.push('/login'); setMobileOpen(false); }}
-                className="w-full py-2.5 rounded-xl bg-primary text-white font-semibold text-sm cursor-pointer shadow-sm">
-                Daftar / Masuk
-              </motion.button>
-              <p className="text-center text-[10px] text-gray-400">KUD Desa Sari Subur &copy; {new Date().getFullYear()}</p>
-            </div>
-          </div>
-        </motion.div>
-      </motion.nav>
-      <section ref={heroRef} className="relative min-h-screen flex items-center bg-gradient-to-br from-emerald-950 via-emerald-900 to-slate-900 overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-[0.05]"
-          style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.8) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-        <div className="absolute inset-0 z-0">
-          <svg className="w-full h-full opacity-[0.03]" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 450 Q 360 200, 720 450 T 1440 450" stroke="white" strokeWidth="0.5" />
-            <path d="M0 500 Q 360 250, 720 500 T 1440 500" stroke="white" strokeWidth="0.3" />
-            <path d="M0 400 Q 360 650, 720 400 T 1440 400" stroke="white" strokeWidth="0.3" />
-          </svg>
-        </div>
-        <div className="absolute rounded-full bg-emerald-500/20 top-10 left-10 w-72 h-72 opacity-20 animate-pulse" style={{ animationDuration: '7s' }} />
-        <div className="absolute rounded-full bg-kud-gold/10 top-1/3 right-10 w-56 h-56 opacity-20 animate-pulse" style={{ animationDuration: '9s' }} />
-        <div className="absolute rounded-full bg-emerald-500/15 bottom-1/4 left-1/3 w-44 h-44 opacity-15 animate-pulse" style={{ animationDuration: '6s' }} />
-        <div className="absolute rounded-full bg-kud-gold/10 bottom-10 right-1/4 w-64 h-64 opacity-15 animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-12 pt-24 pb-14">
-          <motion.div ref={heroTextRef} variants={heroTextVariants} initial="hidden" animate="visible" className="text-center">
-            <motion.div variants={heroItemVariants}
-              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white/90 px-4 py-1.5 rounded-full text-sm mb-6 border border-white/10 mx-auto w-fit">
-              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              Koperasi Unit Digital — Kab. Musi Rawas
-            </motion.div>
-            <motion.h1 variants={heroItemVariants} className="font-heading font-bold text-white leading-tight mb-6 max-w-5xl mx-auto">
-              <span className="inline-block text-3xl md:text-5xl lg:text-6xl">
-                <span className="bg-gradient-to-r from-primary-light to-blue-300 bg-clip-text text-transparent">
-                  KOLABORASI MULTI-PIHAK
-                </span>
-              </span>
-              <span className="block text-2xl md:text-4xl lg:text-5xl mt-2 text-white/90">
-                MENUJU TATA KELOLA PERKEBUNAN SAWIT YANG BAIK DAN BERKELANJUTAN
-              </span>
-            </motion.h1>
-            <motion.p variants={heroItemVariants} className="text-base md:text-lg text-white/50 max-w-4xl mx-auto mb-6 leading-relaxed">
-              KUD Sari Subur Kab. Musi Rawas Berkolaborasi dengan multi pihak dalam pengelolaan
-              data anggota, lahan sawit, program PSR, dan hasil panen TBS secara digital menuju
-              perkebunan jaya.
-            </motion.p>
-
-            {/* Value proposition row */}
-            <motion.div variants={heroItemVariants} className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8 max-w-2xl mx-auto">
-              {[
-                { icon: 'M3.75 9h16.5m-16.5 6h16.5M4.5 3h15a1.5 1.5 0 011.5 1.5v15A1.5 1.5 0 0119.5 21h-15A1.5 1.5 0 013 19.5V4.5A1.5 1.5 0 014.5 3z', t: 'Daftar Program', d: 'PSR, Intensifikasi & Beasiswa' },
-                { icon: 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z', t: 'Pantau Harga', d: 'Update TBS real-time per kelas' },
-                { icon: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0zM19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z', t: 'Kelola Lahan', d: 'Data sawit lengkap & dokumen digital' },
-              ].map((v, idx) => (
-                <motion.div key={idx} whileHover={{ y: -3, backgroundColor: 'rgba(255,255,255,0.08)' }}
-                  className="flex items-center gap-3 bg-white/5 rounded-xl p-3.5 border border-white/5 transition-all duration-200">
-                  <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
-                    <svg className="w-5 h-5 text-primary-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d={v.icon} />
-                    </svg>
-                  </div>
-                  <div className="min-w-0 text-left">
-                    <p className="text-white text-sm font-semibold">{v.t}</p>
-                    <p className="text-white/40 text-xs">{v.d}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            <motion.div variants={heroItemVariants} className="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
-              <motion.button whileHover={{ scale: 1.04, boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }} whileTap={{ scale: 0.96 }}
-                onClick={() => router.push('/login')}
-                className="px-8 py-3.5 bg-white text-primary rounded-xl font-heading font-bold text-lg hover:bg-gray-100 transition-all shadow-xl shadow-black/10 inline-flex items-center gap-2 cursor-pointer">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v-1m0 0a3 3 0 00-3-3m3 3a3 3 0 013 3v1m-7 3.75c-1.688 0-3.75.75-3.75 2.25v.75h7.5V12c0-1.5-2.062-2.25-3.75-2.25zM3.75 9h1.5m-1.5 3h1.5m-1.5 3h1.5m12.75-6h1.5m-1.5 3h1.5m-1.5 3h1.5M5.625 21h12.75a2.25 2.25 0 002.25-2.25V7.5a2.25 2.25 0 00-2.25-2.25H5.625A2.25 2.25 0 003.375 7.5v11.25A2.25 2.25 0 005.625 21z" /></svg>
-                Daftar Jadi Pekebun
-              </motion.button>
-              <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}
-                onClick={() => scrollTo('tentang')}
-                className="px-8 py-3.5 bg-white/10 text-white rounded-xl font-semibold text-lg hover:bg-white/20 transition-all border border-white/10 backdrop-blur-sm cursor-pointer">
-                Pelajari Lebih Lanjut
-              </motion.button>
-            </motion.div>
-
-            <motion.div variants={heroItemVariants} className="flex flex-wrap items-center justify-center gap-6 md:gap-10 mt-8">
-              <span className="text-white/50 text-[10px] uppercase tracking-widest font-semibold">Mitra & Dukungan</span>
-              {['Kemdikbud', 'Kementan', 'BPDPKS', 'Dinas Perkebunan', 'Pemda Mura'].map((m) => (
-                <span key={m} className="text-white/20 hover:text-white/50 transition-colors font-medium text-sm tracking-wide">{m}</span>
-              ))}
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-      <KegiatanGallery />
-
-      <section id="keuntungan" className="py-14 lg:py-20 bg-muted/50 px-6 lg:px-12 scroll-mt-24">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-            className="text-center mb-8">
-            <span className="inline-block px-4 py-1.5 bg-accent/10 text-accent rounded-full text-xs font-semibold mb-4">KEUNTUNGAN</span>
-            <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
-              Kenapa <span className="text-accent">Bergabung</span> dengan KUD?
-            </h2>
-            <p className="text-gray-500 max-w-3xl mx-auto">
-              Nikmati berbagai kemudahan dan keuntungan dengan menjadi anggota aktif KUD Desa Sari Subur.
-            </p>
-          </motion.div>
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { icon: 'M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z', title: 'Pendaftaran Mudah', desc: 'Daftar online dalam 2 menit, upload dokumen langsung dari HP. Tanpa antri, tanpa ribet.', color: 'from-blue-500 to-blue-600' },
-              { icon: 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z', title: 'Verifikasi Cepat', desc: 'Dokumen diverifikasi dalam 1-2 hari kerja. Pantau status verifikasi secara real-time.', color: 'from-emerald-500 to-emerald-600' },
-              { icon: 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z', title: 'Pantau Harga TBS', desc: 'Update harga TBS harian per kelas mutu. Dapatkan notifikasi setiap ada perubahan harga.', color: 'from-amber-500 to-amber-600' },
-              { icon: 'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z', title: 'Program Bantuan', desc: 'Akses program PSR, Intensifikasi, Ekstensifikasi, dan beasiswa untuk pekebun dan keluarga.', color: 'from-violet-500 to-violet-600' },
-            ].map((item, i) => (
-              <motion.div key={i}
-                initial={{ y: 24, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}
-                className="bg-white rounded-2xl border border-border p-6 text-center hover:border-accent/20 transition-all duration-300 group relative overflow-hidden">
-                <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-lg shadow-black/5 group-hover:scale-110 transition-transform duration-300`}>
-                  <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
-                  </svg>
-                </div>
-                <h3 className="font-heading font-bold text-foreground text-base mb-2">{item.title}</h3>
-                <p className="text-gray-500 text-xs leading-relaxed">{item.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      <section id="tentang" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-24">
-        <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-          className="text-center mb-8">
-          <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">TENTANG KUD</span>
-          <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-4">
-            Koperasi <span className="text-primary">Modern</span> untuk Pekebun Sawit
-          </h2>
-          <p className="text-gray-500 max-w-3xl mx-auto leading-relaxed">
-            KUD Desa Sari Subur didirikan pada tahun 2010 dengan tujuan meningkatkan kesejahteraan pekebun sawit
-            di Kecamatan Megang Sakti melalui pelayanan koperasi yang transparan, profesional, dan berbasis teknologi.
-          </p>
-        </motion.div>
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
-          <motion.div initial={{ x: -30, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-            className="bg-white rounded-2xl border border-border p-8 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary to-primary-light rounded-l-2xl" />
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/[0.03] rounded-full blur-2xl" />
-            <h3 className="font-heading font-bold text-foreground text-lg mb-4 flex items-center gap-2 relative">
-              <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-              </svg>
-              Sejarah Singkat
-            </h3>
-            <p className="text-gray-600 text-sm leading-relaxed mb-4 relative">
-              Berawal dari perkumpulan pekebun sawit binaan CV. Sumatera Multi Jaya, KUD Desa Sari Subur resmi
-              berdiri pada 12 Juli 2010. Dengan modal awal 50 anggota, koperasi ini terus berkembang hingga kini
-              memiliki lebih dari 1.250 anggota aktif.
-            </p>
-            <p className="text-gray-600 text-sm leading-relaxed relative">
-              Sejak 2025, KUD bertransformasi digital dengan meluncurkan sistem informasi terpadu untuk
-              memudahkan anggota dalam mengakses layanan koperasi — dari pendaftaran program PSR,
-              pencatatan hasil panen TBS, hingga informasi harga terkini.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 gap-4">
-            {[
-              { t: 'Visi', d: 'Menjadi koperasi sawit terdepan di Sumatera Selatan yang mandiri, profesional, dan berkelanjutan.', c: 'bg-blue-50 border-blue-100', ic: 'M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z' },
-              { t: 'Misi 1', d: 'Meningkatkan kesejahteraan anggota melalui layanan koperasi yang transparan dan berkeadilan.', c: 'bg-green-50 border-green-100', ic: 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-              { t: 'Misi 2', d: 'Mengembangkan sistem digital untuk efisiensi pengelolaan data, program, dan hasil panen anggota.', c: 'bg-amber-50 border-amber-100', ic: 'M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75' },
-            ].map((item, i) => (
-              <motion.div key={i} initial={{ x: 30, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.1 }}
-                className={'rounded-xl border p-4 flex items-start gap-3 ' + item.c}>
-                <div className={'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ' + (i === 0 ? 'bg-blue-200' : i === 1 ? 'bg-green-200' : 'bg-amber-200')}>
-                  <svg className={'w-4 h-4 ' + (i === 0 ? 'text-blue-700' : i === 1 ? 'text-green-700' : 'text-amber-700')} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d={item.ic} />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-foreground text-sm mb-0.5">{item.t}</h4>
-                  <p className="text-gray-600 text-xs leading-relaxed">{item.d}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-        <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[
-            { t: 'Gotong Royong', d: 'Bekerja bersama untuk kemajuan pekebun dan koperasi.', icon: 'M12 21v-6m0 0l-3-3m3 3l3-3m-6-3a3 3 0 100-6 3 3 0 000 6zm9 0a3 3 0 100-6 3 3 0 000 6z' },
-            { t: 'Transparansi', d: 'Seluruh informasi dikelola secara terbuka dan dapat diakses anggota.', icon: 'M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178zM15 12a3 3 0 11-6 0 3 3 0 016 0z' },
-            { t: 'Profesional', d: 'Pelayanan prima dengan standar mutu dan teknologi terkini.', icon: 'M11.42 15.17l-5.1 2.51 2.51-5.1m0 0l5.1-2.51-2.51 5.1m0 0l-5.1 5.1 2.51 5.1 5.1-2.51m0-5.1l5.1-2.51-2.51 5.1' },
-          ].map((item, i) => (
-            <motion.div key={i} variants={itemVariants} whileHover={{ y: -5, boxShadow: '0 12px 24px rgba(37,99,235,0.08)' }}
-              className="bg-white rounded-xl border border-border p-6 text-center hover:border-primary/20 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
-                </svg>
-              </div>
-              <h3 className="font-heading font-bold text-foreground text-base mb-2">{item.t}</h3>
-              <p className="text-gray-500 text-xs leading-relaxed">{item.d}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
-      <Timeline />
-
-      <section className="py-14 lg:py-20 bg-gradient-to-br from-emerald-950 via-emerald-900 to-slate-900 px-6 lg:px-12">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-            className="text-center mb-8">
-            <span className="inline-block px-4 py-1.5 bg-white/10 text-white/90 rounded-full text-xs font-semibold mb-4 border border-white/10">CAPAIAN KAMI</span>
-            <h2 className="text-3xl lg:text-4xl font-heading font-bold text-white mb-3">
-              KUD dalam <span className="text-primary-light">Angka</span>
-            </h2>
-            <p className="text-white/60 max-w-2xl mx-auto">
-              Selama lebih dari 15 tahun melayani pekebun sawit, berikut capaian yang telah kami raih bersama.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {[
-              { v: 1250, s: '+', l: 'Pekebun', icon: 'UserGroupIcon', color: 'bg-blue-500/80', d: 0 },
-              { v: 48, s: '', l: 'Program Aktif', icon: 'ClipboardDocumentListIcon', color: 'bg-emerald-500/80', d: 0.1 },
-              { v: 3200, s: '+', l: 'Lahan (Ha)', icon: 'MapPinIcon', color: 'bg-amber-500/80', d: 0.2 },
-              { v: 8500, s: '+', l: 'TBS Tercatat', icon: 'ChartBarIcon', color: 'bg-violet-500/80', d: 0.3 },
-              { v: 5, s: '', l: 'Desa Binaan', icon: 'BuildingOfficeIcon', color: 'bg-rose-500/80', d: 0.4 },
-              { v: 15, s: '+', l: 'Tahun Berdiri', icon: 'CalendarDaysIcon', color: 'bg-cyan-500/80', d: 0.5 },
-            ].map((s) => <Counter key={s.l} {...s} />)}
-          </div>
-        </div>
-      </section>
-      <section id="fitur" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-24">
-        <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-          className="text-center mb-8">
-          <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">FITUR UNGGULAN</span>
-          <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
-            Semua Kebutuhan <span className="text-primary">Dalam Satu Aplikasi</span>
-          </h2>
-          <p className="text-gray-500 max-w-3xl mx-auto">
-            Nikmati kemudahan mengelola data pekebun, lahan, program KUD, dan hasil panen TBS
-            secara digital — kapan saja, di mana saja.
-          </p>
-        </motion.div>
-        <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            { t: 'Data Pekebun', d: 'Kelola profil lengkap anggota dengan upload KTP, KK, foto, dan status verifikasi.', color: 'bg-blue-500', icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z', bullets: ['Upload dokumen otomatis', 'Status verifikasi real-time', 'Riwayat perubahan data'], popular: true },
-            { t: 'Program KUD', d: 'Daftar dan ikuti program PSR, Intensifikasi, Ekstensifikasi, dan beasiswa.', color: 'bg-emerald-500', icon: 'M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z', bullets: ['Pendaftaran online', 'Pantau status verifikasi', 'Notifikasi program baru'] },
-            { t: 'Harga TBS', d: 'Update harga TBS per kelas mutu dengan periode berlaku dan riwayat perubahan.', color: 'bg-amber-500', icon: 'M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z', bullets: ['Kelas A/B/C otomatis', 'Grafik riwayat harga', 'Notifikasi perubahan'] },
-            { t: 'Sinkron TBS', d: 'Catat hasil panen Tandan Buah Segar secara real-time.', color: 'bg-violet-500', icon: 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z', bullets: ['Input panen harian', 'Riwayat per periode', 'Rekap bulanan otomatis'] },
-            { t: 'Data Lahan', d: 'Kelola data lahan sawit dengan luas, lokasi, status kepemilikan, dan dokumen.', color: 'bg-rose-500', icon: 'M15 10.5a3 3 0 11-6 0 3 3 0 016 0zM19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z', bullets: ['Peta lokasi lahan', 'Upload surat tanah', 'Status verifikasi lahan'] },
-            { t: 'Laporan & Dashboard', d: 'Pantau seluruh aktivitas melalui dashboard interaktif dan laporan berkala.', color: 'bg-cyan-500', icon: 'M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605', bullets: ['Dashboard peran (Admin/Pekebun)', 'Cetak laporan PDF', 'Grafik dan statistik'] },
-          ].map((item, i) => (
-            <motion.div key={i} variants={itemVariants}
-              onMouseMove={(e) => { const c = e.currentTarget; const r = c.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - 0.5; const y = (e.clientY - r.top) / r.height - 0.5; c.style.transform = `perspective(600px) rotateY(${x * 6}deg) rotateX(${y * -6}deg) translateY(-6px)`; c.style.boxShadow = '0 16px 32px rgba(37,99,235,0.08)'; }}
-              onMouseLeave={(e) => { const c = e.currentTarget; c.style.transform = 'perspective(600px) rotateY(0deg) rotateX(0deg) translateY(0)'; c.style.boxShadow = ''; }}
-              className={'relative bg-white rounded-2xl border border-border p-5 hover:border-primary/20 transition-all duration-300 cursor-default ' + (i === 5 ? 'md:col-span-2 lg:col-span-1' : '')}>
-              {item.popular && (
-                <div className="absolute -top-2.5 right-4 bg-gradient-to-r from-primary to-primary-light text-white text-[9px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
-                  <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                  Populer
-                </div>
-              )}
-              <div className={'w-11 h-11 rounded-xl ' + item.color + ' flex items-center justify-center shadow-sm'}>
-                <svg className="w-5.5 h-5.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
-                </svg>
-              </div>
-              <h3 className="font-heading font-bold text-foreground text-base mt-3 mb-1.5">{item.t}</h3>
-              <p className="text-gray-500 text-xs leading-relaxed mb-3">{item.d}</p>
-              <ul className="space-y-1">
-                {item.bullets.map((b, j) => (
-                  <motion.li key={j} initial={{ x: -10, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.1 * j }}
-                    className="text-[11px] text-gray-400 flex items-center gap-1.5">
-                    <svg className="w-3 h-3 text-green-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
-                    {b}
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
-      <section id="cara-kerja" className="py-14 lg:py-20 bg-muted/50 px-6 lg:px-12 scroll-mt-24">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-            className="text-center mb-8">
-            <span className="inline-block px-4 py-1.5 bg-accent/10 text-accent rounded-full text-xs font-semibold mb-4">CARA KERJA</span>
-            <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
-              Mulai Dalam <span className="text-accent">3 Langkah Mudah</span>
-            </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto">
-              Daftar akun, lengkapi data lahan, dan ikuti program KUD — semua dari satu akun,
-              tanpa perlu antre di kantor.
-            </p>
-          </motion.div>
-          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-            {[
-              { num: '1', icon: 'M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z', title: 'Daftar Akun', desc: 'Buat akun pekebun dengan mengisi data diri lengkap — nama, email, password, dan informasi pribadi. Proses pendaftaran hanya memakan waktu 2-3 menit.' },
-              { num: '2', icon: 'M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z', title: 'Lengkapi Data', desc: 'Input data lahan sawit, upload dokumen KTP, KK, surat tanah, dan foto. Dokumen akan diverifikasi oleh tim KUD dalam waktu 1-2 hari kerja.' },
-              { num: '3', icon: 'M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z', title: 'Ikuti Program', desc: 'Pilih program KUD yang tersedia — PSR, Intensifikasi, Ekstensifikasi, atau beasiswa. Pantau status pendaftaran dan verifikasi secara real-time.' },
-            ].map((step, idx) => (
-              <motion.div key={step.num} variants={itemVariants} whileHover={{ y: -6 }} className="relative text-center">
-                {idx < 2 && <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 border-t-2 border-dashed border-gray-300" />}
-                <motion.div whileHover={{ scale: 1.1 }}
-                  className="w-16 h-16 rounded-2xl bg-accent text-white flex items-center justify-center mx-auto mb-5 text-xl font-bold font-heading shadow-lg shadow-accent/20">
-                  {step.num}
-                </motion.div>
-                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d={step.icon} />
-                  </svg>
-                </div>
-                <h3 className="font-heading font-bold text-foreground text-lg mb-2">{step.title}</h3>
-                <p className="text-gray-500 text-xs leading-relaxed max-w-xs mx-auto">{step.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-      <TeamSection />
-
-      <section id="testimoni" className="py-14 lg:py-20 px-6 lg:px-12 max-w-7xl mx-auto scroll-mt-24">
-        <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-          className="text-center mb-8">
-          <span className="inline-block px-4 py-1.5 bg-accent/10 text-accent rounded-full text-xs font-semibold mb-4">TESTIMONI</span>
-          <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
-            Apa Kata <span className="text-accent">Pekebun</span>
-          </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto">
-            Dengarkan langsung pengalaman pekebun yang telah merasakan manfaat layanan digital KUD.
-          </p>
-        </motion.div>
-         <div className="max-w-3xl mx-auto relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-accent/5 via-transparent to-accent/5 rounded-[2rem] blur-3xl -z-10" />
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={testiIdx}
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
-              className="bg-white rounded-2xl border border-border p-8 md:p-10 text-center relative overflow-hidden"
-            >
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent/40 via-accent to-accent/40" />
-              <svg className="w-8 h-8 text-accent/30 mx-auto mb-3" fill="currentColor" viewBox="0 0 24 24"><path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C9.591 11.69 11 13.166 11 15c0 1.933-1.567 3.5-3.5 3.5-1.271 0-2.405-.644-2.917-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C19.591 11.69 21 13.166 21 15c0 1.933-1.567 3.5-3.5 3.5-1.271 0-2.405-.644-2.917-1.179z" /></svg>
-              <div className="flex items-center justify-center gap-0.5 mb-4">
-                {[1,2,3,4,5].map(s => (
-                  <svg key={s} className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                ))}
-              </div>
-              <p className="text-gray-600 text-sm md:text-base leading-relaxed italic mb-6">&ldquo;{testiData[testiIdx].q}&rdquo;</p>
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-accent/70 flex items-center justify-center shadow-sm">
-                  <span className="text-white font-bold text-lg">{testiData[testiIdx].n[0]}</span>
-                </div>
-                <div className="text-left">
-                  <p className="font-semibold text-foreground text-sm">{testiData[testiIdx].n}</p>
-                  <p className="text-gray-400 text-xs">{testiData[testiIdx].r}</p>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-          <div className="flex items-center justify-center gap-2 mt-6">
-            {[0, 1, 2].map((i) => (
-              <button key={i} onClick={() => setTestiIdx(i)}
-                className={'rounded-full transition-all duration-300 cursor-pointer ' + (i === testiIdx ? 'bg-accent w-6 h-2.5' : 'bg-gray-300 w-2 h-2 hover:bg-gray-400')} />
-            ))}
-          </div>
-        </div>
-      </section>
-      <section id="faq" className="py-14 lg:py-20 px-6 lg:px-12 max-w-3xl mx-auto scroll-mt-24">
-        <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-          className="text-center mb-8">
-          <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">FAQ</span>
-          <h2 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
-            Pertanyaan <span className="text-primary">Umum</span>
-          </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto">
-            Temukan jawaban atas pertanyaan yang sering diajukan tentang layanan KUD.
-          </p>
-        </motion.div>
-        <div className="space-y-3">
-          {faqData.map((item, i) => (
-            <motion.div key={i} initial={{ y: 16, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
-              className={'bg-white rounded-2xl border overflow-hidden transition-all duration-300 ' + (faqOpen === i ? 'border-primary/30 shadow-sm' : 'border-border')}>
-              <button onClick={() => setFaqOpen(faqOpen === i ? null : i)}
-                className="w-full flex items-center gap-3 p-5 text-left cursor-pointer">
-                <span className={'w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ' + (faqOpen === i ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400')}>
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <span className="font-semibold text-foreground text-sm flex-1">{item.q}</span>
-                <motion.div animate={{ rotate: faqOpen === i ? 45 : 0 }} transition={{ duration: 0.25, ease: 'easeInOut' }}>
-                  <svg className={'w-4 h-4 shrink-0 ' + (faqOpen === i ? 'text-primary' : 'text-gray-400')} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                  </svg>
-                </motion.div>
-              </button>
-              <AnimatePresence>
-                {faqOpen === i && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25, ease: 'easeInOut' }} className="overflow-hidden">
-                    <div className="h-px bg-primary/10 mx-5" />
-                    <p className="px-5 pb-5 pt-4 text-gray-500 text-sm leading-relaxed">{item.a}</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-      <section className="py-14 lg:py-20 bg-gradient-to-br from-emerald-800 to-emerald-950 px-6 lg:px-12 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
-        </div>
-        <motion.div initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }}
-          className="relative z-10 max-w-4xl mx-auto text-center">
-          <motion.div initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }}
-            className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 border border-white/10">
-            <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25" />
-            </svg>
-          </motion.div>
-          <h2 className="text-3xl lg:text-4xl font-heading font-bold text-white mb-4">
-            Siap Bergabung dengan{' '}
-            <span className="text-primary-light">KUD Desa Sari Subur</span>?
-          </h2>
-          <p className="text-white/70 max-w-2xl mx-auto mb-4 leading-relaxed">
-            Lebih dari <strong className="text-white">1.250 pekebun</strong> telah merasakan manfaat layanan digital KUD.
-            Daftar sekarang dan nikmati kemudahan mengelola lahan sawit, mengikuti program, dan memantau
-            harga TBS dari genggaman Anda.
-          </p>
-          <motion.div whileHover={{ boxShadow: '0 0 40px rgba(255,255,255,0.2)' }}
-            className="inline-block rounded-2xl p-[1px] bg-gradient-to-r from-primary-light to-blue-300 mb-4">
-            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              onClick={() => router.push('/login')}
-              className="px-8 py-3.5 bg-white text-primary rounded-2xl font-heading font-bold text-lg hover:bg-gray-50 transition-all inline-flex items-center gap-2 cursor-pointer">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v-1m0 0a3 3 0 00-3-3m3 3a3 3 0 013 3v1m-7 3.75c-1.688 0-3.75.75-3.75 2.25v.75h7.5V12c0-1.5-2.062-2.25-3.75-2.25zM3.75 9h1.5m-1.5 3h1.5m-1.5 3h1.5m12.75-6h1.5m-1.5 3h1.5m-1.5 3h1.5M5.625 21h12.75a2.25 2.25 0 002.25-2.25V7.5a2.25 2.25 0 00-2.25-2.25H5.625A2.25 2.25 0 003.375 7.5v11.25A2.25 2.25 0 005.625 21z" />
-              </svg>
-              Daftar Sekarang — Gratis
-            </motion.button>
-          </motion.div>
-          <p className="text-white/40 text-xs">Tidak perlu kartu kredit • Verifikasi cepat • Dukungan WhatsApp 24/7</p>
-        </motion.div>
-      </section>
-      <MapSection />
-
-      <footer className="bg-slate-900 border-t border-white/5 px-6 lg:px-12 py-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-            <div className="col-span-2 md:col-span-1">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-10 max-w-[160px] rounded-lg bg-white/10 flex items-center justify-center overflow-hidden px-1">
-                  {logoUrl ? <img src={logoUrl} alt="KUD Desa Sari Subur" className="h-full w-auto max-h-10 object-contain" /> : <span className="font-heading font-bold text-white text-lg px-2">K</span>}
-                </div>
-                <span className="font-heading font-bold text-white">KUD Sari Subur</span>
-              </div>
-              <p className="text-gray-500 text-xs leading-relaxed mb-4 max-w-xs">
-                Koperasi Unit Digital yang melayani pekebun sawit di Kabupaten Musi Rawas, Sumatera Selatan.
-              </p>
-              <div className="flex gap-2">
-                {['M16.5 6v3m0 0v3m0-3h3m-3 0h-3m-2.25-3c.125 0 .25-.007.375-.018a9.058 9.058 0 01.9 7.428 9.026 9.026 0 01-1.295 2.44l-.273.387a9.032 9.032 0 01-3.815 2.976l-.334.133a9.028 9.028 0 01-7.447-.189l-.26-.125A9.061 9.061 0 012.25 6.75H3m5.25 0a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM12.75 3.75h.008v.008h-.008V3.75z', 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75', 'M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418'].map((icon, i) => (
-                  <a key={i} href="#" className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
-                    </svg>
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden border-t border-white/10 bg-white/95 backdrop-blur-xl overflow-hidden">
+              <div className="px-4 py-4 space-y-1">
+                {navLinks.map((link) => (
+                  <a key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground/70 hover:text-primary hover:bg-primary/5 transition-colors">
+                    <link.icon className="w-5 h-5" /><span className="font-medium">{link.label}</span>
                   </a>
                 ))}
+                <div className="pt-3 border-t border-gray-100 flex gap-2">
+                  {mounted && !loggedIn ? (
+                    <>
+                      <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/login'); }} className="flex-1 py-2.5 rounded-lg border border-primary text-primary font-semibold text-sm">Masuk</motion.button>
+                      <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/login?tab=register'); }} className="flex-1 py-2.5 rounded-lg bg-primary text-white font-semibold text-sm">Daftar</motion.button>
+                    </>
+                  ) : mounted && loggedIn ? (
+                    <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/dashboard'); }} className="w-full py-2.5 rounded-lg bg-primary text-white font-semibold text-sm">Dashboard</motion.button>
+                  ) : null}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
+
+      {/* ===== HERO SECTION ===== */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.3),transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(6,182,212,0.2),transparent_50%)]" />
+          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl animate-pulse animation-delay-2000" />
+          {[...Array(20)].map((_, i) => (
+            <motion.div key={i} className="absolute w-1 h-1 bg-white/20 rounded-full" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }} animate={{ y: [0, -30, 0], opacity: [0, 1, 0], }} transition={{ duration: 3 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 3 }} />
+          ))}
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24 pb-16">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <motion.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-6">
+              Koperasi Unit Desa Tegal Sari
+            </motion.span>
+          </motion.div>
+          <motion.h1 ref={heroTextRef} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold font-heading text-white leading-tight max-w-5xl mx-auto">
+            Maju Bersama{' '}
+            <span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD Sari Subur</span>
+          </motion.h1>
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto leading-relaxed">
+            Koperasi petani kelapa sawit yang berkomitmen meningkatkan kesejahteraan anggota melalui kemitraan berkelanjutan, inovasi, dan gotong royong.
+          </motion.p>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => router.push('/login?tab=register')} className="px-8 py-3.5 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center gap-2 text-base">
+              Jadi Anggota <ArrowRightIcon className="w-5 h-5" />
+            </motion.button>
+            <motion.a whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} href="#tentang" className="px-8 py-3.5 rounded-xl border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center gap-2 text-base backdrop-blur-sm">
+              Pelajari Lebih Lanjut <ChevronDownIcon className="w-5 h-5" />
+            </motion.a>
+          </motion.div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-12 flex items-center justify-center gap-6 md:gap-10 text-white/60 text-sm">
+            <div className="flex items-center gap-2"><ShieldCheckIcon className="w-4 h-4 text-green-400" />Terpercaya</div>
+            <div className="flex items-center gap-2"><UserGroupIcon className="w-4 h-4 text-green-400" />500+ Anggota</div>
+            <div className="flex items-center gap-2"><HeartIcon className="w-4 h-4 text-green-400" />Ramah Lingkungan</div>
+          </motion.div>
+        </div>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="absolute bottom-8 left-1/2 -translate-x-1/2">
+          <motion.a href="#harga" animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }} className="flex flex-col items-center gap-1 text-white/50 hover:text-white/80 transition-colors text-xs">
+            <span>Scroll</span>
+            <ChevronDownIcon className="w-4 h-4" />
+          </motion.a>
+        </motion.div>
+      </section>
+
+      {/* ===== HARGA TBS LIVE ===== */}
+      <section id="harga" className="relative -mt-20 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="bg-white rounded-2xl shadow-card border border-gray-100 p-6 md:p-8">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center"><CurrencyDollarIcon className="w-5 h-5 text-emerald-600" /></div>
+              <div>
+                <h3 className="font-bold font-heading text-foreground">Harga TBS Hari Ini</h3>
+                <p className="text-xs text-muted-foreground">Update terakhir: 22 Juli 2025</p>
               </div>
             </div>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />Live
+            </span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { t: 'Layanan', l: ['Data Pekebun', 'Program KUD', 'Harga TBS', 'Sinkron TBS', 'Data Lahan'] },
-              { t: 'Program', l: ['PSR', 'Intensifikasi', 'Ekstensifikasi', 'Beasiswa', 'Kemitraan'] },
-              { t: 'Bantuan', l: ['Pusat Bantuan', 'FAQ', 'Hubungi Kami', 'Kebijakan Privasi', 'Syarat & Ketentuan'] },
-            ].map((col) => (
-              <div key={col.t}>
-                <h4 className="font-heading font-bold text-white text-sm mb-4">{col.t}</h4>
-                <ul className="space-y-2.5">
-                  {col.l.map((link) => (
-                    <li key={link}><a href="#" className="text-gray-500 text-xs hover:text-white transition-colors">{link}</a></li>
-                  ))}
-                </ul>
-              </div>
+              { grade: 'TBS Super', price: 'Rp 2.850', kg: 'kg', change: '+50', up: true },
+              { grade: 'TBS Grade A', price: 'Rp 2.650', kg: 'kg', change: '+30', up: true },
+              { grade: 'TBS Grade B', price: 'Rp 2.450', kg: 'kg', change: '-20', up: false },
+              { grade: 'TBS Grade C', price: 'Rp 2.250', kg: 'kg', change: '+10', up: true },
+            ].map((item, idx) => (
+              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="relative p-4 rounded-xl bg-gradient-to-br from-gray-50 to-white border border-gray-100 hover:border-primary/20 hover:shadow-md transition-all">
+                <div className="text-xs text-muted-foreground mb-1">{item.grade}</div>
+                <div className="text-2xl font-bold font-heading text-foreground">{item.price}</div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className="text-xs text-muted-foreground">/{item.kg}</span>
+                  <span className={`text-xs font-medium flex items-center gap-0.5 ${item.up ? 'text-green-600' : 'text-red-500'}`}>
+                    {item.up ? '?' : '?'} {item.change}
+                  </span>
+                </div>
+              </motion.div>
             ))}
           </div>
-          <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-gray-500 text-xs">
-              &copy; {new Date().getFullYear()} KUD Desa Sari Subur — CV. Sumatera Multi Jaya. All rights reserved.
-            </p>
-            <p className="text-gray-600 text-[10px]">
-              Developer: M. Sukma Wijaya | UX Designer: Dedek Sulaiman
-            </p>
+        </motion.div>
+      </section>
+
+      {/* ===== KUD DALAM ANGKA ===== */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Statistik" title="KUD dalam Angka" subtitle="Capaian dan dampak nyata KUD Desa Sari Subur bagi petani kelapa sawit di wilayah Kecamatan Tegal Sari." />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+            <Counter end={532} suffix="+" label="Anggota Aktif" />
+            <Counter end={1250} suffix="+" label="Hektar Lahan" />
+            <Counter end={8500} suffix=" Ton" label="TBS per Tahun" />
+            <Counter end={15} suffix="+" label="Tahun Berdiri" />
+          </div>
+        </div>
+      </section>
+
+      {/* ===== KEGIATAN GALLERY ===== */}
+      <section className="py-20 md:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Dokumentasi" title="Kegiatan Kami" subtitle="Dokumentasi berbagai kegiatan dan program yang telah dilaksanakan KUD Desa Sari Subur." />
+        </div>
+        <KegiatanGallery />
+      </section>
+
+      {/* ===== VIDEO KUD ===== */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-white via-emerald-50/20 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Multimedia" title="Video KUD Sari Subur" subtitle="Tonton berbagai kegiatan, profil, dan informasi seputar KUD Desa Sari Subur." />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {YT_VIDEOS.map((video, idx) => (
+              <motion.div key={video.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -6 }} className="group cursor-pointer rounded-xl overflow-hidden bg-white shadow-card hover:shadow-card-hover transition-all" onClick={() => setVideoModal(video.id)}>
+                <div className="relative aspect-video bg-gray-200 overflow-hidden">
+                  <img src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/40 transition-colors">
+                    <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"><PlayIcon className="w-6 h-6 text-emerald-700 ml-0.5" /></div>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h4 className="font-semibold text-foreground text-sm group-hover:text-primary transition-colors line-clamp-2">{video.title}</h4>
+                  <p className="text-xs text-muted-foreground mt-1">KUD Sari Subur</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== BLOG TERBARU ===== */}
+      <section id="blog" className="py-20 md:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Blog" title="Artikel & Berita Terbaru" subtitle="Informasi terkini seputar KUD, pertanian sawit, dan kegiatan anggota." />
+          <div className="flex flex-col sm:flex-row items-center gap-3 mb-8">
+            <div className="relative flex-1 w-full max-w-md">
+              <MagnifyingGlassIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input type="text" placeholder="Cari artikel..." value={blogSearch} onChange={(e) => setBlogSearch(e.target.value)} className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" />
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {['Semua', 'Panen', 'Pelatihan', 'Program', 'Info'].map((cat) => (
+                <button key={cat} onClick={() => setBlogCategory(cat)} className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${blogCategory === cat ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-foreground/60 hover:bg-gray-200'}`}>{cat}</button>
+              ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredBlogs.filter((b) => !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase())).length > 0 ? (
+              filteredBlogs.filter((b) => !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase())).map((post, idx) => (
+                <motion.article key={post.slug} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -5 }} className="group rounded-xl overflow-hidden bg-white shadow-card border border-gray-100 hover:shadow-card-hover transition-all cursor-pointer" onClick={() => router.push(`/blog/${post.slug}`)}>
+                  <div className="relative h-44 bg-gradient-to-br from-emerald-100 to-teal-50 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-[1]" />
+                    <div className="absolute top-3 left-3 z-[2] px-2.5 py-1 rounded-md text-xs font-semibold bg-white/90 backdrop-blur-sm text-foreground">{post.category}</div>
+                    <div className="absolute bottom-3 left-3 z-[2] flex items-center gap-2 text-xs text-white">
+                      <CalendarDaysIcon className="w-3.5 h-3.5" />{post.date}
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2 text-sm">{post.title}</h4>
+                    <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2">{post.excerpt}</p>
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                      <span className="text-xs text-muted-foreground">{post.author}</span>
+                      <span className="text-xs font-medium text-primary flex items-center gap-1 group-hover:gap-1.5 transition-all">Baca <ArrowRightIcon className="w-3 h-3" /></span>
+                    </div>
+                  </div>
+                </motion.article>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12 text-muted-foreground">Tidak ada artikel ditemukan.</div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== TENTANG ===== */}
+      <section id="tentang" className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 via-white to-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+              <SectionBadge>Tentang Kami</SectionBadge>
+              <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-foreground leading-tight">Koperasi yang <span className="text-primary">Berkembang</span> Bersama Petani</h2>
+              <p className="mt-6 text-muted-foreground leading-relaxed">
+                KUD Desa Sari Subur didirikan pada tahun 2010 oleh sekelompok petani kelapa sawit di Kecamatan Tegal Sari. Berawal dari keprihatinan terhadap praktik tengkulak yang merugikan petani, koperasi ini hadir sebagai solusi untuk meningkatkan posisi tawar petani dalam rantai pasok kelapa sawit.
+              </p>
+              <p className="mt-4 text-muted-foreground leading-relaxed">
+                Kini, KUD Sari Subur telah berkembang menjadi koperasi yang melayani lebih dari 500 petani anggota. Dengan semangat gotong royong dan transparansi, kami terus berinovasi untuk memberikan pelayanan terbaik bagi anggota.
+              </p>
+              <div className="mt-8 grid grid-cols-2 gap-4">
+                {[
+                  { icon: EyeIcon, label: 'Visi', text: 'Menjadi koperasi petani sawit terdepan dan mandiri.' },
+                  { icon: HeartIcon, label: 'Misi', text: 'Mensejahterakan anggota melalui kemitraan berkelanjutan.' },
+                ].map((item, idx) => {
+                  const Icn = item.icon;
+                  return (
+                    <div key={idx} className="p-4 rounded-xl bg-emerald-50/50 border border-emerald-100/50">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-2"><Icn className="w-4 h-4 text-primary" /></div>
+                      <h4 className="font-semibold text-foreground text-sm">{item.label}</h4>
+                      <p className="text-xs text-muted-foreground mt-1">{item.text}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="relative">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] bg-gradient-to-br from-emerald-200 via-green-100 to-teal-50">
+                <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/40 to-transparent z-[1]" />
+                <div className="absolute bottom-6 left-6 right-6 z-[2]">
+                  <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">K</div>
+                      <div>
+                        <div className="font-semibold text-foreground text-sm">KUD Sari Subur</div>
+                        <div className="text-xs text-muted-foreground">Berkembang Bersama Petani</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center hidden lg:flex">
+                <div className="text-center">
+                  <div className="text-2xl font-bold font-heading text-primary">15+</div>
+                  <div className="text-[10px] text-muted-foreground">Tahun</div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== TIMELINE ===== */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Perjalanan" title="Sejarah & Perjalanan KUD" subtitle="Dari awal berdiri hingga menjadi koperasi kebanggaan petani kelapa sawit di Tegal Sari." />
+        </div>
+        <Timeline />
+      </section>
+
+      {/* ===== PROGRAM UNGGULAN ===== */}
+      <section id="program" className="py-20 md:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Program" title="Program Unggulan" subtitle="Berbagai program dirancang khusus untuk meningkatkan kesejahteraan dan produktivitas petani." />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {PROGRAMS.map((program, idx) => {
+              const Icon = program.icon;
+              return (
+                <motion.div key={program.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -6 }} className="group relative bg-white rounded-2xl border border-gray-100 p-6 shadow-card hover:shadow-card-hover transition-all cursor-pointer" onClick={() => setProgramModal(program)}>
+                  <div className={`w-12 h-12 rounded-xl bg-${program.color}-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                    <Icon className={`w-6 h-6 text-${program.color}-600`} />
+                  </div>
+                  <h3 className="text-lg font-bold font-heading text-foreground">{program.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{program.desc}</p>
+                  <div className="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between">
+                    <span className="text-xs text-muted-foreground">{program.manfaat.length} Manfaat</span>
+                    <span className="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">Detail <ArrowRightIcon className="w-4 h-4" /></span>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== KEUNTUNGAN ===== */}
+      <section className="py-20 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(16,185,129,0.15),transparent_50%)]" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Mengapa KUD" title="Keuntungan Bergabung" subtitle="Rasakan manfaat nyata menjadi bagian dari keluarga besar KUD Desa Sari Subur." light />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: CurrencyDollarIcon, title: 'Harga TBS Kompetitif', desc: 'Harga terbaik untuk TBS anggota dengan sistem bagi hasil yang transparan dan adil.' },
+              { icon: AcademicCapIcon, title: 'Pendampingan Teknis', desc: 'Tim ahli siap mendampingi petani dalam teknik budidaya sawit yang baik dan benar.' },
+              { icon: ShieldCheckIcon, title: 'Jaminan Pembelian', desc: 'KUD menjamin pembelian seluruh hasil panen anggota dengan harga pasar yang wajar.' },
+              { icon: UserGroupIcon, title: 'Komunitas Solid', desc: 'Bergabung dengan komunitas petani yang solid, saling mendukung, dan berbagai pengalaman.' },
+            ].map((item, idx) => {
+              const Icn = item.icon;
+              return (
+                <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="group p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all">
+                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><Icn className="w-6 h-6 text-emerald-300" /></div>
+                  <h3 className="text-lg font-bold font-heading text-white">{item.title}</h3>
+                  <p className="mt-2 text-sm text-white/60">{item.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== FITUR ===== */}
+      <section id="fitur" className="py-20 md:py-28 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Layanan Digital" title="Fitur Aplikasi KUD" subtitle="Nikmati kemudahan akses informasi dan layanan KUD melalui aplikasi digital kami." />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: ChartBarIcon, title: 'Pantau Harga', desc: 'Cek harga TBS terkini secara real-time langsung dari smartphone Anda.' },
+              { icon: DocumentTextIcon, title: 'Riwayat Transaksi', desc: 'Akses riwayat setoran TBS, penjualan, dan peminjaman kapan saja.' },
+              { icon: BellAlertIcon, title: 'Notifikasi Cerdas', desc: 'Dapatkan pemberitahuan otomatis untuk harga baru, jadwal, dan pengumuman.' },
+              { icon: MapPinIcon, title: 'Lacak Pengiriman', desc: 'Pantau status pengiriman TBS dari kebun ke pabrik secara langsung.' },
+              { icon: CalendarDaysIcon, title: 'Jadwal Kegiatan', desc: 'Lihat jadwal pelatihan, penyuluhan, dan kegiatan KUD lainnya.' },
+              { icon: ChatBubbleLeftRightIcon, title: 'Konsultasi Online', desc: 'Tanya langsung ke tim penyuluh KUD lewat fitur chat terintegrasi.' },
+            ].map((item, idx) => {
+              const Icn = item.icon;
+              return (
+                <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -5 }} className="group p-6 rounded-2xl bg-white border border-gray-100 shadow-card hover:shadow-card-hover transition-all">
+                  <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-primary/10 transition-all"><Icn className="w-6 h-6 text-primary" /></div>
+                  <h3 className="text-lg font-bold font-heading text-foreground">{item.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{item.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== KALKULATOR TBS ===== */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Kalkulator" title="Kalkulator TBS" subtitle="Simulasi pendapatan Anda dari hasil kebun kelapa sawit." />
+          <TbsCalculator />
+        </div>
+      </section>
+
+      {/* ===== ALUR 6 LANGKAH ===== */}
+      <section className="py-20 md:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Panduan" title="6 Langkah Jadi Anggota" subtitle="Proses mudah dan cepat untuk bergabung menjadi anggota KUD Desa Sari Subur." />
+          <div className="relative">
+            <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/40 via-primary/20 to-transparent hidden md:block" />
+            <div className="space-y-8 md:space-y-0">
+              {[
+                { icon: DocumentTextIcon, step: 1, title: 'Isi Formulir', desc: 'Ambil dan isi formulir pendaftaran di kantor KUD atau unduh dari website.' },
+                { icon: FolderIcon, step: 2, title: 'Siapkan Berkas', desc: 'Lengkapi persyaratan: KTP, KK, surat keterangan desa, dan pas foto 3x4.' },
+                { icon: ShieldCheckIcon, step: 3, title: 'Verifikasi Data', desc: 'Petugas KUD akan memverifikasi kelengkapan dan keabsahan data Anda.' },
+                { icon: HandRaisedIcon, step: 4, title: 'Ikuti Orientasi', desc: 'Ikuti masa orientasi anggota selama 1 bulan untuk memahami AD/ART KUD.' },
+                { icon: UserGroupIcon, step: 5, title: 'Bayar Simpanan', desc: 'Bayar simpanan pokok dan simpanan wajib sesuai ketentuan koperasi.' },
+                { icon: CheckBadgeIcon, step: 6, title: 'Jadi Anggota', desc: 'Resmi menjadi anggota aktif KUD dan nikmati seluruh layanan dan program.' },
+              ].map((item, idx) => {
+                const Icn = item.icon;
+                const isLeft = idx % 2 === 0;
+                return (
+                  <motion.div key={item.step} initial={{ opacity: 0, x: isLeft ? -30 : 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.15 }} className={`relative flex items-start gap-6 md:gap-0 md:flex ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'} py-4 md:py-0 md:h-40`}>
+                    <div className="hidden md:flex md:w-1/2 items-center">
+                      <div className={`${isLeft ? 'md:pr-12 md:text-right' : 'md:pl-12'} w-full`}>
+                        <h4 className="font-bold font-heading text-foreground text-lg">{item.title}</h4>
+                        <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
+                      </div>
+                    </div>
+                    <div className="flex-shrink-0 relative z-10 md:absolute md:left-1/2 md:-translate-x-1/2">
+                      <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shadow-lg shadow-primary/30">
+                        <Icn className="w-5 h-5" />
+                      </div>
+                    </div>
+                    <div className="md:hidden flex-1">
+                      <h4 className="font-bold font-heading text-foreground text-lg">{item.title}</h4>
+                      <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== TEAM ===== */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Pengurus" title="Tim Pengurus KUD" subtitle="Kenali pengurus KUD Desa Sari Subur yang berdedikasi melayani anggota." />
+        </div>
+        <TeamSection />
+      </section>
+
+      {/* ===== SERTIFIKASI & PENGHARGAAN ===== */}
+      <section className="py-20 md:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Pengakuan" title="Sertifikasi & Penghargaan" subtitle="Berbagai sertifikasi dan penghargaan yang telah diraih KUD Desa Sari Subur." />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { icon: ShieldCheckIcon, title: 'ISO 9001:2015', desc: 'Sistem Manajemen Mutu' },
+              { icon: GlobeAltIcon, title: 'ISPO', desc: 'Indonesian Sustainable Palm Oil' },
+              { icon: StarIcon, title: 'Koperasi Teladan', desc: 'Tingkat Provinsi 2023' },
+              { icon: GlobeAltIcon, title: 'SNI 8900', desc: 'Sistem Koperasi Indonesia' },
+            ].map((item, idx) => {
+              const Icn = item.icon;
+              return (
+                <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="p-6 rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-emerald-50/30 text-center hover:shadow-md transition-all">
+                  <div className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mx-auto mb-3"><Icn className="w-7 h-7 text-primary" /></div>
+                  <h4 className="font-bold font-heading text-foreground">{item.title}</h4>
+                  <p className="text-xs text-muted-foreground mt-1">{item.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== MITRA & KOLABORASI ===== */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Kolaborasi" title="Mitra & Kolaborasi" subtitle="Kemitraan strategis dengan berbagai lembaga untuk mendukung kemajuan KUD." />
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
+            {MITRA.map((mitra, idx) => (
+              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.08 }} className="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all text-center group">
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">{mitra.logo}</div>
+                <div className="text-xs font-medium text-foreground/70">{mitra.name}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== TESTIMONI ===== */}
+      <section id="testimoni" className="py-20 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.15),transparent_50%)]" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Testimoni" title="Apa Kata Anggota?" subtitle="Pengalaman nyata dari para anggota yang telah merasakan manfaat bergabung dengan KUD." light />
+          <div className="relative max-w-4xl mx-auto">
+            <motion.div key={testiIdx} initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} transition={{ duration: 0.5 }} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 md:p-12 text-center">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">
+                {TESTIMONI[testiIdx].nama.charAt(0)}
+              </div>
+              <div className="flex items-center justify-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon key={i} className={`w-5 h-5 ${i < TESTIMONI[testiIdx].rating ? 'text-amber-400 fill-amber-400' : 'text-white/20'}`} />
+                ))}
+              </div>
+              <p className="text-xl md:text-2xl text-white/90 leading-relaxed font-medium italic">"{TESTIMONI[testiIdx].quote}"</p>
+              <div className="mt-6 pt-6 border-t border-white/10">
+                <div className="font-bold text-white text-lg">{TESTIMONI[testiIdx].nama}</div>
+                <div className="text-white/50 text-sm">{TESTIMONI[testiIdx].asal}</div>
+              </div>
+            </motion.div>
+            <div className="flex items-center justify-center gap-3 mt-8">
+              {TESTIMONI.map((_, idx) => (
+                <button key={idx} onClick={() => setTestiIdx(idx)} className={`w-2.5 h-2.5 rounded-full transition-all ${idx === testiIdx ? 'bg-white w-8' : 'bg-white/30 hover:bg-white/50'}`} />
+              ))}
+            </div>
+            <div className="flex justify-between mt-6">
+              <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setTestiIdx((prev) => (prev - 1 + TESTIMONI.length) % TESTIMONI.length)} className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"><ChevronLeftIcon className="w-5 h-5" /></motion.button>
+              <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setTestiIdx((prev) => (prev + 1) % TESTIMONI.length)} className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"><ChevronRightIcon className="w-5 h-5" /></motion.button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== LAYANAN & DUKUNGAN ===== */}
+      <section id="layanan" className="py-20 md:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Kontak" title="Layanan & Dukungan" subtitle="Hubungi kami melalui berbagai saluran yang tersedia." />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {LAYANAN.map((item, idx) => {
+              const Icn = item.icon;
+              return (
+                <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="p-6 rounded-2xl border border-gray-100 shadow-card hover:shadow-card-hover transition-all text-center group">
+                  <div className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform"><Icn className="w-7 h-7 text-primary" /></div>
+                  <h4 className="font-bold font-heading text-foreground">{item.title}</h4>
+                  <p className="text-sm text-muted-foreground mt-2">{item.desc}</p>
+                  <p className="text-sm font-semibold text-primary mt-3">{item.contact}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== FAQ ===== */}
+      <section id="faq" className="py-20 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Tanya Jawab" title="Pertanyaan Umum" subtitle="Temukan jawaban atas pertanyaan yang sering diajukan tentang KUD Desa Sari Subur." />
+          <div className="space-y-3">
+            {FAQ_DATA.map((faq, idx) => (
+              <motion.div key={idx} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.05 }} className="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <button onClick={() => setFaqOpen(faqOpen === idx ? null : idx)} className="w-full flex items-center justify-between p-4 md:p-5 text-left">
+                  <span className="font-medium text-foreground text-sm md:text-base pr-4">{faq.q}</span>
+                  <ChevronDownIcon className={`w-5 h-5 flex-shrink-0 text-muted-foreground transition-transform duration-300 ${faqOpen === idx ? 'rotate-180 text-primary' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {faqOpen === idx && (
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
+                      <div className="px-4 md:px-5 pb-4 md:pb-5 text-sm text-muted-foreground leading-relaxed border-t border-gray-50 pt-3">{faq.a}</div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== MAP ===== */}
+      <section className="py-20 md:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Lokasi" title="Temukan Kami" subtitle="Kunjungi kantor KUD Desa Sari Subur untuk informasi lebih lanjut." />
+        </div>
+        <MapSection />
+      </section>
+
+      {/* ===== NEWSLETTER CTA ===== */}
+      <section className="py-20 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.2),transparent_60%)]" />
+        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.span initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-6">
+            Tetap Terhubung
+          </motion.span>
+          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-white">
+            Dapatkan Info Terbaru dari KUD
+          </motion.h2>
+          <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="mt-4 text-white/70 text-lg max-w-xl mx-auto">
+            Berlangganan newsletter kami untuk mendapatkan update harga TBS, program, dan kegiatan KUD.
+          </motion.p>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="mt-8 max-w-md mx-auto flex gap-3">
+            <input type="email" placeholder="Masukkan email Anda" className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 backdrop-blur-sm" />
+            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="px-6 py-3 rounded-xl bg-white text-emerald-900 font-bold shadow-xl hover:shadow-2xl transition-all text-sm">Langganan</motion.button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ===== FOOTER ===== */}
+      <footer className="bg-foreground text-white/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-sm">K</div>
+                <span className="font-bold font-heading text-lg text-white">KUD Sari Subur</span>
+              </div>
+              <p className="text-sm leading-relaxed">Koperasi Unit Desa Sari Subur berkomitmen meningkatkan kesejahteraan petani kelapa sawit melalui kemitraan berkelanjutan.</p>
+              <div className="flex items-center gap-3 mt-5">
+                {['??', '??', '??'].map((emoji, idx) => (
+                  <div key={idx} className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-sm hover:bg-white/10 hover:text-white transition-all cursor-pointer">{emoji}</div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="font-bold text-white mb-4 font-heading">Tautan</h4>
+              <ul className="space-y-2.5 text-sm">
+                {['Beranda', 'Fitur', 'Tentang', 'Program', 'Blog', 'Kontak'].map((link) => (
+                  <li key={link}><a href="#" className="hover:text-white transition-colors">{link}</a></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold text-white mb-4 font-heading">Program</h4>
+              <ul className="space-y-2.5 text-sm">
+                {PROGRAMS.map((p) => (
+                  <li key={p.id}><a href="#" className="hover:text-white transition-colors">{p.title}</a></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold text-white mb-4 font-heading">Kontak</h4>
+              <ul className="space-y-3 text-sm">
+                <li className="flex items-start gap-2"><MapPinIcon className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />Jl. Tegal Sari No. 123, Kec. Tegal Sari</li>
+                <li className="flex items-start gap-2"><PhoneIcon className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />0851-6988-3337</li>
+                <li className="flex items-start gap-2"><GlobeAltIcon className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />kud-sari-subur.my.id</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+            <p>&copy; {new Date().getFullYear()} KUD Desa Sari Subur. Hak Cipta Dilindungi.</p>
+            <div className="flex items-center gap-4">
+              <a href="/syarat-ketentuan" className="hover:text-white transition-colors">Syarat & Ketentuan</a>
+              <a href="/kebijakan-privasi" className="hover:text-white transition-colors">Kebijakan Privasi</a>
+            </div>
           </div>
         </div>
       </footer>
-    </div>
+
+      {/* ===== BACK TO TOP ===== */}
+      <AnimatePresence>
+        {showBackTop && (
+          <motion.button initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="fixed bottom-24 right-4 md:right-6 z-40 w-11 h-11 rounded-full bg-primary text-white shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all flex items-center justify-center">
+            <ArrowUpIcon className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* ===== WHATSAPP FLOATING ===== */}
+      <motion.a
+        href="https://wa.me/6285169883337?text=Halo%20KUD%20Sari%20Subur%2C%20saya%20ingin%20bertanya"
+        target="_blank"
+        rel="noopener noreferrer"
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 2, type: 'spring' }}
+        whileHover={{ scale: 1.1 }}
+        className="fixed bottom-6 right-4 md:right-6 z-40 w-14 h-14 rounded-full bg-green-500 text-white shadow-lg shadow-green-500/30 hover:bg-green-600 transition-all flex items-center justify-center group"
+      >
+        <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <span className="absolute -top-10 right-0 bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">Chat WhatsApp</span>
+      </motion.a>
+
+      {/* ===== PROGRAM MODAL ===== */}
+      <ProgramModal program={programModal} onClose={() => setProgramModal(null)} />
+
+      {/* ===== VIDEO MODAL ===== */}
+      <VideoModal videoId={videoModal} onClose={() => setVideoModal(null)} />
+    </>
   );
 }

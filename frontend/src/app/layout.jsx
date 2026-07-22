@@ -1,5 +1,6 @@
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
+import LenisProvider from "@/components/LenisProvider";
 
 export const metadata = {
   title: "KUD Desa Sari Subur",
@@ -10,7 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="id" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <ClientLayout>{children}</ClientLayout>
+        <LenisProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </LenisProvider>
       </body>
     </html>
   );
