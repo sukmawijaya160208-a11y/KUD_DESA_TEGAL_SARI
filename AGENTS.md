@@ -200,3 +200,20 @@ systemctl restart kud-frontend kud-backend kud-queue
 
 ### Current secrets
 Real values disimpan di memory AI (opencode-mem). Kalo butuh deploy, tinggal bilang "deploy VPS" — AI tau inject secretnya.
+
+## MCP Servers (5 Aktif)
+
+| MCP | Type | Fungsi |
+|-----|------|--------|
+| `stitch` | remote (Google Gemini) | AI multimodal, generate gambar/desain |
+| `github` | remote (GitHub API) | Manage repo, commit, PR, issues |
+| `ssh-mcp-server` | stdio (npx) | SSH ke VPS `root@31.97.50.22` |
+| `mcp-sqlite` | stdio (npx) | Akses SQLite database langsung |
+| `puppeteer` | stdio (npx) | Browser automation & screenshot |
+
+### Auto-Debug Flow
+1. Puppeteer screenshot halaman error → detect visual bug
+2. mcp-sqlite cek data anomali di database
+3. SSH MCP cek log Laravel/Next.js di VPS
+4. AI analisa + bikin fix
+5. GitHub MCP commit fix + SSH deploy
