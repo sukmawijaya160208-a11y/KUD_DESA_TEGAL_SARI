@@ -39,6 +39,7 @@ jobs:
             fuser -k 3000/tcp 2>/dev/null || true
 
             cd /var/www/kud
-            git pull --rebase origin main
+            git fetch origin main
+            git reset --hard origin/main
             docker compose up -d --build
             echo "=== Deploy selesai ==="

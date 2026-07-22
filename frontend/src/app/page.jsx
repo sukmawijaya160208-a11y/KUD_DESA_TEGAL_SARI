@@ -331,74 +331,9 @@ export default function Home() {
 
 
 
-      {/* ===== VIDEO KUD ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-white via-emerald-50/20 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Multimedia" title="Video KUD Sari Subur" subtitle="Tonton berbagai kegiatan, profil, dan informasi seputar KUD Desa Sari Subur." />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {YT_VIDEOS.map((video, idx) => (
-              <motion.div key={video.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -6 }} className="group cursor-pointer rounded-xl overflow-hidden bg-white shadow-card hover:shadow-card-hover transition-all" onClick={() => setVideoModal(video.id)}>
-                <div className="relative aspect-video bg-gray-200 overflow-hidden">
-                  <img src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/40 transition-colors">
-                    <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"><PlayIcon className="w-6 h-6 text-emerald-700 ml-0.5" /></div>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-foreground text-sm group-hover:text-primary transition-colors line-clamp-2">{video.title}</h4>
-                  <p className="text-xs text-muted-foreground mt-1">KUD Sari Subur</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
-      {/* ===== BLOG TERBARU ===== */}
-      <section id="blog" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Blog" title="Artikel & Berita Terbaru" subtitle="Informasi terkini seputar KUD, pertanian sawit, dan kegiatan anggota." />
-          <div className="flex flex-col sm:flex-row items-center gap-3 mb-8">
-            <div className="relative flex-1 w-full max-w-md">
-              <MagnifyingGlassIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <input type="text" placeholder="Cari artikel..." value={blogSearch} onChange={(e) => setBlogSearch(e.target.value)} className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50/50 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" />
-            </div>
-            <div className="flex gap-2 overflow-x-auto pb-1 w-full sm:w-auto scrollbar-none">
-              {['Semua', 'Pelatihan', 'Sosial', 'Pendidikan'].map((cat) => (
-                <button key={cat} onClick={() => setBlogCategory(cat)} className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${blogCategory === cat ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-foreground/60 hover:bg-gray-200'}`}>{cat}</button>
-              ))}
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredBlogs.filter((b) => !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase())).length > 0 ? (
-              filteredBlogs.filter((b) => !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase())).map((post, idx) => (
-                <motion.article key={post.slug} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -5 }} className="group rounded-xl overflow-hidden bg-white shadow-card border border-gray-100 hover:shadow-card-hover transition-all cursor-pointer" onClick={() => router.push(`/blog/${post.slug}`)}>
-                  <div className="relative h-44 overflow-hidden">
-                    <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-[1]" />
-                    <div className="absolute top-3 left-3 z-[2] px-2.5 py-1 rounded-md text-xs font-semibold bg-white/90 backdrop-blur-sm text-foreground">{post.category}</div>
-                    <div className="absolute bottom-3 left-3 z-[2] flex items-center gap-2 text-xs text-white">
-                      <CalendarDaysIcon className="w-3.5 h-3.5" />{post.date}
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2 text-sm">{post.title}</h4>
-                    <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2">{post.excerpt}</p>
-                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
-                      <span className="text-xs text-muted-foreground">{post.author}</span>
-                      <span className="text-xs font-medium text-primary flex items-center gap-1 group-hover:gap-1.5 transition-all">Baca <ArrowRightIcon className="w-3 h-3" /></span>
-                    </div>
-                  </div>
-                </motion.article>
-              ))
-            ) : (
-              <div className="col-span-full text-center py-12 text-muted-foreground">Tidak ada artikel ditemukan.</div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== TIMELINE ===== */}
+{/* ===== TIMELINE ===== */}
       <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Perjalanan" title="Sejarah & Perjalanan KUD" subtitle="Dari 50 pekebun hingga 371+ anggota — perjalanan KUD Sari Subur membangun koperasi sawit yang mandiri dan profesional." />
@@ -406,7 +341,9 @@ export default function Home() {
         <Timeline />
       </section>
 
-      {/* ===== PROGRAM UNGGULAN ===== */}
+      
+
+{/* ===== PROGRAM UNGGULAN ===== */}
       <section id="program" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Program" title="Program Unggulan" subtitle="Berbagai program dirancang khusus untuk meningkatkan kesejahteraan dan produktivitas petani." />
@@ -431,33 +368,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== FITUR ===== */}
-      <section id="fitur" className="py-14 md:py-28 bg-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Layanan Digital" title="Fitur Aplikasi KUD" subtitle="Nikmati kemudahan akses informasi dan layanan KUD melalui aplikasi digital kami." />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: ChartBarIcon, title: 'Pantau Harga', desc: 'Cek harga TBS terkini secara real-time langsung dari smartphone Anda.' },
-              { icon: DocumentTextIcon, title: 'Riwayat Transaksi', desc: 'Akses riwayat setoran TBS, penjualan, dan peminjaman kapan saja.' },
-              { icon: BellAlertIcon, title: 'Notifikasi Cerdas', desc: 'Dapatkan pemberitahuan otomatis untuk harga baru, jadwal, dan pengumuman.' },
-              { icon: MapPinIcon, title: 'Lacak Pengiriman', desc: 'Pantau status pengiriman TBS dari kebun ke pabrik secara langsung.' },
-              { icon: CalendarDaysIcon, title: 'Jadwal Kegiatan', desc: 'Lihat jadwal pelatihan, penyuluhan, dan kegiatan KUD lainnya.' },
-              { icon: ChatBubbleLeftRightIcon, title: 'Konsultasi Online', desc: 'Tanya langsung ke tim penyuluh KUD lewat fitur chat terintegrasi.' },
-            ].map((item, idx) => {
-              const Icn = item.icon;
-              return (
-                <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -5 }} className="group p-6 rounded-2xl bg-white border border-gray-100 shadow-card hover:shadow-card-hover transition-all">
-                  <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-primary/10 transition-all"><Icn className="w-6 h-6 text-primary" /></div>
-                  <h3 className="text-lg font-bold font-heading text-foreground">{item.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{item.desc}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      
 
-      {/* ===== ALUR 6 LANGKAH ===== */}
+{/* ===== ALUR 6 LANGKAH ===== */}
       <section className="py-14 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Panduan" title="6 Langkah Jadi Anggota" subtitle="Proses mudah dan cepat untuk bergabung menjadi anggota KUD Desa Sari Subur." />
@@ -499,7 +412,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== TEAM ===== */}
+      
+
+{/* ===== TEAM ===== */}
       <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Pengurus" title="Tim Pengurus KUD" subtitle="Kenali pengurus KUD Desa Sari Subur yang berdedikasi melayani anggota." />
@@ -507,20 +422,9 @@ export default function Home() {
         <TeamSection />
       </section>
 
-      {/* ===== KUD DALAM ANGKA ===== */}
-      <section className="py-16 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Statistik" title="KUD dalam Angka" subtitle="Capaian dan dampak nyata KUD Desa Sari Subur bagi petani kelapa sawit di wilayah Kecamatan Tegal Sari." />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
-            <Counter end={371} suffix="+" label="Anggota Aktif" />
-            <Counter end={850} suffix="+" label="Hektar Lahan" />
-            <Counter end={5000} suffix=" Ton" label="TBS per Tahun" />
-            <Counter end={7} suffix="+" label="Tahun Berdiri" />
-          </div>
-        </div>
-      </section>
+      
 
-      {/* ===== SERTIFIKASI & PENGHARGAAN ===== */}
+{/* ===== SERTIFIKASI & PENGHARGAAN ===== */}
       <section className="py-14 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Pengakuan" title="Sertifikasi & Penghargaan" subtitle="Berbagai sertifikasi dan penghargaan yang telah diraih KUD Desa Sari Subur." />
@@ -544,22 +448,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== MITRA & KOLABORASI ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Kolaborasi" title="Mitra & Kolaborasi" subtitle="Kemitraan strategis dengan berbagai lembaga untuk mendukung kemajuan KUD." />
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-4 sm:gap-6">
-            {MITRA.map((mitra, idx) => (
-              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.08 }} className="p-4 sm:p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all text-center group">
-                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">{mitra.logo}</div>
-                <div className="text-xs font-medium text-foreground/70">{mitra.name}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
-      {/* ===== KEGIATAN GALLERY ===== */}
+{/* ===== KEGIATAN GALLERY ===== */}
       <section className="py-14 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Dokumentasi" title="Kegiatan Kami" subtitle="Dokumentasi berbagai kegiatan dan program yang telah dilaksanakan KUD Desa Sari Subur." />
@@ -567,7 +458,9 @@ export default function Home() {
         <KegiatanGallery />
       </section>
 
-      {/* ===== TENTANG ===== */}
+      
+
+{/* ===== TENTANG ===== */}
       <section id="tentang" className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 via-white to-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -626,7 +519,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== KEUNTUNGAN ===== */}
+      
+
+{/* ===== VIDEO KUD ===== */}
+      <section className="py-14 md:py-28 bg-gradient-to-b from-white via-emerald-50/20 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Multimedia" title="Video KUD Sari Subur" subtitle="Tonton berbagai kegiatan, profil, dan informasi seputar KUD Desa Sari Subur." />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {YT_VIDEOS.map((video, idx) => (
+              <motion.div key={video.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -6 }} className="group cursor-pointer rounded-xl overflow-hidden bg-white shadow-card hover:shadow-card-hover transition-all" onClick={() => setVideoModal(video.id)}>
+                <div className="relative aspect-video bg-gray-200 overflow-hidden">
+                  <img src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/40 transition-colors">
+                    <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"><PlayIcon className="w-6 h-6 text-emerald-700 ml-0.5" /></div>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h4 className="font-semibold text-foreground text-sm group-hover:text-primary transition-colors line-clamp-2">{video.title}</h4>
+                  <p className="text-xs text-muted-foreground mt-1">KUD Sari Subur</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      
+
+{/* ===== KEUNTUNGAN ===== */}
       <section className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(16,185,129,0.15),transparent_50%)]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -651,7 +571,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== KALKULATOR TBS ===== */}
+      
+
+{/* ===== KALKULATOR TBS ===== */}
       <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kalkulator" title="Kalkulator TBS" subtitle="Simulasi pendapatan Anda dari hasil kebun kelapa sawit." />
@@ -659,7 +581,116 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== TESTIMONI ===== */}
+      
+
+{/* ===== BLOG TERBARU ===== */}
+      <section id="blog" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Blog" title="Artikel & Berita Terbaru" subtitle="Informasi terkini seputar KUD, pertanian sawit, dan kegiatan anggota." />
+          <div className="flex flex-col sm:flex-row items-center gap-3 mb-8">
+            <div className="relative flex-1 w-full max-w-md">
+              <MagnifyingGlassIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input type="text" placeholder="Cari artikel..." value={blogSearch} onChange={(e) => setBlogSearch(e.target.value)} className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50/50 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" />
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-1 w-full sm:w-auto scrollbar-none">
+              {['Semua', 'Pelatihan', 'Sosial', 'Pendidikan'].map((cat) => (
+                <button key={cat} onClick={() => setBlogCategory(cat)} className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${blogCategory === cat ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-foreground/60 hover:bg-gray-200'}`}>{cat}</button>
+              ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredBlogs.filter((b) => !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase())).length > 0 ? (
+              filteredBlogs.filter((b) => !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase())).map((post, idx) => (
+                <motion.article key={post.slug} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -5 }} className="group rounded-xl overflow-hidden bg-white shadow-card border border-gray-100 hover:shadow-card-hover transition-all cursor-pointer" onClick={() => router.push(`/blog/${post.slug}`)}>
+                  <div className="relative h-44 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 to-emerald-50 z-0" />
+                    <img src={post.image} alt={post.title} className="relative w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-[1]" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-[2]" />
+                    <div className="absolute top-3 left-3 z-[2] px-2.5 py-1 rounded-md text-xs font-semibold bg-white/90 backdrop-blur-sm text-foreground">{post.category}</div>
+                    <div className="absolute bottom-3 left-3 z-[2] flex items-center gap-2 text-xs text-white">
+                      <CalendarDaysIcon className="w-3.5 h-3.5" />{post.date}
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2 text-sm">{post.title}</h4>
+                    <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2">{post.excerpt}</p>
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
+                      <span className="text-xs text-muted-foreground">{post.author}</span>
+                      <span className="text-xs font-medium text-primary flex items-center gap-1 group-hover:gap-1.5 transition-all">Baca <ArrowRightIcon className="w-3 h-3" /></span>
+                    </div>
+                  </div>
+                </motion.article>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12 text-muted-foreground">Tidak ada artikel ditemukan.</div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      
+
+{/* ===== FITUR ===== */}
+      <section id="fitur" className="py-14 md:py-28 bg-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Layanan Digital" title="Fitur Aplikasi KUD" subtitle="Nikmati kemudahan akses informasi dan layanan KUD melalui aplikasi digital kami." />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: ChartBarIcon, title: 'Pantau Harga', desc: 'Cek harga TBS terkini secara real-time langsung dari smartphone Anda.' },
+              { icon: DocumentTextIcon, title: 'Riwayat Transaksi', desc: 'Akses riwayat setoran TBS, penjualan, dan peminjaman kapan saja.' },
+              { icon: BellAlertIcon, title: 'Notifikasi Cerdas', desc: 'Dapatkan pemberitahuan otomatis untuk harga baru, jadwal, dan pengumuman.' },
+              { icon: MapPinIcon, title: 'Lacak Pengiriman', desc: 'Pantau status pengiriman TBS dari kebun ke pabrik secara langsung.' },
+              { icon: CalendarDaysIcon, title: 'Jadwal Kegiatan', desc: 'Lihat jadwal pelatihan, penyuluhan, dan kegiatan KUD lainnya.' },
+              { icon: ChatBubbleLeftRightIcon, title: 'Konsultasi Online', desc: 'Tanya langsung ke tim penyuluh KUD lewat fitur chat terintegrasi.' },
+            ].map((item, idx) => {
+              const Icn = item.icon;
+              return (
+                <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} whileHover={{ y: -5 }} className="group p-6 rounded-2xl bg-white border border-gray-100 shadow-card hover:shadow-card-hover transition-all">
+                  <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-primary/10 transition-all"><Icn className="w-6 h-6 text-primary" /></div>
+                  <h3 className="text-lg font-bold font-heading text-foreground">{item.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{item.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      
+
+{/* ===== KUD DALAM ANGKA ===== */}
+      <section className="py-16 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Statistik" title="KUD dalam Angka" subtitle="Capaian dan dampak nyata KUD Desa Sari Subur bagi petani kelapa sawit di wilayah Kecamatan Tegal Sari." />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
+            <Counter end={371} suffix="+" label="Anggota Aktif" />
+            <Counter end={850} suffix="+" label="Hektar Lahan" />
+            <Counter end={5000} suffix=" Ton" label="TBS per Tahun" />
+            <Counter end={7} suffix="+" label="Tahun Berdiri" />
+          </div>
+        </div>
+      </section>
+
+      
+
+{/* ===== MITRA & KOLABORASI ===== */}
+      <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader badge="Kolaborasi" title="Mitra & Kolaborasi" subtitle="Kemitraan strategis dengan berbagai lembaga untuk mendukung kemajuan KUD." />
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-4 sm:gap-6">
+            {MITRA.map((mitra, idx) => (
+              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.08 }} className="p-4 sm:p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all text-center group">
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">{mitra.logo}</div>
+                <div className="text-xs font-medium text-foreground/70">{mitra.name}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      
+
+{/* ===== TESTIMONI ===== */}
       <section id="testimoni" className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden scroll-mt-16 md:scroll-mt-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.15),transparent_50%)]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -674,7 +705,7 @@ export default function Home() {
                   <StarIcon key={i} className={`w-5 h-5 ${i < TESTIMONI[testiIdx].rating ? 'text-amber-400 fill-amber-400' : 'text-white/20'}`} />
                 ))}
               </div>
-              <p className="text-base sm:text-xl md:text-2xl text-white/90 leading-relaxed font-medium italic">"{TESTIMONI[testiIdx].quote}"</p>
+              <p className="text-base sm:text-xl md:text-2xl text-white/90 leading-relaxed font-medium italic">{'\u201C'}{TESTIMONI[testiIdx].quote}{'\u201D'}</p>
               <div className="mt-6 pt-6 border-t border-white/10">
                 <div className="font-bold text-white text-lg">{TESTIMONI[testiIdx].nama}</div>
                 <div className="text-white/50 text-sm">{TESTIMONI[testiIdx].asal}</div>
@@ -693,7 +724,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== LAYANAN & DUKUNGAN ===== */}
+      
+
+{/* ===== LAYANAN & DUKUNGAN ===== */}
       <section id="layanan" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kontak" title="Layanan & Dukungan" subtitle="Hubungi kami melalui berbagai saluran yang tersedia." />
@@ -713,7 +746,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== FAQ ===== */}
+      
+
+{/* ===== FAQ ===== */}
       <section id="faq" className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Tanya Jawab" title="Pertanyaan Umum" subtitle="Temukan jawaban atas pertanyaan yang sering diajukan tentang KUD Desa Sari Subur." />
@@ -737,7 +772,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== MAP ===== */}
+      
+
+{/* ===== MAP ===== */}
       <section className="py-14 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Lokasi" title="Temukan Kami" subtitle="Kunjungi kantor KUD Desa Sari Subur untuk informasi lebih lanjut." />
@@ -745,7 +782,9 @@ export default function Home() {
         <MapSection />
       </section>
 
-      {/* ===== NEWSLETTER CTA ===== */}
+      
+
+{/* ===== NEWSLETTER CTA ===== */}
       <section className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.2),transparent_60%)]" />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
