@@ -16,27 +16,14 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup SSH key
-        run: |
-          mkdir -p ~/.ssh
-          cat <<'SSH_KEY' > ~/.ssh/deploy_key
-          ${{ secrets.VPS_SSH_KEY }}
-          SSH_KEY
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -t rsa ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
-
-      - name: Deploy via SSH
-        run: |
-          ssh -i ~/.ssh/deploy_key \
-              -o StrictHostKeyChecking=no \
-              -p ${{ secrets.VPS_PORT }} \
-              ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-            "cd /var/www/kud && \
-             git pull origin main && \
-             git checkout -- docker-compose.yml && \
-             docker compose up -d --build && \
-             docker exec kud-backend php artisan migrate --force && \
-             echo '=== DEPLOY SELESAI ==='"
+      - name: Test SSH connection
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            whoami
+            hostname
+            echo "SSH OK"
