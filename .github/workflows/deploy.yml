@@ -16,5 +16,7 @@ jobs:
       cancel-in-progress: false
 
     steps:
+      - name: Test cd in set -e
+        run: bash /opt/actions-runner/test2.sh
       - name: Build & Deploy
         run: bash /opt/actions-runner/deploy.sh
