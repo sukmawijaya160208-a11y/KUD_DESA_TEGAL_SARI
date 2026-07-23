@@ -640,8 +640,7 @@ export default function AdminProgramPage() {
                           Placeholder: {`{{nama_pekebun}}, {{nik}}, {{no_kk}}, {{tempat_lahir}}, {{tanggal_lahir}}, {{alamat}}, {{alamat_lahan}}, {{luas_lahan}}, {{nama_program}}`}
                         </p>
                       </div>
-                      {form[`surat_${i}_isi`] && (
-                        <details className="text-xs text-gray-500">
+                      <details className="text-xs text-gray-500">
                           <summary className="cursor-pointer hover:text-primary font-medium">Preview Surat {i}</summary>
                           <div className="mt-2">
                             <DocumentViewer
@@ -666,7 +665,6 @@ export default function AdminProgramPage() {
                             />
                           </div>
                         </details>
-                      )}
                     </div>
                   </div>
                 ))}

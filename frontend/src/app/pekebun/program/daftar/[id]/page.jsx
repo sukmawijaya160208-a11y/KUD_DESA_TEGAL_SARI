@@ -326,8 +326,7 @@ export default function DaftarProgramPage() {
                     Surat {i}: {judul || `Pernyataan ${i}`}
                   </h3>
 
-                  {isi ? (
-                    <DocumentViewer
+                  <DocumentViewer
                       suratIndex={i}
                       judul={judul}
                       isi={isi}
@@ -336,11 +335,6 @@ export default function DaftarProgramPage() {
                       signature={ttd}
                       showSignature={!!ttd}
                     />
-                  ) : (
-                    <div className="bg-gray-50 rounded-xl border border-dashed border-gray-200 p-6 text-center text-sm text-gray-400">
-                      Template surat belum diisi oleh admin
-                    </div>
-                  )}
 
                   <label className="flex items-start gap-3 mt-3 p-3 bg-white rounded-lg border border-border cursor-pointer hover:bg-gray-50 transition-colors">
                     <input

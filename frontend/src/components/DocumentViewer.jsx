@@ -65,6 +65,24 @@ function InfoRow({ label, value }) {
   );
 }
 
+const DEFAULT_BODY = {
+  1: `Dengan ini menyatakan, bahwa saya bersedia untuk mengikuti Kegiatan Pelatihan Pengembangan Sumber Daya Manusia Perkebunan Kelapa Sawit (SDMPKS) Tahun (Sesuaikan dengan tahun pelaksanaan) yang didanai oleh Badan Pengelola Dana Perkebunan (BPDP) dengan mematuhi segala peraturan yang telah ditetapkan.
+
+Demikian surat pernyataan ini dibuat dengan sebenar-benarnya untuk dapat digunakan sebagaimana mestinya. Apabila di kemudian hari ditemukan bahwa pernyataan ini tidak benar, saya bersedia menerima konsekuensi sesuai dengan peraturan yang berlaku.`,
+  2: `Dengan ini menyatakan bahwa saya benar-benar memiliki lahan perkebunan kelapa sawit kurang dari 25 (dua puluh lima) Hektar.
+
+Demikian surat pernyataan ini dibuat dengan sesungguhnya dan dapat digunakan seperlunya.`,
+  3: `Benar nama tersebut di atas adalah petani sawit dan tergabung dalam Koperasi Unit Desa Sari Subur Desa Tegalsari Kecamatan Megang Sakti Kabupaten Musi Rawas dengan jabatan sebagai Anggota.
+
+Demikian surat pernyataan ini dibuat dengan sesungguhnya dan dapat digunakan seperlunya.`,
+};
+
+const DEFAULT_JUDUL = {
+  1: 'SURAT PERNYATAAN',
+  2: 'SURAT PERNYATAAN KEPEMILIKAN LAHAN',
+  3: 'SURAT KETERANGAN KEANGGOTAAN KOPERASI',
+};
+
 export default function DocumentViewer({
   judul,
   isi,
@@ -74,14 +92,14 @@ export default function DocumentViewer({
   suratIndex = 1,
   program = {},
 }) {
-  const rendered = useMemo(() => replacePlaceholders(isi, data), [isi, data]);
+  const body = isi || DEFAULT_BODY[suratIndex] || '';
+  const title = judul || DEFAULT_JUDUL[suratIndex] || '';
+  const rendered = useMemo(() => replacePlaceholders(body, data), [body, data]);
   const desa = useMemo(() => detectDesa(data?.alamat), [data?.alamat]);
   const kades = desa ? KADES_MAP[desa] : null;
   const tanggalSurat = formatSuratDate(data?.tanggal_surat || program?.tanggal_mulai);
   const logoKudUrl = data?.logo_kud;
   const qrUrl = data?.qr_logo;
-
-  if (!isi) return null;
 
   return (
     <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
@@ -128,7 +146,7 @@ export default function DocumentViewer({
             <div className="border-t-2 border-b border-gray-800 mb-4" />
             <div className="text-center mb-5">
               <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
-                {judul || 'SURAT KETERANGAN KEANGGOTAAN KOPERASI'}
+                {title}
               </h2>
               <div className="w-16 h-[1.5px] bg-gray-400 mx-auto mt-1.5" />
             </div>
@@ -139,7 +157,7 @@ export default function DocumentViewer({
         {suratIndex !== 3 && (
           <div className="text-center mb-6">
             <h2 className="text-base font-bold text-gray-900 uppercase tracking-wide">
-              {judul || (suratIndex === 2 ? 'SURAT PERNYATAAN KEPEMILIKAN LAHAN' : 'SURAT PERNYATAAN')}
+              {title}
             </h2>
             {suratIndex === 2 && (
               <p className="text-[11px] font-semibold text-gray-700 mt-0.5 tracking-wide">
