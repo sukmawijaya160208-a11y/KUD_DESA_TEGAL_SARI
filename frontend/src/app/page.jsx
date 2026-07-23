@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLogo } from '@/hooks/useLogo';
@@ -39,7 +39,7 @@ const scaleIn = {
   show: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
 };
 
-const PalmLogo = () => (
+const PalmSvg = () => (
   <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full p-1">
     <path d="M4 28Q16 14 28 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     <path d="M8 23Q14 19 16 21Q13 21.5 9 23Z" fill="currentColor"/>
@@ -51,6 +51,13 @@ const PalmLogo = () => (
     <path d="M18 14Q16 11 18 10Q19 12 19 13.5Z" fill="currentColor"/>
   </svg>
 );
+
+function LogoDisplay({ logoUrl, className }) {
+  if (logoUrl) {
+    return <img src={logoUrl} alt="KUD Logo" className={`w-full h-full object-contain ${className || ''}`} />;
+  }
+  return <PalmSvg />;
+}
 
 const YT_VIDEOS = [
   { id: 'o7k3SZ0sIVQ', title: 'Profil KUD Desa Sari Subur' },
@@ -109,31 +116,6 @@ const MITRA = [
   { name: 'LSM Swadaya', logo: '🤝' },
   { name: 'Kementan RI', logo: '🌾' },
 ];
-
-const heroParticles = Array.from({ length: 30 }, (_, i) => ({
-  left: ((i * 53 + 17) % 97) + 1,
-  top: ((i * 83 + 31) % 97) + 1,
-  offsetY: ((i * 11 + 7) % 30) + 10,
-  offsetX: ((i * 19 + 13) % 20) - 10,
-  duration: 4 + (i % 5),
-  delay: (i * 0.3) % 4,
-}));
-
-const heroShapes = Array.from({ length: 6 }, (_, i) => ({
-  size: 20 + (i * 17) % 40,
-  left: 10 + (i * 23) % 80,
-  top: 10 + (i * 29) % 80,
-  duration: 6 + (i % 4),
-  delay: (i * 0.5),
-}));
-
-const ctaShapes = Array.from({ length: 8 }, (_, i) => ({
-  size: 10 + (i * 13) % 30,
-  left: 10 + (i * 19) % 80,
-  top: 10 + (i * 23) % 80,
-  duration: 5 + (i % 3),
-  delay: (i * 0.4),
-}));
 
 const PROGRAM_COLORS = {
   emerald: { bg: 'bg-emerald-50', icon: 'text-emerald-600' },
@@ -282,7 +264,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
             <div className="flex items-center gap-2 cursor-pointer flex-shrink-0 min-w-0" onClick={() => router.push('/')}>
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0 shadow-lg shadow-emerald-500/30"><PalmLogo /></div>
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0 shadow-lg shadow-emerald-500/30 overflow-hidden"><LogoDisplay logoUrl={logoUrl} /></div>
               <span className={`font-bold font-heading text-sm sm:text-lg truncate transition-colors ${scrolled ? 'text-foreground' : 'text-white'}`}>KUD Sari Subur</span>
             </div>
             <div className="hidden md:flex items-center gap-1">
@@ -340,12 +322,6 @@ export default function Home() {
           <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl animate-pulse animate-delay-700" />
           <div className="absolute top-1/3 right-1/3 w-48 h-48 bg-green-400/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
           <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-cyan-400/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-          {heroParticles.map((p, i) => (
-            <motion.div key={i} className="absolute w-1 h-1 bg-white/20 rounded-full" style={{ left: `${p.left}%`, top: `${p.top}%` }} animate={{ y: [0, -40 - p.offsetY, 0], x: [0, p.offsetX, 0], opacity: [0, 0.8, 0] }} transition={{ duration: p.duration, repeat: Infinity, delay: p.delay }} />
-          ))}
-          {heroShapes.map((s, i) => (
-            <motion.div key={`shape-${i}`} className="absolute border border-white/5 rounded-lg backdrop-blur-sm" style={{ width: s.size, height: s.size, left: `${s.left}%`, top: `${s.top}%` }} animate={{ y: [0, -20, 0], rotate: [0, 10, 0, -10, 0], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: s.duration, repeat: Infinity, delay: s.delay }} />
-          ))}
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 pb-10 md:pt-24 md:pb-16">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
@@ -568,7 +544,7 @@ export default function Home() {
                 <div className="absolute bottom-6 left-6 right-6 z-[2]">
                   <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-500/30"><PalmLogo /></div>
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-500/30 overflow-hidden"><LogoDisplay logoUrl={logoUrl} /></div>
                       <div>
                         <div className="font-semibold text-foreground text-sm">KUD Sari Subur</div>
                         <div className="text-xs text-muted-foreground">Berkembang Bersama Petani</div>
@@ -880,9 +856,6 @@ export default function Home() {
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
         <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(6,182,212,0.1),transparent_50%)]" />
-        {ctaShapes.map((s, i) => (
-          <motion.div key={`cta-shape-${i}`} className="absolute border border-white/5 rounded-full" style={{ width: s.size, height: s.size, left: `${s.left}%`, top: `${s.top}%` }} animate={{ y: [0, -15, 0], opacity: [0.2, 0.5, 0.2] }} transition={{ duration: s.duration, repeat: Infinity, delay: s.delay }} />
-        ))}
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.span initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-6">
             Tetap Terhubung
@@ -906,7 +879,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-500/30"><PalmLogo /></div>
+                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-500/30 overflow-hidden"><LogoDisplay logoUrl={logoUrl} /></div>
                 <span className="font-bold font-heading text-lg text-white">KUD Sari Subur</span>
               </div>
               <p className="text-sm leading-relaxed">Koperasi Unit Desa Sari Subur berkomitmen meningkatkan kesejahteraan petani kelapa sawit melalui kemitraan berkelanjutan.</p>
