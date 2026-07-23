@@ -45,6 +45,7 @@ export default function DaftarProgramPage() {
   const [loading, setLoading] = useState(true);
   const [previewImage, setPreviewImage] = useState(null);
   const [previewLabel, setPreviewLabel] = useState('');
+  const [pengaturan, setPengaturan] = useState(null);
 
   const allChecked = useMemo(() => {
     if (program?.aktifkan_surat) {
@@ -65,8 +66,9 @@ export default function DaftarProgramPage() {
       api.pekebun.programTersediaById(id).catch(() => null),
       api.pekebun.profil().catch(() => null),
       api.pekebun.lahan.list().catch(() => []),
+      api.pengaturan.get().catch(() => null),
     ])
-      .then(([prog, profil, lahan]) => {
+      .then(([prog, profil, lahan, peng]) => {
         if (!prog) {
           toast.error('Program tidak ditemukan');
           router.push('/pekebun/program');
@@ -77,6 +79,7 @@ export default function DaftarProgramPage() {
         setProgram(prog);
         setPekebun(profil);
         setLahanSaya(lahan || []);
+        setPengaturan(peng);
         if (lahan?.length === 1) setSelectedLahan(lahan[0].id.toString());
       })
       .catch((e) => {
@@ -121,15 +124,19 @@ export default function DaftarProgramPage() {
   };
 
   const logoKudUrl = useMemo(() => {
+    if (pengaturan?.logo_kud) {
+      const base = typeof window !== 'undefined' ? window.location.origin : '';
+      return pengaturan.logo_kud.startsWith('http') ? pengaturan.logo_kud : `${base}${pengaturan.logo_kud}`;
+    }
     if (typeof window === 'undefined') return '';
     const base = window.location.origin;
     return `${base}/images/logo.jpeg`;
-  }, []);
+  }, [pengaturan]);
 
   const qrLogoUrl = useMemo(() => {
     if (typeof window === 'undefined') return '';
     const base = window.location.origin;
-    return `${base}/qr-logo/qr-code.svg`;
+    return `${base}/qr-logo/qr-code.jpg`;
   }, []);
 
   function detectDesa(alamat) {
@@ -163,6 +170,7 @@ export default function DaftarProgramPage() {
       tanggal_lahir: pekebun.tanggal_lahir ? formatDate(pekebun.tanggal_lahir) : '',
       no_whatsapp: pekebun.no_whatsapp || '',
       alamat: pekebun.alamat || '',
+      alamat_lengkap: pekebun.alamat ? `${pekebun.alamat} KECAMATAN MEGANG SAKTI KABUPATEN MUSI RAWAS PROVINSI SUMATERA SELATAN` : '',
       alamat_lahan: lahan?.alamat_lahan || '',
       jenis_surat_lahan: lahan?.jenis_surat || '',
       nomor_surat_lahan: lahan?.nomor_surat || '',
@@ -179,7 +187,7 @@ export default function DaftarProgramPage() {
       qr_logo: qrLogoUrl,
       kop_kud: `KOPERASI UNIT DESA (KUD) "SARI SUBUR"`,
     };
-  }, [pekebun, lahanSaya, selectedLahan, program, kadesInfo, logoKudUrl, qrLogoUrl]);
+  }, [pekebun, lahanSaya, selectedLahan, program, kadesInfo, logoKudUrl, qrLogoUrl, pengaturan]);
 
   if (loading) {
     return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" /></div>;

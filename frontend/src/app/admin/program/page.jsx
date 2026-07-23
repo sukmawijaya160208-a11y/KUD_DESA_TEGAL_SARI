@@ -39,6 +39,27 @@ const SORT_OPTIONS = [
   { value: 'tanggal_mulai', label: 'Tanggal Mulai' },
 ];
 
+const DEFAULT_SURAT_TEMPLATES = {
+  1: {
+    judul: 'SURAT PERNYATAAN',
+    isi: `Dengan ini menyatakan, bahwa saya bersedia untuk mengikuti Kegiatan Pelatihan Pengembangan Sumber Daya Manusia Perkebunan Kelapa Sawit (SDMPKS) Tahun (Sesuaikan dengan tahun pelaksanaan) yang didanai oleh Badan Pengelola Dana Perkebunan (BPDP) dengan mematuhi segala peraturan yang telah ditetapkan.
+
+Demikian surat pernyataan ini dibuat dengan sebenar-benarnya untuk dapat digunakan sebagaimana mestinya. Apabila di kemudian hari ditemukan bahwa pernyataan ini tidak benar, saya bersedia menerima konsekuensi sesuai dengan peraturan yang berlaku.`,
+  },
+  2: {
+    judul: 'SURAT PERNYATAAN KEPEMILIKAN LAHAN',
+    isi: `Dengan ini menyatakan bahwa saya benar-benar memiliki lahan perkebunan kelapa sawit kurang dari 25 (dua puluh lima) Hektar.
+
+Demikian surat pernyataan ini dibuat dengan sesungguhnya dan dapat digunakan seperlunya.`,
+  },
+  3: {
+    judul: 'SURAT KETERANGAN KEANGGOTAAN KOPERASI',
+    isi: `Benar nama tersebut di atas adalah petani sawit dan tergabung dalam Koperasi Unit Desa Sari Subur Desa Tegalsari Kecamatan Megang Sakti Kabupaten Musi Rawas dengan jabatan sebagai Anggota.
+
+Demikian surat pernyataan ini dibuat dengan sesungguhnya dan dapat digunakan seperlunya.`,
+  },
+};
+
 
 const STATUS_MAP = {
   verified: 'âœ“',
@@ -571,7 +592,19 @@ export default function AdminProgramPage() {
               <input
                 type="checkbox"
                 checked={form.aktifkan_surat}
-                onChange={(e) => setForm({ ...form, aktifkan_surat: e.target.checked })}
+                onChange={(e) => {
+                  const aktif = e.target.checked;
+                  setForm((prev) => {
+                    const next = { ...prev, aktifkan_surat: aktif };
+                    if (aktif) {
+                      [1, 2, 3].forEach((i) => {
+                        if (!next[`surat_${i}_judul`]) next[`surat_${i}_judul`] = DEFAULT_SURAT_TEMPLATES[i].judul;
+                        if (!next[`surat_${i}_isi`]) next[`surat_${i}_isi`] = DEFAULT_SURAT_TEMPLATES[i].isi;
+                      });
+                    }
+                    return next;
+                  });
+                }}
                 className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary/30 cursor-pointer"
               />
               <div>
