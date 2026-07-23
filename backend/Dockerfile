@@ -29,6 +29,7 @@ WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts
 
+COPY database/migrations /app-migrations
 COPY . .
 
 RUN mkdir -p storage/app/public public/storage && \
