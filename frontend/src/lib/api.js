@@ -35,10 +35,10 @@ async function request(endpoint, options = {}) {
     const data = await res.json();
 
     if (!res.ok) {
-      const msg =
-        ERROR_MESSAGES[res.status] ||
+    const msg =
         data.message ||
         (data.errors && Object.values(data.errors)[0]?.[0]) ||
+        ERROR_MESSAGES[res.status] ||
         'Permintaan gagal';
 
       const error = new Error(typeof msg === 'function' ? msg(data) : msg);

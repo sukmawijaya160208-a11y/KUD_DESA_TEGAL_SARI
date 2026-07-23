@@ -36,20 +36,14 @@ return Application::configure(basePath: dirname(__DIR__))
                 }
 
                 if ($e instanceof AuthenticationException) {
-                    return response()->json(['success' => false, 'message' => 'Unauthenticated'], 401);
+                    return response()->json(['message' => 'Unauthenticated'], 401);
                 }
 
                 $status = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
 
-                $message = $status === 500 && ! config('app.debug')
-                    ? 'Terjadi kesalahan pada server'
-                    : $e->getMessage();
+                $message = $e->getMessage();
 
-                $response = ['success' => false, 'message' => $message];
-
-                if (config('app.debug')) {
-                    $response['file'] = $e->getFile() . ':' . $e->getLine();
-                }
+                $response = ['message' => $message];
 
                 return response()->json($response, $status);
             }
