@@ -33,6 +33,7 @@ class PekebunController extends Controller
         $validated = $request->validate([
             'nama' => 'sometimes|string|max:255',
             'nik' => 'sometimes|string|size:16|unique:pekebun,nik,'.$pekebun->id,
+            'jenis_kelamin' => 'sometimes|in:LAKI-LAKI,PEREMPUAN',
             'no_kk' => 'sometimes|string',
             'tempat_lahir' => 'sometimes|string',
             'tanggal_lahir' => 'sometimes|date',

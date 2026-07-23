@@ -9,7 +9,7 @@ class Pekebun extends Model
     protected $table = 'pekebun';
 
     protected $fillable = [
-        'user_id', 'nama', 'nik', 'no_kk', 'tempat_lahir', 'tanggal_lahir',
+        'user_id', 'nama', 'nik', 'jenis_kelamin', 'no_kk', 'tempat_lahir', 'tanggal_lahir',
         'no_whatsapp', 'alamat', 'foto_pekebun', 'upload_ktp', 'upload_kk',
         'status', 'verified_by', 'verified_at', 'catatan_verifikasi',
     ];

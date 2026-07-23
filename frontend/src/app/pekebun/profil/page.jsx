@@ -6,6 +6,7 @@ import { useToast } from '@/components/ToastProvider';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+import Select from '@/components/ui/Select';
 import Textarea from '@/components/ui/Textarea';
 import DatePicker from '@/components/ui/DatePicker';
 import Modal from '@/components/ui/Modal';
@@ -228,11 +229,18 @@ export default function PekebunProfilPage() {
                   <Input label="NIK" value={form.nik || ''} onChange={(e) => setForm({ ...form, nik: e.target.value })} required />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Select label="Jenis Kelamin" value={form.jenis_kelamin || ''} onChange={(e) => setForm({ ...form, jenis_kelamin: e.target.value })}>
+                    <option value="">Pilih Jenis Kelamin</option>
+                    <option value="LAKI-LAKI">Laki-Laki</option>
+                    <option value="PEREMPUAN">Perempuan</option>
+                  </Select>
                   <Input label="No. KK" value={form.no_kk || ''} onChange={(e) => setForm({ ...form, no_kk: e.target.value })} required />
-                  <Input label="No. WhatsApp" value={form.no_whatsapp || ''} onChange={(e) => setForm({ ...form, no_whatsapp: e.target.value })} />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Input label="No. WhatsApp" value={form.no_whatsapp || ''} onChange={(e) => setForm({ ...form, no_whatsapp: e.target.value })} />
                   <Input label="Tempat Lahir" value={form.tempat_lahir || ''} onChange={(e) => setForm({ ...form, tempat_lahir: e.target.value })} required />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <DatePicker label="Tanggal Lahir" value={form.tanggal_lahir ? form.tanggal_lahir.split('T')[0] : ''} onChange={(v) => setForm({ ...form, tanggal_lahir: v })} />
                 </div>
                 <Textarea label="Alamat" value={form.alamat || ''} onChange={(e) => setForm({ ...form, alamat: e.target.value })} rows={2} />
@@ -267,6 +275,7 @@ export default function PekebunProfilPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-0">
                     {[
                       ['NIK', profil.nik],
+                      ['Jenis Kelamin', profil.jenis_kelamin || '-'],
                       ['No. KK', profil.no_kk || '-'],
                       ['Tempat Lahir', profil.tempat_lahir || '-'],
                       ['Tanggal Lahir', profil.tanggal_lahir ? formatDate(profil.tanggal_lahir) : '-'],

@@ -15,6 +15,7 @@ import { formatDate, formatDateShort } from '@/lib/date';
 import { motion, AnimatePresence } from 'framer-motion';
 import ExportDropdown from '@/components/ExportDropdown';
 import DocumentViewer from '@/components/DocumentViewer';
+import SignaturePad from '@/components/SignaturePad';
 import {
   ClipboardDocumentListIcon, PlusIcon, PencilSquareIcon, TrashIcon,
   XMarkIcon, PhotoIcon, CalendarDaysIcon, UsersIcon,
@@ -322,7 +323,7 @@ export default function AdminProgramPage() {
   }, [fetchData]);
 
   const resetForm = useCallback(() => {
-    setForm({ nama: '', jenis: 'PSR', deskripsi: '', foto: [], persyaratan: [], tanggal_mulai: '', tanggal_selesai: '', kuota: '', aktifkan_surat: false, surat_1_judul: '', surat_1_isi: '', surat_2_judul: '', surat_2_isi: '', surat_3_judul: '', surat_3_isi: '' });
+    setForm({ nama: '', jenis: 'PSR', deskripsi: '', foto: [], persyaratan: [], tanggal_mulai: '', tanggal_selesai: '', kuota: '', aktifkan_surat: false, surat_1_judul: '', surat_1_isi: '', surat_2_judul: '', surat_2_isi: '', surat_3_judul: '', surat_3_isi: '', tanda_tangan_kades_tegal_sari: '', tanda_tangan_kades_marga_puspita: '', tanda_tangan_kades_campur_sari: '', tanda_tangan_ketua_kud: '' });
     setEditing(null);
     setShowForm(false);
   }, []);
@@ -344,6 +345,10 @@ export default function AdminProgramPage() {
       surat_2_isi: item.surat_2_isi || '',
       surat_3_judul: item.surat_3_judul || '',
       surat_3_isi: item.surat_3_isi || '',
+      tanda_tangan_kades_tegal_sari: item.tanda_tangan_kades_tegal_sari || '',
+      tanda_tangan_kades_marga_puspita: item.tanda_tangan_kades_marga_puspita || '',
+      tanda_tangan_kades_campur_sari: item.tanda_tangan_kades_campur_sari || '',
+      tanda_tangan_ketua_kud: item.tanda_tangan_ketua_kud || '',
     });
     setEditing(item);
     setShowForm(true);
@@ -608,16 +613,23 @@ export default function AdminProgramPage() {
                           <summary className="cursor-pointer hover:text-primary font-medium">Preview Surat {i}</summary>
                           <div className="mt-2">
                             <DocumentViewer
+                              suratIndex={i}
                               judul={form[`surat_${i}_judul`]}
                               isi={form[`surat_${i}_isi`]}
                               data={{
                                 nama_pekebun: 'Contoh Nama',
                                 nik: '3512345678901234',
+                                jenis_kelamin: 'LAKI-LAKI',
+                                no_whatsapp: '08123456789',
                                 alamat: 'Desa Tegal Sari',
                                 alamat_lahan: 'Sawit 2 Ha',
                                 luas_lahan: '20.000 M²',
                                 nama_program: form.nama || 'Program',
+                                kades_nama: 'SISWOYO',
+                                tanggal_surat: form.tanggal_mulai || '',
+                                tempat_surat: 'Megang Sakti',
                               }}
+                              program={{}}
                               showSignature={false}
                             />
                           </div>
@@ -626,6 +638,52 @@ export default function AdminProgramPage() {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {form.aktifkan_surat && (
+              <div className="mt-6 p-4 bg-purple-50 rounded-xl border border-purple-200">
+                <h4 className="font-semibold text-foreground text-sm mb-3 flex items-center gap-2">
+                  <DocumentTextIcon className="w-4 h-4 text-purple-600" />
+                  Tanda Tangan Digital (Admin)
+                </h4>
+                <p className="text-xs text-gray-500 mb-4">
+                  Upload tanda tangan untuk masing-masing pejabat. Tanda tangan akan otomatis muncul di surat pekebun. Bersifat opsional.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-3 bg-white rounded-xl border border-border">
+                    <p className="text-xs font-semibold text-gray-700 mb-2">Kades Tegal Sari — Siswoyo</p>
+                    <SignaturePad
+                      value={form.tanda_tangan_kades_tegal_sari}
+                      onChange={(v) => setForm({ ...form, tanda_tangan_kades_tegal_sari: v || '' })}
+                      height={120}
+                    />
+                  </div>
+                  <div className="p-3 bg-white rounded-xl border border-border">
+                    <p className="text-xs font-semibold text-gray-700 mb-2">Kades Marga Puspita — Sumodiono</p>
+                    <SignaturePad
+                      value={form.tanda_tangan_kades_marga_puspita}
+                      onChange={(v) => setForm({ ...form, tanda_tangan_kades_marga_puspita: v || '' })}
+                      height={120}
+                    />
+                  </div>
+                  <div className="p-3 bg-white rounded-xl border border-border">
+                    <p className="text-xs font-semibold text-gray-700 mb-2">Kades Campur Sari — Muhksin</p>
+                    <SignaturePad
+                      value={form.tanda_tangan_kades_campur_sari}
+                      onChange={(v) => setForm({ ...form, tanda_tangan_kades_campur_sari: v || '' })}
+                      height={120}
+                    />
+                  </div>
+                  <div className="p-3 bg-white rounded-xl border border-border">
+                    <p className="text-xs font-semibold text-gray-700 mb-2">Ketua KUD — Dedek Sulaiman, S.Pd.</p>
+                    <SignaturePad
+                      value={form.tanda_tangan_ketua_kud}
+                      onChange={(v) => setForm({ ...form, tanda_tangan_ketua_kud: v || '' })}
+                      height={120}
+                    />
+                  </div>
+                </div>
               </div>
             )}
           </div>

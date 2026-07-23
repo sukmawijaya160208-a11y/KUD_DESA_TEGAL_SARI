@@ -15,6 +15,10 @@ class ProgramKud extends Model
         'surat_1_judul', 'surat_1_isi',
         'surat_2_judul', 'surat_2_isi',
         'surat_3_judul', 'surat_3_isi',
+        'tanda_tangan_kades_tegal_sari',
+        'tanda_tangan_kades_marga_puspita',
+        'tanda_tangan_kades_campur_sari',
+        'tanda_tangan_ketua_kud',
     ];
 
     protected $casts = [

@@ -206,6 +206,10 @@ class AdminController extends Controller
             'surat_2_isi' => 'nullable|string',
             'surat_3_judul' => 'nullable|string',
             'surat_3_isi' => 'nullable|string',
+            'tanda_tangan_kades_tegal_sari' => 'nullable|string',
+            'tanda_tangan_kades_marga_puspita' => 'nullable|string',
+            'tanda_tangan_kades_campur_sari' => 'nullable|string',
+            'tanda_tangan_ketua_kud' => 'nullable|string',
         ]);
 
         DB::beginTransaction();
@@ -248,6 +252,10 @@ class AdminController extends Controller
             'surat_2_isi' => 'nullable|string',
             'surat_3_judul' => 'nullable|string',
             'surat_3_isi' => 'nullable|string',
+            'tanda_tangan_kades_tegal_sari' => 'nullable|string',
+            'tanda_tangan_kades_marga_puspita' => 'nullable|string',
+            'tanda_tangan_kades_campur_sari' => 'nullable|string',
+            'tanda_tangan_ketua_kud' => 'nullable|string',
         ]);
 
         DB::beginTransaction();

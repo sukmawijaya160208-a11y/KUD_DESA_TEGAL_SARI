@@ -120,12 +120,44 @@ export default function DaftarProgramPage() {
     setSubmitting(false);
   };
 
+  const logoKudUrl = useMemo(() => {
+    if (typeof window === 'undefined') return '';
+    const base = window.location.origin;
+    return `${base}/images/logo.jpeg`;
+  }, []);
+
+  const qrLogoUrl = useMemo(() => {
+    if (typeof window === 'undefined') return '';
+    const base = window.location.origin;
+    return `${base}/qr-logo/qr-code.svg`;
+  }, []);
+
+  function detectDesa(alamat) {
+    if (!alamat) return null;
+    const a = alamat.toLowerCase();
+    if (a.includes('tegal sari') || a.includes('tegalsari')) return 'tegal sari';
+    if (a.includes('marga puspita')) return 'marga puspita';
+    if (a.includes('campur sari') || a.includes('campursari')) return 'campur sari';
+    return null;
+  }
+
+  const kadesInfo = useMemo(() => {
+    const desa = detectDesa(pekebun?.alamat);
+    const map = {
+      'tegal sari': { nama: 'SISWOYO', title: 'Kepala Desa Tegalsari Kecamatan Megang Sakti' },
+      'marga puspita': { nama: 'SUMODIONO', title: 'Kepala Desa Marga Puspita Kecamatan Megang Sakti' },
+      'campur sari': { nama: 'MUKHSIN', title: 'Kepala Desa Campur Sari Kecamatan Megang Sakti' },
+    };
+    return desa ? map[desa] : { nama: '', title: '' };
+  }, [pekebun]);
+
   const docData = useMemo(() => {
     if (!pekebun) return {};
     const lahan = lahanSaya.find((l) => l.id.toString() === selectedLahan);
     return {
       nama_pekebun: pekebun.nama || '',
       nik: pekebun.nik || '',
+      jenis_kelamin: pekebun.jenis_kelamin || '',
       no_kk: pekebun.no_kk || '',
       tempat_lahir: pekebun.tempat_lahir || '',
       tanggal_lahir: pekebun.tanggal_lahir ? formatDate(pekebun.tanggal_lahir) : '',
@@ -136,8 +168,18 @@ export default function DaftarProgramPage() {
       nomor_surat_lahan: lahan?.nomor_surat || '',
       luas_lahan: lahan ? `${Number(lahan.luas_lahan_m2).toLocaleString()} M²` : '',
       nama_program: program?.nama || '',
+      kades_nama: kadesInfo.nama,
+      kades_title: kadesInfo.title,
+      ketua_kud_nama: 'Dedek Sulaiman, S.Pd.',
+      ketua_kud_jabatan: 'Ketua Koperasi Unit Desa Sari Subur',
+      ketua_kud_alamat: 'Desa Tegalsari Kecamatan Megang Sakti Kabupaten Musi Rawas',
+      tanggal_surat: program?.tanggal_mulai || '',
+      tempat_surat: 'Megang Sakti',
+      logo_kud: logoKudUrl,
+      qr_logo: qrLogoUrl,
+      kop_kud: `KOPERASI UNIT DESA (KUD) "SARI SUBUR"`,
     };
-  }, [pekebun, lahanSaya, selectedLahan, program]);
+  }, [pekebun, lahanSaya, selectedLahan, program, kadesInfo, logoKudUrl, qrLogoUrl]);
 
   if (loading) {
     return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" /></div>;
@@ -278,9 +320,11 @@ export default function DaftarProgramPage() {
 
                   {isi ? (
                     <DocumentViewer
+                      suratIndex={i}
                       judul={judul}
                       isi={isi}
                       data={docData}
+                      program={program || {}}
                       signature={ttd}
                       showSignature={!!ttd}
                     />
