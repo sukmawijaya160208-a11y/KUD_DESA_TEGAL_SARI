@@ -350,7 +350,8 @@ export default function AdminProgramPage() {
   }, []);
 
   const openEdit = useCallback((item) => {
-    setForm({
+    const aktif = item.aktifkan_surat || false;
+    const formData = {
       nama: item.nama || '',
       jenis: item.jenis || 'PSR',
       deskripsi: item.deskripsi || '',
@@ -359,18 +360,16 @@ export default function AdminProgramPage() {
       tanggal_mulai: item.tanggal_mulai || '',
       tanggal_selesai: item.tanggal_selesai || '',
       kuota: item.kuota?.toString() || '',
-      aktifkan_surat: item.aktifkan_surat || false,
-      surat_1_judul: item.surat_1_judul || '',
-      surat_1_isi: item.surat_1_isi || '',
-      surat_2_judul: item.surat_2_judul || '',
-      surat_2_isi: item.surat_2_isi || '',
-      surat_3_judul: item.surat_3_judul || '',
-      surat_3_isi: item.surat_3_isi || '',
-      tanda_tangan_kades_tegal_sari: item.tanda_tangan_kades_tegal_sari || '',
-      tanda_tangan_kades_marga_puspita: item.tanda_tangan_kades_marga_puspita || '',
-      tanda_tangan_kades_campur_sari: item.tanda_tangan_kades_campur_sari || '',
-      tanda_tangan_ketua_kud: item.tanda_tangan_ketua_kud || '',
+      aktifkan_surat: aktif,
+    };
+    [1, 2, 3].forEach((i) => {
+      formData[`surat_${i}_judul`] = item[`surat_${i}_judul`] || (aktif ? DEFAULT_SURAT_TEMPLATES[i].judul : '');
+      formData[`surat_${i}_isi`] = item[`surat_${i}_isi`] || (aktif ? DEFAULT_SURAT_TEMPLATES[i].isi : '');
     });
+    ['tanda_tangan_kades_tegal_sari', 'tanda_tangan_kades_marga_puspita', 'tanda_tangan_kades_campur_sari', 'tanda_tangan_ketua_kud'].forEach((key) => {
+      formData[key] = item[key] || '';
+    });
+    setForm(formData);
     setEditing(item);
     setShowForm(true);
   }, []);
