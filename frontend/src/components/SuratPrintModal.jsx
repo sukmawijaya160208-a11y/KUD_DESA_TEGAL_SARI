@@ -10,24 +10,27 @@ export default function SuratPrintModal({ open, onClose, suratIndex, judul, isi,
   if (!open) return null;
 
   const handlePrint = () => {
+    const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
+      .map((s) => s.outerHTML)
+      .join('');
+    const content = contentRef.current?.innerHTML || '';
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
       <html>
         <head>
           <title>Cetak Surat</title>
+          ${styles}
           <style>
             @page { margin: 15mm; size: A4; }
-            body { font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
+            body { font-family: 'Times New Roman', Times, serif; margin: 0; padding: 20px; }
             img { max-width: 100%; }
             * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           </style>
           <script>
-            window.onload = function() { window.print(); window.close(); };
+            window.onload = function () { window.print(); window.close(); };
           <\/script>
         </head>
-        <body>
-          ${contentRef.current?.innerHTML || ''}
-        </body>
+        <body>${content}</body>
       </html>
     `);
     printWindow.document.close();

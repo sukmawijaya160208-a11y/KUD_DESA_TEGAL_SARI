@@ -63,10 +63,10 @@ function formatSuratDate(dateStr) {
 
 function InfoRow({ label, value }) {
   return (
-    <div className="grid grid-cols-[160px_auto_1fr] gap-x-1 py-0.5">
-      <span className="text-sm text-gray-800 text-left">{label}</span>
+    <div className="grid grid-cols-[180px_auto_1fr] gap-x-1 py-0.5">
+      <span className="text-sm text-gray-800 text-left whitespace-nowrap">{label}</span>
       <span className="text-sm text-gray-800">:</span>
-      <span className="text-sm font-semibold text-gray-900 text-left">{value || '_________________________'}</span>
+      <span className="text-sm font-semibold text-gray-900 text-left break-words">{value || '_________________________'}</span>
     </div>
   );
 }
@@ -215,13 +215,13 @@ export default function DocumentViewer({
 
         {/* ===== SURAT 2: ALAMAT SUB ===== */}
         {suratIndex === 2 && (
-          <p className="text-sm font-semibold text-gray-800 -mt-1 mb-3 tracking-wide indent-[120px]">
+          <p className="text-sm font-semibold text-gray-800 -mt-1 mb-3 tracking-wide indent-[180px]">
             KECAMATAN MEGANG SAKTI KABUPATEN MUSI RAWAS
           </p>
         )}
 
         {/* ===== BODY TEXT ===== */}
-        <div className="text-sm text-gray-800 leading-relaxed space-y-1.5 text-justify mb-3">
+        <div className="text-sm text-gray-800 leading-snug space-y-1 text-justify mb-4">
           {rendered.split('\n').map((line, i) => {
             const trimmed = line.trim();
             if (!trimmed) return <div key={i} className="h-2" />;
@@ -230,15 +230,15 @@ export default function DocumentViewer({
         </div>
 
         {/* ===== DATE ===== */}
-        <div className="text-sm text-gray-700 mb-6 text-center">
+        <div className="text-sm text-gray-700 mb-5 text-center">
           <p className="font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
         </div>
 
         {/* ===== SURAT 1: PEKEBUN SIGNATURE (center) ===== */}
         {suratIndex === 1 && (
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-3">
             <div className="text-center">
-              <p className="text-sm text-gray-600 mb-6">Yang Membuat Pernyataan,</p>
+              <p className="text-sm text-gray-600 mb-4">Yang Membuat Pernyataan,</p>
               {signature ? (
                 <img src={signature} alt="Tanda Tangan" className="h-14 object-contain mx-auto mb-1" />
               ) : (
@@ -255,7 +255,7 @@ export default function DocumentViewer({
           <>
             <div className="flex justify-start mb-4">
               <div className="text-center">
-                <p className="text-sm text-gray-600 mb-6">Saya yang membuat Pernyataan,</p>
+                <p className="text-sm text-gray-600 mb-4">Saya yang membuat Pernyataan,</p>
                 {signature ? (
                   <img src={signature} alt="Tanda Tangan" className="h-14 object-contain mx-auto mb-1" />
                 ) : (
@@ -271,7 +271,7 @@ export default function DocumentViewer({
                 <p className="text-sm font-bold text-gray-800 text-center mb-5 uppercase tracking-wide">Mengetahui</p>
                 <div className="flex justify-end">
                   <div className="text-center">
-                    <p className="text-sm text-gray-600 mb-6">{kades?.title || 'Kepala Desa'}</p>
+                    <p className="text-sm text-gray-600 mb-4">{kades?.title || 'Kepala Desa'}</p>
                     {(() => {
                       let kadesSignature = '';
                       if (desa === 'tegal sari') kadesSignature = program?.tanda_tangan_kades_tegal_sari;
@@ -296,7 +296,7 @@ export default function DocumentViewer({
         {suratIndex === 3 && (
           <div className="flex justify-end mb-4">
             <div className="text-center">
-              <p className="text-sm text-gray-600 mb-6">Ketua Koperasi Unit Desa Sari Subur,</p>
+              <p className="text-sm text-gray-600 mb-4">Ketua Koperasi Unit Desa Sari Subur,</p>
               {(() => {
                 const ttdKetua = program?.tanda_tangan_ketua_kud;
                 return ttdKetua ? (
