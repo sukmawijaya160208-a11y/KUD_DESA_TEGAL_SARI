@@ -32,7 +32,8 @@ RUN composer install --no-dev --no-interaction --no-progress --optimize-autoload
 COPY database/migrations /app-migrations
 COPY . .
 
-RUN mkdir -p storage/app/public public/storage && \
+RUN rm -f bootstrap/cache/config.php bootstrap/cache/routes-v7.php && \
+    mkdir -p storage/app/public public/storage && \
     php artisan package:discover --ansi && \
     php artisan storage:link --force || true
 
