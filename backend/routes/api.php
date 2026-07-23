@@ -40,20 +40,22 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/upload-profil', [AdminController::class, 'uploadProfilePhoto']);
 
-    // Upload
-    Route::post('/upload/profil', [UploadController::class, 'profil']);
-    Route::post('/upload/ktp', [UploadController::class, 'ktp']);
-    Route::post('/upload/kk', [UploadController::class, 'kk']);
-    Route::post('/upload/foto-pekebun', [UploadController::class, 'fotoPekebun']);
-    Route::post('/upload/surat-tanah', [UploadController::class, 'suratTanah']);
-    Route::post('/upload/surat-keterangan', [UploadController::class, 'suratKeterangan']);
-    Route::post('/upload/logo', [UploadController::class, 'logo']);
-    Route::post('/upload/foto-petani', [UploadController::class, 'fotoPetani']);
-    Route::post('/upload/foto-kebun', [UploadController::class, 'fotoKebun']);
-    Route::post('/upload/foto-pengembang', [UploadController::class, 'fotoPengembang']);
-    Route::post('/upload/dokumen-program', [UploadController::class, 'dokumenProgram']);
-    Route::post('/upload/video-tentang-aplikasi', [UploadController::class, 'videoTentangAplikasi']);
-    Route::post('/upload/chat', [UploadController::class, 'chatUpload']);
+    // Upload (rate limited: 10 per minute)
+    Route::middleware('throttle:10,1')->group(function () {
+        Route::post('/upload/profil', [UploadController::class, 'profil']);
+        Route::post('/upload/ktp', [UploadController::class, 'ktp']);
+        Route::post('/upload/kk', [UploadController::class, 'kk']);
+        Route::post('/upload/foto-pekebun', [UploadController::class, 'fotoPekebun']);
+        Route::post('/upload/surat-tanah', [UploadController::class, 'suratTanah']);
+        Route::post('/upload/surat-keterangan', [UploadController::class, 'suratKeterangan']);
+        Route::post('/upload/logo', [UploadController::class, 'logo']);
+        Route::post('/upload/foto-petani', [UploadController::class, 'fotoPetani']);
+        Route::post('/upload/foto-kebun', [UploadController::class, 'fotoKebun']);
+        Route::post('/upload/foto-pengembang', [UploadController::class, 'fotoPengembang']);
+        Route::post('/upload/dokumen-program', [UploadController::class, 'dokumenProgram']);
+        Route::post('/upload/video-tentang-aplikasi', [UploadController::class, 'videoTentangAplikasi']);
+        Route::post('/upload/chat', [UploadController::class, 'chatUpload']);
+    });
 
     // Notifikasi
     Route::get('/notifikasi', [NotifikasiController::class, 'index']);

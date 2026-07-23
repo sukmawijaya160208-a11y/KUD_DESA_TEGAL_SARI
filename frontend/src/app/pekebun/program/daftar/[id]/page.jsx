@@ -336,6 +336,12 @@ export default function DaftarProgramPage() {
                       showSignature={!!ttd}
                     />
 
+                  <div className="flex items-center justify-end gap-2 mt-2">
+                    <button onClick={() => window.print()} className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors cursor-pointer">
+                      Cetak Surat {i}
+                    </button>
+                  </div>
+
                   <label className="flex items-start gap-3 mt-3 p-3 bg-white rounded-lg border border-border cursor-pointer hover:bg-gray-50 transition-colors">
                     <input
                       type="checkbox"

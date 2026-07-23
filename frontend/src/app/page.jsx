@@ -279,7 +279,7 @@ export default function Home() {
                   <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => router.push('/login?tab=register')} className="px-4 py-2 rounded-lg text-sm font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-lg shadow-emerald-600/30 hover:shadow-xl hover:shadow-emerald-600/40 transition-all hover:from-emerald-700 hover:to-emerald-800">Daftar</motion.button>
                 </div>
               ) : mounted && loggedIn ? (
-                <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => router.push('/dashboard')} className="ml-3 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-lg shadow-emerald-600/30">Dashboard</motion.button>
+                <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={() => { try { const u = JSON.parse(localStorage.getItem('user') || '{}'); router.push(u.role === 'admin' ? '/admin' : u.role === 'verifikator' ? '/verifikator' : u.role === 'pekebun' ? '/pekebun' : '/login'); } catch { router.push('/login'); } }} className="ml-3 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-lg shadow-emerald-600/30">Dashboard</motion.button>
               ) : null}
             </div>
             <button onClick={() => setMobileOpen(!mobileOpen)} className={`md:hidden p-2 rounded-lg transition-colors ${scrolled ? 'text-foreground' : 'text-white'}`}>
@@ -303,7 +303,7 @@ export default function Home() {
                       <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/login?tab=register'); }} className="flex-1 py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/30">Daftar</motion.button>
                     </>
                   ) : mounted && loggedIn ? (
-                    <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); router.push('/dashboard'); }} className="w-full py-2.5 rounded-lg bg-primary text-white font-semibold text-sm">Dashboard</motion.button>
+                    <motion.button whileTap={{ scale: 0.97 }} onClick={() => { setMobileOpen(false); try { const u = JSON.parse(localStorage.getItem('user') || '{}'); router.push(u.role === 'admin' ? '/admin' : u.role === 'verifikator' ? '/verifikator' : u.role === 'pekebun' ? '/pekebun' : '/login'); } catch { router.push('/login'); } }} className="w-full py-2.5 rounded-lg bg-primary text-white font-semibold text-sm">Dashboard</motion.button>
                   ) : null}
                 </div>
               </div>

@@ -35,10 +35,19 @@ export default function AdminTentangAplikasiPage() {
     } catch (err) { toast.error('Upload gagal: ' + err.message); }
   }, [toast]);
 
+  const persistVideos = useCallback(async (videos) => {
+    try {
+      await api.admin.tentangAplikasi.update({ videos });
+    } catch {
+    }
+  }, []);
+
   const handleUploadVideo = useCallback(async (file, folderUrl) => {
     if (folderUrl) {
       setEdit((prev) => {
         const next = [...(Array.isArray(prev.videos) ? prev.videos : []), folderUrl];
+        setData((d) => ({ ...d, videos: next }));
+        persistVideos(next);
         return { ...prev, videos: next };
       });
       toast.success('Video ditambahkan dari folder');
@@ -50,20 +59,24 @@ export default function AdminTentangAplikasiPage() {
       const res = await api.upload('/upload/video-tentang-aplikasi', file);
       setEdit((prev) => {
         const next = [...(Array.isArray(prev.videos) ? prev.videos : []), res.url];
+        setData((d) => ({ ...d, videos: next }));
+        persistVideos(next);
         return { ...prev, videos: next };
       });
       toast.success('Video berhasil diupload');
     } catch (err) { toast.error('Upload video gagal: ' + err.message); }
     setUploadingVideo(false);
-  }, [toast]);
+  }, [toast, persistVideos]);
 
   const handleRemoveVideo = useCallback((idx) => {
     setEdit((prev) => {
       const next = Array.isArray(prev.videos) ? [...prev.videos] : [];
       if (typeof idx === 'number') next.splice(idx, 1);
+      setData((d) => ({ ...d, videos: next }));
+      persistVideos(next);
       return { ...prev, videos: next };
     });
-  }, []);
+  }, [persistVideos]);
 
   const handleSave = useCallback(async (editData) => {
     setSaving(true);

@@ -9,6 +9,7 @@ import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
+import DocumentViewer from '@/components/DocumentViewer';
 import {
   DocumentTextIcon, EyeIcon, XMarkIcon, MapPinIcon,
   ChevronDownIcon, ChevronRightIcon, MagnifyingGlassIcon,
@@ -204,15 +205,18 @@ const ExpandedRow = memo(function ExpandedRow({ d, onPreview, onVerifikasi, cata
                   </h4>
                   <div className="space-y-1.5">
                     {[
-                      { label: d.programKud?.surat_1_judul || 'Surat 1', value: d.setuju_surat_1 },
-                      { label: d.programKud?.surat_2_judul || 'Surat 2', value: d.setuju_surat_2 },
-                      { label: d.programKud?.surat_3_judul || 'Surat 3', value: d.setuju_surat_3 },
+                      { idx: 1, label: d.programKud?.surat_1_judul || 'Surat 1', value: d.setuju_surat_1 },
+                      { idx: 2, label: d.programKud?.surat_2_judul || 'Surat 2', value: d.setuju_surat_2 },
+                      { idx: 3, label: d.programKud?.surat_3_judul || 'Surat 3', value: d.setuju_surat_3 },
                     ].map((s, i) => (
                       <div key={i} className="flex items-center justify-between p-2 bg-white rounded-lg border border-border">
                         <span className="text-sm text-gray-700">{s.label}</span>
-                        <span className={`text-xs font-semibold ${s.value ? 'text-green-600' : 'text-gray-400'}`}>
-                          {s.value ? '✓ Disetujui' : '✗ Belum'}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <button onClick={() => setPreviewSurat({ data: d, suratIndex: s.idx })} className="text-xs text-primary hover:underline font-medium cursor-pointer">Lihat</button>
+                          <span className={`text-xs font-semibold ${s.value ? 'text-green-600' : 'text-gray-400'}`}>
+                            {s.value ? '✓ Disetujui' : '✗ Belum'}
+                          </span>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -321,6 +325,7 @@ export default function VerifikatorProgramPage() {
   const [gotoPage, setGotoPage] = useState('');
   const [expandedId, setExpandedId] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [previewSurat, setPreviewSurat] = useState(null);
   const [verifModal, setVerifModal] = useState(null);
   const [catatan, setCatatan] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -597,6 +602,44 @@ export default function VerifikatorProgramPage() {
           </Button>
         </div>
       </Modal>
+
+      {previewSurat && (
+        <div className="fixed inset-0 z-[9999] bg-black/85 flex items-center justify-center p-4 overflow-y-auto" onClick={() => setPreviewSurat(null)}>
+          <div className="relative w-full max-w-[210mm] my-4" onClick={(e) => e.stopPropagation()}>
+            <div className="sticky top-0 z-10 flex items-center justify-end gap-2 mb-2">
+              <button onClick={() => window.print()}
+                className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg shadow-lg hover:bg-primary-dark transition-colors cursor-pointer">Cetak</button>
+              <button onClick={() => setPreviewSurat(null)}
+                className="w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center cursor-pointer">
+                <XMarkIcon className="w-4 h-4 text-gray-700" />
+              </button>
+            </div>
+            <DocumentViewer
+              suratIndex={previewSurat.suratIndex || 1}
+              data={{
+                nama_pekebun: previewSurat.data?.pekebun?.nama || '',
+                nik: previewSurat.data?.pekebun?.nik || '',
+                jenis_kelamin: previewSurat.data?.pekebun?.jenis_kelamin || '',
+                alamat: (previewSurat.data?.pekebun?.alamat_lengkap || previewSurat.data?.pekebun?.alamat || '') + ' KECAMATAN MEGANG SAKTI KABUPATEN MUSI RAWAS PROVINSI SUMATERA SELATAN',
+                no_whatsapp: previewSurat.data?.pekebun?.no_whatsapp || '',
+                nama_program: previewSurat.data?.programKud?.nama || '',
+                kades_nama: previewSurat.data?.pekebun?.desa ? {
+                  'tegal sari': 'SISWOYO',
+                  'marga puspita': 'SUMODIONO',
+                  'campur sari': 'MUKHSIN',
+                }[(previewSurat.data?.pekebun?.desa || '').toLowerCase()] || '' : '',
+                tanggal_surat: previewSurat.data?.programKud?.tanggal_mulai || '',
+                tempat_surat: 'Megang Sakti',
+                logo_kud: '',
+                qr_logo: '',
+              }}
+              program={previewSurat.data?.programKud || {}}
+              signature={previewSurat.data?.tanda_tangan_digital || ''}
+              showSignature={!!previewSurat.data?.tanda_tangan_digital}
+            />
+          </div>
+        </div>
+      )}
 
       {previewImage && (
         <div className="fixed inset-0 z-[9999] bg-black/85 flex items-center justify-center p-4" onClick={() => setPreviewImage(null)}>

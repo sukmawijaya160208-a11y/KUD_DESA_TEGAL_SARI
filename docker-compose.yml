@@ -13,6 +13,7 @@ services:
     environment:
       - APP_ENV=production
       - DB_CONNECTION=sqlite
+      - FRONTEND_URL=https://kud-sari-subur.my.id
     ports:
       - "8000:8000"
     networks:
