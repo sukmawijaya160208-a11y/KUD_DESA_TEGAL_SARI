@@ -63,7 +63,7 @@ function formatSuratDate(dateStr) {
 
 function InfoRow({ label, value }) {
   return (
-    <div className="grid grid-cols-[120px_auto_1fr] gap-x-1 py-0.5">
+    <div className="grid grid-cols-[160px_auto_1fr] gap-x-1 py-0.5">
       <span className="text-sm text-gray-800 text-left">{label}</span>
       <span className="text-sm text-gray-800">:</span>
       <span className="text-sm font-semibold text-gray-900 text-left">{value || '_________________________'}</span>
@@ -109,11 +109,11 @@ export default function DocumentViewer({
 
   return (
     <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
-      <div className="max-w-full sm:max-w-[210mm] mx-auto py-5 px-4 sm:px-8">
+      <div className="max-w-full sm:max-w-[210mm] mx-auto py-4 px-4 sm:px-6">
 
         {/* ===== SURAT 3 HEADER ===== */}
         {suratIndex === 3 && (
-          <div className="flex items-start justify-between gap-2 mb-3">
+          <div className="flex items-start justify-between gap-2 mb-2">
             <div className="w-[60px] sm:w-[75px] h-[60px] sm:h-[75px] shrink-0">
               {logoKudUrl ? (
                 <img src={logoKudUrl} alt="Logo KUD" className="w-full h-full object-contain" />
@@ -149,8 +149,8 @@ export default function DocumentViewer({
 
         {suratIndex === 3 && (
           <>
-            <div className="border-t-2 border-b border-gray-800 mb-3" />
-            <div className="text-center mb-3">
+            <div className="border-t-2 border-b border-gray-800 mb-2" />
+            <div className="text-center mb-2">
               <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
                 {title}
               </h2>
@@ -161,7 +161,7 @@ export default function DocumentViewer({
 
         {/* ===== SURAT 1 & 2 TITLE ===== */}
         {suratIndex !== 3 && (
-          <div className="text-center mb-4">
+          <div className="text-center mb-3">
             <h2 className="text-base font-bold text-gray-900 uppercase tracking-wide">
               {title}
             </h2>
@@ -176,7 +176,7 @@ export default function DocumentViewer({
 
         {/* ===== SURAT 3: KETUA KUD FIXED DATA ===== */}
         {suratIndex === 3 && (
-          <div className="mb-3">
+          <div className="mb-2">
             <p className="text-sm font-semibold text-gray-800 mb-1">Yang bertanda tangan di bawah ini :</p>
             <div>
               <InfoRow label="Nama" value={data?.ketua_kud_nama || 'Dedek Sulaiman, S.Pd.'} />
@@ -188,7 +188,7 @@ export default function DocumentViewer({
 
         {/* ===== SURAT 3: AUTO POPULATE PEKEBUN ===== */}
         {suratIndex === 3 && (
-          <div className="mb-3">
+          <div className="mb-2">
             <p className="text-sm font-semibold text-gray-800 mb-1">Menerangkan dengan sebenarnya, bahwa :</p>
             <div>
               <InfoRow label="Nama" value={data?.nama_pekebun} />
@@ -201,7 +201,7 @@ export default function DocumentViewer({
 
         {/* ===== SURAT 1 & 2: AUTO POPULATE PEKEBUN ===== */}
         {suratIndex !== 3 && (
-          <div className="mb-3">
+          <div className="mb-2">
             <p className="text-sm font-semibold text-gray-800 mb-1">Yang bertanda tangan di bawah ini :</p>
             <div>
               <InfoRow label="Nama" value={data?.nama_pekebun} />
@@ -221,7 +221,7 @@ export default function DocumentViewer({
         )}
 
         {/* ===== BODY TEXT ===== */}
-        <div className="text-sm text-gray-800 leading-relaxed space-y-2 text-justify mb-4">
+        <div className="text-sm text-gray-800 leading-relaxed space-y-1.5 text-justify mb-3">
           {rendered.split('\n').map((line, i) => {
             const trimmed = line.trim();
             if (!trimmed) return <div key={i} className="h-2" />;
@@ -230,7 +230,7 @@ export default function DocumentViewer({
         </div>
 
         {/* ===== DATE ===== */}
-        <div className="text-sm text-gray-700 mb-8 text-center">
+        <div className="text-sm text-gray-700 mb-6 text-center">
           <p className="font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
         </div>
 

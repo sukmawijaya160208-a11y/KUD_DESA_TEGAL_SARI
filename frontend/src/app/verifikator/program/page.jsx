@@ -10,6 +10,7 @@ import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
 import DocumentViewer from '@/components/DocumentViewer';
+import SuratPrintModal from '@/components/SuratPrintModal';
 import {
   DocumentTextIcon, EyeIcon, XMarkIcon, MapPinIcon,
   ChevronDownIcon, ChevronRightIcon, MagnifyingGlassIcon,
@@ -603,43 +604,33 @@ export default function VerifikatorProgramPage() {
         </div>
       </Modal>
 
-      {previewSurat && (
-        <div className="fixed inset-0 z-[9999] bg-black/85 flex items-center justify-center p-4 overflow-y-auto" onClick={() => setPreviewSurat(null)}>
-          <div className="relative w-full max-w-[210mm] my-4" onClick={(e) => e.stopPropagation()}>
-            <div className="sticky top-0 z-10 flex items-center justify-end gap-2 mb-2">
-              <button onClick={() => window.print()}
-                className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg shadow-lg hover:bg-primary-dark transition-colors cursor-pointer">Cetak</button>
-              <button onClick={() => setPreviewSurat(null)}
-                className="w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center cursor-pointer">
-                <XMarkIcon className="w-4 h-4 text-gray-700" />
-              </button>
-            </div>
-            <DocumentViewer
-              suratIndex={previewSurat.suratIndex || 1}
-              data={{
-                nama_pekebun: previewSurat.data?.pekebun?.nama || '',
-                nik: previewSurat.data?.pekebun?.nik || '',
-                jenis_kelamin: previewSurat.data?.pekebun?.jenis_kelamin || '',
-                alamat: (previewSurat.data?.pekebun?.alamat_lengkap || previewSurat.data?.pekebun?.alamat || '') + ' KECAMATAN MEGANG SAKTI KABUPATEN MUSI RAWAS PROVINSI SUMATERA SELATAN',
-                no_whatsapp: previewSurat.data?.pekebun?.no_whatsapp || '',
-                nama_program: previewSurat.data?.programKud?.nama || '',
-                kades_nama: previewSurat.data?.pekebun?.desa ? {
-                  'tegal sari': 'SISWOYO',
-                  'marga puspita': 'SUMODIONO',
-                  'campur sari': 'MUKHSIN',
-                }[(previewSurat.data?.pekebun?.desa || '').toLowerCase()] || '' : '',
-                tanggal_surat: previewSurat.data?.programKud?.tanggal_mulai || '',
-                tempat_surat: 'Megang Sakti',
-                logo_kud: '',
-                qr_logo: '',
-              }}
-              program={previewSurat.data?.programKud || {}}
-              signature={previewSurat.data?.tanda_tangan_digital || ''}
-              showSignature={!!previewSurat.data?.tanda_tangan_digital}
-            />
-          </div>
-        </div>
-      )}
+      <SuratPrintModal
+        open={previewSurat !== null}
+        onClose={() => setPreviewSurat(null)}
+        suratIndex={previewSurat?.suratIndex || 1}
+        judul={previewSurat?.data?.programKud ? previewSurat.data.programKud[`surat_${previewSurat.suratIndex}_judul`] : ''}
+        isi={previewSurat?.data?.programKud ? previewSurat.data.programKud[`surat_${previewSurat.suratIndex}_isi`] : ''}
+        data={{
+          nama_pekebun: previewSurat?.data?.pekebun?.nama || '',
+          nik: previewSurat?.data?.pekebun?.nik || '',
+          jenis_kelamin: previewSurat?.data?.pekebun?.jenis_kelamin || '',
+          alamat: previewSurat?.data?.pekebun?.alamat || '',
+          alamat_lengkap: (previewSurat?.data?.pekebun?.alamat_lengkap || previewSurat?.data?.pekebun?.alamat || '') + ' KECAMATAN MEGANG SAKTI KABUPATEN MUSI RAWAS PROVINSI SUMATERA SELATAN',
+          no_whatsapp: previewSurat?.data?.pekebun?.no_whatsapp || '',
+          nama_program: previewSurat?.data?.programKud?.nama || '',
+          kades_nama: previewSurat?.data?.pekebun?.desa ? {
+            'tegal sari': 'SISWOYO',
+            'marga puspita': 'SUMODIONO',
+            'campur sari': 'MUKHSIN',
+          }[(previewSurat.data?.pekebun?.desa || '').toLowerCase()] || '' : '',
+          tanggal_surat: previewSurat?.data?.programKud?.tanggal_mulai || '',
+          tempat_surat: 'Megang Sakti',
+          logo_kud: '',
+          qr_logo: '',
+        }}
+        program={previewSurat?.data?.programKud || {}}
+        signature={previewSurat?.data?.tanda_tangan_digital || ''}
+      />
 
       {previewImage && (
         <div className="fixed inset-0 z-[9999] bg-black/85 flex items-center justify-center p-4" onClick={() => setPreviewImage(null)}>
