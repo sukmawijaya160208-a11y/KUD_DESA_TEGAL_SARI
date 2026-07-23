@@ -12,11 +12,16 @@ class PendaftaranProgram extends Model
         'pekebun_id', 'program_kud_id', 'lahan_id',
         'status', 'verified_by', 'verified_at', 'catatan_verifikasi',
         'data',
+        'setuju_surat_1', 'setuju_surat_2', 'setuju_surat_3',
+        'tanda_tangan_digital',
     ];
 
     protected $casts = [
         'data' => 'array',
         'verified_at' => 'datetime',
+        'setuju_surat_1' => 'boolean',
+        'setuju_surat_2' => 'boolean',
+        'setuju_surat_3' => 'boolean',
     ];
 
     protected static function booted(): void

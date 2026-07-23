@@ -199,6 +199,13 @@ class AdminController extends Controller
             'tanggal_mulai' => 'nullable|date',
             'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
             'kuota' => 'nullable|integer|min:0',
+            'aktifkan_surat' => 'sometimes|boolean',
+            'surat_1_judul' => 'nullable|string',
+            'surat_1_isi' => 'nullable|string',
+            'surat_2_judul' => 'nullable|string',
+            'surat_2_isi' => 'nullable|string',
+            'surat_3_judul' => 'nullable|string',
+            'surat_3_isi' => 'nullable|string',
         ]);
 
         DB::beginTransaction();
@@ -234,6 +241,13 @@ class AdminController extends Controller
             'tanggal_mulai' => 'nullable|date',
             'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
             'kuota' => 'nullable|integer|min:0',
+            'aktifkan_surat' => 'sometimes|boolean',
+            'surat_1_judul' => 'nullable|string',
+            'surat_1_isi' => 'nullable|string',
+            'surat_2_judul' => 'nullable|string',
+            'surat_2_isi' => 'nullable|string',
+            'surat_3_judul' => 'nullable|string',
+            'surat_3_isi' => 'nullable|string',
         ]);
 
         DB::beginTransaction();

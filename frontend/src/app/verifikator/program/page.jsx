@@ -195,6 +195,38 @@ const ExpandedRow = memo(function ExpandedRow({ d, onPreview, onVerifikasi, cata
                 </div>
               )}
 
+              {/* Surat Persetujuan */}
+              {d.setuju_surat_1 !== undefined && d.programKud?.aktifkan_surat && (
+                <div>
+                  <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                    <DocumentTextIcon className="w-3.5 h-3.5 inline mr-1" />
+                    Status Persetujuan Surat
+                  </h4>
+                  <div className="space-y-1.5">
+                    {[
+                      { label: d.programKud?.surat_1_judul || 'Surat 1', value: d.setuju_surat_1 },
+                      { label: d.programKud?.surat_2_judul || 'Surat 2', value: d.setuju_surat_2 },
+                      { label: d.programKud?.surat_3_judul || 'Surat 3', value: d.setuju_surat_3 },
+                    ].map((s, i) => (
+                      <div key={i} className="flex items-center justify-between p-2 bg-white rounded-lg border border-border">
+                        <span className="text-sm text-gray-700">{s.label}</span>
+                        <span className={`text-xs font-semibold ${s.value ? 'text-green-600' : 'text-gray-400'}`}>
+                          {s.value ? '✓ Disetujui' : '✗ Belum'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  {d.tanda_tangan_digital && (
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-400 mb-1">Tanda Tangan Digital:</p>
+                      <div className="bg-white rounded-lg border border-border p-3 inline-block">
+                        <img src={d.tanda_tangan_digital} alt="TTD" className="h-12 object-contain" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Data Lahan */}
               {semuaLahan.length > 0 && (
                 <div>

@@ -155,6 +155,10 @@ class PekebunController extends Controller
             'program_kud_id' => 'required|exists:program_kud,id',
             'lahan_id' => 'nullable|exists:lahan,id',
             'data' => 'nullable|array',
+            'setuju_surat_1' => 'sometimes|boolean',
+            'setuju_surat_2' => 'sometimes|boolean',
+            'setuju_surat_3' => 'sometimes|boolean',
+            'tanda_tangan_digital' => 'nullable|string',
         ]);
 
         $exists = PendaftaranProgram::where([
@@ -181,6 +185,17 @@ class PekebunController extends Controller
             }
         }
 
+        if ($program->aktifkan_surat) {
+            $suratErrors = [];
+            if (! $validated['setuju_surat_1']) $suratErrors[] = 'Surat 1 belum disetujui';
+            if (! $validated['setuju_surat_2']) $suratErrors[] = 'Surat 2 belum disetujui';
+            if (! $validated['setuju_surat_3']) $suratErrors[] = 'Surat 3 belum disetujui';
+            if (empty($validated['tanda_tangan_digital'])) $suratErrors[] = 'Tanda tangan digital belum diisi';
+            if (! empty($suratErrors)) {
+                return response()->json(['message' => implode(', ', $suratErrors)], 400);
+            }
+        }
+
         DB::beginTransaction();
         try {
             $daftar = PendaftaranProgram::create([
@@ -188,6 +203,10 @@ class PekebunController extends Controller
                 'program_kud_id' => $validated['program_kud_id'],
                 'lahan_id' => $validated['lahan_id'] ?? null,
                 'data' => $validated['data'] ?? null,
+                'setuju_surat_1' => $validated['setuju_surat_1'] ?? false,
+                'setuju_surat_2' => $validated['setuju_surat_2'] ?? false,
+                'setuju_surat_3' => $validated['setuju_surat_3'] ?? false,
+                'tanda_tangan_digital' => $validated['tanda_tangan_digital'] ?? null,
             ]);
 
             DB::commit();
@@ -196,7 +215,6 @@ class PekebunController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            // Hapus file dokumen yang terlanjur diupload ke storage
             if (! empty($validated['data']['dokumen'])) {
                 foreach ($validated['data']['dokumen'] as $jenis => $urlPath) {
                     $relativePath = ltrim(parse_url($urlPath, PHP_URL_PATH), '/storage/');

@@ -1,17 +1,15 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
-import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
-import Modal from '@/components/ui/Modal';
 import ProgramDetail from '@/components/ProgramDetail';
 import { formatDate, formatDateShort } from '@/lib/date';
 import {
   ClipboardDocumentListIcon, CheckCircleIcon, CalendarDaysIcon, UsersIcon,
-  XMarkIcon, ChevronRightIcon, ArrowLeftIcon,
-  PhotoIcon, DocumentIcon
+  ChevronRightIcon, XMarkIcon
 } from '@heroicons/react/24/outline';
 
 const PERSYARATAN_LABEL = {
@@ -20,24 +18,12 @@ const PERSYARATAN_LABEL = {
   keterangan_beda_nama: 'Keterangan Beda Nama',
 };
 
-const PERSYARATAN_ICON = {
-  foto_ktp: PhotoIcon, foto_kk: PhotoIcon, akte: DocumentIcon,
-  foto_pekebun: PhotoIcon, foto_surat_tanah: PhotoIcon,
-  keterangan_beda_nama: DocumentIcon,
-};
-
 export default function PekebunProgramPage() {
+  const router = useRouter();
   const toast = useToast();
   const [tersedia, setTersedia] = useState([]);
   const [programSaya, setProgramSaya] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [daftarModal, setDaftarModal] = useState(null);
-  const [step, setStep] = useState(1);
-  const [lahanSaya, setLahanSaya] = useState([]);
-  const [selectedLahan, setSelectedLahan] = useState('');
-  const [dokumens, setDokumens] = useState({});
-  const [uploading, setUploading] = useState({});
-  const [submitting, setSubmitting] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [previewLabel, setPreviewLabel] = useState('');
@@ -67,57 +53,8 @@ export default function PekebunProgramPage() {
 
   useEffect(() => { load(); }, [toast]);
 
-  const openDaftar = async (p) => {
-    setDaftarModal(p);
-    setStep(1);
-    setSelectedLahan('');
-    setDokumens({});
-    try {
-      const lahan = await api.pekebun.lahan.list();
-      setLahanSaya(lahan);
-    } catch {}
-  };
-
-  const closeDaftar = () => {
-    setDaftarModal(null);
-    setStep(1);
-  };
-
   const openDetail = (p) => setDetailProgram(p);
   const closeDetail = () => setDetailProgram(null);
-
-  const handleFileUpload = async (jenis, file) => {
-    setUploading((prev) => ({ ...prev, [jenis]: true }));
-    try {
-      const res = await api.uploadDokumenProgram(file, jenis);
-      setDokumens((prev) => ({ ...prev, [jenis]: res.url }));
-    } catch (err) {
-      toast.error(`Upload ${PERSYARATAN_LABEL[jenis] || jenis} gagal: ${err.message}`);
-    }
-    setUploading((prev) => ({ ...prev, [jenis]: false }));
-  };
-
-  const handleSubmit = async () => {
-    setSubmitting(true);
-    try {
-      await api.pekebun.daftarProgram({
-        program_kud_id: daftarModal.id,
-        lahan_id: selectedLahan || null,
-        data: { dokumen: dokumens },
-      });
-      toast.success('Berhasil mendaftar program!');
-      closeDaftar();
-      load();
-    } catch (err) {
-      toast.error(err.message);
-    }
-    setSubmitting(false);
-  };
-
-  const canSubmit = useMemo(() => {
-    if (!daftarModal?.persyaratan) return false;
-    return daftarModal.persyaratan.every((p) => dokumens[p]);
-  }, [daftarModal, dokumens]);
 
   if (loading) return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" /></div>;
 
@@ -207,7 +144,7 @@ export default function PekebunProgramPage() {
                     ) : penuh ? (
                       <span className="px-3 py-1.5 bg-gray-100 text-gray-500 rounded-xl text-sm font-semibold">Kuota Penuh</span>
                     ) : (
-                      <Button size="sm" onClick={() => openDaftar(p)}>
+                      <Button size="sm" onClick={() => router.push(`/pekebun/program/daftar/${p.id}`)}>
                         Daftar <ChevronRightIcon className="w-4 h-4" />
                       </Button>
                     )}
@@ -282,135 +219,6 @@ export default function PekebunProgramPage() {
         </>
       )}
 
-      <Modal open={!!daftarModal} onClose={closeDaftar} title={daftarModal?.nama || 'Daftar Program'} maxWidth="max-w-lg">
-        <div className="flex items-center gap-2 mb-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="flex items-center gap-2 flex-1">
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all
-                ${step >= i ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>{i}</div>
-              <span className={`text-[10px] font-medium ${step >= i ? 'text-primary' : 'text-gray-400'}`}>
-                {i === 1 ? 'Pilih Lahan' : i === 2 ? 'Upload Dokumen' : 'Konfirmasi'}
-              </span>
-              {i < 3 && <div className={`flex-1 h-0.5 ${step > i ? 'bg-primary' : 'bg-gray-200'}`} />}
-            </div>
-          ))}
-        </div>
-
-        {step === 1 && (
-          <div className="space-y-3">
-            <p className="text-sm text-gray-600">Pilih lahan yang akan didaftarkan ke program ini:</p>
-            {lahanSaya.length === 0 ? (
-              <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm rounded-xl p-3">
-                Anda belum memiliki data lahan. <a href="/pekebun/lahan" className="text-primary underline">Daftarkan lahan Anda</a> terlebih dahulu.
-              </div>
-            ) : (
-              <div className="space-y-2 max-h-60 overflow-y-auto">
-                {lahanSaya.map((l) => (
-                  <label key={l.id} className={`block p-3 rounded-xl border-2 cursor-pointer transition-all
-                    ${selectedLahan === l.id.toString() ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/40 bg-white'}`}>
-                    <div className="flex items-center gap-3">
-                      <input type="radio" name="lahan" value={l.id} checked={selectedLahan === l.id.toString()}
-                        onChange={(e) => setSelectedLahan(e.target.value)} className="accent-primary" />
-                      <div>
-                        <p className="font-medium text-sm text-foreground">{l.alamat_lahan}</p>
-                        <p className="text-xs text-gray-500">{l.jenis_surat} — {Number(l.luas_lahan_m2 || 0).toLocaleString()} M²</p>
-                      </div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            )}
-            <div className="flex justify-end pt-2">
-              <Button onClick={() => setStep(2)} disabled={!selectedLahan && lahanSaya.length > 0}>
-                Lanjut <ChevronRightIcon className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="space-y-4">
-            <p className="text-sm text-gray-600">Upload dokumen persyaratan yang diminta:</p>
-            <div className="space-y-3 max-h-80 overflow-y-auto">
-              {daftarModal?.persyaratan?.map((jenis) => {
-                const Icon = PERSYARATAN_ICON[jenis] || DocumentIcon;
-                const uploaded = !!dokumens[jenis];
-                return (
-                  <div key={jenis} className={`p-3 rounded-xl border-2 transition-all ${uploaded ? 'border-green-300 bg-green-50/50' : 'border-border bg-white'}`}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${uploaded ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
-                          <Icon className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">{PERSYARATAN_LABEL[jenis] || jenis}</p>
-                          {uploaded && <p className="text-xs text-green-600 mt-0.5">✓ Terupload</p>}
-                        </div>
-                      </div>
-                      {uploaded ? (
-                        <div className="flex items-center gap-2">
-                          <button onClick={() => { setPreviewImage(dokumens[jenis]); setPreviewLabel(PERSYARATAN_LABEL[jenis] || jenis); }}
-                            className="text-xs text-primary hover:underline cursor-pointer">Lihat</button>
-                          <button onClick={() => setDokumens((prev) => { const n = { ...prev }; delete n[jenis]; return n; })}
-                            className="text-xs text-destructive hover:underline cursor-pointer">Hapus</button>
-                        </div>
-                      ) : (
-                        <label className="relative cursor-pointer">
-                          <span className="px-3 py-1.5 text-xs font-medium text-primary border border-primary rounded-lg hover:bg-primary/5 transition-colors">
-                            {uploading[jenis] ? 'Mengunggah...' : 'Pilih File'}
-                          </span>
-                          <input type="file" accept="image/*,application/pdf" className="hidden"
-                            disabled={uploading[jenis]} onChange={(e) => e.target.files[0] && handleFileUpload(jenis, e.target.files[0])} />
-                        </label>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="flex items-center justify-between pt-2">
-              <Button variant="secondary" onClick={() => setStep(1)}>
-                <ArrowLeftIcon className="w-4 h-4" /> Kembali
-              </Button>
-              <Button onClick={() => setStep(3)} disabled={!canSubmit}>
-                Lanjut <ChevronRightIcon className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {step === 3 && (
-          <div className="space-y-4">
-            <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-              <CheckCircleIcon className="w-10 h-10 text-green-500 mx-auto mb-2" />
-              <p className="font-semibold text-green-800">Semua dokumen telah siap!</p>
-              <p className="text-sm text-green-600 mt-1">{daftarModal?.persyaratan?.length} persyaratan terpenuhi</p>
-            </div>
-
-            <div className="bg-gray-50 rounded-xl p-4 space-y-2">
-              <p className="text-sm font-medium text-foreground">Ringkasan Pendaftaran</p>
-              <div className="text-sm text-gray-600 space-y-1">
-                <p><span className="text-gray-400">Program:</span> {daftarModal?.nama}</p>
-                <p><span className="text-gray-400">Jenis:</span> {daftarModal?.jenis}</p>
-                {selectedLahan && (() => {
-                  const l = lahanSaya.find((x) => x.id.toString() === selectedLahan);
-                  return l ? <p><span className="text-gray-400">Lahan:</span> {l.alamat_lahan}</p> : null;
-                })()}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between pt-2">
-              <Button variant="secondary" onClick={() => setStep(2)}>
-                <ArrowLeftIcon className="w-4 h-4" /> Kembali
-              </Button>
-              <Button onClick={handleSubmit} loading={submitting}>
-                <CheckCircleIcon className="w-4 h-4" /> Konfirmasi & Daftar
-              </Button>
-            </div>
-          </div>
-        )}
-      </Modal>
-
       {previewImage && (
         <div className="fixed inset-0 z-[9999] bg-black/85 flex items-center justify-center p-4" onClick={() => { setPreviewImage(null); setPreviewLabel(''); }}>
           <div className="relative max-w-xl w-full max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
@@ -421,7 +229,6 @@ export default function PekebunProgramPage() {
                 <XMarkIcon className="w-4 h-4 text-white" />
               </button>
             </div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={previewImage} alt="" className="w-full h-auto rounded-2xl shadow-2xl mt-6" />
           </div>
         </div>
@@ -432,7 +239,7 @@ export default function PekebunProgramPage() {
         open={!!detailProgram}
         onClose={closeDetail}
         role="pekebun"
-        onDaftar={(p) => { closeDetail(); openDaftar(p); }}
+        onDaftar={(p) => { closeDetail(); router.push(`/pekebun/program/daftar/${p.id}`); }}
         sudahDaftar={detailProgram ? programSaya.some((s) => s.program_kud_id === detailProgram.id) : false}
         penuh={detailProgram ? detailProgram.kuota && (detailProgram.pendaftaran_program_count || 0) >= detailProgram.kuota : false}
       />

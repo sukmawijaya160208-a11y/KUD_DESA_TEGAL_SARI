@@ -14,11 +14,12 @@ import ProgramDetail from '@/components/ProgramDetail';
 import { formatDate, formatDateShort } from '@/lib/date';
 import { motion, AnimatePresence } from 'framer-motion';
 import ExportDropdown from '@/components/ExportDropdown';
+import DocumentViewer from '@/components/DocumentViewer';
 import {
   ClipboardDocumentListIcon, PlusIcon, PencilSquareIcon, TrashIcon,
   XMarkIcon, PhotoIcon, CalendarDaysIcon, UsersIcon,
   CheckCircleIcon, ClockIcon, MagnifyingGlassIcon,
-  ChevronDownIcon, ChevronUpIcon, EyeIcon,
+  ChevronDownIcon, ChevronUpIcon, EyeIcon, DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 
 const JENIS_OPTIONS = ['PSR', 'Intensifikasi', 'Ekstensifikasi', 'Pelatihan SDMPKS', 'Beasiswa SDMPKS', 'Kemitraan'];
@@ -273,6 +274,10 @@ export default function AdminProgramPage() {
     nama: '', jenis: 'PSR', deskripsi: '',
     foto: [], persyaratan: [],
     tanggal_mulai: '', tanggal_selesai: '', kuota: '',
+    aktifkan_surat: false,
+    surat_1_judul: '', surat_1_isi: '',
+    surat_2_judul: '', surat_2_isi: '',
+    surat_3_judul: '', surat_3_isi: '',
   });
 
   const fetchData = useCallback((params = {}) => {
@@ -317,7 +322,7 @@ export default function AdminProgramPage() {
   }, [fetchData]);
 
   const resetForm = useCallback(() => {
-    setForm({ nama: '', jenis: 'PSR', deskripsi: '', foto: [], persyaratan: [], tanggal_mulai: '', tanggal_selesai: '', kuota: '' });
+    setForm({ nama: '', jenis: 'PSR', deskripsi: '', foto: [], persyaratan: [], tanggal_mulai: '', tanggal_selesai: '', kuota: '', aktifkan_surat: false, surat_1_judul: '', surat_1_isi: '', surat_2_judul: '', surat_2_isi: '', surat_3_judul: '', surat_3_isi: '' });
     setEditing(null);
     setShowForm(false);
   }, []);
@@ -332,6 +337,13 @@ export default function AdminProgramPage() {
       tanggal_mulai: item.tanggal_mulai || '',
       tanggal_selesai: item.tanggal_selesai || '',
       kuota: item.kuota?.toString() || '',
+      aktifkan_surat: item.aktifkan_surat || false,
+      surat_1_judul: item.surat_1_judul || '',
+      surat_1_isi: item.surat_1_isi || '',
+      surat_2_judul: item.surat_2_judul || '',
+      surat_2_isi: item.surat_2_isi || '',
+      surat_3_judul: item.surat_3_judul || '',
+      surat_3_isi: item.surat_3_isi || '',
     });
     setEditing(item);
     setShowForm(true);
@@ -547,6 +559,75 @@ export default function AdminProgramPage() {
                 </button>
               ))}
             </div>
+          </div>
+
+          <div className="border-t border-border pt-4">
+            <label className="flex items-center gap-3 cursor-pointer mb-4">
+              <input
+                type="checkbox"
+                checked={form.aktifkan_surat}
+                onChange={(e) => setForm({ ...form, aktifkan_surat: e.target.checked })}
+                className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary/30 cursor-pointer"
+              />
+              <div>
+                <span className="font-medium text-foreground">Aktifkan Surat Pernyataan</span>
+                <p className="text-xs text-gray-400">Pekebun akan membaca & menandatangani 3 surat pernyataan</p>
+              </div>
+            </label>
+
+            {form.aktifkan_surat && (
+              <div className="space-y-6">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="p-4 bg-gray-50 rounded-xl border border-border">
+                    <h4 className="font-semibold text-foreground text-sm mb-3 flex items-center gap-2">
+                      <DocumentTextIcon className="w-4 h-4 text-primary" />
+                      Surat {i}
+                    </h4>
+                    <div className="space-y-3">
+                      <Input
+                        label="Judul Surat"
+                        value={form[`surat_${i}_judul`]}
+                        onChange={(e) => setForm({ ...form, [`surat_${i}_judul`]: e.target.value })}
+                        placeholder={`Surat Pernyataan ${i}`}
+                      />
+                      <div>
+                        <label className="block text-sm font-medium text-foreground/80 mb-1">Isi Surat</label>
+                        <textarea
+                          value={form[`surat_${i}_isi`]}
+                          onChange={(e) => setForm({ ...form, [`surat_${i}_isi`]: e.target.value })}
+                          rows={6}
+                          className="w-full px-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-y"
+                          placeholder={`Gunakan {{placeholder}} untuk data dinamis:\n{{nama_pekebun}}, {{nik}}, {{alamat}}, {{luas_lahan}}, dll.`}
+                        />
+                        <p className="text-[10px] text-gray-400 mt-1">
+                          Placeholder: {`{{nama_pekebun}}, {{nik}}, {{no_kk}}, {{tempat_lahir}}, {{tanggal_lahir}}, {{alamat}}, {{alamat_lahan}}, {{luas_lahan}}, {{nama_program}}`}
+                        </p>
+                      </div>
+                      {form[`surat_${i}_isi`] && (
+                        <details className="text-xs text-gray-500">
+                          <summary className="cursor-pointer hover:text-primary font-medium">Preview Surat {i}</summary>
+                          <div className="mt-2">
+                            <DocumentViewer
+                              judul={form[`surat_${i}_judul`]}
+                              isi={form[`surat_${i}_isi`]}
+                              data={{
+                                nama_pekebun: 'Contoh Nama',
+                                nik: '3512345678901234',
+                                alamat: 'Desa Tegal Sari',
+                                alamat_lahan: 'Sawit 2 Ha',
+                                luas_lahan: '20.000 M²',
+                                nama_program: form.nama || 'Program',
+                              }}
+                              showSignature={false}
+                            />
+                          </div>
+                        </details>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

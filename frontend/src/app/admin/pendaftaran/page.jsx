@@ -9,10 +9,11 @@ import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import { TableSkeleton } from '@/components/ui/Skeleton';
 import { formatDate } from '@/lib/date';
+import DocumentViewer from '@/components/DocumentViewer';
 import {
   BookOpenIcon, EyeIcon, CheckCircleIcon, XCircleIcon,
   XMarkIcon, ChevronDownIcon, ChevronUpIcon, TrashIcon,
-  ClockIcon
+  ClockIcon, DocumentTextIcon
 } from '@heroicons/react/24/outline';
 import ExportDropdown from '@/components/ExportDropdown';
 
@@ -199,6 +200,42 @@ export default function AdminPendaftaranPage() {
                               </div>
                             </button>
                           ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {d.setuju_surat_1 !== undefined && d.programKud?.aktifkan_surat && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+                          <DocumentTextIcon className="w-3.5 h-3.5 inline mr-1" />
+                          Status Persetujuan Surat
+                        </h4>
+                        <div className="space-y-2">
+                          {[
+                            { label: 'Surat 1', value: d.setuju_surat_1, judul: d.programKud?.surat_1_judul },
+                            { label: 'Surat 2', value: d.setuju_surat_2, judul: d.programKud?.surat_2_judul },
+                            { label: 'Surat 3', value: d.setuju_surat_3, judul: d.programKud?.surat_3_judul },
+                          ].map((s, i) => (
+                            <div key={i} className="flex items-center justify-between p-2.5 bg-white rounded-lg border border-border">
+                              <div className="flex items-center gap-2">
+                                <span className={`w-2 h-2 rounded-full ${s.value ? 'bg-green-500' : 'bg-gray-300'}`} />
+                                <span className="text-sm text-gray-700">{s.judul || s.label}</span>
+                              </div>
+                              <span className={`text-xs font-semibold ${s.value ? 'text-green-600' : 'text-gray-400'}`}>
+                                {s.value ? '✓ Disetujui' : '✗ Belum'}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {d.tanda_tangan_digital && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Tanda Tangan Digital</h4>
+                        <div className="bg-white rounded-lg border border-border p-4 inline-block">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={d.tanda_tangan_digital} alt="Tanda Tangan" className="h-16 object-contain" />
                         </div>
                       </div>
                     )}
