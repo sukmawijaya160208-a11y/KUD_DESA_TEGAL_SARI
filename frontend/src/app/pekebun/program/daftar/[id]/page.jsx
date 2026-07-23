@@ -62,10 +62,7 @@ export default function DaftarProgramPage() {
 
   useEffect(() => {
     Promise.all([
-      api.admin.program.list().then((res) => {
-        const progs = res.data || res || [];
-        return progs.find((p) => p.id.toString() === id);
-      }),
+      api.pekebun.programTersediaById(id).catch(() => null),
       api.pekebun.profil().catch(() => null),
       api.pekebun.lahan.list().catch(() => []),
     ])

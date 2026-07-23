@@ -290,6 +290,7 @@ export const api = {
       delete: (id) => request(`/pekebun/lahan/${id}`, { method: 'DELETE' }),
     },
     programTersedia: () => request('/pekebun/program-tersedia'),
+    programTersediaById: (id) => request(`/pekebun/program-tersedia/${id}`),
     daftarProgram: (data) => request('/pekebun/daftar-program', { method: 'POST', body: JSON.stringify(data) }),
     programSaya: () => request('/pekebun/program-saya'),
     tbs: {

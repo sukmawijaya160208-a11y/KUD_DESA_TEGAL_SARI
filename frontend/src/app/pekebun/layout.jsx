@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { api } from '@/lib/api';
 import Sidebar from '@/components/layout/Sidebar';
 
 export default function PekebunLayout({ children }) {

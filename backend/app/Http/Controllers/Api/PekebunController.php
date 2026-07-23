@@ -142,6 +142,21 @@ class PekebunController extends Controller
         return response()->json(ProgramKud::where('aktif', true)->withCount('pendaftaranProgram')->paginate($perPage));
     }
 
+    public function programTersediaById(ProgramKud $program)
+    {
+        $pekebun = request()->user()->pekebun;
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
+        if ($pekebun->status !== 'verified') {
+            return response()->json(['message' => 'Profil Anda belum diverifikasi.'], 403);
+        }
+        if (! $program->aktif) {
+            return response()->json(['message' => 'Program tidak tersedia'], 404);
+        }
+        return response()->json($program->loadCount('pendaftaranProgram'));
+    }
+
     public function daftarProgram(Request $request)
     {
         $pekebun = $request->user()->pekebun;

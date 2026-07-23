@@ -188,6 +188,7 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::put('/lahan/{lahan}', [PekebunController::class, 'lahanUpdate']);
         Route::delete('/lahan/{lahan}', [PekebunController::class, 'lahanDestroy']);
         Route::get('/program-tersedia', [PekebunController::class, 'programTersedia']);
+        Route::get('/program-tersedia/{program}', [PekebunController::class, 'programTersediaById']);
         Route::post('/daftar-program', [PekebunController::class, 'daftarProgram']);
         Route::get('/program-saya', [PekebunController::class, 'programSaya']);
         Route::get('/tbs', [PekebunController::class, 'tbsIndex']);
