@@ -5,14 +5,12 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLogo } from '@/hooks/useLogo';
 import { api } from '@/lib/api';
-import Timeline from '@/components/Timeline';
 import KegiatanGallery from '@/components/KegiatanGallery';
-import TeamSection from '@/components/TeamSection';
 import MapSection from '@/components/MapSection';
 import TbsCalculator from '@/components/TbsCalculator';
 
 import {
-  Squares2X2Icon, InformationCircleIcon, ChatBubbleLeftRightIcon,
+  Squares2X2Icon, ChatBubbleLeftRightIcon,
   QuestionMarkCircleIcon, NewspaperIcon, ArrowRightIcon,
   ChevronDownIcon, Bars3Icon, XMarkIcon, PhoneIcon,
   PlayIcon, CalendarDaysIcon, UserGroupIcon,
@@ -22,7 +20,8 @@ import {
   StarIcon, HeartIcon, ArrowUpIcon,
   ChevronLeftIcon, ChevronRightIcon, MagnifyingGlassIcon,
   DocumentTextIcon, GlobeAltIcon,
-  EyeIcon, BellAlertIcon, FolderIcon
+  BellAlertIcon, FolderIcon,
+  BuildingOfficeIcon
 } from '@heroicons/react/24/outline';
 
 const containerVariants = {
@@ -121,12 +120,17 @@ const LAYANAN = [
 ];
 
 const MITRA = [
-  { name: 'Dinas Pertanian', logo: '🏛️' },
-  { name: 'PTPN V', logo: '🏭' },
-  { name: 'Bank BRI', logo: '🏦' },
-  { name: 'Universitas Riau', logo: '🎓' },
-  { name: 'LSM Swadaya', logo: '🤝' },
-  { name: 'Kementan RI', logo: '🌾' },
+  { name: 'Dinas Perkebunan', icon: BuildingOfficeIcon },
+  { name: 'PTPN VII', icon: BuildingOfficeIcon },
+  { name: 'Kementerian Pertanian RI', icon: BuildingOfficeIcon },
+  { name: 'Dinas Koperasi dan UKM', icon: BuildingOfficeIcon },
+  { name: 'PT. Inti Guna Nabati', icon: BuildingOfficeIcon },
+  { name: 'BPJS Ketenagakerjaan', icon: ShieldCheckIcon },
+  { name: 'Politeknik Jambi', icon: AcademicCapIcon },
+  { name: 'Universitas Pelalawan Riau', icon: AcademicCapIcon },
+  { name: 'Universitas Pasir Pangaraian Riau', icon: AcademicCapIcon },
+  { name: 'Politeknik Samarinda Kalimantan Timur', icon: AcademicCapIcon },
+  { name: 'Universitas Venezuela', icon: GlobeAltIcon },
 ];
 
 
@@ -448,16 +452,6 @@ export default function Home() {
 
       
 
-{/* ===== TIMELINE ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/30 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(16,185,129,0.05),transparent_50%)]" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Perjalanan" title="Sejarah & Perjalanan KUD" subtitle="Dari 50 pekebun hingga 371+ anggota — perjalanan KUD Sari Subur membangun koperasi sawit yang mandiri dan profesional." />
-        </div>
-        <div className="relative z-10"><Timeline /></div>
-      </section>
-
-      
 
 {/* ===== PROGRAM UNGGULAN ===== */}
       <section id="program" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
@@ -563,14 +557,7 @@ export default function Home() {
 
       
 
-{/* ===== TEAM ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/30 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.05),transparent_50%)]" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Pengurus" title="Tim Pengurus KUD" subtitle="Kenali pengurus KUD Desa Sari Subur yang berdedikasi melayani anggota." />
-        </div>
-        <div className="relative z-10"><TeamSection /></div>
-      </section>
+
 
       
 
@@ -612,64 +599,7 @@ export default function Home() {
 
       
 
-{/* ===== TENTANG ===== */}
-      <section id="tentang" className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 via-white to-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
-              <SectionBadge>Tentang Kami</SectionBadge>
-              <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-foreground leading-tight">Koperasi yang <span className="text-primary">Berkembang</span> Bersama Petani</h2>
-              <p className="mt-6 text-muted-foreground leading-relaxed">
-                KUD Desa Sari Subur didirikan pada tahun 2019 oleh sekelompok petani kelapa sawit di Kecamatan Megang Sakti, Kabupaten Musi Rawas. Berawal dari keprihatinan terhadap praktik tengkulak yang merugikan petani, koperasi ini hadir sebagai solusi untuk meningkatkan posisi tawar petani dalam rantai pasok kelapa sawit.
-              </p>
-              <p className="mt-4 text-muted-foreground leading-relaxed">
-                Kini, KUD Sari Subur telah berkembang menjadi koperasi yang melayani lebih dari 371 petani anggota dengan total lahan kelola 850 hektar dan produksi TBS mencapai 5.000 ton per tahun. Kami mengelola 6 program unggulan: Kemitraan Petani, Simpan Pinjam, Pelatihan & Penyuluhan, Distribusi & Logistik, Asuransi Tani, dan Koperasi Konsumsi.
-              </p>
-              <p className="mt-4 text-muted-foreground leading-relaxed">
-                Dengan semangat gotong royong dan transparansi, kami terus berinovasi untuk memberikan pelayanan terbaik bagi anggota. KUD Sari Subur telah terverifikasi dan berbadan hukum resmi melalui Dinas Koperasi & UKM, serta berkomitmen pada prinsip-prinsip koperasi yang mandiri, profesional, dan berkelanjutan.
-              </p>
-              <div className="mt-8 grid grid-cols-2 gap-4">
-                {[
-                  { icon: EyeIcon, label: 'Visi', text: 'Menjadi koperasi petani sawit terdepan dan mandiri.' },
-                  { icon: HeartIcon, label: 'Misi', text: 'Mensejahterakan anggota melalui kemitraan berkelanjutan.' },
-                ].map((item, idx) => {
-                  const Icn = item.icon;
-                  return (
-                    <motion.div key={idx} whileHover={{ y: -3, scale: 1.02 }} className="group p-4 rounded-xl bg-white/70 backdrop-blur-sm border border-emerald-100/60 shadow-md hover:shadow-lg transition-all">
-                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-2 shadow-md shadow-emerald-500/20"><Icn className="w-4 h-4 text-white" /></div>
-                      <h4 className="font-semibold text-foreground text-sm">{item.label}</h4>
-                      <p className="text-xs text-muted-foreground mt-1">{item.text}</p>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
-                <img src="/images/foto.jpg" alt="Kegiatan KUD Sari Subur" className="w-full h-full object-cover" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/40 to-transparent z-[1]" />
-                <div className="absolute bottom-6 left-6 right-6 z-[2]">
-                  <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-500/30 overflow-hidden"><LogoDisplay logoUrl={logoUrl} /></div>
-                      <div>
-                        <div className="font-semibold text-foreground text-sm">KUD Sari Subur</div>
-                        <div className="text-xs text-muted-foreground">Berkembang Bersama Petani</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <motion.div initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.5, type: 'spring' }} className="absolute -bottom-6 -right-6 w-32 h-32 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 border-2 border-emerald-400/30 flex items-center justify-center hidden lg:flex shadow-xl shadow-emerald-500/30">
-                <div className="text-center">
-                  <div className="text-2xl font-bold font-heading text-white">7+</div>
-                  <div className="text-[10px] text-emerald-200">Tahun</div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+
 
       
 
@@ -844,14 +774,21 @@ export default function Home() {
       <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kolaborasi" title="Mitra & Kolaborasi" subtitle="Kemitraan strategis dengan berbagai lembaga untuk mendukung kemajuan KUD." />
-          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-3 md:grid-cols-6 gap-4 sm:gap-6">
-            {MITRA.map((mitra, idx) => (
-              <motion.div key={idx} variants={scaleIn} whileHover={{ y: -4, scale: 1.05 }} className="group relative p-4 sm:p-6 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-lg transition-all text-center">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-emerald-50/30 pointer-events-none" />
-                <div className="relative z-10 text-4xl mb-2 group-hover:scale-110 transition-transform">{mitra.logo}</div>
-                <div className="relative z-10 text-xs font-medium text-foreground/70">{mitra.name}</div>
-              </motion.div>
-            ))}
+          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {MITRA.map((mitra, idx) => {
+              const Icon = mitra.icon;
+              const initials = mitra.name.split(' ').slice(0, 2).map((w) => w[0]).join('');
+              return (
+                <motion.div key={idx} variants={scaleIn} whileHover={{ y: -6, scale: 1.04 }} className="group relative p-5 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-xl transition-all text-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-emerald-50/30 pointer-events-none" />
+                  <div className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20">
+                    <Icon className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="relative z-10 text-xs font-semibold text-foreground/80 leading-tight">{mitra.name}</div>
+                  <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-emerald-400/0 via-emerald-400/40 to-emerald-400/0 scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>
