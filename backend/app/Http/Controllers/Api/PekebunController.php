@@ -9,7 +9,6 @@ use App\Models\ProgramKud;
 use App\Models\TbsSync;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class PekebunController extends Controller
 {
@@ -170,11 +169,10 @@ class PekebunController extends Controller
         $validated = $request->validate([
             'program_kud_id' => 'required|exists:program_kud,id',
             'lahan_id' => 'nullable|exists:lahan,id',
-            'data' => 'nullable|array',
-            'setuju_surat_1' => 'sometimes|boolean',
-            'setuju_surat_2' => 'sometimes|boolean',
-            'setuju_surat_3' => 'sometimes|boolean',
-            'tanda_tangan_digital' => 'nullable|string',
+            'setuju_surat_1' => 'required|boolean',
+            'setuju_surat_2' => 'required|boolean',
+            'setuju_surat_3' => 'required|boolean',
+            'tanda_tangan_digital' => 'required|string',
         ]);
 
         $exists = PendaftaranProgram::where([
@@ -186,30 +184,13 @@ class PekebunController extends Controller
             return response()->json(['message' => 'Anda sudah mendaftar program ini sebelumnya'], 400);
         }
 
-        $program = ProgramKud::findOrFail($validated['program_kud_id']);
-        $persyaratan = $program->persyaratan ?? [];
-
-        if (! empty($persyaratan) && empty($validated['data']['dokumen'])) {
-            return response()->json(['message' => 'Lengkapi semua persyaratan dokumen'], 400);
-        }
-
-        if (! empty($persyaratan)) {
-            $uploaded = array_keys($validated['data']['dokumen'] ?? []);
-            $missing = array_diff($persyaratan, $uploaded);
-            if (! empty($missing)) {
-                return response()->json(['message' => 'Dokumen belum lengkap: '.implode(', ', $missing)], 400);
-            }
-        }
-
-        if ($program->aktifkan_surat) {
-            $suratErrors = [];
-            if (! $validated['setuju_surat_1']) $suratErrors[] = 'Surat 1 belum disetujui';
-            if (! $validated['setuju_surat_2']) $suratErrors[] = 'Surat 2 belum disetujui';
-            if (! $validated['setuju_surat_3']) $suratErrors[] = 'Surat 3 belum disetujui';
-            if (empty($validated['tanda_tangan_digital'])) $suratErrors[] = 'Tanda tangan digital belum diisi';
-            if (! empty($suratErrors)) {
-                return response()->json(['message' => implode(', ', $suratErrors)], 400);
-            }
+        $suratErrors = [];
+        if (! $validated['setuju_surat_1']) $suratErrors[] = 'Surat 1 belum disetujui';
+        if (! $validated['setuju_surat_2']) $suratErrors[] = 'Surat 2 belum disetujui';
+        if (! $validated['setuju_surat_3']) $suratErrors[] = 'Surat 3 belum disetujui';
+        if (empty($validated['tanda_tangan_digital'])) $suratErrors[] = 'Tanda tangan digital belum diisi';
+        if (! empty($suratErrors)) {
+            return response()->json(['message' => implode(', ', $suratErrors)], 400);
         }
 
         DB::beginTransaction();
@@ -218,11 +199,10 @@ class PekebunController extends Controller
                 'pekebun_id' => $pekebun->id,
                 'program_kud_id' => $validated['program_kud_id'],
                 'lahan_id' => $validated['lahan_id'] ?? null,
-                'data' => $validated['data'] ?? null,
-                'setuju_surat_1' => $validated['setuju_surat_1'] ?? false,
-                'setuju_surat_2' => $validated['setuju_surat_2'] ?? false,
-                'setuju_surat_3' => $validated['setuju_surat_3'] ?? false,
-                'tanda_tangan_digital' => $validated['tanda_tangan_digital'] ?? null,
+                'setuju_surat_1' => $validated['setuju_surat_1'],
+                'setuju_surat_2' => $validated['setuju_surat_2'],
+                'setuju_surat_3' => $validated['setuju_surat_3'],
+                'tanda_tangan_digital' => $validated['tanda_tangan_digital'],
             ]);
 
             DB::commit();
@@ -230,15 +210,6 @@ class PekebunController extends Controller
             return response()->json($daftar->load('programKud', 'lahan'), 201);
         } catch (\Exception $e) {
             DB::rollBack();
-
-            if (! empty($validated['data']['dokumen'])) {
-                foreach ($validated['data']['dokumen'] as $jenis => $urlPath) {
-                    $relativePath = ltrim(parse_url($urlPath, PHP_URL_PATH), '/storage/');
-                    if ($relativePath && Storage::disk('public')->exists($relativePath)) {
-                        Storage::disk('public')->delete($relativePath);
-                    }
-                }
-            }
 
             return response()->json(['message' => 'Gagal mendaftar program: '.$e->getMessage()], 500);
         }
