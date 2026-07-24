@@ -293,7 +293,7 @@ export default function AdminProgramPage() {
   const searchTimer = useRef(null);
   const [form, setForm] = useState({
     nama: '', jenis: 'PSR', deskripsi: '',
-    foto: [], persyaratan: [],
+    foto: [], persyaratan: [], manfaat: [],
     tanggal_mulai: '', tanggal_selesai: '', kuota: '',
     aktifkan_surat: false,
     surat_1_judul: '', surat_1_isi: '',

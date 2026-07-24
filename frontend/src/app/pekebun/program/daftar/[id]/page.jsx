@@ -46,6 +46,7 @@ export default function DaftarProgramPage() {
   const [previewImage, setPreviewImage] = useState(null);
   const [previewLabel, setPreviewLabel] = useState('');
   const [pengaturan, setPengaturan] = useState(null);
+  const [sudahDaftar, setSudahDaftar] = useState(false);
 
   const allChecked = useMemo(() => {
     if (program?.aktifkan_surat) {
@@ -59,7 +60,7 @@ export default function DaftarProgramPage() {
     return program.persyaratan.every((p) => dokumens[p]);
   }, [program, dokumens]);
 
-  const canSubmit = uploadsComplete && allChecked && (!!selectedLahan || lahanSaya.length === 0);
+  const canSubmit = !sudahDaftar && uploadsComplete && allChecked && (!!selectedLahan || lahanSaya.length === 0);
 
   useEffect(() => {
     Promise.all([
@@ -67,8 +68,9 @@ export default function DaftarProgramPage() {
       api.pekebun.profil().catch(() => null),
       api.pekebun.lahan.list().catch(() => []),
       api.pengaturan.get().catch(() => null),
+      api.pekebun.programSaya().catch(() => ({ data: [] })),
     ])
-      .then(([prog, profil, lahan, peng]) => {
+      .then(([prog, profil, lahan, peng, progSaya]) => {
         if (!prog) {
           toast.error('Program tidak ditemukan');
           router.push('/pekebun/program');
@@ -81,6 +83,10 @@ export default function DaftarProgramPage() {
         setLahanSaya(lahan || []);
         setPengaturan(peng);
         if (lahan?.length === 1) setSelectedLahan(lahan[0].id.toString());
+        const already = (progSaya?.data || progSaya || []).some(
+          (s) => s.program_kud_id === parseInt(id) && ['pending', 'verified'].includes(s.status)
+        );
+        setSudahDaftar(already);
       })
       .catch((e) => {
         toast.error(e.message);
@@ -101,6 +107,11 @@ export default function DaftarProgramPage() {
   };
 
   const handleSubmit = async () => {
+    if (sudahDaftar) {
+      toast.error('Anda sudah mendaftar program ini sebelumnya');
+      router.push('/pekebun/program');
+      return;
+    }
     setSubmitting(true);
     try {
       const payload = {
@@ -388,6 +399,12 @@ export default function DaftarProgramPage() {
           )}
         </div>
 
+        {sudahDaftar && (
+          <div className="p-3 bg-green-50 border border-green-200 rounded-xl text-xs text-green-700 mb-4">
+            ✓ Anda sudah mendaftar program ini. <button onClick={() => router.push('/pekebun/program')} className="underline font-medium cursor-pointer">Lihat status pendaftaran</button>
+          </div>
+        )}
+
         {program.aktifkan_surat && (!surat1 || !surat2 || !surat3) && (
           <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-700 mb-4">
             ⚠️ Semua surat pernyataan harus disetujui dan ditandatangani sebelum mendaftar
@@ -408,7 +425,7 @@ export default function DaftarProgramPage() {
           disabled={!canSubmit}
         >
           <ShieldCheckIcon className="w-5 h-5" />
-          {canSubmit ? 'Daftar Sekarang' : 'Lengkapi Semua Persyaratan'}
+          {sudahDaftar ? 'Sudah Mendaftar' : canSubmit ? 'Daftar Sekarang' : 'Lengkapi Semua Persyaratan'}
         </Button>
       </div>
 
