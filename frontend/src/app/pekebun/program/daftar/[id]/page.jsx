@@ -10,7 +10,7 @@ import SignaturePad from '@/components/SignaturePad';
 import { formatDate } from '@/lib/date';
 import {
   ClipboardDocumentListIcon, CalendarDaysIcon, UsersIcon,
-  ArrowLeftIcon, PhotoIcon, DocumentIcon,
+  ArrowLeftIcon, DocumentIcon,
   ShieldCheckIcon, XMarkIcon, CheckCircleIcon,
   ExclamationCircleIcon, MapPinIcon, FolderOpenIcon,
   PencilSquareIcon
@@ -63,8 +63,8 @@ export default function DaftarProgramPage() {
 
   const uploadsComplete = useMemo(() => {
     if (!program?.persyaratan?.length) return true;
-    return program.persyaratan.every((p) => dokumens[p]);
-  }, [program, dokumens]);
+    return program.persyaratan.every((p) => dokumens[p] || !!getNilaiBerkas(p));
+  }, [program, dokumens, pekebun, lahanSaya, selectedLahan]);
 
   const canSubmit = !sudahDaftar && uploadsComplete && allChecked && (!!selectedLahan || lahanSaya.length === 0);
 
@@ -141,12 +141,13 @@ export default function DaftarProgramPage() {
         payload.tanda_tangan_digital = ttd;
       }
       await api.pekebun.daftarProgram(payload);
+      setSubmitting(false);
       toast.success('Berhasil mendaftar program!');
       router.push('/pekebun/program');
     } catch (err) {
+      setSubmitting(false);
       toast.error(err.message);
     }
-    setSubmitting(false);
   };
 
   const logoKudUrl = useMemo(() => {
@@ -213,7 +214,7 @@ export default function DaftarProgramPage() {
       qr_logo: qrLogoUrl,
       kop_kud: `KOPERASI UNIT DESA (KUD) "SARI SUBUR"`,
     };
-  }, [pekebun, lahanSaya, selectedLahan, program, kadesInfo, logoKudUrl, qrLogoUrl, pengaturan]);
+  }, [pekebun, lahanSaya, selectedLahan, program, kadesInfo, logoKudUrl, qrLogoUrl]);
 
   const getNilaiBerkas = (jenis) => {
     const map = BERKAS_MAPPING[jenis];
@@ -234,17 +235,12 @@ export default function DaftarProgramPage() {
   const semuaBerkasLengkap = useMemo(() => {
     if (!program?.persyaratan?.length) return true;
     return program.persyaratan.every((jenis) => {
+      if (dokumens[jenis]) return true;
       const map = BERKAS_MAPPING[jenis];
       if (!map || !map.field) return false;
       return !!getNilaiBerkas(jenis);
     });
-  }, [program, pekebun, lahanSaya, selectedLahan]);
-
-  const stepCanProceed = useMemo(() => {
-    if (step === 1) return !!selectedLahan || lahanSaya.length === 0;
-    if (step === 2) return true;
-    return true;
-  }, [step, selectedLahan, lahanSaya]);
+  }, [program, pekebun, lahanSaya, selectedLahan, dokumens]);
 
   if (loading) {
     return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" /></div>;
@@ -428,7 +424,7 @@ export default function DaftarProgramPage() {
               )}
               <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
                 <button onClick={() => setStep(1)} className="text-sm text-gray-500 hover:text-foreground cursor-pointer">&larr; Kembali ke Lahan</button>
-                <Button onClick={() => setStep(3)}>
+                <Button onClick={() => setStep(3)} disabled={!uploadsComplete}>
                   {program.aktifkan_surat ? 'Lanjut ke Surat & Tanda Tangan →' : 'Lanjut ke Konfirmasi →'}
                 </Button>
               </div>
@@ -452,7 +448,7 @@ export default function DaftarProgramPage() {
                     })()}
                     <p><span className="text-gray-400">Berkas:</span> {program.persyaratan?.filter((p) => dokumens[p] || getNilaiBerkas(p)).length || 0}/{program.persyaratan?.length || 0} lengkap</p>
                   </div>
-                  <Button className="w-full" size="lg" onClick={handleSubmit} loading={submitting} disabled={!canSubmit || sudahDaftar}>
+                  <Button className="w-full" size="lg" onClick={handleSubmit} loading={submitting} disabled={!canSubmit}>
                     <ShieldCheckIcon className="w-5 h-5" />
                     {submitting ? 'Mendaftarkan...' : sudahDaftar ? 'Sudah Mendaftar' : 'Daftar Sekarang'}
                   </Button>
@@ -542,7 +538,7 @@ export default function DaftarProgramPage() {
                       </div>
                     )}
 
-                    <Button className="w-full" size="lg" onClick={handleSubmit} loading={submitting} disabled={!canSubmit || sudahDaftar}>
+                    <Button className="w-full" size="lg" onClick={handleSubmit} loading={submitting} disabled={!canSubmit}>
                       <ShieldCheckIcon className="w-5 h-5" />
                       {submitting ? 'Mendaftarkan...' : sudahDaftar ? 'Sudah Mendaftar' : 'Daftar Sekarang'}
                     </Button>

@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef, useCallback, memo, startTransition } from 'react';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
-import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
@@ -11,7 +10,7 @@ import Textarea from '@/components/ui/Textarea';
 import Modal from '@/components/ui/Modal';
 import DatePicker from '@/components/ui/DatePicker';
 import ProgramDetail from '@/components/ProgramDetail';
-import { formatDate, formatDateShort } from '@/lib/date';
+import { formatDate } from '@/lib/date';
 import { motion, AnimatePresence } from 'framer-motion';
 import DocumentViewer from '@/components/DocumentViewer';
 import SignaturePad from '@/components/SignaturePad';
@@ -299,6 +298,8 @@ export default function AdminProgramPage() {
     surat_1_judul: '', surat_1_isi: '',
     surat_2_judul: '', surat_2_isi: '',
     surat_3_judul: '', surat_3_isi: '',
+    tanda_tangan_kades_tegal_sari: '', tanda_tangan_kades_marga_puspita: '',
+    tanda_tangan_kades_campur_sari: '', tanda_tangan_ketua_kud: '',
   });
 
   const fetchData = useCallback((params = {}) => {
@@ -306,6 +307,7 @@ export default function AdminProgramPage() {
     if (params.search || search) p.search = params.search || search;
     if (params.jenis || filterJenis) p.jenis = params.jenis || filterJenis;
     if (params.sort || sortOrder) p.sort = params.sort || sortOrder;
+    if (params.page) p.page = params.page;
     p.per_page = params.per_page || 20;
     api.admin.program.list(Object.keys(p).length ? p : undefined)
       .then((res) => {
@@ -363,11 +365,11 @@ export default function AdminProgramPage() {
       aktifkan_surat: aktif,
     };
     [1, 2, 3].forEach((i) => {
-      formData[`surat_${i}_judul`] = item[`surat_${i}_judul`] || (aktif ? DEFAULT_SURAT_TEMPLATES[i].judul : '');
-      formData[`surat_${i}_isi`] = item[`surat_${i}_isi`] || (aktif ? DEFAULT_SURAT_TEMPLATES[i].isi : '');
+      formData[`surat_${i}_judul`] = item[`surat_${i}_judul`] ?? (aktif ? DEFAULT_SURAT_TEMPLATES[i].judul : '');
+      formData[`surat_${i}_isi`] = item[`surat_${i}_isi`] ?? (aktif ? DEFAULT_SURAT_TEMPLATES[i].isi : '');
     });
     ['tanda_tangan_kades_tegal_sari', 'tanda_tangan_kades_marga_puspita', 'tanda_tangan_kades_campur_sari', 'tanda_tangan_ketua_kud'].forEach((key) => {
-      formData[key] = item[key] || '';
+      formData[key] = item[key] ?? '';
     });
     setForm(formData);
     setEditing(item);
@@ -423,7 +425,7 @@ export default function AdminProgramPage() {
         tanggal_selesai: form.tanggal_selesai || null,
       };
       if (editing) {
-        await api.admin.program.update(editing.id, { ...payload, aktif: true });
+        await api.admin.program.update(editing.id, { ...payload, aktif: editing.aktif });
         toast.success('Program berhasil diperbarui');
       } else {
         await api.admin.program.create(payload);
