@@ -110,8 +110,8 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
         foto: editing.foto || [],
         persyaratan: editing.persyaratan || [],
         manfaat: editing.manfaat || [],
-        tanggal_mulai: editing.tanggal_mulai || '',
-        tanggal_selesai: editing.tanggal_selesai || '',
+        tanggal_mulai: editing.tanggal_mulai ? editing.tanggal_mulai.slice(0, 10) : '',
+        tanggal_selesai: editing.tanggal_selesai ? editing.tanggal_selesai.slice(0, 10) : '',
         kuota: editing.kuota?.toString() || '',
         aktifkan_surat: aktif,
       };

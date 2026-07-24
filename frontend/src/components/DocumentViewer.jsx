@@ -227,13 +227,6 @@ export default function DocumentViewer({
           </div>
         )}
 
-        {/* SURAT 2: ALAMAT SUB */}
-        {suratIndex === 2 && (
-          <p className="text-sm font-semibold text-slate-800 -mt-1 mb-4 tracking-wide indent-[180px]">
-            KECAMATAN MEGANG SAKTI KABUPATEN MUSI RAWAS
-          </p>
-        )}
-
         {/* BODY TEXT */}
         <div className="text-justify leading-relaxed text-sm sm:text-base text-slate-700 my-6 space-y-3">
           {rendered.split('\n').map((line, i) => {
