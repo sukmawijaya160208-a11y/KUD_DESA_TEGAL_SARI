@@ -12,7 +12,8 @@ import DatePicker from '@/components/ui/DatePicker';
 import Modal from '@/components/ui/Modal';
 import PrintButton from '@/components/PrintButton';
 import { CardSkeleton } from '@/components/ui/Skeleton';
-import { UserIcon, PencilIcon, CameraIcon, DocumentTextIcon, CreditCardIcon, PrinterIcon } from '@heroicons/react/24/outline';
+import { UserIcon, PencilIcon, CameraIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import KartuAnggotaKud from '@/components/KartuAnggotaKud';
 import { formatDate } from '@/lib/date';
 
 async function compressImage(file, maxSizeMB = 2, maxWidth = 1920) {
@@ -134,8 +135,12 @@ export default function PekebunProfilPage() {
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({});
+  const [kartuData, setKartuData] = useState(null);
 
-  const load = useCallback(() => api.pekebun.profil().then((d) => { setProfil(d); setForm({ ...d }); }).catch((err) => toast.error(err.message)).finally(() => setLoading(false)), [toast]);
+  const load = useCallback(() => {
+    api.pekebun.profil().then((d) => { setProfil(d); setForm({ ...d }); }).catch((err) => toast.error(err.message)).finally(() => setLoading(false));
+    api.pekebun.kartuAnggota().then(setKartuData).catch(() => {});
+  }, [toast]);
   useEffect(() => { load(); }, [load]);
 
   const uploadHandler = (folder) => (url) => {
@@ -170,8 +175,6 @@ export default function PekebunProfilPage() {
     }
     setSaving(false);
   };
-
-  const handlePrint = () => window.print();
 
   if (loading) return <div className="p-6"><CardSkeleton /></div>;
 
@@ -309,52 +312,7 @@ export default function PekebunProfilPage() {
             <UploadField label="Upload KK" current={form.upload_kk || ''} folder="kk" onUpload={uploadHandler('kk')} onDelete={() => handleDelete('upload_kk')} />
           </Card>
 
-          {profil && (
-            <Card className="border border-primary/10 shadow-sm overflow-hidden p-0">
-              <div className="p-5 bg-gradient-to-br from-primary/5 via-white to-primary/5">
-                <div className="flex items-center gap-2 mb-4">
-                  <CreditCardIcon className="w-4 h-4 text-primary" />
-                  <h3 className="font-bold text-foreground text-sm">Kartu Tanda Pengenal</h3>
-                </div>
-                <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
-                  <div className="bg-gradient-to-r from-primary to-primary/80 px-4 py-3">
-                    <p className="text-white/70 text-[10px] uppercase tracking-widest font-medium">KUD "SARI SUBUR"</p>
-                    <p className="text-white text-[11px] font-semibold -mt-0.5">Kartu Tanda Pengenal</p>
-                  </div>
-                  <div className="p-4 flex items-start gap-4">
-                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted shrink-0 border-2 border-primary/10">
-                      {profil.foto_pekebun ? (
-                        <img src={profil.foto_pekebun} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full bg-primary/5 flex items-center justify-center">
-                          <UserIcon className="w-6 h-6 text-primary/30" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-bold text-foreground truncate">{profil.nama || '-'}</p>
-                      <p className="text-[11px] text-gray-500 font-mono mt-0.5">NIK. {profil.nik || '-'}</p>
-                      <p className="text-[10px] text-gray-400 mt-1 leading-relaxed line-clamp-2">{profil.alamat || '-'}</p>
-                      <div className="flex items-center gap-1.5 mt-2">
-                        <span className={`inline-block w-1.5 h-1.5 rounded-full ${
-                          profil.status === 'verified' ? 'bg-green-500' : profil.status === 'rejected' ? 'bg-red-500' : 'bg-yellow-500'
-                        }`} />
-                        <span className="text-[10px] font-medium text-gray-500">
-                          {profil.status === 'verified' ? 'Terverifikasi' : profil.status === 'rejected' ? 'Ditolak' : 'Menunggu Verifikasi'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="px-4 pb-4">
-                    <button onClick={() => window.print()}
-                      className="w-full py-2 rounded-xl bg-gray-50 hover:bg-gray-100 border border-border text-xs font-medium text-gray-600 flex items-center justify-center gap-1.5 transition-colors cursor-pointer">
-                      <PrinterIcon className="w-3.5 h-3.5" /> Cetak Kartu
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          )}
+          {kartuData && <KartuAnggotaKud data={kartuData} />}
         </div>
       </div>
     </div>
