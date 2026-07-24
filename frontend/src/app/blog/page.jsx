@@ -9,7 +9,7 @@ import {
   NewspaperIcon, MagnifyingGlassIcon, ClockIcon,
   XMarkIcon, PlayIcon, PhotoIcon, VideoCameraIcon, EyeIcon,
   ArrowUpIcon, ShareIcon, ArrowLeftIcon, ArrowRightIcon,
-  ChatBubbleLeftRightIcon,
+  ChatBubbleLeftRightIcon, ChevronDownIcon,
 } from '@heroicons/react/24/outline';
 
 const CATEGORY_COLORS = {

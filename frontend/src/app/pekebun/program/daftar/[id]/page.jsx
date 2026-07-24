@@ -120,10 +120,19 @@ export default function DaftarProgramPage() {
     }
     setSubmitting(true);
     try {
+      const allDokumen = { ...dokumens };
+      if (program?.persyaratan) {
+        program.persyaratan.forEach((jenis) => {
+          if (!allDokumen[jenis]) {
+            const nilai = getNilaiBerkas(jenis);
+            if (nilai) allDokumen[jenis] = nilai;
+          }
+        });
+      }
       const payload = {
         program_kud_id: parseInt(id),
         lahan_id: selectedLahan ? parseInt(selectedLahan) : null,
-        data: { dokumen: dokumens },
+        data: { dokumen: allDokumen },
       };
       if (program?.aktifkan_surat) {
         payload.setuju_surat_1 = surat1;
