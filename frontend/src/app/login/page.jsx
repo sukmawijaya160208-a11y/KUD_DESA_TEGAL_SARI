@@ -403,8 +403,8 @@ function RegisterForm({ reg, setReg, updateReg, regErrors, regStep, setRegStep, 
                   valid={reg.password_confirmation && reg.password === reg.password_confirmation} />
               </div>
               <Checkbox id="agree-terms" label={
-                <span>Saya menyetujui <button type="button" onClick={() => router.push('/syarat-ketentuan')}
-                  className="text-primary hover:underline font-medium">Syarat & Ketentuan</button> dan <button type="button" onClick={() => router.push('/kebijakan-privasi')}
+                <span>Saya menyetujui <button type="button" onClick={() => window.open('/syarat-ketentuan', '_blank')}
+                  className="text-primary hover:underline font-medium">Syarat & Ketentuan</button> dan <button type="button" onClick={() => window.open('/kebijakan-privasi', '_blank')}
                   className="text-primary hover:underline font-medium">Kebijakan Privasi</button> KUD Desa Sari Subur</span>
               } checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} required />
               <button type="button" onClick={() => setRegStep(2)}

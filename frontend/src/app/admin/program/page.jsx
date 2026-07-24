@@ -61,9 +61,9 @@ Demikian surat pernyataan ini dibuat dengan sesungguhnya dan dapat digunakan sep
 
 
 const STATUS_MAP = {
-  verified: 'âœ“',
-  pending: 'â—',
-  rejected: 'âœ—',
+  verified: '✓',
+  pending: '○',
+  rejected: '✗',
 };
 const STATUS_CLASS = {
   verified: 'text-green-600 bg-green-50',
@@ -801,7 +801,7 @@ export default function AdminProgramPage() {
         {deleteModal?.pendaftaran_program_count > 0 && (
           <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl">
             <p className="text-xs text-amber-700">
-              âš ï¸ Program ini memiliki <strong>{deleteModal.pendaftaran_program_count} pendaftaran</strong> yang juga akan dihapus.
+               Program ini memiliki <strong>{deleteModal.pendaftaran_program_count} pendaftaran</strong> yang juga akan dihapus.
             </p>
           </div>
         )}

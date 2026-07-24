@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, memo, startTransition, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, memo, startTransition, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatDate } from '@/lib/date';
 import { api } from '@/lib/api';
@@ -381,7 +381,7 @@ export default function VerifikatorProgramPage() {
 
   const openVerifikasi = (id, action) => {
     setVerifModal({ id, action });
-    setVerifCatatan('');
+    setVerifCatatan(catatan[id] || '');
   };
 
   const handleVerifikasi = async () => {

@@ -15,7 +15,6 @@ import {
   TrashIcon, ArrowTopRightOnSquareIcon,
   ChevronDownIcon, ChevronRightIcon,
   ExclamationTriangleIcon,
-  ArrowTrendingUpIcon, ArrowTrendingDownIcon,
   DocumentArrowDownIcon
 } from '@heroicons/react/24/outline';
 
@@ -225,12 +224,6 @@ export default function VerifikatorRiwayatPage() {
 
   const hasActiveFilters = search || filterTindakan;
 
-  const trendIcon = (val) => {
-    if (val > 0) return <ArrowTrendingUpIcon className="w-3.5 h-3.5 text-emerald-500" />;
-    if (val < 0) return <ArrowTrendingDownIcon className="w-3.5 h-3.5 text-rose-500" />;
-    return null;
-  };
-
   return (
     <motion.div variants={containerAnim} initial="hidden" animate="show">
       <div className="flex items-center justify-between mb-6">
@@ -267,9 +260,7 @@ export default function VerifikatorRiwayatPage() {
             </div>
             <div className="flex items-center gap-2">
               <div className="text-xl lg:text-2xl font-bold text-foreground">{s.value}</div>
-              <span className="flex items-center text-xs text-gray-400">
-                {trendIcon(s.value)}
-              </span>
+              <span className="flex items-center text-xs text-gray-400"></span>
             </div>
           </div>
         ))}

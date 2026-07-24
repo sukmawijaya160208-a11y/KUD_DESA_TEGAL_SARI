@@ -271,13 +271,13 @@ export default function AdminUsersPage() {
       let result;
       if (type === 'lahan') {
         const all = await api.admin.lahan.list();
-        result = Array.isArray(all) ? all.filter(l => l.user_id === userId || l.pekebun?.user_id === userId) : [];
+        result = (Array.isArray(all) ? all : all?.data || []).filter(l => l.user_id === userId || l.pekebun?.user_id === userId);
       } else if (type === 'pendaftaran') {
         const all = await api.admin.pendaftaran.list();
-        result = Array.isArray(all) ? all.filter(p => p.pekebun?.user_id === userId) : [];
+        result = (Array.isArray(all) ? all : all?.data || []).filter(p => p.pekebun?.user_id === userId);
       } else if (type === 'tbs') {
         const all = await api.admin.tbs.list();
-        result = Array.isArray(all) ? all.filter(t => t.user_id === userId || t.pekebun?.user_id === userId) : [];
+        result = (Array.isArray(all) ? all : all?.data || []).filter(t => t.user_id === userId || t.pekebun?.user_id === userId);
       }
       setExpansionCache(p => ({ ...p, [cacheKey]: result || [] }));
     } catch (err) {
@@ -842,7 +842,7 @@ export default function AdminUsersPage() {
           </div>
           <div className="flex items-center gap-2">
             <button disabled={safePage <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}
-              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Â« Prev</button>
+              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">« Prev</button>
             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
               let pageNum;
               if (totalPages <= 7) pageNum = i + 1;
@@ -857,7 +857,7 @@ export default function AdminUsersPage() {
               );
             })}
             <button disabled={safePage >= totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Next Â»</button>
+              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Next »</button>
             <div className="flex items-center gap-1 ml-2">
               <span className="text-xs text-gray-400">Go:</span>
               <input type="number" min={1} max={totalPages} value={gotoPage} onChange={(e) => setGotoPage(e.target.value)}

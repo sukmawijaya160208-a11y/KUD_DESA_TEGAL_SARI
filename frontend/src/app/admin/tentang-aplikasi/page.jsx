@@ -38,9 +38,10 @@ export default function AdminTentangAplikasiPage() {
   const persistVideos = useCallback(async (videos) => {
     try {
       await api.admin.tentangAplikasi.update({ videos });
-    } catch {
+    } catch (err) {
+      toast.error('Gagal menyimpan video: ' + (err?.message || ''));
     }
-  }, []);
+  }, [toast]);
 
   const handleUploadVideo = useCallback(async (file, folderUrl) => {
     if (folderUrl) {

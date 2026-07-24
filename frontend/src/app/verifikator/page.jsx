@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, memo, startTransition, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, memo, startTransition, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
@@ -34,10 +34,10 @@ const STATUS_OPTIONS = [
 
 const PAGE_SIZES = [10, 25, 50, 100];
 
-const PekebunRow = memo(function PekebunRow({ d, onPreview, onVerifikasi, isSelected, onToggleSelect, expanded, onToggleExpand }) {
+const PekebunRow = memo(function PekebunRow({ d, onPreview, onVerifikasi, expanded, onToggleExpand }) {
   return (
     <motion.tr variants={fadeUp}
-      className={`border-b border-border/50 transition-colors ${isSelected ? 'bg-primary/5' : 'hover:bg-muted/50'} ${expanded ? 'bg-muted/30' : ''}`}>
+      className={`border-b border-border/50 transition-colors hover:bg-muted/50 ${expanded ? 'bg-muted/30' : ''}`}>
       <td className="py-3 px-3 w-8">
         <button onClick={onToggleExpand} className="p-0.5 rounded hover:bg-muted transition-all cursor-pointer">
           {expanded ? <ChevronDownIcon className="w-4 h-4 text-gray-400" /> : <ChevronRightIcon className="w-4 h-4 text-gray-400" />}

@@ -7,7 +7,7 @@ import { api } from '@/lib/api';
 import Link from 'next/link';
 import {
   NewspaperIcon, MagnifyingGlassIcon, ClockIcon,
-  XMarkIcon, PlayIcon, PhotoIcon, VideoCameraIcon, EyeIcon,
+  XMarkIcon, PlayIcon, PhotoIcon, EyeIcon,
   ArrowUpIcon, ShareIcon, ArrowLeftIcon, ArrowRightIcon,
   ChatBubbleLeftRightIcon, ChevronDownIcon,
 } from '@heroicons/react/24/outline';
