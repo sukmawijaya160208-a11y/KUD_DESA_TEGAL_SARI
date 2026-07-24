@@ -4,59 +4,31 @@ import { useEffect, useState, useRef, useCallback, memo, startTransition } from 
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
-import Select from '@/components/ui/Select';
-import Textarea from '@/components/ui/Textarea';
 import Modal from '@/components/ui/Modal';
-import DatePicker from '@/components/ui/DatePicker';
+import EditProgramModal from './components/EditProgramModal';
 import ProgramDetail from '@/components/ProgramDetail';
 import { formatDate, formatDateShort } from '@/lib/date';
 import { motion, AnimatePresence } from 'framer-motion';
-import DocumentViewer from '@/components/DocumentViewer';
-import SignaturePad from '@/components/SignaturePad';
 import {
   ClipboardDocumentListIcon, PlusIcon, PencilSquareIcon, TrashIcon,
-  XMarkIcon, PhotoIcon, CalendarDaysIcon, UsersIcon,
+  CalendarDaysIcon, UsersIcon,
   CheckCircleIcon, ClockIcon, MagnifyingGlassIcon,
-  ChevronDownIcon, ChevronUpIcon, EyeIcon, DocumentTextIcon,
+  ChevronDownIcon, ChevronUpIcon, EyeIcon,
 } from '@heroicons/react/24/outline';
 
-const JENIS_OPTIONS = ['PSR', 'Intensifikasi', 'Ekstensifikasi', 'Pelatihan SDMPKS', 'Beasiswa SDMPKS', 'Kemitraan'];
-const ALL_PERSYARATAN = [
-  { value: 'foto_ktp', label: 'Foto KTP' },
-  { value: 'foto_kk', label: 'Foto KK' },
-  { value: 'akte', label: 'Akte' },
-  { value: 'foto_pekebun', label: 'Foto Pekebun' },
-  { value: 'foto_surat_tanah', label: 'Foto Surat Tanah' },
-  { value: 'keterangan_beda_nama', label: 'Keterangan Beda Nama' },
-];
-const PERSYARATAN_LABEL = Object.fromEntries(ALL_PERSYARATAN.map((p) => [p.value, p.label]));
+const PERSYARATAN_LABEL = {
+  foto_ktp: 'Foto KTP',
+  foto_kk: 'Foto KK',
+  akte: 'Akte',
+  foto_pekebun: 'Foto Pekebun',
+  foto_surat_tanah: 'Foto Surat Tanah',
+  keterangan_beda_nama: 'Keterangan Beda Nama',
+};
 const SORT_OPTIONS = [
   { value: 'created_at', label: 'Terbaru' },
   { value: 'nama', label: 'Nama A-Z' },
   { value: 'tanggal_mulai', label: 'Tanggal Mulai' },
 ];
-
-const DEFAULT_SURAT_TEMPLATES = {
-  1: {
-    judul: 'SURAT PERNYATAAN',
-    isi: `Dengan ini menyatakan, bahwa saya bersedia untuk mengikuti Kegiatan Pelatihan Pengembangan Sumber Daya Manusia Perkebunan Kelapa Sawit (SDMPKS) Tahun (Sesuaikan dengan tahun pelaksanaan) yang didanai oleh Badan Pengelola Dana Perkebunan (BPDP) dengan mematuhi segala peraturan yang telah ditetapkan.
-
-Demikian surat pernyataan ini dibuat dengan sebenar-benarnya untuk dapat digunakan sebagaimana mestinya. Apabila di kemudian hari ditemukan bahwa pernyataan ini tidak benar, saya bersedia menerima konsekuensi sesuai dengan peraturan yang berlaku.`,
-  },
-  2: {
-    judul: 'SURAT PERNYATAAN KEPEMILIKAN LAHAN',
-    isi: `Dengan ini menyatakan bahwa saya benar-benar memiliki lahan perkebunan kelapa sawit kurang dari 25 (dua puluh lima) Hektar.
-
-Demikian surat pernyataan ini dibuat dengan sesungguhnya dan dapat digunakan seperlunya.`,
-  },
-  3: {
-    judul: 'SURAT KETERANGAN KEANGGOTAAN KOPERASI',
-    isi: `Benar nama tersebut di atas adalah petani sawit dan tergabung dalam Koperasi Unit Desa Sari Subur Desa Tegalsari Kecamatan Megang Sakti Kabupaten Musi Rawas dengan jabatan sebagai Anggota.
-
-Demikian surat pernyataan ini dibuat dengan sesungguhnya dan dapat digunakan seperlunya.`,
-  },
-};
 
 
 const STATUS_MAP = {
@@ -285,22 +257,10 @@ export default function AdminProgramPage() {
   const [editing, setEditing] = useState(null);
   const [deleteModal, setDeleteModal] = useState(null);
   const [detailProgram, setDetailProgram] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
   const [search, setSearch] = useState('');
   const [filterJenis, setFilterJenis] = useState('');
   const [sortOrder, setSortOrder] = useState('created_at');
   const searchTimer = useRef(null);
-  const [form, setForm] = useState({
-    nama: '', jenis: 'PSR', deskripsi: '',
-    foto: [], persyaratan: [], manfaat: [],
-    tanggal_mulai: '', tanggal_selesai: '', kuota: '',
-    aktifkan_surat: false,
-    surat_1_judul: '', surat_1_isi: '',
-    surat_2_judul: '', surat_2_isi: '',
-    surat_3_judul: '', surat_3_isi: '',
-    tanda_tangan_kades_tegal_sari: '', tanda_tangan_kades_marga_puspita: '',
-    tanda_tangan_kades_campur_sari: '', tanda_tangan_ketua_kud: '',
-  });
 
   const fetchData = useCallback((params = {}) => {
     const p = {};
@@ -344,101 +304,15 @@ export default function AdminProgramPage() {
     fetchData({ sort: val });
   }, [fetchData]);
 
-  const resetForm = useCallback(() => {
-    setForm({ nama: '', jenis: 'PSR', deskripsi: '', foto: [], persyaratan: [], manfaat: [], tanggal_mulai: '', tanggal_selesai: '', kuota: '', aktifkan_surat: false, surat_1_judul: '', surat_1_isi: '', surat_2_judul: '', surat_2_isi: '', surat_3_judul: '', surat_3_isi: '', tanda_tangan_kades_tegal_sari: '', tanda_tangan_kades_marga_puspita: '', tanda_tangan_kades_campur_sari: '', tanda_tangan_ketua_kud: '' });
-    setEditing(null);
-    setShowForm(false);
-  }, []);
-
   const openEdit = useCallback((item) => {
-    const aktif = item.aktifkan_surat || false;
-    const formData = {
-      nama: item.nama || '',
-      jenis: item.jenis || 'PSR',
-      deskripsi: item.deskripsi || '',
-      foto: item.foto || [],
-      persyaratan: item.persyaratan || [],
-      manfaat: item.manfaat || [],
-      tanggal_mulai: item.tanggal_mulai || '',
-      tanggal_selesai: item.tanggal_selesai || '',
-      kuota: item.kuota?.toString() || '',
-      aktifkan_surat: aktif,
-    };
-    [1, 2, 3].forEach((i) => {
-      formData[`surat_${i}_judul`] = item[`surat_${i}_judul`] ?? (aktif ? DEFAULT_SURAT_TEMPLATES[i].judul : '');
-      formData[`surat_${i}_isi`] = item[`surat_${i}_isi`] ?? (aktif ? DEFAULT_SURAT_TEMPLATES[i].isi : '');
-    });
-    ['tanda_tangan_kades_tegal_sari', 'tanda_tangan_kades_marga_puspita', 'tanda_tangan_kades_campur_sari', 'tanda_tangan_ketua_kud'].forEach((key) => {
-      formData[key] = item[key] ?? '';
-    });
-    setForm(formData);
     setEditing(item);
     setShowForm(true);
   }, []);
 
-  const handleFotoUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      const res = await api.uploadDokumenProgram(file, 'foto_program');
-      setForm((prev) => ({ ...prev, foto: [...prev.foto, res.url] }));
-    } catch (err) {
-      toast.error('Upload gagal: ' + err.message);
-    }
-  };
-
-  const removeFoto = (idx) => {
-    setForm((prev) => ({ ...prev, foto: prev.foto.filter((_, i) => i !== idx) }));
-  };
-
-  const togglePersyaratan = (val) => {
-    setForm((prev) => ({
-      ...prev,
-      persyaratan: prev.persyaratan.includes(val)
-        ? prev.persyaratan.filter((p) => p !== val)
-        : [...prev.persyaratan, val],
-    }));
-  };
-
-  const [manfaatInput, setManfaatInput] = useState('');
-  const addManfaat = () => {
-    const val = manfaatInput.trim();
-    if (!val || form.manfaat.includes(val)) return;
-    setForm((prev) => ({ ...prev, manfaat: [...prev.manfaat, val] }));
-    setManfaatInput('');
-  };
-  const removeManfaat = (val) => {
-    setForm((prev) => ({ ...prev, manfaat: prev.manfaat.filter((m) => m !== val) }));
-  };
-  const handleManfaatKeyDown = (e) => {
-    if (e.key === 'Enter') { e.preventDefault(); addManfaat(); }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      const payload = {
-        ...form,
-        kuota: form.kuota ? parseInt(form.kuota) : null,
-        tanggal_mulai: form.tanggal_mulai || null,
-        tanggal_selesai: form.tanggal_selesai || null,
-      };
-      if (editing) {
-        await api.admin.program.update(editing.id, { ...payload, aktif: editing.aktif });
-        toast.success('Program berhasil diperbarui');
-      } else {
-        await api.admin.program.create(payload);
-        toast.success('Program berhasil ditambahkan');
-      }
-      resetForm();
-      fetchData();
-      fetchStats();
-    } catch (err) {
-      toast.error(err.message);
-    }
-    setSubmitting(false);
-  };
+  const handleFormSaved = useCallback(() => {
+    fetchData();
+    fetchStats();
+  }, [fetchData, fetchStats]);
 
   const handleToggleAktif = useCallback(async (program) => {
     try {
@@ -477,7 +351,7 @@ export default function AdminProgramPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={() => { resetForm(); setShowForm(true); }}>
+          <Button onClick={() => { setEditing(null); setShowForm(true); }}>
             <PlusIcon className="w-4 h-4" /> Tambah Program
           </Button>
         </div>
@@ -519,238 +393,12 @@ export default function AdminProgramPage() {
         </select>
       </motion.div>
 
-      <Modal open={showForm} onClose={resetForm} title={editing ? 'Edit Program' : 'Tambah Program Baru'} maxWidth="max-w-2xl">
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input label="Nama Program" value={form.nama} onChange={(e) => setForm({ ...form, nama: e.target.value })} required placeholder="PSR - Peremajaan Sawit Rakyat" />
-            <Select label="Jenis" value={form.jenis} onChange={(e) => setForm({ ...form, jenis: e.target.value })}>
-              {JENIS_OPTIONS.map((j) => (<option key={j} value={j}>{j}</option>))}
-            </Select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-foreground/80 mb-2">Foto Program</label>
-            <div className="flex flex-wrap gap-3">
-              {form.foto.map((url, idx) => (
-                <div key={idx} className="relative w-24 h-24 rounded-xl overflow-hidden border border-border bg-muted group">
-                  <img src={url} alt="" className="w-full h-full object-cover" />
-                  <button type="button" onClick={() => removeFoto(idx)}
-                    className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-destructive text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-lg">
-                    <XMarkIcon className="w-3 h-3" />
-                  </button>
-                </div>
-              ))}
-              <label className="w-24 h-24 rounded-xl border-2 border-dashed border-border bg-muted/50 flex items-center justify-center cursor-pointer hover:bg-muted hover:border-primary/40 transition-all">
-                <div className="flex flex-col items-center gap-1">
-                  <PhotoIcon className="w-6 h-6 text-gray-300" />
-                  <span className="text-[10px] text-gray-400">Tambah</span>
-                </div>
-                <input type="file" className="hidden" accept="image/*" onChange={handleFotoUpload} />
-              </label>
-            </div>
-          </div>
-
-          <Textarea label="Deskripsi Program" value={form.deskripsi} onChange={(e) => setForm({ ...form, deskripsi: e.target.value })} rows={3} placeholder="Deskripsi lengkap program..." />
-
-          <div>
-            <label className="block text-sm font-medium text-foreground/80 mb-2">Persyaratan Dokumen</label>
-            <div className="flex flex-wrap gap-2">
-              {ALL_PERSYARATAN.map((p) => (
-                <button key={p.value} type="button" onClick={() => togglePersyaratan(p.value)}
-                  className={`px-3 py-1.5 rounded-xl text-sm font-medium border transition-all cursor-pointer ${form.persyaratan.includes(p.value) ? 'bg-primary text-white border-primary shadow-sm' : 'bg-white text-gray-600 border-border hover:border-primary/40'}`}>
-                  {form.persyaratan.includes(p.value) && <CheckCircleIcon className="w-3.5 h-3.5 inline mr-1" />}
-                  {p.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-foreground/80 mb-2">Manfaat Program</label>
-            <div className="flex gap-2 mb-2">
-              <input type="text" value={manfaatInput} onChange={(e) => setManfaatInput(e.target.value)} onKeyDown={handleManfaatKeyDown} placeholder="Tambah manfaat..." className="flex-1 px-3 py-2 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" />
-              <button type="button" onClick={addManfaat} className="px-4 py-2 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all">Tambah</button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {form.manfaat.map((m, idx) => (
-                <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-sm font-medium border border-emerald-200">
-                  {m}
-                  <button type="button" onClick={() => removeManfaat(m)} className="text-emerald-400 hover:text-emerald-700 transition-colors"><XMarkIcon className="w-3.5 h-3.5" /></button>
-                </span>
-              ))}
-              {form.manfaat.length === 0 && <span className="text-sm text-gray-400 italic">Belum ada manfaat ditambahkan</span>}
-            </div>
-          </div>
-
-          <div className="border-t border-border pt-4">
-            <label className="flex items-center gap-3 cursor-pointer mb-4">
-              <input
-                type="checkbox"
-                checked={form.aktifkan_surat}
-                onChange={(e) => {
-                  const aktif = e.target.checked;
-                  setForm((prev) => {
-                    const next = { ...prev, aktifkan_surat: aktif };
-                    if (aktif) {
-                      [1, 2, 3].forEach((i) => {
-                        if (!next[`surat_${i}_judul`]) next[`surat_${i}_judul`] = DEFAULT_SURAT_TEMPLATES[i].judul;
-                        if (!next[`surat_${i}_isi`]) next[`surat_${i}_isi`] = DEFAULT_SURAT_TEMPLATES[i].isi;
-                      });
-                    }
-                    return next;
-                  });
-                }}
-                className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary/30 cursor-pointer"
-              />
-              <div>
-                <span className="font-medium text-foreground">Aktifkan Surat Pernyataan</span>
-                <p className="text-xs text-gray-400">Pekebun akan membaca & menandatangani 3 surat pernyataan</p>
-              </div>
-            </label>
-
-            {form.aktifkan_surat && (
-              <div className="space-y-5">
-                <div className="flex items-center gap-2 px-1">
-                  <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-primary/60">3 Surat Pernyataan</span>
-                  <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
-                </div>
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
-                    <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-primary/5 to-transparent border-b border-border">
-                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                        <DocumentTextIcon className="w-4 h-4 text-primary" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-foreground text-sm">Surat Pernyataan {i}</h4>
-                        <p className="text-[11px] text-gray-400">Lampiran {String(i).padStart(2, '0')}</p>
-                      </div>
-                    </div>
-                    <div className="p-4 space-y-4">
-                      <Input
-                        label="Judul Surat"
-                        value={form[`surat_${i}_judul`]}
-                        onChange={(e) => setForm({ ...form, [`surat_${i}_judul`]: e.target.value })}
-                        placeholder={`Surat Pernyataan ${i}`}
-                      />
-                      <div>
-                        <label className="block text-sm font-medium text-foreground/80 mb-1.5">Isi Surat</label>
-                        <textarea
-                          value={form[`surat_${i}_isi`]}
-                          onChange={(e) => setForm({ ...form, [`surat_${i}_isi`]: e.target.value })}
-                          rows={6}
-                          className="w-full px-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-y font-mono text-gray-700 leading-relaxed"
-                          placeholder={`{{nama_pekebun}}, {{nik}}, {{alamat}}, dll.`}
-                        />
-                        <p className="text-[10px] text-gray-400 mt-1.5">
-                          Placeholder: {`{{nama_pekebun}} {{nik}} {{no_kk}} {{tempat_lahir}} {{tanggal_lahir}} {{alamat}} {{alamat_lahan}} {{luas_lahan}} {{nama_program}} {{kades_nama}} {{tanggal_surat}}`}
-                        </p>
-                      </div>
-                      <div className="bg-gray-50 rounded-xl border border-border overflow-hidden">
-                        <div className="px-3 py-2 bg-gray-100/80 border-b border-border flex items-center justify-between">
-                          <span className="text-[11px] font-medium text-gray-500">PREVIEW SURAT {i}</span>
-                          <span className="text-[10px] text-gray-400">Data contoh untuk pratinjau</span>
-                        </div>
-                        <div className="p-3 max-h-48 overflow-y-auto">
-                          <DocumentViewer
-                            suratIndex={i}
-                            judul={form[`surat_${i}_judul`]}
-                            isi={form[`surat_${i}_isi`]}
-                            data={{
-                              nama_pekebun: 'Contoh Nama',
-                              nik: '3512345678901234',
-                              no_kk: '1234567890123456',
-                              jenis_kelamin: 'LAKI-LAKI',
-                              tempat_lahir: 'Tegal Sari',
-                              tanggal_lahir: '17 Agustus 1990',
-                              no_whatsapp: '08123456789',
-                              alamat: 'Desa Tegal Sari, Kec. Megang Sakti',
-                              alamat_lahan: 'Dusun Sawit Makmur',
-                              luas_lahan: '20.000 M² (2 Ha)',
-                              jenis_surat_lahan: 'SHM',
-                              nomor_surat_lahan: '123/SHM/2024',
-                              nama_program: form.nama || 'Program KUD',
-                              kades_nama: 'SISWOYO',
-                              kades_title: 'Kepala Desa Tegalsari',
-                              ketua_kud_nama: 'Dedek Sulaiman, S.Pd.',
-                              tanggal_surat: form.tanggal_mulai || new Date().toISOString().split('T')[0],
-                              tempat_surat: 'Megang Sakti',
-                              logo_kud: '',
-                              kop_kud: 'KOPERASI UNIT DESA (KUD) "SARI SUBUR"',
-                            }}
-                            program={{}}
-                            showSignature={false}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {form.aktifkan_surat && (
-              <div className="mt-6 p-4 bg-purple-50 rounded-xl border border-purple-200">
-                <h4 className="font-semibold text-foreground text-sm mb-3 flex items-center gap-2">
-                  <DocumentTextIcon className="w-4 h-4 text-purple-600" />
-                  Tanda Tangan Digital (Admin)
-                </h4>
-                <p className="text-xs text-gray-500 mb-4">
-                  Upload tanda tangan untuk masing-masing pejabat. Tanda tangan akan otomatis muncul di surat pekebun. Bersifat opsional.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-3 bg-white rounded-xl border border-border">
-                    <p className="text-xs font-semibold text-gray-700 mb-2">Kades Tegal Sari — Siswoyo</p>
-                    <SignaturePad
-                      value={form.tanda_tangan_kades_tegal_sari}
-                      onChange={(v) => setForm({ ...form, tanda_tangan_kades_tegal_sari: v || '' })}
-                      height={120}
-                    />
-                  </div>
-                  <div className="p-3 bg-white rounded-xl border border-border">
-                    <p className="text-xs font-semibold text-gray-700 mb-2">Kades Marga Puspita — Sumodiono</p>
-                    <SignaturePad
-                      value={form.tanda_tangan_kades_marga_puspita}
-                      onChange={(v) => setForm({ ...form, tanda_tangan_kades_marga_puspita: v || '' })}
-                      height={120}
-                    />
-                  </div>
-                  <div className="p-3 bg-white rounded-xl border border-border">
-                    <p className="text-xs font-semibold text-gray-700 mb-2">Kades Campur Sari — Muhksin</p>
-                    <SignaturePad
-                      value={form.tanda_tangan_kades_campur_sari}
-                      onChange={(v) => setForm({ ...form, tanda_tangan_kades_campur_sari: v || '' })}
-                      height={120}
-                    />
-                  </div>
-                  <div className="p-3 bg-white rounded-xl border border-border">
-                    <p className="text-xs font-semibold text-gray-700 mb-2">Ketua KUD — Dedek Sulaiman, S.Pd.</p>
-                    <SignaturePad
-                      value={form.tanda_tangan_ketua_kud}
-                      onChange={(v) => setForm({ ...form, tanda_tangan_ketua_kud: v || '' })}
-                      height={120}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <DatePicker label="Tanggal Mulai" value={form.tanggal_mulai} onChange={(v) => setForm({ ...form, tanggal_mulai: v })} />
-            <DatePicker label="Tanggal Selesai" value={form.tanggal_selesai} onChange={(v) => setForm({ ...form, tanggal_selesai: v })} />
-            <Input label="Kuota Pendaftar" type="number" min="0" value={form.kuota} onChange={(e) => setForm({ ...form, kuota: e.target.value })} placeholder="Maksimal peserta" />
-          </div>
-
-          <div className="flex gap-2 justify-end pt-2">
-            <Button variant="secondary" type="button" onClick={resetForm}>Batal</Button>
-            <Button type="submit" loading={submitting}>
-              {editing ? <PencilSquareIcon className="w-4 h-4" /> : <PlusIcon className="w-4 h-4" />}
-              {editing ? 'Simpan Perubahan' : 'Simpan Program'}
-            </Button>
-          </div>
-        </form>
-      </Modal>
+      <EditProgramModal
+        open={showForm}
+        onClose={() => { setShowForm(false); setEditing(null); }}
+        editing={editing}
+        onSaved={handleFormSaved}
+      />
 
       {data.length === 0 && !search && !filterJenis ? (
         <motion.div variants={fadeUp} className="text-center py-20">
@@ -759,7 +407,7 @@ export default function AdminProgramPage() {
           </div>
           <p className="text-gray-400 text-lg font-medium">Belum Ada Program KUD</p>
           <p className="text-gray-400 text-sm mt-1 mb-6">Buat program KUD pertama Anda untuk memulai pendaftaran</p>
-          <Button onClick={() => { resetForm(); setShowForm(true); }}>
+          <Button onClick={() => { setEditing(null); setShowForm(true); }}>
             <PlusIcon className="w-4 h-4" /> Buat Program Baru
           </Button>
         </motion.div>

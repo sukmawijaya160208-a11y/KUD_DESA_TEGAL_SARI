@@ -51,22 +51,26 @@ function replacePlaceholders(text, data) {
   return Object.entries(map).reduce((t, [k, v]) => t.replaceAll(k, v), text);
 }
 
-function formatSuratDate(dateStr) {
-  if (!dateStr) return '_________________________';
+function todayDateStr() {
   try {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    return new Date().toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
   } catch {
-    return dateStr;
+    return '_________________________';
   }
 }
+
+const todayDate = todayDateStr();
 
 function InfoRow({ label, value }) {
   return (
     <div className="flex my-1">
       <span className="w-36 font-medium text-slate-600 text-sm shrink-0">{label}</span>
       <span className="mr-2 text-sm text-slate-600">:</span>
-      <span className="font-semibold text-slate-900 text-sm">{value || '_________________________'}</span>
+      <span className="font-semibold text-slate-900 text-sm uppercase">{value || '_________________________'}</span>
     </div>
   );
 }
@@ -89,6 +93,25 @@ const DEFAULT_JUDUL = {
   3: 'SURAT KETERANGAN KEANGGOTAAN KOPERASI',
 };
 
+function SingleSignerBlock({ dateLabel, jabatan, ttdUrl, namaTerang }) {
+  return (
+    <div className="flex flex-col items-end mt-8 text-sm text-slate-800">
+      <div className="text-center w-64 space-y-1">
+        <p className="text-right">Megang Sakti, {todayDate}</p>
+        <p className="font-medium mt-2">{jabatan || 'Yang Membuat Pernyataan,'}</p>
+        <div className="h-20 flex items-center justify-center my-2">
+          {ttdUrl ? (
+            <img src={ttdUrl} alt="Tanda Tangan" className="h-20 object-contain" />
+          ) : (
+            <div className="h-16" />
+          )}
+        </div>
+        <p className="font-bold text-slate-900 uppercase tracking-wide">{namaTerang || '_________________________'}</p>
+      </div>
+    </div>
+  );
+}
+
 export default function DocumentViewer({
   judul,
   isi,
@@ -103,7 +126,6 @@ export default function DocumentViewer({
   const rendered = useMemo(() => replacePlaceholders(body, data), [body, data]);
   const desa = useMemo(() => detectDesa(data?.alamat), [data?.alamat]);
   const kades = desa ? KADES_MAP[desa] : null;
-  const tanggalSurat = formatSuratDate(data?.tanggal_surat || program?.tanggal_mulai);
   const logoKudUrl = data?.logo_kud;
   const qrUrl = data?.qr_logo;
 
@@ -121,7 +143,7 @@ export default function DocumentViewer({
           .no-print { display: none !important; }
         }
       `}</style>
-      <div className="max-w-[210mm] mx-auto p-6 sm:p-10 print:p-0">
+      <div className="p-6 sm:p-10 max-w-3xl mx-auto my-4 text-slate-800">
 
         {/* SURAT 3 HEADER */}
         {suratIndex === 3 && (
@@ -220,12 +242,20 @@ export default function DocumentViewer({
           })}
         </div>
 
-        {/* SURAT 1: TTD PEKEBUN (kanan, satu block) */}
+        {/* SURAT 1: TTD PEKEBUN — Single Signer */}
         {suratIndex === 1 && (
-          <div className="flex flex-col items-end mt-10 mb-4">
-            <p className="text-sm text-slate-700 mb-6 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
-            <div className="text-center">
-              <p className="text-sm text-slate-600 mb-4">Yang Membuat Pernyataan,</p>
+          <SingleSignerBlock
+            jabatan="Yang Membuat Pernyataan,"
+            ttdUrl={signature}
+            namaTerang={data?.nama_pekebun}
+          />
+        )}
+
+        {/* SURAT 2: TTD PEKEBUN (kiri) + KADES (kanan) — GRID 2 KOLOM */}
+        {suratIndex === 2 && (
+          <div className="grid grid-cols-2 gap-4 mt-8 text-sm text-center text-slate-800">
+            <div>
+              <p className="font-medium text-slate-600 mb-4">Saya yang membuat Pernyataan,</p>
               {signature ? (
                 <div className="h-20 flex items-center justify-center my-2">
                   <img src={signature} alt="Tanda Tangan" className="h-20 object-contain" />
@@ -233,66 +263,33 @@ export default function DocumentViewer({
               ) : (
                 <div className="h-20" />
               )}
-              <p className="font-bold text-slate-900 uppercase tracking-wide mt-1">{data?.nama_pekebun || '_________________________'}</p>
+              <p className="font-bold text-slate-900 uppercase tracking-wide">{data?.nama_pekebun || '_________________________'}</p>
             </div>
-          </div>
-        )}
-
-        {/* SURAT 2: TTD PEKEBUN (kiri) + KADES (kanan) — GRID 2 KOLOM */}
-        {suratIndex === 2 && (
-          <>
-            <div className="flex justify-end mb-6">
-              <p className="text-sm text-slate-700 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
-            </div>
-            <div className="grid grid-cols-2 text-center gap-6 mt-8 sm:mt-12 text-sm">
+            {showSignature && (
               <div>
-                <p className="text-slate-600 mb-4">Saya yang membuat Pernyataan,</p>
-                {signature ? (
+                <p className="text-right text-slate-700 mb-4">Megang Sakti, {todayDate}</p>
+                <p className="font-bold text-slate-800 mb-4 uppercase tracking-wide">Mengetahui</p>
+                <p className="text-slate-600 mb-4">{kades?.title || 'Kepala Desa'}</p>
+                {kadesSignature ? (
                   <div className="h-20 flex items-center justify-center my-2">
-                    <img src={signature} alt="Tanda Tangan" className="h-20 object-contain" />
+                    <img src={kadesSignature} alt="Tanda Tangan Kades" className="h-20 object-contain" />
                   </div>
                 ) : (
                   <div className="h-20" />
                 )}
-                <p className="font-bold text-slate-900 uppercase tracking-wide mt-1">{data?.nama_pekebun || '_________________________'}</p>
+                <p className="font-bold text-slate-900 tracking-wide">{kades?.nama || data?.kades_nama || '_________________________'}</p>
               </div>
-              {showSignature && (
-                <div>
-                  <p className="font-bold text-slate-800 mb-4 uppercase tracking-wide">Mengetahui</p>
-                  <p className="text-slate-600 mb-4">{kades?.title || 'Kepala Desa'}</p>
-                  {kadesSignature ? (
-                    <div className="h-20 flex items-center justify-center my-2">
-                      <img src={kadesSignature} alt="Tanda Tangan Kades" className="h-20 object-contain" />
-                    </div>
-                  ) : (
-                    <div className="h-20" />
-                  )}
-                  <p className="font-bold text-slate-900 tracking-wide mt-1">{kades?.nama || data?.kades_nama || '_________________________'}</p>
-                </div>
-              )}
-            </div>
-          </>
+            )}
+          </div>
         )}
 
-        {/* SURAT 3: TTD KETUA KUD (kanan, satu block) */}
+        {/* SURAT 3: TTD KETUA KUD — Single Signer */}
         {suratIndex === 3 && (
-          <div className="flex flex-col items-end mt-10 mb-4">
-            <p className="text-sm text-slate-700 mb-6 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
-            <div className="text-center">
-              <p className="text-sm text-slate-600 mb-4">Ketua Koperasi Unit Desa Sari Subur,</p>
-              {(() => {
-                const ttdKetua = program?.tanda_tangan_ketua_kud;
-                return ttdKetua ? (
-                  <div className="h-20 flex items-center justify-center my-2">
-                    <img src={ttdKetua} alt="Tanda Tangan Ketua KUD" className="h-20 object-contain" />
-                  </div>
-                ) : (
-                  <div className="h-20" />
-                );
-              })()}
-              <p className="font-bold text-slate-900 uppercase tracking-wide mt-1">{data?.ketua_kud_nama || 'Dedek Sulaiman, S.Pd.'}</p>
-            </div>
-          </div>
+          <SingleSignerBlock
+            jabatan="Ketua Koperasi Unit Desa Sari Subur,"
+            ttdUrl={program?.tanda_tangan_ketua_kud}
+            namaTerang={data?.ketua_kud_nama || 'Dedek Sulaiman, S.Pd.'}
+          />
         )}
 
       </div>

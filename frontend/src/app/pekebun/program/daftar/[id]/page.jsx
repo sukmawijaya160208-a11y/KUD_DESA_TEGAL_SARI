@@ -437,12 +437,14 @@ export default function DaftarProgramPage() {
               </h2>
 
               {!semuaBerkasLengkap && (
-                <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800 mb-5 flex items-start gap-3">
-                  <ExclamationCircleIcon className="w-5 h-5 shrink-0 mt-0.5" />
+                <div className="p-4 bg-red-50 border-2 border-red-300 rounded-xl text-sm text-red-800 mb-5 flex items-start gap-3">
+                  <ExclamationCircleIcon className="w-6 h-6 shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium">Beberapa berkas persyaratan belum di-upload</p>
-                    <p className="text-xs text-amber-700 mt-0.5">
-                      Silakan lengkapi profil Anda terlebih dahulu untuk kelancaran verifikasi.
+                    <p className="font-semibold">⚠️ Belum Lengkap — Lengkapi Dulu!</p>
+                    <p className="text-xs text-red-700 mt-0.5">
+                      Beberapa berkas persyaratan belum di-upload. Silakan lengkapi profil Anda
+                      {' '}<a href="/pekebun/profil" className="underline font-semibold hover:text-red-900">ke halaman profil</a>{' '}
+                      untuk kelancaran verifikasi pendaftaran.
                     </p>
                   </div>
                 </div>
@@ -482,8 +484,8 @@ export default function DaftarProgramPage() {
                           </span>
                         ) : (
                           <a href="/pekebun/profil"
-                            className="text-[10px] font-semibold text-red-600 bg-red-50 px-2.5 py-1 rounded-full border border-red-200 hover:bg-red-100 transition-colors flex items-center gap-1">
-                            <ExclamationCircleIcon className="w-3 h-3" /> Belum Lengkap
+                            className="text-[10px] font-semibold text-red-600 bg-red-50 px-2.5 py-1.5 rounded-full border border-red-200 hover:bg-red-100 transition-colors flex items-center gap-1.5 animate-pulse">
+                            <ExclamationCircleIcon className="w-3.5 h-3.5" /> Belum Lengkap (Lengkapi Dulu)
                           </a>
                         )}
                       </div>

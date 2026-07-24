@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\Admin\ProgramKudController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BackupController;
 use App\Http\Controllers\Api\BlogController;
@@ -95,12 +96,12 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::put('/pekebun/{pekebun}', [AdminController::class, 'pekebunUpdate']);
         Route::delete('/pekebun/{pekebun}', [AdminController::class, 'pekebunDestroy']);
         // Program
-        Route::get('/program/stats', [AdminController::class, 'programStats']);
-        Route::get('/program', [AdminController::class, 'programIndex']);
-        Route::post('/program', [AdminController::class, 'programStore']);
-        Route::put('/program/{programKud}', [AdminController::class, 'programUpdate']);
-        Route::put('/program/{programKud}/toggle-aktif', [AdminController::class, 'programToggleAktif']);
-        Route::delete('/program/{programKud}', [AdminController::class, 'programDestroy']);
+        Route::get('/program/stats', [ProgramKudController::class, 'stats']);
+        Route::get('/program', [ProgramKudController::class, 'index']);
+        Route::post('/program', [ProgramKudController::class, 'store']);
+        Route::put('/program/{programKud}', [ProgramKudController::class, 'update']);
+        Route::put('/program/{programKud}/toggle-aktif', [ProgramKudController::class, 'toggleAktif']);
+        Route::delete('/program/{programKud}', [ProgramKudController::class, 'destroy']);
         // Pengaturan
         Route::get('/pengaturan', [AdminController::class, 'pengaturanIndex']);
         Route::put('/pengaturan', [AdminController::class, 'pengaturanUpdate']);
