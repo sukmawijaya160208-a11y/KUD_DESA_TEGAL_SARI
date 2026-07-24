@@ -129,13 +129,13 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
 
       <div className="p-4 space-y-3">
         <div className="flex items-center gap-3 text-xs text-gray-500">
-          {program.tanggal_mulai && (
-            <span className="flex items-center gap-1">
-              <CalendarDaysIcon className="w-3.5 h-3.5" />
-              {formatDate(program.tanggal_mulai)}
-              {program.tanggal_selesai && ` - ${formatDate(program.tanggal_selesai)}`}
-            </span>
-          )}
+              {program.tanggal_mulai && (
+                <span className="flex items-center gap-1">
+                  <CalendarDaysIcon className="w-3.5 h-3.5" />
+                  {formatDate(program.tanggal_mulai, 'dd MMM')}
+                  {program.tanggal_selesai && ` - ${formatDateShort(program.tanggal_selesai)}`}
+                </span>
+              )}
           {kuota && (
             <span className="flex items-center gap-1">
               <UsersIcon className="w-3.5 h-3.5" />

@@ -100,7 +100,7 @@ export default function PekebunProgramPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
           {tersedia.map((p) => {
-            const sudahDaftar = programSaya.some((s) => s.program_kud_id === p.id);
+            const sudahDaftar = programSaya.some((s) => s.program_kud_id === p.id && ['pending', 'verified'].includes(s.status));
             const penuh = p.kuota && (p.pendaftaran_program_count || 0) >= p.kuota;
             return (
               <div key={p.id} className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 group">
@@ -305,7 +305,7 @@ export default function PekebunProgramPage() {
         onClose={closeDetail}
         role="pekebun"
         onDaftar={(p) => { closeDetail(); router.push(`/pekebun/program/daftar/${p.id}`); }}
-        sudahDaftar={detailProgram ? programSaya.some((s) => s.program_kud_id === detailProgram.id) : false}
+        sudahDaftar={detailProgram ? programSaya.some((s) => s.program_kud_id === detailProgram.id && ['pending', 'verified'].includes(s.status)) : false}
         penuh={detailProgram ? detailProgram.kuota && (detailProgram.pendaftaran_program_count || 0) >= detailProgram.kuota : false}
       />
     </div>
