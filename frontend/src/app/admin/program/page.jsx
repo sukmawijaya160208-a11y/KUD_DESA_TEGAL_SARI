@@ -10,7 +10,7 @@ import Textarea from '@/components/ui/Textarea';
 import Modal from '@/components/ui/Modal';
 import DatePicker from '@/components/ui/DatePicker';
 import ProgramDetail from '@/components/ProgramDetail';
-import { formatDate } from '@/lib/date';
+import { formatDate, formatDateShort } from '@/lib/date';
 import { motion, AnimatePresence } from 'framer-motion';
 import DocumentViewer from '@/components/DocumentViewer';
 import SignaturePad from '@/components/SignaturePad';
