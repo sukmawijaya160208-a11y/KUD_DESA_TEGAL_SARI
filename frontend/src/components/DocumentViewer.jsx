@@ -3,9 +3,9 @@
 import { useMemo } from 'react';
 
 const KADES_MAP = {
-  'tegal sari': { nama: 'SISWOYO', title: 'KEPALA Desa Tegalsari Kecamatan Megang Sakti' },
-  'marga puspita': { nama: 'SUMODIONO', title: 'KEPALA Desa Marga Puspita Kecamatan Megang Sakti' },
-  'campur sari': { nama: 'MUKHSIN', title: 'KEPALA Desa Campur Sari Kecamatan Megang Sakti' },
+  'tegal sari': { nama: 'SISWOYO', title: 'Kepala Desa Tegalsari Kecamatan Megang Sakti' },
+  'marga puspita': { nama: 'SUMODIONO', title: 'Kepala Desa Marga Puspita Kecamatan Megang Sakti' },
+  'campur sari': { nama: 'MUKHSIN', title: 'Kepala Desa Campur Sari Kecamatan Megang Sakti' },
 };
 
 const DESA_LIST = [
@@ -108,8 +108,15 @@ export default function DocumentViewer({
   const qrUrl = data?.qr_logo;
 
   return (
-    <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
-      <div className="max-w-full sm:max-w-[210mm] mx-auto py-4 px-4 sm:px-6">
+    <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden print:shadow-none print:border-none">
+      <style>{`
+        @page { size: A4 portrait; margin: 20mm 25mm; }
+        @media print {
+          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          .no-print { display: none !important; }
+        }
+      `}</style>
+      <div className="max-w-full sm:max-w-[210mm] mx-auto py-4 px-4 sm:px-6 print:p-0">
 
         {/* ===== SURAT 3 HEADER ===== */}
         {suratIndex === 3 && (
@@ -236,9 +243,9 @@ export default function DocumentViewer({
             <div className="text-center">
               <p className="text-sm text-gray-600 mb-4">Yang Membuat Pernyataan,</p>
               {signature ? (
-                <img src={signature} alt="Tanda Tangan" className="h-14 object-contain mx-auto mb-1" />
+                <img src={signature} alt="Tanda Tangan" className="h-16 object-contain mx-auto mb-1" />
               ) : (
-                <div className="h-14" />
+                <div className="h-16" />
               )}
               <div className="w-48 h-[1.5px] bg-gray-400 mx-auto mb-1" />
               <p className="text-sm font-bold text-gray-900 uppercase tracking-wide">{data?.nama_pekebun || '_________________________'}</p>
@@ -256,9 +263,9 @@ export default function DocumentViewer({
               <div className="text-center flex-1">
                 <p className="text-sm text-gray-600 mb-4">Saya yang membuat Pernyataan,</p>
                 {signature ? (
-                  <img src={signature} alt="Tanda Tangan" className="h-14 object-contain mx-auto mb-1" />
+                  <img src={signature} alt="Tanda Tangan" className="h-16 object-contain mx-auto mb-1" />
                 ) : (
-                  <div className="h-14" />
+                  <div className="h-16" />
                 )}
                 <div className="w-48 h-[1.5px] bg-gray-400 mx-auto mb-1" />
                 <p className="text-sm font-bold text-gray-900 uppercase tracking-wide">{data?.nama_pekebun || '_________________________'}</p>
@@ -273,9 +280,9 @@ export default function DocumentViewer({
                     else if (desa === 'marga puspita') kadesSignature = program?.tanda_tangan_kades_marga_puspita;
                     else if (desa === 'campur sari') kadesSignature = program?.tanda_tangan_kades_campur_sari;
                     return kadesSignature ? (
-                      <img src={kadesSignature} alt="Tanda Tangan Kades" className="h-14 object-contain mx-auto mb-1" />
+                      <img src={kadesSignature} alt="Tanda Tangan Kades" className="h-16 object-contain mx-auto mb-1" />
                     ) : (
-                      <div className="h-14" />
+                      <div className="h-16" />
                     );
                   })()}
                   <div className="w-48 h-[1.5px] bg-gray-400 mx-auto mb-1" />
@@ -295,9 +302,9 @@ export default function DocumentViewer({
               {(() => {
                 const ttdKetua = program?.tanda_tangan_ketua_kud;
                 return ttdKetua ? (
-                  <img src={ttdKetua} alt="Tanda Tangan Ketua KUD" className="h-14 object-contain mx-auto mb-1" />
+                  <img src={ttdKetua} alt="Tanda Tangan Ketua KUD" className="h-16 object-contain mx-auto mb-1" />
                 ) : (
-                  <div className="h-14" />
+                  <div className="h-16" />
                 );
               })()}
               <div className="w-48 h-[1.5px] bg-gray-400 mx-auto mb-1" />
