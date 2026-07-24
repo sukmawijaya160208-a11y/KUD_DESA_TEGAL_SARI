@@ -136,6 +136,7 @@ export default function PekebunProfilPage() {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({});
   const [kartuData, setKartuData] = useState(null);
+  const [previewCard, setPreviewCard] = useState(false);
 
   const load = useCallback(() => {
     api.pekebun.profil().then((d) => { setProfil(d); setForm({ ...d }); }).catch((err) => toast.error(err.message)).finally(() => setLoading(false));
@@ -326,8 +327,26 @@ export default function PekebunProfilPage() {
             </div>
           </div>
           <KartuAnggotaKud data={kartuData} width={360} />
+          <div className="flex justify-center mt-4">
+            <button onClick={() => setPreviewCard(true)}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-foreground rounded-xl text-sm font-semibold border-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5 transition-all shadow-sm cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Preview Kartu
+            </button>
+          </div>
         </div>
       )}
+
+      <Modal open={previewCard} onClose={() => setPreviewCard(false)} maxWidth="max-w-2xl">
+        {kartuData && (
+          <div className="py-4">
+            <KartuAnggotaKud data={kartuData} width={500} />
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

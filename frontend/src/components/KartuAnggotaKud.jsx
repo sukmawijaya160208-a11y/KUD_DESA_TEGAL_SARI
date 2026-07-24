@@ -147,6 +147,18 @@ export default function KartuAnggotaKud({ data, onClose, width = 300 }) {
   const ttdEnabled = kud.tanda_tangan_kartu !== false;
 
   const handlePrint = () => {
+    const html = buildHtml();
+    const tryPrint = (doc) => {
+      try { doc.focus(); doc.print(); } catch { fallbackPrint(); }
+    };
+    const fallbackPrint = () => {
+      try {
+        const win = window.open('', '_blank');
+        if (win) { win.document.write(html); win.document.close(); }
+        else { window.print(); }
+      } catch { window.print(); }
+    };
+
     const iframe = document.createElement('iframe');
     iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;opacity:0;pointer-events:none';
     document.body.appendChild(iframe);
@@ -154,27 +166,11 @@ export default function KartuAnggotaKud({ data, onClose, width = 300 }) {
 
     const doc = iframe.contentWindow.document;
     doc.open();
-    doc.write(buildHtml());
+    doc.write(html);
     doc.close();
 
-    setTimeout(() => {
-      try {
-        iframe.contentWindow.focus();
-        iframe.contentWindow.print();
-      } catch (e) {
-        const win = window.open('', '_blank');
-        if (win) {
-          win.document.write(buildHtml());
-          win.document.close();
-        } else {
-          alert('Izinkan popup untuk mencetak');
-        }
-      }
-    }, 800);
-
-    setTimeout(() => {
-      if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
-    }, 120000);
+    setTimeout(() => tryPrint(iframe.contentWindow), 800);
+    setTimeout(() => { if (iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 120000);
   };
 
   const buildHtml = () => `
@@ -243,7 +239,8 @@ export default function KartuAnggotaKud({ data, onClose, width = 300 }) {
           <div
             className="rounded-xl overflow-hidden shadow-lg"
             style={{
-              width: width + 'px',
+              width: '100%',
+              maxWidth: width + 'px',
               background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`,
               color: 'white',
             }}
