@@ -13,8 +13,14 @@ import {
   ArrowLeftIcon, DocumentIcon, ShieldCheckIcon, XMarkIcon,
   CheckCircleIcon, ExclamationCircleIcon, MapPinIcon,
   PencilSquareIcon, ChevronLeftIcon, ChevronRightIcon,
-  CheckIcon, EyeIcon,
+  CheckIcon, EyeIcon, FolderOpenIcon, PhotoIcon,
 } from '@heroicons/react/24/outline';
+
+const BERKAS_CEK = [
+  { key: 'ktp', label: 'Foto KTP', field: 'upload_ktp', sumber: 'profil' },
+  { key: 'kk', label: 'Foto KK', field: 'upload_kk', sumber: 'profil' },
+  { key: 'surat_tanah', label: 'Foto Surat Tanah', field: 'upload_surat_tanah', sumber: 'lahan' },
+];
 
 function StepIndicator({ current, steps }) {
   return (
@@ -38,7 +44,7 @@ function StepIndicator({ current, steps }) {
               }`}>{s}</span>
             </div>
             {i < steps.length - 1 && (
-              <div className={`w-12 sm:w-20 h-0.5 mx-1 sm:mx-2 mt-[-1.5rem] ${
+              <div className={`w-10 sm:w-14 h-0.5 mx-1 sm:mx-2 mt-[-1.5rem] ${
                 isCompleted ? 'bg-emerald-400' : 'bg-gray-200'
               }`} />
             )}
@@ -69,13 +75,36 @@ export default function DaftarProgramPage() {
   const [step, setStep] = useState(1);
   const [previewSurat, setPreviewSurat] = useState(null);
 
-  const steps = ['Pilih Lahan', 'Surat & TTD', 'Konfirmasi'];
+  const steps = ['Pilih Lahan', 'Surat & TTD', 'Berkas Profil', 'Konfirmasi'];
+
+  const selectedLahanObj = useMemo(() => {
+    if (!selectedLahan || !lahanSaya.length) return null;
+    return lahanSaya.find((l) => l.id.toString() === selectedLahan) || null;
+  }, [selectedLahan, lahanSaya]);
+
+  const berkasStatus = useMemo(() => {
+    return BERKAS_CEK.map((b) => {
+      let ada = false;
+      let nilai = null;
+      if (b.sumber === 'profil') {
+        nilai = pekebun?.[b.field];
+        ada = Boolean(nilai) && nilai !== '-' && nilai !== '';
+      } else if (b.sumber === 'lahan') {
+        nilai = selectedLahanObj?.[b.field];
+        ada = Boolean(nilai) && nilai !== '-' && nilai !== '';
+      }
+      return { ...b, ada, nilai };
+    });
+  }, [pekebun, selectedLahanObj]);
+
+  const semuaBerkasLengkap = useMemo(() => berkasStatus.every((b) => b.ada), [berkasStatus]);
 
   const canGoNext = useMemo(() => {
-    if (step === 1) return !!selectedLahan || lahanSaya.length === 0;
+    if (step === 1) return !!selectedLahan;
     if (step === 2) return surat1 && surat2 && surat3 && !!ttd;
+    if (step === 3) return true;
     return true;
-  }, [step, selectedLahan, lahanSaya.length, surat1, surat2, surat3, ttd]);
+  }, [step, selectedLahan, surat1, surat2, surat3, ttd]);
 
   useEffect(() => {
     Promise.all([
@@ -114,7 +143,7 @@ export default function DaftarProgramPage() {
     try {
       await api.pekebun.daftarProgram({
         program_kud_id: parseInt(id),
-        lahan_id: selectedLahan ? parseInt(selectedLahan) : null,
+        lahan_id: parseInt(selectedLahan),
         setuju_surat_1: surat1,
         setuju_surat_2: surat2,
         setuju_surat_3: surat3,
@@ -166,7 +195,7 @@ export default function DaftarProgramPage() {
 
   const docData = useMemo(() => {
     if (!pekebun) return {};
-    const lahan = lahanSaya.find((l) => l.id.toString() === selectedLahan);
+    const lahan = selectedLahanObj;
     return {
       nama_pekebun: pekebun.nama || '',
       nik: pekebun.nik || '',
@@ -193,9 +222,9 @@ export default function DaftarProgramPage() {
       qr_logo: qrLogoUrl,
       kop_kud: `KOPERASI UNIT DESA (KUD) "SARI SUBUR"`,
     };
-  }, [pekebun, lahanSaya, selectedLahan, program, kadesInfo, logoKudUrl, qrLogoUrl]);
+  }, [pekebun, selectedLahanObj, program, kadesInfo, logoKudUrl, qrLogoUrl]);
 
-  const goNext = () => { if (canGoNext && step < 3) setStep((s) => s + 1); };
+  const goNext = () => { if (canGoNext && step < 4) setStep((s) => s + 1); };
   const goBack = () => { if (step > 1) setStep((s) => s - 1); };
 
   if (loading) {
@@ -263,7 +292,7 @@ export default function DaftarProgramPage() {
             <div>
               <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <MapPinIcon className="w-5 h-5 text-blue-800" />
-                Pilih Lahan
+                Pilih Lahan Sawit
               </h2>
               {lahanSaya.length === 0 ? (
                 <div className="bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-xl p-5">
@@ -399,8 +428,97 @@ export default function DaftarProgramPage() {
             </div>
           )}
 
-          {/* ===== STEP 3: KONFIRMASI ===== */}
+          {/* ===== STEP 3: BERKAS PROFIL ===== */}
           {step === 3 && (
+            <div>
+              <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <FolderOpenIcon className="w-5 h-5 text-blue-800" />
+                Status Berkas Profil
+              </h2>
+
+              {!semuaBerkasLengkap && (
+                <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800 mb-5 flex items-start gap-3">
+                  <ExclamationCircleIcon className="w-5 h-5 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-medium">Beberapa berkas persyaratan belum di-upload</p>
+                    <p className="text-xs text-amber-700 mt-0.5">
+                      Silakan lengkapi profil Anda terlebih dahulu untuk kelancaran verifikasi.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {semuaBerkasLengkap && (
+                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700 mb-5 flex items-center gap-2">
+                  <CheckCircleIcon className="w-5 h-5 shrink-0" />
+                  Semua berkas persyaratan sudah lengkap.
+                </div>
+              )}
+
+              <div className="space-y-3">
+                {berkasStatus.map((b) => (
+                  <div key={b.key} className={`rounded-xl border overflow-hidden bg-white shadow-sm ${
+                    b.ada ? 'border-emerald-200' : 'border-red-200'
+                  }`}>
+                    <div className="flex items-center justify-between p-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                          b.ada ? 'bg-emerald-100' : 'bg-red-100'
+                        }`}>
+                          {b.ada
+                            ? <CheckCircleIcon className="w-4 h-4 text-emerald-600" />
+                            : <ExclamationCircleIcon className="w-4 h-4 text-red-500" />
+                          }
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-medium text-sm text-gray-900">{b.label}</p>
+                          <p className="text-[11px] text-gray-400">Sumber: {b.sumber === 'profil' ? 'Profil Pekebun' : 'Data Lahan'}</p>
+                        </div>
+                      </div>
+                      <div className="shrink-0 ml-3">
+                        {b.ada ? (
+                          <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
+                            <CheckIcon className="w-3 h-3" /> Ter-upload
+                          </span>
+                        ) : (
+                          <a href="/pekebun/profil"
+                            className="text-[10px] font-semibold text-red-600 bg-red-50 px-2.5 py-1 rounded-full border border-red-200 hover:bg-red-100 transition-colors flex items-center gap-1">
+                            <ExclamationCircleIcon className="w-3 h-3" /> Belum Lengkap
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                    {b.ada && b.nilai && (
+                      <div className="px-4 pb-4 pt-0">
+                        <div className="flex items-center gap-2 text-xs text-blue-600">
+                          <PhotoIcon className="w-3.5 h-3.5" />
+                          <span className="truncate max-w-[200px]">{b.nilai.split('/').pop()}</span>
+                          <button onClick={() => window.open(b.nilai, '_blank')}
+                            className="underline hover:text-blue-800 cursor-pointer">
+                            Lihat
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800 flex items-start gap-3">
+                <ShieldCheckIcon className="w-5 h-5 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium">Status ini hanya sebagai informasi</p>
+                  <p className="text-xs text-blue-600 mt-0.5">
+                    Anda tetap bisa melanjutkan pendaftaran meskipun ada berkas yang belum lengkap.
+                    Namun, pastikan untuk melengkapinya agar proses verifikasi berjalan lancar.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== STEP 4: KONFIRMASI ===== */}
+          {step === 4 && (
             <div className="space-y-4">
               <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <ShieldCheckIcon className="w-5 h-5 text-blue-800" />
@@ -437,34 +555,30 @@ export default function DaftarProgramPage() {
                 </div>
               </div>
 
-              {selectedLahan && (() => {
-                const l = lahanSaya.find((x) => x.id.toString() === selectedLahan);
-                if (!l) return null;
-                return (
-                  <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-5">
-                    <div className="flex items-center gap-2 pb-3 mb-3 border-b border-gray-100">
-                      <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center">
-                        <MapPinIcon className="w-4 h-4 text-blue-800" />
-                      </div>
-                      <h3 className="font-semibold text-gray-900 text-sm">Lahan Terpilih</h3>
+              {selectedLahanObj && (
+                <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-5">
+                  <div className="flex items-center gap-2 pb-3 mb-3 border-b border-gray-100">
+                    <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center">
+                      <MapPinIcon className="w-4 h-4 text-blue-800" />
                     </div>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                      <span className="text-gray-400">Alamat</span>
-                      <span className="text-gray-900">{l.alamat_lahan}</span>
-                      <span className="text-gray-400">Luas</span>
-                      <span className="text-gray-900">{Number(l.luas_lahan_m2).toLocaleString()} M²</span>
-                      <span className="text-gray-400">Jenis Surat</span>
-                      <span className="text-gray-900">{l.jenis_surat}</span>
-                      {l.nomor_surat && (
-                        <>
-                          <span className="text-gray-400">No. Surat</span>
-                          <span className="text-gray-900">{l.nomor_surat}</span>
-                        </>
-                      )}
-                    </div>
+                    <h3 className="font-semibold text-gray-900 text-sm">Lahan Terpilih</h3>
                   </div>
-                );
-              })()}
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <span className="text-gray-400">Alamat</span>
+                    <span className="text-gray-900">{selectedLahanObj.alamat_lahan}</span>
+                    <span className="text-gray-400">Luas</span>
+                    <span className="text-gray-900">{Number(selectedLahanObj.luas_lahan_m2).toLocaleString()} M²</span>
+                    <span className="text-gray-400">Jenis Surat</span>
+                    <span className="text-gray-900">{selectedLahanObj.jenis_surat}</span>
+                    {selectedLahanObj.nomor_surat && (
+                      <>
+                        <span className="text-gray-400">No. Surat</span>
+                        <span className="text-gray-900">{selectedLahanObj.nomor_surat}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
 
               <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-5">
                 <div className="flex items-center gap-2 pb-3 mb-3 border-b border-gray-100">
@@ -506,6 +620,40 @@ export default function DaftarProgramPage() {
                 </div>
               </div>
 
+              <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-5">
+                <div className="flex items-center gap-2 pb-3 mb-3 border-b border-gray-100">
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
+                    semuaBerkasLengkap ? 'bg-emerald-100' : 'bg-amber-100'
+                  }`}>
+                    {semuaBerkasLengkap
+                      ? <CheckCircleIcon className="w-4 h-4 text-emerald-600" />
+                      : <ExclamationCircleIcon className="w-4 h-4 text-amber-600" />
+                    }
+                  </div>
+                  <h3 className="font-semibold text-gray-900 text-sm">Status Berkas</h3>
+                </div>
+                <div className="space-y-2">
+                  {berkasStatus.map((b) => (
+                    <div key={b.key} className="flex items-center justify-between py-1.5">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {b.ada
+                          ? <CheckCircleIcon className="w-4 h-4 text-emerald-500 shrink-0" />
+                          : <ExclamationCircleIcon className="w-4 h-4 text-amber-400 shrink-0" />
+                        }
+                        <span className="text-sm text-gray-700">{b.label}</span>
+                      </div>
+                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ml-3 ${
+                        b.ada
+                          ? 'text-emerald-600 bg-emerald-50 border border-emerald-200'
+                          : 'text-amber-600 bg-amber-50 border border-amber-200'
+                      }`}>
+                        {b.ada ? '✓ Lengkap' : 'Belum'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800 flex items-start gap-3">
                 <ShieldCheckIcon className="w-5 h-5 shrink-0 mt-0.5" />
                 <div>
@@ -531,7 +679,7 @@ export default function DaftarProgramPage() {
                 <div />
               )}
 
-              {step < 3 ? (
+              {step < 4 ? (
                 <button onClick={goNext} disabled={!canGoNext}
                   className={`h-11 px-6 rounded-lg text-sm font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                     canGoNext

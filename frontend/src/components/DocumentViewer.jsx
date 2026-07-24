@@ -63,10 +63,10 @@ function formatSuratDate(dateStr) {
 
 function InfoRow({ label, value }) {
   return (
-    <div className="grid grid-cols-[180px_auto_1fr] gap-x-1 py-0.5">
-      <span className="text-sm text-gray-800 text-left whitespace-nowrap">{label}</span>
-      <span className="text-sm text-gray-800">:</span>
-      <span className="text-sm font-semibold text-gray-900 text-left break-words">{value || '_________________________'}</span>
+    <div className="flex my-1">
+      <span className="w-36 font-medium text-slate-600 text-sm shrink-0">{label}</span>
+      <span className="mr-2 text-sm text-slate-600">:</span>
+      <span className="font-semibold text-slate-900 text-sm">{value || '_________________________'}</span>
     </div>
   );
 }
@@ -107,8 +107,13 @@ export default function DocumentViewer({
   const logoKudUrl = data?.logo_kud;
   const qrUrl = data?.qr_logo;
 
+  let kadesSignature = '';
+  if (desa === 'tegal sari') kadesSignature = program?.tanda_tangan_kades_tegal_sari;
+  else if (desa === 'marga puspita') kadesSignature = program?.tanda_tangan_kades_marga_puspita;
+  else if (desa === 'campur sari') kadesSignature = program?.tanda_tangan_kades_campur_sari;
+
   return (
-    <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden print:shadow-none print:border-none">
+    <div className="bg-white shadow-md border border-slate-200/80 rounded-2xl overflow-hidden print:shadow-none print:border-none">
       <style>{`
         @page { size: A4 portrait; margin: 20mm 25mm; }
         @media print {
@@ -116,119 +121,98 @@ export default function DocumentViewer({
           .no-print { display: none !important; }
         }
       `}</style>
-      <div className="max-w-full sm:max-w-[210mm] mx-auto py-4 px-4 sm:px-6 print:p-0">
+      <div className="max-w-[210mm] mx-auto p-6 sm:p-10 print:p-0">
 
-        {/* ===== SURAT 3 HEADER ===== */}
+        {/* SURAT 3 HEADER */}
         {suratIndex === 3 && (
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <div className="w-[60px] sm:w-[75px] h-[60px] sm:h-[75px] shrink-0">
+          <div className="flex items-start justify-between gap-2 mb-4">
+            <div className="w-[65px] sm:w-[80px] h-[65px] sm:h-[80px] shrink-0">
               {logoKudUrl ? (
                 <img src={logoKudUrl} alt="Logo KUD" className="w-full h-full object-contain" />
               ) : (
-                <div className="w-full h-full bg-gray-50 rounded flex items-center justify-center text-[7px] text-gray-300 border border-dashed border-gray-200">Logo</div>
+                <div className="w-full h-full bg-slate-50 rounded flex items-center justify-center text-[7px] text-slate-300 border border-dashed border-slate-200">Logo</div>
               )}
             </div>
             <div className="flex-1 min-w-0 mx-1 sm:mx-3">
               <div className="text-center leading-tight">
-                <p className="text-[10px] sm:text-[11px] font-bold text-gray-900 uppercase tracking-widest">
+                <p className="text-[10px] sm:text-[11px] font-bold text-slate-900 uppercase tracking-widest">
                   KOPERASI UNIT DESA (KUD) &ldquo; S A R I &nbsp; S U B U R &rdquo;
                 </p>
-                <p className="text-[9px] sm:text-[10px] font-semibold text-gray-800 uppercase mt-0.5">
+                <p className="text-[9px] sm:text-[10px] font-semibold text-slate-800 uppercase mt-0.5">
                   DESA TEGALSARI KECAMATAN MEGANG SAKTI KABUPATEN MUSI RAWAS
                 </p>
-                <p className="text-[7px] sm:text-[8px] text-gray-600 mt-0.5 leading-tight">
+                <p className="text-[7px] sm:text-[8px] text-slate-600 mt-0.5 leading-tight">
                   Sekretariat : Desa Tegalsari Dusun I Kec. Megang Sakti Kab. Musi Rawas Provinsi Sumatera Selatan, 31657
                 </p>
-                <p className="text-[7px] sm:text-[8px] text-gray-600 leading-tight">
+                <p className="text-[7px] sm:text-[8px] text-slate-600 leading-tight">
                   HP. 0822-2728-3416 – Email : kudsarisubur@gmail.com – https://kudsarisubur.blogspot.com/
                 </p>
               </div>
             </div>
-            <div className="w-[60px] sm:w-[75px] h-[60px] sm:h-[75px] shrink-0 flex flex-col items-center">
+            <div className="w-[65px] sm:w-[80px] h-[65px] sm:h-[80px] shrink-0 flex flex-col items-center">
               {qrUrl ? (
                 <img src={qrUrl} alt="QR Code" className="w-full h-full object-contain" />
               ) : (
-                <div className="w-full h-full bg-gray-50 rounded flex items-center justify-center text-[7px] text-gray-300 border border-dashed border-gray-200">QR</div>
+                <div className="w-full h-full bg-slate-50 rounded flex items-center justify-center text-[7px] text-slate-300 border border-dashed border-slate-200">QR</div>
               )}
             </div>
           </div>
         )}
 
+        {/* TITLE */}
+        <div className="text-center mb-6">
+          <h2 className="font-bold text-base sm:text-lg text-slate-900 uppercase tracking-wide border-b-2 border-slate-900 inline-block pb-0.5">
+            {title}
+          </h2>
+          {suratIndex === 2 && (
+            <p className="text-[11px] font-semibold text-slate-700 mt-1 tracking-wide">
+              PERKEBUNAN KELAPA SAWIT TA.2026
+            </p>
+          )}
+        </div>
+
+        {/* SURAT 3: KETUA KUD DATA */}
         {suratIndex === 3 && (
-          <>
-            <div className="border-t-2 border-b border-gray-800 mb-2" />
-            <div className="text-center mb-2">
-              <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
-                {title}
-              </h2>
-              <div className="w-16 h-[1.5px] bg-gray-400 mx-auto mt-1" />
-            </div>
-          </>
+          <div className="mb-3">
+            <p className="text-sm font-semibold text-slate-800 mb-2">Yang bertanda tangan di bawah ini :</p>
+            <InfoRow label="Nama" value={data?.ketua_kud_nama || 'Dedek Sulaiman, S.Pd.'} />
+            <InfoRow label="Jabatan" value={data?.ketua_kud_jabatan || 'Ketua Koperasi Unit Desa Sari Subur'} />
+            <InfoRow label="Alamat" value={data?.ketua_kud_alamat || 'Desa Tegalsari Kecamatan Megang Sakti Kabupaten Musi Rawas'} />
+          </div>
         )}
 
-        {/* ===== SURAT 1 & 2 TITLE ===== */}
+        {/* SURAT 3: PEKEBUN DATA */}
+        {suratIndex === 3 && (
+          <div className="mb-3">
+            <p className="text-sm font-semibold text-slate-800 mb-2">Menerangkan dengan sebenarnya, bahwa :</p>
+            <InfoRow label="Nama" value={data?.nama_pekebun} />
+            <InfoRow label="NIK" value={data?.nik} />
+            <InfoRow label="Jenis Kelamin" value={data?.jenis_kelamin} />
+            <InfoRow label="Alamat" value={data?.alamat_lengkap || data?.alamat} />
+          </div>
+        )}
+
+        {/* SURAT 1 & 2: PEKEBUN DATA */}
         {suratIndex !== 3 && (
-          <div className="text-center mb-3">
-            <h2 className="text-base font-bold text-gray-900 uppercase tracking-wide">
-              {title}
-            </h2>
-            {suratIndex === 2 && (
-              <p className="text-[11px] font-semibold text-gray-700 mt-0.5 tracking-wide">
-                PERKEBUNAN KELAPA SAWIT TA.2026
-              </p>
-            )}
-            <div className="w-16 h-[1.5px] bg-gray-400 mx-auto mt-1" />
+          <div className="mb-3">
+            <p className="text-sm font-semibold text-slate-800 mb-2">Yang bertanda tangan di bawah ini :</p>
+            <InfoRow label="Nama" value={data?.nama_pekebun} />
+            <InfoRow label="NIK" value={data?.nik} />
+            <InfoRow label="Jenis Kelamin" value={data?.jenis_kelamin} />
+            <InfoRow label="Alamat" value={suratIndex === 2 ? (data?.alamat_lengkap || data?.alamat) : data?.alamat} />
+            {suratIndex === 1 && <InfoRow label="Nomor Hp/Telepon" value={data?.no_whatsapp} />}
           </div>
         )}
 
-        {/* ===== SURAT 3: KETUA KUD FIXED DATA ===== */}
-        {suratIndex === 3 && (
-          <div className="mb-2">
-            <p className="text-sm font-semibold text-gray-800 mb-1">Yang bertanda tangan di bawah ini :</p>
-            <div>
-              <InfoRow label="Nama" value={data?.ketua_kud_nama || 'Dedek Sulaiman, S.Pd.'} />
-              <InfoRow label="Jabatan" value={data?.ketua_kud_jabatan || 'Ketua Koperasi Unit Desa Sari Subur'} />
-              <InfoRow label="Alamat" value={data?.ketua_kud_alamat || 'Desa Tegalsari Kecamatan Megang Sakti Kabupaten Musi Rawas'} />
-            </div>
-          </div>
-        )}
-
-        {/* ===== SURAT 3: AUTO POPULATE PEKEBUN ===== */}
-        {suratIndex === 3 && (
-          <div className="mb-2">
-            <p className="text-sm font-semibold text-gray-800 mb-1">Menerangkan dengan sebenarnya, bahwa :</p>
-            <div>
-              <InfoRow label="Nama" value={data?.nama_pekebun} />
-              <InfoRow label="NIK" value={data?.nik} />
-              <InfoRow label="Jenis Kelamin" value={data?.jenis_kelamin} />
-              <InfoRow label="Alamat" value={data?.alamat_lengkap || data?.alamat} />
-            </div>
-          </div>
-        )}
-
-        {/* ===== SURAT 1 & 2: AUTO POPULATE PEKEBUN ===== */}
-        {suratIndex !== 3 && (
-          <div className="mb-2">
-            <p className="text-sm font-semibold text-gray-800 mb-1">Yang bertanda tangan di bawah ini :</p>
-            <div>
-              <InfoRow label="Nama" value={data?.nama_pekebun} />
-              <InfoRow label="NIK" value={data?.nik} />
-              <InfoRow label="Jenis Kelamin" value={data?.jenis_kelamin} />
-              <InfoRow label="Alamat" value={suratIndex === 2 ? (data?.alamat_lengkap || data?.alamat) : data?.alamat} />
-              {suratIndex === 1 && <InfoRow label="Nomor Hp/Telepon" value={data?.no_whatsapp} />}
-            </div>
-          </div>
-        )}
-
-        {/* ===== SURAT 2: ALAMAT SUB ===== */}
+        {/* SURAT 2: ALAMAT SUB */}
         {suratIndex === 2 && (
-          <p className="text-sm font-semibold text-gray-800 -mt-1 mb-3 tracking-wide indent-[180px]">
+          <p className="text-sm font-semibold text-slate-800 -mt-1 mb-4 tracking-wide indent-[180px]">
             KECAMATAN MEGANG SAKTI KABUPATEN MUSI RAWAS
           </p>
         )}
 
-        {/* ===== BODY TEXT ===== */}
-        <div className="text-sm text-gray-800 leading-snug space-y-1 text-justify mb-4">
+        {/* BODY TEXT */}
+        <div className="text-justify leading-relaxed text-sm sm:text-base text-slate-700 my-4 space-y-1">
           {rendered.split('\n').map((line, i) => {
             const trimmed = line.trim();
             if (!trimmed) return <div key={i} className="h-2" />;
@@ -236,79 +220,77 @@ export default function DocumentViewer({
           })}
         </div>
 
-        {/* ===== SURAT 1: TANGGAL + SIGNATURE (kanan, satu block) ===== */}
+        {/* SURAT 1: TTD PEKEBUN (kanan, satu block) */}
         {suratIndex === 1 && (
-          <div className="flex flex-col items-end mb-3">
-            <p className="text-sm text-gray-700 mb-5 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
+          <div className="flex flex-col items-end mt-10 mb-4">
+            <p className="text-sm text-slate-700 mb-6 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
             <div className="text-center">
-              <p className="text-sm text-gray-600 mb-4">Yang Membuat Pernyataan,</p>
+              <p className="text-sm text-slate-600 mb-4">Yang Membuat Pernyataan,</p>
               {signature ? (
-                <img src={signature} alt="Tanda Tangan" className="h-16 object-contain mx-auto mb-1" />
+                <div className="h-20 flex items-center justify-center my-2">
+                  <img src={signature} alt="Tanda Tangan" className="h-20 object-contain" />
+                </div>
               ) : (
-                <div className="h-16" />
+                <div className="h-20" />
               )}
-              <div className="w-48 h-[1.5px] bg-gray-400 mx-auto mb-1" />
-              <p className="text-sm font-bold text-gray-900 uppercase tracking-wide">{data?.nama_pekebun || '_________________________'}</p>
+              <p className="font-bold text-slate-900 uppercase tracking-wide mt-1">{data?.nama_pekebun || '_________________________'}</p>
             </div>
           </div>
         )}
 
-        {/* ===== SURAT 2: TANGGAL (kanan) + PEKEBUN (kiri) + KADES (kanan) ===== */}
+        {/* SURAT 2: TTD PEKEBUN (kiri) + KADES (kanan) — GRID 2 KOLOM */}
         {suratIndex === 2 && (
           <>
-            <div className="flex justify-end mb-5">
-              <p className="text-sm text-gray-700 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
+            <div className="flex justify-end mb-6">
+              <p className="text-sm text-slate-700 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
             </div>
-            <div className="flex flex-row justify-between gap-8 mb-3">
-              <div className="text-center flex-1">
-                <p className="text-sm text-gray-600 mb-4">Saya yang membuat Pernyataan,</p>
+            <div className="grid grid-cols-2 text-center gap-6 mt-8 sm:mt-12 text-sm">
+              <div>
+                <p className="text-slate-600 mb-4">Saya yang membuat Pernyataan,</p>
                 {signature ? (
-                  <img src={signature} alt="Tanda Tangan" className="h-16 object-contain mx-auto mb-1" />
+                  <div className="h-20 flex items-center justify-center my-2">
+                    <img src={signature} alt="Tanda Tangan" className="h-20 object-contain" />
+                  </div>
                 ) : (
-                  <div className="h-16" />
+                  <div className="h-20" />
                 )}
-                <div className="w-48 h-[1.5px] bg-gray-400 mx-auto mb-1" />
-                <p className="text-sm font-bold text-gray-900 uppercase tracking-wide">{data?.nama_pekebun || '_________________________'}</p>
+                <p className="font-bold text-slate-900 uppercase tracking-wide mt-1">{data?.nama_pekebun || '_________________________'}</p>
               </div>
               {showSignature && (
-                <div className="text-center flex-1">
-                  <p className="text-sm font-bold text-gray-800 mb-4 uppercase tracking-wide">Mengetahui</p>
-                  <p className="text-sm text-gray-600 mb-4">{kades?.title || 'Kepala Desa'}</p>
-                  {(() => {
-                    let kadesSignature = '';
-                    if (desa === 'tegal sari') kadesSignature = program?.tanda_tangan_kades_tegal_sari;
-                    else if (desa === 'marga puspita') kadesSignature = program?.tanda_tangan_kades_marga_puspita;
-                    else if (desa === 'campur sari') kadesSignature = program?.tanda_tangan_kades_campur_sari;
-                    return kadesSignature ? (
-                      <img src={kadesSignature} alt="Tanda Tangan Kades" className="h-16 object-contain mx-auto mb-1" />
-                    ) : (
-                      <div className="h-16" />
-                    );
-                  })()}
-                  <div className="w-48 h-[1.5px] bg-gray-400 mx-auto mb-1" />
-                  <p className="text-sm font-bold text-gray-900 tracking-wide">{kades?.nama || data?.kades_nama || '_________________________'}</p>
+                <div>
+                  <p className="font-bold text-slate-800 mb-4 uppercase tracking-wide">Mengetahui</p>
+                  <p className="text-slate-600 mb-4">{kades?.title || 'Kepala Desa'}</p>
+                  {kadesSignature ? (
+                    <div className="h-20 flex items-center justify-center my-2">
+                      <img src={kadesSignature} alt="Tanda Tangan Kades" className="h-20 object-contain" />
+                    </div>
+                  ) : (
+                    <div className="h-20" />
+                  )}
+                  <p className="font-bold text-slate-900 tracking-wide mt-1">{kades?.nama || data?.kades_nama || '_________________________'}</p>
                 </div>
               )}
             </div>
           </>
         )}
 
-        {/* ===== SURAT 3: TANGGAL (kanan) + KETUA KUD SIGNATURE (kanan) ===== */}
+        {/* SURAT 3: TTD KETUA KUD (kanan, satu block) */}
         {suratIndex === 3 && (
-          <div className="flex flex-col items-end mb-4">
-            <p className="text-sm text-gray-700 mb-5 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
+          <div className="flex flex-col items-end mt-10 mb-4">
+            <p className="text-sm text-slate-700 mb-6 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
             <div className="text-center">
-              <p className="text-sm text-gray-600 mb-4">Ketua Koperasi Unit Desa Sari Subur,</p>
+              <p className="text-sm text-slate-600 mb-4">Ketua Koperasi Unit Desa Sari Subur,</p>
               {(() => {
                 const ttdKetua = program?.tanda_tangan_ketua_kud;
                 return ttdKetua ? (
-                  <img src={ttdKetua} alt="Tanda Tangan Ketua KUD" className="h-16 object-contain mx-auto mb-1" />
+                  <div className="h-20 flex items-center justify-center my-2">
+                    <img src={ttdKetua} alt="Tanda Tangan Ketua KUD" className="h-20 object-contain" />
+                  </div>
                 ) : (
-                  <div className="h-16" />
+                  <div className="h-20" />
                 );
               })()}
-              <div className="w-48 h-[1.5px] bg-gray-400 mx-auto mb-1" />
-              <p className="text-sm font-bold text-gray-900 uppercase tracking-wide">{data?.ketua_kud_nama || 'Dedek Sulaiman, S.Pd.'}</p>
+              <p className="font-bold text-slate-900 uppercase tracking-wide mt-1">{data?.ketua_kud_nama || 'Dedek Sulaiman, S.Pd.'}</p>
             </div>
           </div>
         )}

@@ -168,7 +168,7 @@ class PekebunController extends Controller
         }
         $validated = $request->validate([
             'program_kud_id' => 'required|exists:program_kud,id',
-            'lahan_id' => 'nullable|exists:lahan,id',
+            'lahan_id' => 'required|exists:lahan,id',
             'setuju_surat_1' => 'required|boolean',
             'setuju_surat_2' => 'required|boolean',
             'setuju_surat_3' => 'required|boolean',
