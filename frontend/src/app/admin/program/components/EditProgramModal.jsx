@@ -234,17 +234,17 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
 
         {/* FOTO PROGRAM */}
         <FormSection title="Foto Program" icon={PhotoIcon}>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {form.foto.map((url, idx) => (
-              <div key={idx} className="relative w-24 h-24 rounded-xl overflow-hidden border border-border bg-muted group">
+              <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border border-border bg-muted">
                 <img src={url} alt="" className="w-full h-full object-cover" />
                 <button type="button" onClick={() => removeFoto(idx)}
-                  className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-lg">
-                  <XMarkIcon className="w-3 h-3" />
+                  className="absolute top-1 right-1 w-7 h-7 bg-red-500/90 text-white rounded-full flex items-center justify-center opacity-80 hover:opacity-100 transition-all cursor-pointer shadow-lg backdrop-blur-sm">
+                  <XMarkIcon className="w-3.5 h-3.5" />
                 </button>
               </div>
             ))}
-            <label className="w-24 h-24 rounded-xl border-2 border-dashed border-border bg-muted/50 flex items-center justify-center cursor-pointer hover:bg-muted hover:border-primary/40 transition-all">
+            <label className="aspect-square rounded-xl border-2 border-dashed border-border bg-muted/50 flex items-center justify-center cursor-pointer hover:bg-muted hover:border-primary/40 transition-all">
               <div className="flex flex-col items-center gap-1">
                 <PhotoIcon className="w-6 h-6 text-gray-300" />
                 <span className="text-[10px] text-gray-400">Tambah</span>

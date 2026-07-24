@@ -67,10 +67,10 @@ const todayDate = todayDateStr();
 
 function InfoRow({ label, value }) {
   return (
-    <div className="flex my-1">
-      <span className="w-36 font-medium text-slate-600 text-sm shrink-0">{label}</span>
-      <span className="mr-2 text-sm text-slate-600">:</span>
-      <span className="font-semibold text-slate-900 text-sm uppercase">{value || '_________________________'}</span>
+    <div className="flex my-1 text-sm">
+      <span className="w-36 font-medium text-slate-700 shrink-0">{label}</span>
+      <span className="mr-2 text-slate-700">: </span>
+      <span className="font-semibold text-slate-900 uppercase">{value || '_________________________'}</span>
     </div>
   );
 }
@@ -95,10 +95,10 @@ const DEFAULT_JUDUL = {
 
 function SingleSignerBlock({ dateLabel, jabatan, ttdUrl, namaTerang }) {
   return (
-    <div className="flex flex-col items-end mt-8 text-sm text-slate-800">
+    <div className="flex flex-col items-center mt-10 text-sm text-slate-800">
       <div className="text-center w-64 space-y-1">
-        <p className="text-right">Megang Sakti, {todayDate}</p>
-        <p className="font-medium mt-2">{jabatan || 'Yang Membuat Pernyataan,'}</p>
+        <p>Megang Sakti, {todayDate}</p>
+        <p className="font-medium text-slate-600 mt-4">{jabatan || 'Yang Membuat Pernyataan,'}</p>
         <div className="h-20 flex items-center justify-center my-2">
           {ttdUrl ? (
             <img src={ttdUrl} alt="Tanda Tangan" className="h-20 object-contain" />
@@ -106,7 +106,7 @@ function SingleSignerBlock({ dateLabel, jabatan, ttdUrl, namaTerang }) {
             <div className="h-16" />
           )}
         </div>
-        <p className="font-bold text-slate-900 uppercase tracking-wide">{namaTerang || '_________________________'}</p>
+        <p className="font-bold text-slate-900 uppercase tracking-wide mt-2">{namaTerang || '_________________________'}</p>
       </div>
     </div>
   );
@@ -135,15 +135,16 @@ export default function DocumentViewer({
   else if (desa === 'campur sari') kadesSignature = program?.tanda_tangan_kades_campur_sari;
 
   return (
-    <div className="bg-white shadow-md border border-slate-200/80 rounded-2xl overflow-hidden print:shadow-none print:border-none">
-      <style>{`
-        @page { size: A4 portrait; margin: 20mm 25mm; }
-        @media print {
-          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-          .no-print { display: none !important; }
-        }
-      `}</style>
-      <div className="p-6 sm:p-10 max-w-3xl mx-auto my-4 text-slate-800">
+    <div className="bg-slate-100 p-4 sm:p-8 flex justify-center print:bg-white print:p-0">
+      <div className="bg-white shadow-xl rounded-2xl overflow-hidden max-w-3xl w-full print:shadow-none print:rounded-none print:max-w-none">
+        <style>{`
+          @page { size: A4 portrait; margin: 20mm 25mm; }
+          @media print {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none !important; }
+          }
+        `}</style>
+        <div className="p-6 sm:p-10 text-slate-800">
 
         {/* SURAT 3 HEADER */}
         {suratIndex === 3 && (
@@ -188,7 +189,7 @@ export default function DocumentViewer({
           </h2>
           {suratIndex === 2 && (
             <p className="text-[11px] font-semibold text-slate-700 mt-1 tracking-wide">
-              PERKEBUNAN KELAPA SAWIT TA.2026
+              PERKEBUNAN KELAPA SAWIT {data?.tahun_anggaran ? `TA.${data.tahun_anggaran}` : ''}
             </p>
           )}
         </div>
@@ -234,11 +235,11 @@ export default function DocumentViewer({
         )}
 
         {/* BODY TEXT */}
-        <div className="text-justify leading-relaxed text-sm sm:text-base text-slate-700 my-4 space-y-1">
+        <div className="text-justify leading-relaxed text-sm sm:text-base text-slate-700 my-6 space-y-3">
           {rendered.split('\n').map((line, i) => {
             const trimmed = line.trim();
             if (!trimmed) return <div key={i} className="h-2" />;
-            return <p key={i} className="text-justify">{trimmed}</p>;
+            return <p key={i} className="text-justify indent-8">{trimmed}</p>;
           })}
         </div>
 
@@ -253,30 +254,34 @@ export default function DocumentViewer({
 
         {/* SURAT 2: TTD PEKEBUN (kiri) + KADES (kanan) — GRID 2 KOLOM */}
         {suratIndex === 2 && (
-          <div className="grid grid-cols-2 gap-4 mt-8 text-sm text-center text-slate-800">
-            <div>
-              <p className="font-medium text-slate-600 mb-4">Saya yang membuat Pernyataan,</p>
-              {signature ? (
-                <div className="h-20 flex items-center justify-center my-2">
-                  <img src={signature} alt="Tanda Tangan" className="h-20 object-contain" />
-                </div>
-              ) : (
-                <div className="h-20" />
-              )}
-              <p className="font-bold text-slate-900 uppercase tracking-wide">{data?.nama_pekebun || '_________________________'}</p>
-            </div>
-            {showSignature && (
+          <div className="grid grid-cols-2 gap-8 mt-10 text-sm text-center text-slate-800">
+            <div className="flex flex-col justify-between min-h-[180px]">
               <div>
-                <p className="text-right text-slate-700 mb-4">Megang Sakti, {todayDate}</p>
-                <p className="font-bold text-slate-800 mb-4 uppercase tracking-wide">Mengetahui</p>
-                <p className="text-slate-600 mb-4">{kades?.title || 'Kepala Desa'}</p>
-                {kadesSignature ? (
-                  <div className="h-20 flex items-center justify-center my-2">
-                    <img src={kadesSignature} alt="Tanda Tangan Kades" className="h-20 object-contain" />
+                <p className="font-medium text-slate-600 mb-1">Saya yang membuat Pernyataan,</p>
+                {signature ? (
+                  <div className="h-20 flex items-center justify-center my-3">
+                    <img src={signature} alt="Tanda Tangan" className="h-20 object-contain" />
                   </div>
                 ) : (
                   <div className="h-20" />
                 )}
+              </div>
+              <p className="font-bold text-slate-900 uppercase tracking-wide">{data?.nama_pekebun || '_________________________'}</p>
+            </div>
+            {showSignature && (
+              <div className="flex flex-col justify-between min-h-[180px]">
+                <div>
+                  <p className="text-center text-slate-700 mb-1">Megang Sakti, {todayDate}</p>
+                  <p className="font-bold text-slate-800 mt-3 uppercase tracking-wide">Mengetahui</p>
+                  <p className="text-slate-600 text-xs mt-1">{kades?.title || 'Kepala Desa'}</p>
+                  {kadesSignature ? (
+                    <div className="h-20 flex items-center justify-center my-3">
+                      <img src={kadesSignature} alt="Tanda Tangan Kades" className="h-20 object-contain" />
+                    </div>
+                  ) : (
+                    <div className="h-20" />
+                  )}
+                </div>
                 <p className="font-bold text-slate-900 tracking-wide">{kades?.nama || data?.kades_nama || '_________________________'}</p>
               </div>
             )}
@@ -292,6 +297,7 @@ export default function DocumentViewer({
           />
         )}
 
+        </div>
       </div>
     </div>
   );
