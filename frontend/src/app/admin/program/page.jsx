@@ -8,6 +8,7 @@ import Modal from '@/components/ui/Modal';
 import EditProgramModal from './components/EditProgramModal';
 import ProgramDetail from '@/components/ProgramDetail';
 import { formatDate, formatDateShort } from '@/lib/date';
+import { JENIS_OPTIONS } from '@/constants/options';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ClipboardDocumentListIcon, PlusIcon, PencilSquareIcon, TrashIcon,
