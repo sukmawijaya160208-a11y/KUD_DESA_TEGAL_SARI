@@ -311,10 +311,23 @@ export default function PekebunProfilPage() {
             <UploadField label="Upload KTP" current={form.upload_ktp || ''} folder="ktp" onUpload={uploadHandler('ktp')} onDelete={() => handleDelete('upload_ktp')} />
             <UploadField label="Upload KK" current={form.upload_kk || ''} folder="kk" onUpload={uploadHandler('kk')} onDelete={() => handleDelete('upload_kk')} />
           </Card>
-
-          {kartuData && <KartuAnggotaKud data={kartuData} />}
         </div>
       </div>
+
+      {kartuData && (
+        <div className="mt-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <UserIcon className="w-6 h-6 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Kartu Tanda Pengenal</h2>
+              <p className="text-sm text-muted-foreground mt-0.5">Kartu identitas anggota KUD</p>
+            </div>
+          </div>
+          <KartuAnggotaKud data={kartuData} width={360} />
+        </div>
+      )}
     </div>
   );
 }

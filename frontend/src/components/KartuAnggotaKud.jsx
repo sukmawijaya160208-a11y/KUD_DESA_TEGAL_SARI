@@ -131,7 +131,7 @@ const CARD_STYLES = `
   }
 `;
 
-export default function KartuAnggotaKud({ data, onClose }) {
+export default function KartuAnggotaKud({ data, onClose, width = 300 }) {
   const iframeRef = useRef(null);
 
   if (!data) return null;
@@ -243,7 +243,7 @@ export default function KartuAnggotaKud({ data, onClose }) {
           <div
             className="rounded-xl overflow-hidden shadow-lg"
             style={{
-              width: '300px',
+              width: width + 'px',
               background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`,
               color: 'white',
             }}
