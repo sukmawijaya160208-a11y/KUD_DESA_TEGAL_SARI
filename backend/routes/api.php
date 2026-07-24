@@ -41,8 +41,8 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/upload-profil', [AdminController::class, 'uploadProfilePhoto']);
 
-    // Upload (rate limited: 10 per minute)
-    Route::middleware('throttle:10,1')->group(function () {
+    // Upload (rate limited: 30 per minute)
+    Route::middleware('throttle:30,1')->group(function () {
         Route::post('/upload/profil', [UploadController::class, 'profil']);
         Route::post('/upload/ktp', [UploadController::class, 'ktp']);
         Route::post('/upload/kk', [UploadController::class, 'kk']);

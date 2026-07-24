@@ -177,7 +177,18 @@ export default function DaftarProgramPage() {
         });
       }
 
-      // 3. PRE-SUBMIT VALIDASI — zero trust
+      // 3. DEBUG LOG (F12 Console)
+      console.log('=== SUBMIT DEBUG ===');
+      console.log('persyaratan:', program?.persyaratan);
+      console.log('collected:', collected);
+      console.log('pekebun fields:', pekebun ? { upload_ktp: pekebun.upload_ktp, upload_kk: pekebun.upload_kk, foto_pekebun: pekebun.foto_pekebun } : 'null');
+      console.log('selectedLahan:', selectedLahan);
+      if (selectedLahan) {
+        const lahan = lahanSaya.find((x) => x.id.toString() === selectedLahan);
+        console.log('lahan:', lahan ? { upload_surat_tanah: lahan.upload_surat_tanah, upload_surat_keterangan: lahan.upload_surat_keterangan } : 'not found');
+      }
+
+      // 4. PRE-SUBMIT VALIDASI — zero trust
       const missing = program?.persyaratan?.filter((p) => !collected[p]) || [];
       if (missing.length > 0) {
         const labels = missing.map((p) => BERKAS_MAPPING[p]?.label || p);
@@ -186,7 +197,7 @@ export default function DaftarProgramPage() {
         return;
       }
 
-      // 4. Kirim
+      // 5. Kirim
       await api.pekebun.daftarProgram({
         program_kud_id: parseInt(id),
         lahan_id: selectedLahan ? parseInt(selectedLahan) : null,
@@ -386,40 +397,31 @@ export default function DaftarProgramPage() {
             </div>
           )}
 
-          {/* ===== STEP 2: UPLOAD BERKAS — PREMIUM CARDS ===== */}
+          {/* ===== STEP 2: UPLOAD BERKAS — OPSI A VERTICAL CARD ===== */}
           {step === 2 && (
             <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-6">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="font-bold text-foreground flex items-center gap-2">
-                  <span className="w-1.5 h-5 bg-blue-500 rounded-full inline-block" />
-                  Upload Berkas
-                </h2>
-                {program.persyaratan?.length > 0 && (
-                  <div className="flex items-center gap-1.5 text-xs">
-                    {(() => {
-                      const ok = program.persyaratan.filter((p) => dokumens[p] || getNilaiBerkasDisplay(p)).length;
-                      const total = program.persyaratan.length;
-                      return (
-                        <>
-                          <span className="font-semibold text-foreground">{ok}/{total}</span>
-                          <span className="text-gray-400">lengkap</span>
-                        </>
-                      );
-                    })()}
-                  </div>
-                )}
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
+                  <FolderOpenIcon className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <h2 className="font-bold text-foreground">Upload Berkas</h2>
+                  <p className="text-xs text-gray-500">
+                    Berkas dari profil/lahan terdeteksi otomatis. Upload manual untuk yang belum.
+                  </p>
+                </div>
               </div>
 
-              <p className="text-sm text-gray-500 mb-5">
-                Berkas yang sudah ada di profil/lahan akan terdeteksi otomatis. Upload manual untuk yang belum tersedia.
-              </p>
-
-              {/* Progress bar */}
+              {/* Progress bar + count */}
               {program.persyaratan?.length > 0 && (() => {
                 const ok = program.persyaratan.filter((p) => dokumens[p] || getNilaiBerkasDisplay(p)).length;
                 const total = program.persyaratan.length;
                 return (
-                  <div className="mb-5">
+                  <div className="mt-5 mb-5">
+                    <div className="flex items-center justify-between text-xs text-gray-500 mb-1.5">
+                      <span>Progress</span>
+                      <span className="font-semibold text-foreground">{ok}/{total}</span>
+                    </div>
                     <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div className="h-full rounded-full transition-all duration-700 bg-gradient-to-r from-blue-400 to-green-500"
                         style={{ width: `${(ok / total) * 100}%` }} />
@@ -429,10 +431,10 @@ export default function DaftarProgramPage() {
               })()}
 
               {program.persyaratan?.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {program.persyaratan.map((jenis) => {
                     const map = BERKAS_MAPPING[jenis];
-                    const Icon = FIELD_ICONS[map?.icon] || DocumentIcon;
+                    const url = dokumens[jenis] || getNilaiBerkasDisplay(jenis) || '';
                     const adaManual = !!dokumens[jenis];
                     const adaProfil = !!getNilaiBerkasDisplay(jenis);
                     const tersedia = adaManual || adaProfil;
@@ -443,59 +445,59 @@ export default function DaftarProgramPage() {
                         : null;
 
                     return (
-                      <div key={jenis} className={`rounded-xl border-2 transition-all ${
-                        tersedia
-                          ? 'border-green-200 bg-white'
-                          : 'border-red-200 bg-red-50/30'
+                      <div key={jenis} className={`rounded-xl border-2 overflow-hidden transition-all ${
+                        tersedia ? 'border-green-200 bg-white' : 'border-red-200 bg-red-50/30'
                       }`}>
-                        <div className="p-4">
-                          <div className="flex items-start gap-3">
-                            {/* left icon */}
-                            <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
-                              tersedia ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-500'
-                            }`}>
-                              {tersedia
-                                ? <CheckCircleIcon className="w-6 h-6" />
-                                : <ExclamationCircleIcon className="w-6 h-6" />}
+                        {/* THUMBNAIL */}
+                        <div
+                          onClick={() => url && (setPreviewImage(url), setPreviewLabel(map?.label || jenis))}
+                          className={`relative h-36 flex items-center justify-center cursor-pointer overflow-hidden ${
+                            url ? 'bg-gray-100' : 'bg-gray-50'
+                          }`}
+                        >
+                          {url ? (
+                            <img src={url} alt="" className="w-full h-full object-contain p-2 hover:scale-105 transition-transform duration-300" />
+                          ) : (
+                            <div className="text-center">
+                              <PhotoIcon className="w-10 h-10 text-gray-300 mx-auto mb-1" />
+                              <p className="text-xs text-gray-400">Belum ada foto</p>
                             </div>
+                          )}
+                          {/* Status badge overlay */}
+                          <div className={`absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-semibold shadow-sm ${
+                            tersedia ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                          }`}>
+                            {tersedia ? '✓ Lengkap' : '✗ Belum'}
+                          </div>
+                        </div>
 
-                            {/* center: info */}
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 flex-wrap">
+                        {/* INFO + ACTIONS */}
+                        <div className="p-3">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-1.5 flex-wrap">
                                 <p className="text-sm font-semibold text-foreground">{map?.label || jenis}</p>
                                 {sumber && (
-                                  <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${sumber.color}`}>
-                                    📎 {sumber.label}
+                                  <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded-full border ${sumber.color}`}>
+                                    {sumber.label.length > 30 ? sumber.label.substring(0, 28) + '..' : sumber.label}
                                   </span>
                                 )}
                               </div>
-                              {adaManual ? (
-                                <p className="text-xs text-green-600 mt-1.5 truncate max-w-[300px]">
-                                  ✓ {dokumens[jenis]}
-                                </p>
-                              ) : adaProfil ? (
-                                <p className="text-xs text-green-600 mt-1.5">✓ Tersedia — upload ulang jika perlu</p>
-                              ) : (
-                                <p className="text-xs text-red-500 mt-1.5">✗ Upload {map?.label?.toLowerCase() || jenis} Anda</p>
-                              )}
+                              <p className={`text-xs mt-1 ${tersedia ? 'text-green-600' : 'text-red-500'}`}>
+                                {tersedia ? 'Siap digunakan' : `Upload ${map?.label?.toLowerCase() || jenis} Anda`}
+                              </p>
                             </div>
 
-                            {/* right: actions */}
-                            <div className="flex items-center gap-2 shrink-0">
-                              {(adaManual || adaProfil) && (
-                                <button
-                                  onClick={() => {
-                                    const url = adaManual ? dokumens[jenis] : getNilaiBerkasDisplay(jenis);
-                                    setPreviewImage(url);
-                                    setPreviewLabel(map?.label || jenis);
-                                  }}
-                                  className="px-3 py-1.5 text-xs font-medium text-primary border border-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer flex items-center gap-1"
-                                >
-                                  <EyeIcon className="w-3.5 h-3.5" /> Lihat
+                            {/* Action buttons */}
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              {url && (
+                                <button onClick={() => { setPreviewImage(url); setPreviewLabel(map?.label || jenis); }}
+                                  className="px-2.5 py-1.5 text-xs font-medium text-primary border border-primary rounded-lg hover:bg-primary/5 transition-colors cursor-pointer flex items-center gap-1">
+                                  <EyeIcon className="w-3 h-3" /> Lihat
                                 </button>
                               )}
                               <label className="relative cursor-pointer">
-                                <span className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors inline-flex items-center gap-1 ${
+                                <span className={`px-2.5 py-1.5 text-xs font-medium rounded-lg transition-colors inline-flex items-center gap-1 ${
                                   uploading[jenis]
                                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                     : tersedia
@@ -503,7 +505,7 @@ export default function DaftarProgramPage() {
                                       : 'text-white bg-primary hover:bg-primary/90 shadow-sm'
                                 }`}>
                                   {uploading[jenis] ? (
-                                    'Mengunggah...'
+                                    <><ArrowPathIcon className="w-3 h-3 animate-spin" /> Uploading</>
                                   ) : tersedia ? (
                                     <><ArrowPathIcon className="w-3 h-3" /> Ganti</>
                                   ) : (
@@ -527,6 +529,7 @@ export default function DaftarProgramPage() {
                 </div>
               )}
 
+              {/* Banner sukses */}
               {semuaLengkap && program.persyaratan?.length > 0 && (
                 <div className="mt-5 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl">
                   <div className="flex items-center gap-3">
