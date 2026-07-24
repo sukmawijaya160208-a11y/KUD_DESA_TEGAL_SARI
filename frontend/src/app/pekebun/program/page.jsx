@@ -6,11 +6,13 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Button from '@/components/ui/Button';
 import ProgramDetail from '@/components/ProgramDetail';
+import KartuAnggotaKud from '@/components/KartuAnggotaKud';
 import { formatDate, formatDateShort } from '@/lib/date';
+import Modal from '@/components/ui/Modal';
 import {
   ClipboardDocumentListIcon, CheckCircleIcon, CalendarDaysIcon, UsersIcon,
   ChevronRightIcon, XMarkIcon, MapPinIcon, ClockIcon,
-  DocumentTextIcon, FunnelIcon
+  DocumentTextIcon, FunnelIcon, CreditCardIcon, PrinterIcon
 } from '@heroicons/react/24/outline';
 
 const PERSYARATAN_LABEL = {
@@ -30,6 +32,9 @@ export default function PekebunProgramPage() {
   const [previewLabel, setPreviewLabel] = useState('');
   const [detailProgram, setDetailProgram] = useState(null);
   const [filterStatus, setFilterStatus] = useState('semua');
+  const [kartuModal, setKartuModal] = useState(false);
+  const [kartuData, setKartuData] = useState(null);
+  const [kartuLoading, setKartuLoading] = useState(false);
   const [expandedRegId, setExpandedRegId] = useState(null);
 
   const filterTabs = [
@@ -70,6 +75,19 @@ export default function PekebunProgramPage() {
 
   const openDetail = (p) => setDetailProgram(p);
   const closeDetail = () => setDetailProgram(null);
+
+  const handleKartuAnggota = async () => {
+    setKartuLoading(true);
+    try {
+      const res = await api.pekebun.kartuAnggota();
+      setKartuData(res);
+      setKartuModal(true);
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setKartuLoading(false);
+    }
+  };
 
   if (loading) return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" /></div>;
 
@@ -173,10 +191,17 @@ export default function PekebunProgramPage() {
 
       {programSaya.length > 0 && (
         <>
-          <h2 className="font-bold text-foreground mb-3 flex items-center gap-2">
-            <span className="w-1.5 h-5 bg-green-500 rounded-full inline-block" />
-            Program Saya
-          </h2>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-bold text-foreground flex items-center gap-2">
+              <span className="w-1.5 h-5 bg-green-500 rounded-full inline-block" />
+              Program Saya
+            </h2>
+            <button onClick={handleKartuAnggota} disabled={kartuLoading}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-xl text-sm font-semibold hover:from-emerald-700 hover:to-emerald-600 disabled:opacity-60 transition-all shadow-sm cursor-pointer">
+              <CreditCardIcon className="w-4 h-4" />
+              {kartuLoading ? 'Memuat...' : 'Kartu Anggota'}
+            </button>
+          </div>
 
           <div className="flex items-center gap-1.5 mb-4 overflow-x-auto pb-1">
             <FunnelIcon className="w-3.5 h-3.5 text-gray-400 mr-1 shrink-0" />
@@ -298,6 +323,10 @@ export default function PekebunProgramPage() {
           </div>
         </div>
       )}
+
+      <Modal open={kartuModal} onClose={() => { setKartuModal(false); setKartuData(null); }} title="Kartu Anggota KUD" maxWidth="max-w-lg">
+        {kartuData && <KartuAnggotaKud data={kartuData} onClose={() => { setKartuModal(false); setKartuData(null); }} />}
+      </Modal>
 
       <ProgramDetail
         program={detailProgram}

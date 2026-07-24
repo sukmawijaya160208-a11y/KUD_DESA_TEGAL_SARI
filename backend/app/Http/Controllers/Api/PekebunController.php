@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lahan;
+use App\Models\Pekebun;
 use App\Models\PendaftaranProgram;
 use App\Models\ProgramKud;
+use App\Models\SettingKud;
 use App\Models\TbsSync;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -309,5 +311,44 @@ class PekebunController extends Controller
         $tbsSync->delete();
 
         return response()->json(['message' => 'Deleted']);
+    }
+
+    public function kartuAnggota()
+    {
+        $pekebun = request()->user()->pekebun;
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
+
+        $settingKud = SettingKud::first();
+        $pengaturan = \App\Models\Pengaturan::pluck('value', 'key');
+
+        $nomorAnggota = 'KUD-' . str_pad((string) $pekebun->id, 5, '0', STR_PAD_LEFT) . '/' . now()->format('Y');
+
+        return response()->json([
+            'pekebun' => $pekebun->load('user'),
+            'setting_kud' => $settingKud,
+            'pengaturan' => $pengaturan,
+            'nomor_anggota' => $nomorAnggota,
+            'tanggal_terbit' => now()->format('Y-m-d'),
+            'masa_berlaku' => now()->addYears(5)->format('Y-m-d'),
+        ]);
+    }
+
+    public function kartuAnggotaAdmin(Pekebun $pekebun)
+    {
+        $settingKud = SettingKud::first();
+        $pengaturan = \App\Models\Pengaturan::pluck('value', 'key');
+
+        $nomorAnggota = 'KUD-' . str_pad((string) $pekebun->id, 5, '0', STR_PAD_LEFT) . '/' . now()->format('Y');
+
+        return response()->json([
+            'pekebun' => $pekebun->load('user'),
+            'setting_kud' => $settingKud,
+            'pengaturan' => $pengaturan,
+            'nomor_anggota' => $nomorAnggota,
+            'tanggal_terbit' => now()->format('Y-m-d'),
+            'masa_berlaku' => now()->addYears(5)->format('Y-m-d'),
+        ]);
     }
 }

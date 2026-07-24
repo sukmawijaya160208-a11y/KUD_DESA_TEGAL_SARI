@@ -14,8 +14,9 @@ import { formatDate } from '@/lib/date';
 import {
   BookOpenIcon, EyeIcon, CheckCircleIcon, XCircleIcon,
   XMarkIcon, ChevronDownIcon, ChevronUpIcon, TrashIcon,
-  ClockIcon, DocumentTextIcon
+  ClockIcon, DocumentTextIcon, PrinterIcon
 } from '@heroicons/react/24/outline';
+import ReviewModal from '@/components/ReviewModal';
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',
   foto_pekebun: 'Foto Pekebun', foto_surat_tanah: 'Foto Surat Tanah',
@@ -30,6 +31,8 @@ export default function AdminPendaftaranPage() {
   const [detailModal, setDetailModal] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [previewLabel, setPreviewLabel] = useState('');
+  const [reviewModal, setReviewModal] = useState(null);
+  const [kartuAnggota, setKartuAnggota] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
 
   const load = () => {
@@ -43,15 +46,27 @@ export default function AdminPendaftaranPage() {
 
   const filtered = data.filter((d) => !filterStatus || d.status === filterStatus);
 
-  const handleVerifikasi = async (id, status) => {
-    const catatan = prompt(`Masukkan catatan untuk ${status === 'verified' ? 'menerima' : 'menolak'} pendaftaran ini:`);
-    if (catatan === null) return;
+  const handleVerifikasi = async (id, status, catatan = '') => {
+    const note = catatan ?? prompt(`Masukkan catatan untuk ${status === 'verified' ? 'menerima' : 'menolak'} pendaftaran ini:`);
+    if (note === null) return;
     try {
-      await api.admin.pendaftaran.verifikasi(id, { status, catatan });
+      await api.admin.pendaftaran.verifikasi(id, { status, catatan: note });
       toast.success(`Pendaftaran berhasil ${status === 'verified' ? 'diterima' : 'ditolak'}`);
       load();
     } catch (err) {
       toast.error(err.message);
+    }
+  };
+
+  const handleReview = async (item) => {
+    try {
+      const card = await api.admin.settingKud.kartuAnggota(item.pekebun?.id);
+      setKartuAnggota(card);
+      setReviewModal(item);
+    } catch (err) {
+      toast.error('Gagal memuat data kartu: ' + err.message);
+      setReviewModal(item);
+      setKartuAnggota(null);
     }
   };
 
@@ -207,6 +222,9 @@ export default function AdminPendaftaranPage() {
                     )}
 
                     <div className="flex items-center gap-2 pt-2 border-t border-border">
+                      <Button size="sm" variant="secondary" onClick={() => handleReview(d)}>
+                        <PrinterIcon className="w-4 h-4" /> Review & Cetak
+                      </Button>
                       {d.status === 'pending' && (
                         <>
                           <Button size="sm" variant="success" onClick={() => handleVerifikasi(d.id, 'verified')}>
@@ -246,6 +264,14 @@ export default function AdminPendaftaranPage() {
           </div>
         </div>
       )}
+
+      <ReviewModal
+        open={!!reviewModal}
+        onClose={() => { setReviewModal(null); setKartuAnggota(null); }}
+        data={reviewModal}
+        kartuAnggota={kartuAnggota}
+        onVerifikasi={reviewModal?.status === 'pending' ? (id, status, catatan) => handleVerifikasi(id, status) : undefined}
+      />
     </div>
   );
 }

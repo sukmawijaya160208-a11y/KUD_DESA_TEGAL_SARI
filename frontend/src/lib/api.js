@@ -122,6 +122,7 @@ export const api = {
   program: {
     list: () => request('/program'),
   },
+
   admin: {
     dashboard: () => request('/admin/dashboard'),
     pekebun: {
@@ -223,6 +224,11 @@ export const api = {
       laporanPdf: () => '/admin/export/laporan/pdf',
       laporanCsv: () => '/admin/export/laporan/csv',
     },
+    settingKud: {
+      get: () => request('/admin/setting-kud'),
+      update: (data) => request('/admin/setting-kud', { method: 'PUT', body: JSON.stringify(data) }),
+      kartuAnggota: (pekebunId) => request(`/admin/pekebun/${pekebunId}/kartu-anggota`),
+    },
     backupRestore: {
       backup: () => request('/admin/backup'),
       restore: (data) => request('/admin/restore', { method: 'POST', body: JSON.stringify(data) }),
@@ -296,6 +302,7 @@ export const api = {
     programTersediaById: (id) => request(`/pekebun/program-tersedia/${id}`),
     daftarProgram: (data) => request('/pekebun/daftar-program', { method: 'POST', body: JSON.stringify(data) }),
     programSaya: () => request('/pekebun/program-saya'),
+    kartuAnggota: () => request('/pekebun/kartu-anggota'),
     tbs: {
       list: () => request('/pekebun/tbs'),
       create: (data) => request('/pekebun/tbs', { method: 'POST', body: JSON.stringify(data) }),

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\Admin\ProgramKudController;
+use App\Http\Controllers\Api\Admin\SettingKudController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BackupController;
 use App\Http\Controllers\Api\BlogController;
@@ -151,6 +152,12 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::post('/restore', [BackupController::class, 'restore']);
         Route::post('/reset-data', [BackupController::class, 'resetData']);
 
+        // Setting KUD
+        Route::get('/setting-kud', [SettingKudController::class, 'index']);
+        Route::put('/setting-kud', [SettingKudController::class, 'update']);
+        // Kartu Anggota (admin view any pekebun's card)
+        Route::get('/pekebun/{pekebun}/kartu-anggota', [PekebunController::class, 'kartuAnggotaAdmin']);
+
         // === EXPORT ===
         Route::prefix('export')->group(function () {
             Route::get('/pekebun/pdf', [ExportController::class, 'pekebunPdf']);
@@ -199,5 +206,6 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::post('/tbs', [PekebunController::class, 'tbsStore']);
         Route::put('/tbs/{tbsSync}', [PekebunController::class, 'tbsUpdate']);
         Route::delete('/tbs/{tbsSync}', [PekebunController::class, 'tbsDestroy']);
+        Route::get('/kartu-anggota', [PekebunController::class, 'kartuAnggota']);
     });
 });
