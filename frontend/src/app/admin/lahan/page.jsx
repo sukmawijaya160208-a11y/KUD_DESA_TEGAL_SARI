@@ -5,7 +5,6 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Card from '@/components/ui/Card';
 import { TableSkeleton } from '@/components/ui/Skeleton';
-import ExportDropdown from '@/components/ExportDropdown';
 import { motion } from 'framer-motion';
 import { MapPinIcon, XMarkIcon, MagnifyingGlassIcon, PhotoIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 
@@ -180,41 +179,6 @@ export default function AdminLahanPage() {
             <p className="text-sm text-gray-500 mt-0.5">Semua data lahan pekebun terdaftar</p>
           </div>
         </div>
-        <ExportDropdown
-          title="Data Lahan"
-          fetchAll={() => api.admin.lahan.list({ per_page: 9999 }).then((res) => res.data || res)}
-          pdfUrl={api.admin.export.lahanPdf()}
-          csvUrl={api.admin.export.lahanCsv()}
-          filename="data-lahan"
-          renderPrintContent={(items) => `
-            <table class="print-table">
-              <thead>
-                <tr>
-                  <th style="width:36px">No</th>
-                  <th>Pekebun</th>
-                  <th>NIK</th>
-                  <th>Alamat Lahan</th>
-                  <th>Jenis Surat</th>
-                  <th style="text-align:right">Luas (M2)</th>
-                  <th>Koordinat</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${items.map((d, i) => `
-                  <tr>
-                    <td>${i + 1}</td>
-                    <td><strong>${d.pekebun?.nama || '-'}</strong></td>
-                    <td>${d.pekebun?.nik || '-'}</td>
-                    <td>${d.alamat_lahan}</td>
-                    <td>${d.jenis_surat || '-'}</td>
-                    <td style="text-align:right;font-weight:700">${d.luas_lahan_m2 ? Number(d.luas_lahan_m2).toLocaleString() : '0'}</td>
-                    <td>${d.titik_koordinat || '-'}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          `}
-        />
       </motion.div>
 
       {stats && (

@@ -196,6 +196,8 @@ class AdminController extends Controller
             'foto.*' => 'string',
             'persyaratan' => 'nullable|array',
             'persyaratan.*' => 'string',
+            'manfaat' => 'nullable|array',
+            'manfaat.*' => 'string',
             'tanggal_mulai' => 'nullable|date',
             'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
             'kuota' => 'nullable|integer|min:0',
@@ -218,6 +220,9 @@ class AdminController extends Controller
             $validated['deskripsi'] = isset($validated['deskripsi']) ? strip_tags($validated['deskripsi']) : null;
             $validated['persyaratan'] = isset($validated['persyaratan'])
                 ? array_map(fn ($p) => strip_tags($p), $validated['persyaratan'])
+                : null;
+            $validated['manfaat'] = isset($validated['manfaat'])
+                ? array_map(fn ($m) => strip_tags($m), $validated['manfaat'])
                 : null;
 
             $program = ProgramKud::create($validated);
@@ -242,6 +247,8 @@ class AdminController extends Controller
             'foto.*' => 'string',
             'persyaratan' => 'nullable|array',
             'persyaratan.*' => 'string',
+            'manfaat' => 'nullable|array',
+            'manfaat.*' => 'string',
             'tanggal_mulai' => 'nullable|date',
             'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
             'kuota' => 'nullable|integer|min:0',
@@ -269,6 +276,9 @@ class AdminController extends Controller
             if (isset($validated['persyaratan'])) {
                 $validated['persyaratan'] = array_map(fn ($p) => strip_tags($p), $validated['persyaratan']);
             }
+            if (isset($validated['manfaat'])) {
+                $validated['manfaat'] = array_map(fn ($m) => strip_tags($m), $validated['manfaat']);
+            }
 
             $programKud->update($validated);
             DB::commit();
@@ -295,6 +305,11 @@ class AdminController extends Controller
 
             return response()->json(['message' => 'Gagal menghapus program'], 500);
         }
+    }
+
+    public function programPublic()
+    {
+        return response()->json(ProgramKud::where('aktif', true)->get());
     }
 
     // === PENGATURAN ===

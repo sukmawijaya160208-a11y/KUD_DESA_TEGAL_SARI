@@ -9,7 +9,6 @@ import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
-import ExportDropdown from '@/components/ExportDropdown';
 import DatePicker from '@/components/ui/DatePicker';
 import { motion } from 'framer-motion';
 import {
@@ -252,53 +251,6 @@ export default function AdminPekebunPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <ExportDropdown
-            title="Data Pekebun"
-            fetchAll={() => api.admin.pekebun.list({ per_page: 9999 }).then((res) => res.data || res)}
-            pdfUrl={api.admin.export.pekebunPdf()}
-            csvUrl={api.admin.export.pekebunCsv()}
-            filename="data-pekebun"
-            renderPrintContent={(items) => `
-              <table class="print-table">
-                <thead>
-                  <tr>
-                    <th style="width:36px">No</th>
-                    <th>Nama</th>
-                    <th>NIK</th>
-                    <th>Kontak</th>
-                    <th style="width:80px">Status</th>
-                    <th style="width:60px;text-align:center">Lahan</th>
-                    <th>Dokumen</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${items.map((d, i) => {
-                    const docs = [];
-                    if (d.foto_pekebun) docs.push({ url: d.foto_pekebun, label: 'Foto' });
-                    if (d.upload_ktp) docs.push({ url: d.upload_ktp, label: 'KTP' });
-                    if (d.upload_kk) docs.push({ url: d.upload_kk, label: 'KK' });
-                    return `
-                    <tr>
-                      <td>${i + 1}</td>
-                      <td><strong>${d.nama}</strong></td>
-                      <td>${d.nik}</td>
-                      <td style="font-size:10px">${[d.no_whatsapp, d.alamat].filter(Boolean).join('<br>') || '-'}</td>
-                      <td><span class="badge badge-${d.status}">${d.status}</span></td>
-                      <td class="text-center font-bold">${d.lahan?.length || 0}</td>
-                      <td>
-                        <div class="doc-grid">
-                          ${docs.length > 0 ? docs.map((doc) =>
-                            `<a href="${doc.url}" target="_blank"><img src="${doc.url}" alt="${doc.label}" title="${doc.label}" /></a>`
-                          ).join('') : '<span class="text-muted">-</span>'}
-                        </div>
-                      </td>
-                    </tr>
-                    `;
-                  }).join('')}
-                </tbody>
-              </table>
-            `}
-          />
           <Button onClick={openCreate}><PlusIcon className="w-4 h-4" /> Tambah Pekebun</Button>
         </div>
       </motion.div>

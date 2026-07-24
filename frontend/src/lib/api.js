@@ -184,7 +184,10 @@ export const api = {
       update: (id, data) => request(`/admin/harga-tbs/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
       delete: (id) => request(`/admin/harga-tbs/${id}`, { method: 'DELETE' }),
     },
-    blog: {
+  program: {
+    list: () => request('/program'),
+  },
+  blog: {
       list: (params) => {
         const qs = params ? '?' + new URLSearchParams(params).toString() : '';
         return request('/admin/blog' + qs);

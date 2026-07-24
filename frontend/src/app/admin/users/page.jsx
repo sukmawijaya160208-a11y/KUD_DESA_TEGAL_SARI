@@ -22,8 +22,6 @@ import {
   UsersIcon, UserIcon, PhoneIcon, PhotoIcon, ShieldCheckIcon,
   CheckCircleIcon, MapPinIcon, ClipboardDocumentListIcon, ChartBarIcon,
 } from '@heroicons/react/24/outline';
-import ExportDropdown from '@/components/ExportDropdown';
-
   const ROLE_STYLES = {
     admin: 'bg-blue-100 text-blue-700 ring-blue-300',
     verifikator: 'bg-purple-100 text-purple-700 ring-purple-300',
@@ -480,43 +478,6 @@ export default function AdminUsersPage() {
             <p className="text-sm text-gray-500 mt-0.5">Kelola semua akun pengguna</p>
           </div>
         </div>
-          <ExportDropdown
-            title="Data Users"
-            fetchAll={() => api.admin.users.list().then((res) => res.data || res)}
-            pdfUrl={api.admin.export.usersPdf()}
-            csvUrl={api.admin.export.usersCsv()}
-            filename="data-users"
-            renderPrintContent={(items) => `
-              <table class="print-table">
-                <thead>
-                  <tr>
-                    <th style="width:36px">No</th>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status Pekebun</th>
-                    <th>NIK</th>
-                    <th>No WhatsApp</th>
-                    <th>Tanggal Daftar</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${items.map((d, i) => `
-                    <tr>
-                      <td>${i + 1}</td>
-                      <td><strong>${d.name}</strong></td>
-                      <td>${d.email}</td>
-                      <td>${d.role}</td>
-                      <td>${d.pekebun?.status || '-'}</td>
-                      <td>${d.pekebun?.nik || '-'}</td>
-                      <td>${d.pekebun?.no_whatsapp || '-'}</td>
-                      <td>${d.created_at ? new Date(d.created_at).toLocaleDateString('id-ID') : '-'}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            `}
-          />
         <Button onClick={() => setCreateModal(true)}>+ Tambah User</Button>
       </div>
 

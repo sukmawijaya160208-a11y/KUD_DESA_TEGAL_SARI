@@ -14,8 +14,6 @@ import {
   ClockIcon, EyeIcon, ChevronDownIcon, ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { formatDate, formatRelative } from '@/lib/date';
-import ExportDropdown from '@/components/ExportDropdown';
-
 const TINDAKAN_OPTIONS = [
   { value: '', label: 'Semua Tindakan' },
   { value: 'terima', label: 'Disetujui' },
@@ -191,39 +189,6 @@ export default function VerifikasiLogPage() {
             <p className="text-sm text-gray-500 mt-0.5">Riwayat verifikasi oleh semua verifikator</p>
           </div>
         </div>
-        <ExportDropdown
-          title="Log Verifikasi"
-          fetchAll={() => api.admin.verifikasiLog.list().then((res) => res.data || res)}
-          pdfUrl={api.admin.export.verifikasiLogPdf()}
-          csvUrl={api.admin.export.verifikasiLogCsv()}
-          filename="log-verifikasi"
-          renderPrintContent={(items) => `
-              <table class="print-table">
-                <thead>
-                  <tr>
-                    <th style="width:36px">No</th>
-                    <th>Waktu</th>
-                    <th>Verifikator</th>
-                    <th style="width:80px">Tindakan</th>
-                    <th style="width:120px">Target</th>
-                    <th>Catatan</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${items.map((v, i) => `
-                    <tr>
-                      <td>${i + 1}</td>
-                      <td>${v.created_at ? new Date(v.created_at).toLocaleDateString('id-ID') + ' ' + new Date(v.created_at).toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'}) : '-'}</td>
-                      <td>${v.user?.name || '-'}</td>
-                      <td><span class="badge badge-${v.tindakan}">${v.tindakan}</span></td>
-                      <td>${v.verifiable_type ? v.verifiable_type.split('\\').pop() + ' #' + v.verifiable_id : '-'}</td>
-                      <td>${v.catatan || '-'}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            `}
-        />
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">

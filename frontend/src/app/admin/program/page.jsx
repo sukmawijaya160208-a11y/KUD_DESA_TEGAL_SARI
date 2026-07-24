@@ -13,7 +13,6 @@ import DatePicker from '@/components/ui/DatePicker';
 import ProgramDetail from '@/components/ProgramDetail';
 import { formatDate, formatDateShort } from '@/lib/date';
 import { motion, AnimatePresence } from 'framer-motion';
-import ExportDropdown from '@/components/ExportDropdown';
 import DocumentViewer from '@/components/DocumentViewer';
 import SignaturePad from '@/components/SignaturePad';
 import {
@@ -344,7 +343,7 @@ export default function AdminProgramPage() {
   }, [fetchData]);
 
   const resetForm = useCallback(() => {
-    setForm({ nama: '', jenis: 'PSR', deskripsi: '', foto: [], persyaratan: [], tanggal_mulai: '', tanggal_selesai: '', kuota: '', aktifkan_surat: false, surat_1_judul: '', surat_1_isi: '', surat_2_judul: '', surat_2_isi: '', surat_3_judul: '', surat_3_isi: '', tanda_tangan_kades_tegal_sari: '', tanda_tangan_kades_marga_puspita: '', tanda_tangan_kades_campur_sari: '', tanda_tangan_ketua_kud: '' });
+    setForm({ nama: '', jenis: 'PSR', deskripsi: '', foto: [], persyaratan: [], manfaat: [], tanggal_mulai: '', tanggal_selesai: '', kuota: '', aktifkan_surat: false, surat_1_judul: '', surat_1_isi: '', surat_2_judul: '', surat_2_isi: '', surat_3_judul: '', surat_3_isi: '', tanda_tangan_kades_tegal_sari: '', tanda_tangan_kades_marga_puspita: '', tanda_tangan_kades_campur_sari: '', tanda_tangan_ketua_kud: '' });
     setEditing(null);
     setShowForm(false);
   }, []);
@@ -357,6 +356,7 @@ export default function AdminProgramPage() {
       deskripsi: item.deskripsi || '',
       foto: item.foto || [],
       persyaratan: item.persyaratan || [],
+      manfaat: item.manfaat || [],
       tanggal_mulai: item.tanggal_mulai || '',
       tanggal_selesai: item.tanggal_selesai || '',
       kuota: item.kuota?.toString() || '',
@@ -396,6 +396,20 @@ export default function AdminProgramPage() {
         ? prev.persyaratan.filter((p) => p !== val)
         : [...prev.persyaratan, val],
     }));
+  };
+
+  const [manfaatInput, setManfaatInput] = useState('');
+  const addManfaat = () => {
+    const val = manfaatInput.trim();
+    if (!val || form.manfaat.includes(val)) return;
+    setForm((prev) => ({ ...prev, manfaat: [...prev.manfaat, val] }));
+    setManfaatInput('');
+  };
+  const removeManfaat = (val) => {
+    setForm((prev) => ({ ...prev, manfaat: prev.manfaat.filter((m) => m !== val) }));
+  };
+  const handleManfaatKeyDown = (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); addManfaat(); }
   };
 
   const handleSubmit = async (e) => {
@@ -461,43 +475,6 @@ export default function AdminProgramPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <ExportDropdown
-            title="Data Program KUD"
-            fetchAll={() => api.admin.program.list({ per_page: 9999 }).then((res) => res.data || res)}
-            pdfUrl={api.admin.export.programPdf()}
-            csvUrl={api.admin.export.programCsv()}
-            filename="data-program"
-            renderPrintContent={(items) => `
-              <table class="print-table">
-                <thead>
-                  <tr>
-                    <th style="width:36px">No</th>
-                    <th>Nama Program</th>
-                    <th>Jenis</th>
-                    <th style="width:70px">Status</th>
-                    <th style="width:50px;text-align:center">Kuota</th>
-                    <th style="width:50px;text-align:center">Daftar</th>
-                    <th>Mulai</th>
-                    <th>Selesai</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${items.map((p, i) => `
-                    <tr>
-                      <td>${i + 1}</td>
-                      <td><strong>${p.nama}</strong></td>
-                      <td>${p.jenis}</td>
-                      <td><span class="badge badge-${p.aktif ? 'aktif' : 'nonaktif'}">${p.aktif ? 'Aktif' : 'Nonaktif'}</span></td>
-                      <td style="text-align:center">${p.kuota ?? '-'}</td>
-                      <td style="text-align:center">${p.pendaftaran_program_count || 0}</td>
-                      <td>${p.tanggal_mulai ? new Date(p.tanggal_mulai).toLocaleDateString('id-ID') : '-'}</td>
-                      <td>${p.tanggal_selesai ? new Date(p.tanggal_selesai).toLocaleDateString('id-ID') : '-'}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            `}
-          />
           <Button onClick={() => { resetForm(); setShowForm(true); }}>
             <PlusIcon className="w-4 h-4" /> Tambah Program
           </Button>
@@ -583,6 +560,23 @@ export default function AdminProgramPage() {
                   {p.label}
                 </button>
               ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-foreground/80 mb-2">Manfaat Program</label>
+            <div className="flex gap-2 mb-2">
+              <input type="text" value={manfaatInput} onChange={(e) => setManfaatInput(e.target.value)} onKeyDown={handleManfaatKeyDown} placeholder="Tambah manfaat..." className="flex-1 px-3 py-2 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" />
+              <button type="button" onClick={addManfaat} className="px-4 py-2 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all">Tambah</button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {form.manfaat.map((m, idx) => (
+                <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-sm font-medium border border-emerald-200">
+                  {m}
+                  <button type="button" onClick={() => removeManfaat(m)} className="text-emerald-400 hover:text-emerald-700 transition-colors"><XMarkIcon className="w-3.5 h-3.5" /></button>
+                </span>
+              ))}
+              {form.manfaat.length === 0 && <span className="text-sm text-gray-400 italic">Belum ada manfaat ditambahkan</span>}
             </div>
           </div>
 

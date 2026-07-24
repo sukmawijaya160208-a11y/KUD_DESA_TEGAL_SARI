@@ -229,14 +229,10 @@ export default function DocumentViewer({
           })}
         </div>
 
-        {/* ===== DATE ===== */}
-        <div className="text-sm text-gray-700 mb-5 text-center">
-          <p className="font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
-        </div>
-
-        {/* ===== SURAT 1: PEKEBUN SIGNATURE (right) ===== */}
+        {/* ===== SURAT 1: TANGGAL + SIGNATURE (kanan, satu block) ===== */}
         {suratIndex === 1 && (
-          <div className="flex justify-end mb-3">
+          <div className="flex flex-col items-end mb-3">
+            <p className="text-sm text-gray-700 mb-5 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
             <div className="text-center">
               <p className="text-sm text-gray-600 mb-4">Yang Membuat Pernyataan,</p>
               {signature ? (
@@ -250,45 +246,50 @@ export default function DocumentViewer({
           </div>
         )}
 
-        {/* ===== SURAT 2: PEKEBUN (kiri) + KADES (kanan) sejajar ===== */}
+        {/* ===== SURAT 2: TANGGAL (kanan) + PEKEBUN (kiri) + KADES (kanan) ===== */}
         {suratIndex === 2 && (
-          <div className="flex flex-row justify-between gap-8 mb-3">
-            <div className="text-center flex-1">
-              <p className="text-sm text-gray-600 mb-4">Saya yang membuat Pernyataan,</p>
-              {signature ? (
-                <img src={signature} alt="Tanda Tangan" className="h-14 object-contain mx-auto mb-1" />
-              ) : (
-                <div className="h-14" />
-              )}
-              <div className="w-48 h-[1.5px] bg-gray-400 mx-auto mb-1" />
-              <p className="text-sm font-bold text-gray-900 uppercase tracking-wide">{data?.nama_pekebun || '_________________________'}</p>
+          <>
+            <div className="flex justify-end mb-5">
+              <p className="text-sm text-gray-700 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
             </div>
-
-            {showSignature && (
+            <div className="flex flex-row justify-between gap-8 mb-3">
               <div className="text-center flex-1">
-                <p className="text-sm font-bold text-gray-800 mb-4 uppercase tracking-wide">Mengetahui</p>
-                <p className="text-sm text-gray-600 mb-4">{kades?.title || 'Kepala Desa'}</p>
-                {(() => {
-                  let kadesSignature = '';
-                  if (desa === 'tegal sari') kadesSignature = program?.tanda_tangan_kades_tegal_sari;
-                  else if (desa === 'marga puspita') kadesSignature = program?.tanda_tangan_kades_marga_puspita;
-                  else if (desa === 'campur sari') kadesSignature = program?.tanda_tangan_kades_campur_sari;
-                  return kadesSignature ? (
-                    <img src={kadesSignature} alt="Tanda Tangan Kades" className="h-14 object-contain mx-auto mb-1" />
-                  ) : (
-                    <div className="h-14" />
-                  );
-                })()}
+                <p className="text-sm text-gray-600 mb-4">Saya yang membuat Pernyataan,</p>
+                {signature ? (
+                  <img src={signature} alt="Tanda Tangan" className="h-14 object-contain mx-auto mb-1" />
+                ) : (
+                  <div className="h-14" />
+                )}
                 <div className="w-48 h-[1.5px] bg-gray-400 mx-auto mb-1" />
-                <p className="text-sm font-bold text-gray-900 tracking-wide">{kades?.nama || data?.kades_nama || '_________________________'}</p>
+                <p className="text-sm font-bold text-gray-900 uppercase tracking-wide">{data?.nama_pekebun || '_________________________'}</p>
               </div>
-            )}
-          </div>
+              {showSignature && (
+                <div className="text-center flex-1">
+                  <p className="text-sm font-bold text-gray-800 mb-4 uppercase tracking-wide">Mengetahui</p>
+                  <p className="text-sm text-gray-600 mb-4">{kades?.title || 'Kepala Desa'}</p>
+                  {(() => {
+                    let kadesSignature = '';
+                    if (desa === 'tegal sari') kadesSignature = program?.tanda_tangan_kades_tegal_sari;
+                    else if (desa === 'marga puspita') kadesSignature = program?.tanda_tangan_kades_marga_puspita;
+                    else if (desa === 'campur sari') kadesSignature = program?.tanda_tangan_kades_campur_sari;
+                    return kadesSignature ? (
+                      <img src={kadesSignature} alt="Tanda Tangan Kades" className="h-14 object-contain mx-auto mb-1" />
+                    ) : (
+                      <div className="h-14" />
+                    );
+                  })()}
+                  <div className="w-48 h-[1.5px] bg-gray-400 mx-auto mb-1" />
+                  <p className="text-sm font-bold text-gray-900 tracking-wide">{kades?.nama || data?.kades_nama || '_________________________'}</p>
+                </div>
+              )}
+            </div>
+          </>
         )}
 
-        {/* ===== SURAT 3: KETUA KUD SIGNATURE (right) ===== */}
+        {/* ===== SURAT 3: TANGGAL (kanan) + KETUA KUD SIGNATURE (kanan) ===== */}
         {suratIndex === 3 && (
-          <div className="flex justify-end mb-4">
+          <div className="flex flex-col items-end mb-4">
+            <p className="text-sm text-gray-700 mb-5 font-medium">{data?.tempat_surat || 'Megang Sakti'}, {tanggalSurat}</p>
             <div className="text-center">
               <p className="text-sm text-gray-600 mb-4">Ketua Koperasi Unit Desa Sari Subur,</p>
               {(() => {

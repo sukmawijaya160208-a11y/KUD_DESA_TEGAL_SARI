@@ -9,15 +9,13 @@ import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import { TableSkeleton } from '@/components/ui/Skeleton';
 import { formatDate } from '@/lib/date';
-import DocumentViewer from '@/components/DocumentViewer';
-import SuratPrintModal from '@/components/SuratPrintModal';
+
+
 import {
   BookOpenIcon, EyeIcon, CheckCircleIcon, XCircleIcon,
   XMarkIcon, ChevronDownIcon, ChevronUpIcon, TrashIcon,
   ClockIcon, DocumentTextIcon
 } from '@heroicons/react/24/outline';
-import ExportDropdown from '@/components/ExportDropdown';
-
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',
   foto_pekebun: 'Foto Pekebun', foto_surat_tanah: 'Foto Surat Tanah',
@@ -33,8 +31,6 @@ export default function AdminPendaftaranPage() {
   const [previewImage, setPreviewImage] = useState(null);
   const [previewLabel, setPreviewLabel] = useState('');
   const [expandedId, setExpandedId] = useState(null);
-  const [printSurat, setPrintSurat] = useState(null);
-  const [printSuratDetail, setPrintSuratDetail] = useState(null);
 
   const load = () => {
     api.admin.pendaftaran.list()
@@ -86,39 +82,6 @@ export default function AdminPendaftaranPage() {
             <p className="text-sm text-gray-500 mt-0.5">Kelola pendaftaran peserta program KUD</p>
           </div>
         </div>
-        <ExportDropdown
-          title="Data Pendaftaran Program"
-          fetchAll={() => api.admin.pendaftaran.list().then((res) => res.data || res)}
-          pdfUrl={api.admin.export.pendaftaranPdf()}
-          csvUrl={api.admin.export.pendaftaranCsv()}
-          filename="data-pendaftaran"
-          renderPrintContent={(items) => `
-              <table class="print-table">
-                <thead>
-                  <tr>
-                    <th style="width:36px">No</th>
-                    <th>Pekebun</th>
-                    <th>NIK</th>
-                    <th>Program</th>
-                    <th style="width:80px">Status</th>
-                    <th>Tanggal Daftar</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${items.map((p, i) => `
-                    <tr>
-                      <td>${i + 1}</td>
-                      <td><strong>${p.pekebun?.nama || '-'}</strong></td>
-                      <td>${p.pekebun?.nik || '-'}</td>
-                      <td>${p.program_kud?.nama || '-'}</td>
-                      <td><span class="badge badge-${p.status}">${p.status}</span></td>
-                      <td>${p.created_at ? new Date(p.created_at).toLocaleDateString('id-ID') : '-'}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            `}
-        />
       </div>
       <div className="flex items-center gap-3 mb-6">
         <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
@@ -215,72 +178,20 @@ export default function AdminPendaftaranPage() {
                         </h4>
                         <div className="space-y-2">
                           {[
-                            { suratIndex: 1, label: 'Surat 1', value: d.setuju_surat_1, judul: d.programKud?.surat_1_judul, isi: d.programKud?.surat_1_isi },
-                            { suratIndex: 2, label: 'Surat 2', value: d.setuju_surat_2, judul: d.programKud?.surat_2_judul, isi: d.programKud?.surat_2_isi },
-                            { suratIndex: 3, label: 'Surat 3', value: d.setuju_surat_3, judul: d.programKud?.surat_3_judul, isi: d.programKud?.surat_3_isi },
-                          ].map((s, i) => {
-                            const desa = d.pekebun?.alamat ? (() => {
-                              const a = d.pekebun.alamat.toLowerCase();
-                              if (a.includes('tegal sari') || a.includes('tegalsari')) return 'tegal sari';
-                              if (a.includes('marga puspita')) return 'marga puspita';
-                              if (a.includes('campur sari') || a.includes('campursari')) return 'campur sari';
-                              return null;
-                            })() : null;
-                            const kadesMap = {
-                              'tegal sari': { nama: 'SISWOYO', title: 'Kepala Desa Tegalsari Kecamatan Megang Sakti' },
-                              'marga puspita': { nama: 'SUMODIONO', title: 'Kepala Desa Marga Puspita Kecamatan Megang Sakti' },
-                              'campur sari': { nama: 'MUKHSIN', title: 'Kepala Desa Campur Sari Kecamatan Megang Sakti' },
-                            };
-                            const kades = desa ? kadesMap[desa] : null;
-                            const lahan = d.lahan;
-                            return (
-                              <div key={i} className="flex items-center justify-between p-2.5 bg-white rounded-lg border border-border">
-                                <div className="flex items-center gap-2">
-                                  <span className={`w-2 h-2 rounded-full ${s.value ? 'bg-green-500' : 'bg-gray-300'}`} />
-                                  <span className="text-sm text-gray-700">{s.judul || s.label}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <button onClick={() => {
-                                    setPrintSurat(s.suratIndex);
-                                    setPrintSuratDetail({
-                                      judul: s.judul,
-                                      isi: s.isi,
-                                      data: {
-                                        nama_pekebun: d.pekebun?.nama || '',
-                                        nik: d.pekebun?.nik || '',
-                                        jenis_kelamin: d.pekebun?.jenis_kelamin || '',
-                                        no_kk: d.pekebun?.no_kk || '',
-                                        tempat_lahir: d.pekebun?.tempat_lahir || '',
-                                        tanggal_lahir: d.pekebun?.tanggal_lahir || '',
-                                        no_whatsapp: d.pekebun?.no_whatsapp || '',
-                                        alamat: d.pekebun?.alamat || '',
-                                        alamat_lengkap: d.pekebun?.alamat ? `${d.pekebun.alamat} KECAMATAN MEGANG SAKTI KABUPATEN MUSI RAWAS PROVINSI SUMATERA SELATAN` : '',
-                                        alamat_lahan: lahan?.alamat_lahan || '',
-                                        jenis_surat_lahan: lahan?.jenis_surat || '',
-                                        nomor_surat_lahan: lahan?.nomor_surat || '',
-                                        luas_lahan: lahan ? `${Number(lahan.luas_lahan_m2).toLocaleString()} M²` : '',
-                                        nama_program: d.programKud?.nama || '',
-                                        kades_nama: kades?.nama || '',
-                                        kades_title: kades?.title || '',
-                                        ketua_kud_nama: 'Dedek Sulaiman, S.Pd.',
-                                        ketua_kud_jabatan: 'Ketua Koperasi Unit Desa Sari Subur',
-                                        ketua_kud_alamat: 'Desa Tegalsari Kecamatan Megang Sakti Kabupaten Musi Rawas',
-                                        tanggal_surat: d.programKud?.tanggal_mulai || '',
-                                        tempat_surat: 'Megang Sakti',
-                                        logo_kud: '',
-                                        qr_logo: '',
-                                      },
-                                      program: d.programKud || {},
-                                      signature: d.tanda_tangan_digital,
-                                    });
-                                  }} className="text-xs text-primary hover:underline font-medium cursor-pointer">Lihat</button>
-                                  <span className={`text-xs font-semibold ${s.value ? 'text-green-600' : 'text-gray-400'}`}>
-                                    {s.value ? '✓' : '✗'}
-                                  </span>
-                                </div>
+                            { label: 'Surat 1', value: d.setuju_surat_1, judul: d.programKud?.surat_1_judul },
+                            { label: 'Surat 2', value: d.setuju_surat_2, judul: d.programKud?.surat_2_judul },
+                            { label: 'Surat 3', value: d.setuju_surat_3, judul: d.programKud?.surat_3_judul },
+                          ].map((s, i) => (
+                            <div key={i} className="flex items-center justify-between p-2.5 bg-white rounded-lg border border-border">
+                              <div className="flex items-center gap-2">
+                                <span className={`w-2 h-2 rounded-full ${s.value ? 'bg-green-500' : 'bg-gray-300'}`} />
+                                <span className="text-sm text-gray-700">{s.judul || s.label}</span>
                               </div>
-                            );
-                          })}
+                              <span className={`text-xs font-semibold ${s.value ? 'text-green-600' : 'text-gray-400'}`}>
+                                {s.value ? '✓ Disetujui' : '✗ Belum'}
+                              </span>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
@@ -320,17 +231,6 @@ export default function AdminPendaftaranPage() {
           ))}
         </div>
       )}
-
-      <SuratPrintModal
-        open={printSurat !== null}
-        onClose={() => { setPrintSurat(null); setPrintSuratDetail(null); }}
-        suratIndex={printSurat}
-        judul={printSuratDetail?.judul}
-        isi={printSuratDetail?.isi}
-        data={printSuratDetail?.data || {}}
-        program={printSuratDetail?.program || {}}
-        signature={printSuratDetail?.signature}
-      />
 
       {previewImage && (
         <div className="fixed inset-0 z-[9999] bg-black/85 flex items-center justify-center p-4" onClick={() => { setPreviewImage(null); setPreviewLabel(''); }}>

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLogo } from '@/hooks/useLogo';
+import { api } from '@/lib/api';
 import Timeline from '@/components/Timeline';
 import KegiatanGallery from '@/components/KegiatanGallery';
 import TeamSection from '@/components/TeamSection';
@@ -20,8 +21,8 @@ import {
   ChartBarIcon, CheckBadgeIcon,
   StarIcon, HeartIcon, ArrowUpIcon,
   ChevronLeftIcon, ChevronRightIcon, MagnifyingGlassIcon,
-  DocumentTextIcon, BuildingOfficeIcon, GlobeAltIcon,
-  TruckIcon, EyeIcon, BellAlertIcon, FolderIcon
+  DocumentTextIcon, GlobeAltIcon,
+  EyeIcon, BellAlertIcon, FolderIcon
 } from '@heroicons/react/24/outline';
 
 const containerVariants = {
@@ -77,14 +78,25 @@ const TESTIMONI = [
   { nama: 'Wahyuni', asal: 'Desa Sumber Rejeki', rating: 4, quote: 'Pelatihan budidaya sawit dari KUD sangat bermanfaat. Sekarang saya bisa panen 2x lebih banyak.', warna: 'from-teal-400 to-cyan-500' },
 ];
 
-const PROGRAMS = [
-  { id: 1, icon: Squares2X2Icon, title: 'Kemitraan Petani', desc: 'Program kemitraan berkelanjutan antara KUD dengan petani kelapa sawit di wilayah Kecamatan Tegal Sari.', manfaat: ['Bibit unggul bersertifikat', 'Pendampingan teknis rutin', 'Harga TBS kompetitif', 'Jaminan pembelian hasil panen', 'Akses pupuk bersubsidi'], color: 'emerald' },
-  { id: 2, icon: CurrencyDollarIcon, title: 'Simpan Pinjam', desc: 'Layanan simpan pinjam dengan bunga ringan untuk anggota KUD. Proses cepat dan persyaratan mudah.', manfaat: ['Bunga 0.5% per bulan', 'Plafon hingga Rp50 juta', 'Proses cair 1-3 hari', 'Tanpa agunan berat', 'Tenor fleksibel 6-24 bulan'], color: 'blue' },
-  { id: 3, icon: AcademicCapIcon, title: 'Pelatihan & Penyuluhan', desc: 'Program pelatihan rutin untuk meningkatkan kapasitas dan pengetahuan petani dalam budidaya sawit.', manfaat: ['Teknik budidaya modern', 'Manajemen keuangan', 'Pemasaran hasil panen', 'Pengendalian hama terpadu', 'Sertifikat pelatihan'], color: 'amber' },
-  { id: 4, icon: TruckIcon, title: 'Distribusi & Logistik', desc: 'Layanan distribusi TBS dari kebun ke pabrik pengolahan dengan armada truk yang memadai.', manfaat: ['Penjemputan TBS ke kebun', 'Armada terawat & tepat waktu', 'Tim pengangkut profesional', 'Tracking pengiriman real-time', 'Tarif kompetitif per kg'], color: 'purple' },
-  { id: 5, icon: ShieldCheckIcon, title: 'Asuransi Tani', desc: 'Perlindungan asuransi untuk lahan dan hasil panen petani dari risiko gagal panen dan bencana alam.', manfaat: ['Premi terjangkau', 'Santunan gagal panen', 'Perlindungan hama & penyakit', 'Bantuan bencana alam', 'Klaim cepat 7-14 hari'], color: 'rose' },
-  { id: 6, icon: BuildingOfficeIcon, title: 'Koperasi Konsumsi', desc: 'Unit usaha konsumsi yang menyediakan kebutuhan pokok dan sarana produksi pertanian dengan harga terjangkau.', manfaat: ['Sembako murah anggota', 'Pupuk & pestisida lengkap', 'Alat & mesin pertanian', 'Suku cadang tersedia', 'Beli grosir & eceran'], color: 'teal' },
-];
+const JENIS_ICON = {
+  PSR: AcademicCapIcon,
+  Intensifikasi: ChartBarIcon,
+  Ekstensifikasi: GlobeAltIcon,
+  'Pelatihan SDMPKS': AcademicCapIcon,
+  'Beasiswa SDMPKS': AcademicCapIcon,
+  Kemitraan: HandRaisedIcon,
+};
+
+const JENIS_COLORS = {
+  PSR: { bg: 'bg-indigo-50', icon: 'text-indigo-600', card: 'indigo' },
+  Intensifikasi: { bg: 'bg-blue-50', icon: 'text-blue-600', card: 'blue' },
+  Ekstensifikasi: { bg: 'bg-teal-50', icon: 'text-teal-600', card: 'teal' },
+  'Pelatihan SDMPKS': { bg: 'bg-amber-50', icon: 'text-amber-600', card: 'amber' },
+  'Beasiswa SDMPKS': { bg: 'bg-rose-50', icon: 'text-rose-600', card: 'rose' },
+  Kemitraan: { bg: 'bg-emerald-50', icon: 'text-emerald-600', card: 'emerald' },
+};
+
+const DEFAULT_COLOR = { bg: 'bg-gray-50', icon: 'text-gray-600', card: 'gray' };
 
 const FAQ_DATA = [
   { q: 'Apa itu KUD Desa Sari Subur?', a: 'KUD (Koperasi Unit Desa) Sari Subur adalah koperasi petani kelapa sawit di Desa Tegal Sari yang bertujuan meningkatkan kesejahteraan petani melalui berbagai program kemitraan, simpan pinjam, dan pelatihan.' },
@@ -117,14 +129,7 @@ const MITRA = [
   { name: 'Kementan RI', logo: '🌾' },
 ];
 
-const PROGRAM_COLORS = {
-  emerald: { bg: 'bg-emerald-50', icon: 'text-emerald-600' },
-  blue: { bg: 'bg-blue-50', icon: 'text-blue-600' },
-  amber: { bg: 'bg-amber-50', icon: 'text-amber-600' },
-  purple: { bg: 'bg-purple-50', icon: 'text-purple-600' },
-  rose: { bg: 'bg-rose-50', icon: 'text-rose-600' },
-  teal: { bg: 'bg-teal-50', icon: 'text-teal-600' },
-};
+
 
 function SectionBadge({ children }) {
   return (
@@ -182,26 +187,83 @@ function Counter({ end, suffix, label, duration = 2000, prefix }) {
 }
 
 function ProgramModal({ program, onClose }) {
+  const router = useRouter();
+  const colors = JENIS_COLORS[program?.jenis] || DEFAULT_COLOR;
+  const Icon = JENIS_ICON[program?.jenis] || Squares2X2Icon;
   return (
     <AnimatePresence>
       {program && (
         <motion.div key={program.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-          <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 30 }} transition={{ type: 'spring', damping: 25 }} className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl max-w-lg w-full p-6 md:p-8 relative overflow-hidden border border-white/50" onClick={(e) => e.stopPropagation()}>
+          <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 30 }} transition={{ type: 'spring', damping: 25 }} className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl max-w-lg w-full p-6 md:p-8 relative overflow-hidden border border-white/50 max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/30 to-transparent pointer-events-none" />
             <button onClick={onClose} className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-gray-100 transition-colors shadow-sm"><XMarkIcon className="w-5 h-5" /></button>
-            <div className="relative z-10 w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/20"><program.icon className="w-7 h-7 text-white" /></div>
-            <h3 className="relative z-10 text-2xl font-bold font-heading text-foreground mb-2">{program.title}</h3>
-            <p className="relative z-10 text-muted-foreground mb-6">{program.desc}</p>
-            <h4 className="relative z-10 font-semibold text-foreground mb-3">Manfaat Program:</h4>
-            <ul className="relative z-10 space-y-2.5">
-              {program.manfaat.map((m, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-white flex items-center justify-center text-xs font-bold mt-0.5 shadow-sm">{idx + 1}</span>
-                  <span className="text-foreground/80">{m}</span>
-                </li>
-              ))}
-            </ul>
-            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="relative z-10 mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-lg shadow-emerald-500/30">Daftar Program</motion.button>
+            <div className="relative z-10 flex items-center gap-3 mb-4">
+              <div className={`w-14 h-14 rounded-xl ${colors.bg} flex items-center justify-center shadow-sm`}><Icon className={`w-7 h-7 ${colors.icon}`} /></div>
+              <div>
+                <h3 className="text-2xl font-bold font-heading text-foreground">{program.nama}</h3>
+                <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">{program.jenis}</span>
+              </div>
+            </div>
+            <p className="relative z-10 text-muted-foreground mb-5 leading-relaxed">{program.deskripsi}</p>
+
+            {program.foto?.length > 0 && (
+              <div className="relative z-10 flex gap-2 overflow-x-auto pb-2 mb-5">
+                {program.foto.map((url, idx) => (
+                  <img key={idx} src={url} alt={`${program.nama} ${idx + 1}`} className="w-32 h-24 rounded-xl object-cover flex-shrink-0 border border-white/40 shadow-sm" loading="lazy" />
+                ))}
+              </div>
+            )}
+
+            <div className="relative z-10 grid grid-cols-2 gap-3 mb-5">
+              {program.tanggal_mulai && (
+                <div className="p-3 rounded-xl bg-gray-50/80 border border-white/40">
+                  <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Mulai</div>
+                  <div className="text-sm font-medium text-foreground">{new Date(program.tanggal_mulai).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                </div>
+              )}
+              {program.tanggal_selesai && (
+                <div className="p-3 rounded-xl bg-gray-50/80 border border-white/40">
+                  <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Selesai</div>
+                  <div className="text-sm font-medium text-foreground">{new Date(program.tanggal_selesai).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                </div>
+              )}
+              {program.kuota && (
+                <div className="p-3 rounded-xl bg-gray-50/80 border border-white/40">
+                  <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Kuota</div>
+                  <div className="text-sm font-medium text-foreground">{program.kuota} orang</div>
+                </div>
+              )}
+            </div>
+
+            {program.persyaratan?.length > 0 && (
+              <div className="relative z-10 mb-5">
+                <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2"><FolderIcon className="w-4 h-4 text-primary" /> Persyaratan</h4>
+                <ul className="space-y-2">
+                  {program.persyaratan.map((s, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center text-[10px] font-bold mt-0.5">{idx + 1}</span>
+                      <span className="text-sm text-foreground/80 capitalize">{s.replace(/_/g, ' ')}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {program.manfaat?.length > 0 && (
+              <div className="relative z-10 mb-5">
+                <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2"><CheckBadgeIcon className="w-4 h-4 text-emerald-500" /> Manfaat Program</h4>
+                <ul className="space-y-2">
+                  {program.manfaat.map((m, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-white flex items-center justify-center text-[10px] font-bold mt-0.5 shadow-sm">{idx + 1}</span>
+                      <span className="text-sm text-foreground/80">{m}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => router.push('/login')} className="relative z-10 mt-2 w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-lg shadow-emerald-500/30">Daftar Program</motion.button>
           </motion.div>
         </motion.div>
       )}
@@ -238,12 +300,21 @@ export default function Home() {
   const [blogSearch, setBlogSearch] = useState('');
   const [blogCategory, setBlogCategory] = useState('Semua');
   const [showBackTop, setShowBackTop] = useState(false);
+  const [programs, setPrograms] = useState([]);
+  const [loadingPrograms, setLoadingPrograms] = useState(true);
   const heroRef = useRef(null);
 
   useEffect(() => { setMounted(true); }, []);
   useEffect(() => {
     const onScroll = () => { setScrolled(window.scrollY > 50); setShowBackTop(window.scrollY > 500); };
     window.addEventListener('scroll', onScroll, { passive: true }); return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  useEffect(() => {
+    api.program.list().then((res) => {
+      setPrograms(Array.isArray(res) ? res : res.data || []);
+    }).catch(() => {
+      setPrograms([]);
+    }).finally(() => setLoadingPrograms(false));
   }, []);
 
   const filteredBlogs = blogCategory === 'Semua' ? BLOG_POSTS : BLOG_POSTS.filter((b) => b.category === blogCategory);
@@ -391,28 +462,58 @@ export default function Home() {
 {/* ===== PROGRAM UNGGULAN ===== */}
       <section id="program" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Program" title="Program Unggulan" subtitle="Berbagai program dirancang khusus untuk meningkatkan kesejahteraan dan produktivitas petani." />
-          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PROGRAMS.map((program, idx) => {
-              const Icon = program.icon;
-              return (
-                <motion.div key={program.id} variants={itemVariants} whileHover={{ y: -8, scale: 1.02 }} className="group relative rounded-2xl p-6 cursor-pointer overflow-hidden bg-white/70 backdrop-blur-xl border border-white/40 shadow-lg hover:shadow-xl hover:border-white/60 transition-all" onClick={() => setProgramModal(program)}>
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent pointer-events-none" />
-                  <div className={`relative z-10 w-12 h-12 rounded-xl ${PROGRAM_COLORS[program.color].bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-sm`}>
-                    <Icon className={`w-6 h-6 ${PROGRAM_COLORS[program.color].icon}`} />
-                  </div>
-                  <div className="relative z-10">
-                    <h3 className="text-lg font-bold font-heading text-foreground">{program.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{program.desc}</p>
-                    <div className="mt-4 pt-4 border-t border-white/20 flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">{program.manfaat.length} Manfaat</span>
-                      <span className="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">Detail <ArrowRightIcon className="w-4 h-4" /></span>
+          <SectionHeader badge="Program" title="Program KUD" subtitle="Berbagai program dirancang khusus untuk meningkatkan kesejahteraan dan produktivitas petani." />
+          {loadingPrograms ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="rounded-2xl p-6 bg-gray-50/50 border border-gray-100 animate-pulse">
+                  <div className="w-12 h-12 rounded-xl bg-gray-200 mb-4" />
+                  <div className="h-5 bg-gray-200 rounded-lg w-3/4 mb-3" />
+                  <div className="h-4 bg-gray-100 rounded-lg w-full mb-2" />
+                  <div className="h-4 bg-gray-100 rounded-lg w-2/3 mb-4" />
+                  <div className="h-4 bg-gray-100 rounded-lg w-1/3" />
+                </div>
+              ))}
+            </div>
+          ) : programs.length === 0 ? (
+            <div className="text-center py-16">
+              <FolderIcon className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+              <p className="text-muted-foreground">Belum ada program tersedia</p>
+            </div>
+          ) : (
+            <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {programs.map((program) => {
+                const Icon = JENIS_ICON[program.jenis] || Squares2X2Icon;
+                const colors = JENIS_COLORS[program.jenis] || DEFAULT_COLOR;
+                return (
+                  <motion.div key={program.id} variants={itemVariants} whileHover={{ y: -8, scale: 1.02 }} className="group relative rounded-2xl p-6 cursor-pointer overflow-hidden bg-white/70 backdrop-blur-xl border border-white/40 shadow-lg hover:shadow-xl hover:border-white/60 transition-all" onClick={() => setProgramModal(program)}>
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent pointer-events-none" />
+                    <div className="relative z-10 flex items-start gap-3 mb-4">
+                      <div className={`w-12 h-12 rounded-xl ${colors.bg} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform shadow-sm`}>
+                        <Icon className={`w-6 h-6 ${colors.icon}`} />
+                      </div>
+                      {program.foto?.length > 0 && (
+                        <div className="flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border border-white/40 shadow-sm ml-auto">
+                          <img src={program.foto[0]} alt={program.nama} className="w-full h-full object-cover" loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
+                        </div>
+                      )}
                     </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+                    <div className="relative z-10">
+                      <h3 className="text-lg font-bold font-heading text-foreground">{program.nama}</h3>
+                      <div className="mt-1 flex items-center gap-2">
+                        <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">{program.jenis}</span>
+                      </div>
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{program.deskripsi}</p>
+                      <div className="mt-4 pt-4 border-t border-white/20 flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">{program.persyaratan?.length || 0} Persyaratan</span>
+                        <span className="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">Detail <ArrowRightIcon className="w-4 h-4" /></span>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -906,9 +1007,11 @@ export default function Home() {
             <div>
               <h4 className="font-bold text-white mb-4 font-heading">Program</h4>
               <ul className="space-y-2.5 text-sm">
-                {PROGRAMS.map((p) => (
-                  <li key={p.id}><a href="#" className="hover:text-white transition-colors">{p.title}</a></li>
-                ))}
+                {programs.length > 0 ? programs.map((p) => (
+                  <li key={p.id}><a href="#" className="hover:text-white transition-colors">{p.nama}</a></li>
+                )) : (
+                  <li className="text-white/40 italic">Belum ada program</li>
+                )}
               </ul>
             </div>
             <div>

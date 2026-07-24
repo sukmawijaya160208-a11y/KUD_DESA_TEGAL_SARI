@@ -10,7 +10,7 @@ class ProgramKud extends Model
 
     protected $fillable = [
         'nama', 'jenis', 'deskripsi', 'aktif',
-        'foto', 'persyaratan', 'tanggal_mulai', 'tanggal_selesai', 'kuota',
+        'foto', 'persyaratan', 'manfaat', 'tanggal_mulai', 'tanggal_selesai', 'kuota',
         'aktifkan_surat',
         'surat_1_judul', 'surat_1_isi',
         'surat_2_judul', 'surat_2_isi',
@@ -24,6 +24,7 @@ class ProgramKud extends Model
     protected $casts = [
         'foto' => 'array',
         'persyaratan' => 'array',
+        'manfaat' => 'array',
         'tanggal_mulai' => 'date',
         'tanggal_selesai' => 'date',
         'aktif' => 'boolean',
@@ -38,6 +39,9 @@ class ProgramKud extends Model
             }
             if ($model->persyaratan === null) {
                 $model->persyaratan = [];
+            }
+            if ($model->manfaat === null) {
+                $model->manfaat = [];
             }
         });
     }

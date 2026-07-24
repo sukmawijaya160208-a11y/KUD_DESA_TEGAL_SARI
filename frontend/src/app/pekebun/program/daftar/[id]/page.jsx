@@ -6,7 +6,6 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Button from '@/components/ui/Button';
 import DocumentViewer from '@/components/DocumentViewer';
-import SuratPrintModal from '@/components/SuratPrintModal';
 import SignaturePad from '@/components/SignaturePad';
 import { formatDate } from '@/lib/date';
 import {
@@ -46,7 +45,6 @@ export default function DaftarProgramPage() {
   const [loading, setLoading] = useState(true);
   const [previewImage, setPreviewImage] = useState(null);
   const [previewLabel, setPreviewLabel] = useState('');
-  const [printSurat, setPrintSurat] = useState(null);
   const [pengaturan, setPengaturan] = useState(null);
 
   const allChecked = useMemo(() => {
@@ -339,9 +337,6 @@ export default function DaftarProgramPage() {
                     />
 
                   <div className="flex items-center justify-end gap-2 mt-2">
-                    <button onClick={() => setPrintSurat(i)} className="px-3 py-1.5 text-xs font-medium text-primary bg-primary/5 hover:bg-primary/10 rounded-lg transition-colors cursor-pointer">
-                      Cetak Surat {i}
-                    </button>
                   </div>
 
                   <label className="flex items-start gap-3 mt-3 p-3 bg-white rounded-lg border border-border cursor-pointer hover:bg-gray-50 transition-colors">
@@ -431,17 +426,6 @@ export default function DaftarProgramPage() {
           </div>
         </div>
       )}
-
-      <SuratPrintModal
-        open={printSurat !== null}
-        onClose={() => setPrintSurat(null)}
-        suratIndex={printSurat}
-        judul={printSurat ? program[`surat_${printSurat}_judul`] : ''}
-        isi={printSurat ? program[`surat_${printSurat}_isi`] : ''}
-        data={docData}
-        program={program}
-        signature={ttd}
-      />
     </div>
   );
 }
