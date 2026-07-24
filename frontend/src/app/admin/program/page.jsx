@@ -383,7 +383,7 @@ export default function AdminProgramPage() {
           className="px-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
         >
           <option value="">Semua Jenis</option>
-          {JENIS_OPTIONS.map((j) => (<option key={j} value={j}>{j}</option>))}
+          {JENIS_OPTIONS.filter(j => j.value).map((j) => (<option key={j.value} value={j.value}>{j.label}</option>))}
         </select>
         <select
           value={sortOrder}
