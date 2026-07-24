@@ -119,6 +119,9 @@ export const api = {
     markAsRead: (id) => request(`/notifikasi/${id}/read`, { method: 'PUT' }),
     markAllAsRead: () => request('/notifikasi/read-all', { method: 'PUT' }),
   },
+  program: {
+    list: () => request('/program'),
+  },
   admin: {
     dashboard: () => request('/admin/dashboard'),
     pekebun: {
@@ -184,9 +187,6 @@ export const api = {
       update: (id, data) => request(`/admin/harga-tbs/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
       delete: (id) => request(`/admin/harga-tbs/${id}`, { method: 'DELETE' }),
     },
-  program: {
-    list: () => request('/program'),
-  },
   blog: {
       list: (params) => {
         const qs = params ? '?' + new URLSearchParams(params).toString() : '';
