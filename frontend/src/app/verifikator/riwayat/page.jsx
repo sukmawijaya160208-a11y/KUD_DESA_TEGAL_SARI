@@ -162,14 +162,14 @@ export default function VerifikatorRiwayatPage() {
           setMeta(Array.isArray(res) ? { currentPage: 1, lastPage: 1, total: res.length } : null);
         }
       }))
-      .catch(() => {})
+      .catch((e) => toast?.error(e?.message || 'Gagal memuat riwayat'))
       .finally(() => setLoading(false));
   }, [page, search, filterTindakan, perPage, toast]);
 
   const fetchStats = useCallback(() => {
     api.verifikator.statsRiwayat()
       .then((s) => startTransition(() => setStats(s)))
-      .catch(() => {});
+      .catch(() => {/* stats opsional */});
   }, []);
 
   useEffect(() => { startTransition(() => { fetchData(); fetchStats(); }); }, [fetchData, fetchStats]);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
@@ -9,7 +9,8 @@ import ProgramDetail from '@/components/ProgramDetail';
 import { formatDate, formatDateShort } from '@/lib/date';
 import {
   ClipboardDocumentListIcon, CheckCircleIcon, CalendarDaysIcon, UsersIcon,
-  ChevronRightIcon, XMarkIcon
+  ChevronRightIcon, XMarkIcon, MapPinIcon, ClockIcon,
+  DocumentTextIcon, FunnelIcon
 } from '@heroicons/react/24/outline';
 
 const PERSYARATAN_LABEL = {
@@ -28,12 +29,26 @@ export default function PekebunProgramPage() {
   const [previewImage, setPreviewImage] = useState(null);
   const [previewLabel, setPreviewLabel] = useState('');
   const [detailProgram, setDetailProgram] = useState(null);
+  const [filterStatus, setFilterStatus] = useState('semua');
+  const [expandedRegId, setExpandedRegId] = useState(null);
+
+  const filterTabs = [
+    { label: 'Semua', value: 'semua' },
+    { label: 'Pending', value: 'pending' },
+    { label: 'Disetujui', value: 'verified' },
+    { label: 'Ditolak', value: 'rejected' },
+  ];
+
+  const filteredProgramSaya = useMemo(() => {
+    if (filterStatus === 'semua') return programSaya;
+    return programSaya.filter((s) => s.status === filterStatus);
+  }, [programSaya, filterStatus]);
 
   const load = () => {
     Promise.all([api.pekebun.programTersedia(), api.pekebun.programSaya()])
       .then(([t, s]) => {
-        setTersedia((t.data || t || []).map(formatProgram));
-        setProgramSaya((s.data || s || []).map(formatReg));
+        setTersedia((Array.isArray(t) ? t : t?.data || []).map(formatProgram));
+        setProgramSaya((Array.isArray(s) ? s : s?.data || []).map(formatReg));
       })
       .catch((e) => toast.error(e.message))
       .finally(() => setLoading(false));
@@ -158,12 +173,33 @@ export default function PekebunProgramPage() {
 
       {programSaya.length > 0 && (
         <>
-          <h2 className="font-bold text-foreground mb-4 flex items-center gap-2">
-            <span className="w-1.5 h-5 bg-green-500 rounded-full inline-block"></span>
+          <h2 className="font-bold text-foreground mb-3 flex items-center gap-2">
+            <span className="w-1.5 h-5 bg-green-500 rounded-full inline-block" />
             Program Saya
           </h2>
+
+          <div className="flex items-center gap-1.5 mb-4 overflow-x-auto pb-1">
+            <FunnelIcon className="w-3.5 h-3.5 text-gray-400 mr-1 shrink-0" />
+            {filterTabs.map((tab) => (
+              <button key={tab.value} onClick={() => setFilterStatus(tab.value)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
+                  filterStatus === tab.value
+                    ? 'bg-primary text-white shadow-sm'
+                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                }`}>
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
           <div className="space-y-3">
-            {programSaya.map((s) => (
+            {filteredProgramSaya.length === 0 ? (
+              <div className="text-center py-10 bg-white rounded-2xl border border-border">
+                <p className="text-gray-400 text-sm">Tidak ada program dengan status ini</p>
+              </div>
+            ) : filteredProgramSaya.map((s) => {
+              const isOpen = expandedRegId === s.id;
+              return (
               <div key={s.id} className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
                 <div className="p-4">
                   <div className="flex items-start justify-between">
@@ -180,41 +216,70 @@ export default function PekebunProgramPage() {
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
                         s.status === 'verified' ? 'bg-green-100 text-green-700' :
                         s.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
-                      }`}>{s.status}</span>
-                      <button onClick={() => setExpandedId(expandedId === s.id ? null : s.id)}
+                      }`}>
+                        {s.status === 'verified' ? 'Disetujui' : s.status === 'rejected' ? 'Ditolak' : 'Pending'}
+                      </span>
+                      <button onClick={() => setExpandedRegId(isOpen ? null : s.id)}
                         className="text-gray-400 hover:text-foreground transition-colors cursor-pointer p-1">
-                        <ChevronRightIcon className={`w-4 h-4 transition-transform ${expandedId === s.id ? 'rotate-90' : ''}`} />
+                        <ChevronRightIcon className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-90' : ''}`} />
                       </button>
                     </div>
                   </div>
 
-                  {expandedId === s.id && s.data?.dokumen && Object.keys(s.data.dokumen).length > 0 && (
-                    <div className="mt-4 pt-4 border-t border-border animate-fade-in">
-                      <h4 className="text-xs font-semibold text-gray-400 uppercase mb-3">Dokumen Terupload</h4>
-                      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                        {Object.entries(s.data.dokumen).map(([key, url]) => (
-                          <button key={key} onClick={() => { setPreviewImage(url); setPreviewLabel(PERSYARATAN_LABEL[key] || key); }}
-                            className="group relative aspect-[3/4] rounded-xl overflow-hidden border border-border bg-muted cursor-pointer">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={url} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all" />
-                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-1.5">
-                              <span className="text-white text-[9px] font-medium block truncate">{PERSYARATAN_LABEL[key] || key}</span>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  {isOpen && (
+                    <div className="mt-4 pt-4 border-t border-border space-y-3 animate-fade-in">
+                      {s.tanggal_daftar && (
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                          <ClockIcon className="w-3.5 h-3.5 text-gray-400" />
+                          Mendaftar: {formatDate(s.tanggal_daftar, 'dd MMM yyyy HH:mm')}
+                        </div>
+                      )}
 
-                  {s.catatan_verifikasi && (
-                    <div className="mt-3 text-xs text-gray-500 bg-gray-50 rounded-xl p-3 border border-border">
-                      <span className="font-medium">Catatan:</span> {s.catatan_verifikasi}
+                      {s.lahan && (
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                          <MapPinIcon className="w-3.5 h-3.5 text-gray-400" />
+                          Lahan: {s.lahan.alamat_lahan} ({Number(s.lahan.luas_lahan_m2 || 0).toLocaleString()} M²)
+                        </div>
+                      )}
+
+                      {s.data?.dokumen && Object.keys(s.data.dokumen).length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-semibold text-gray-400 uppercase mb-2">Dokumen Terupload</h4>
+                          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                            {Object.entries(s.data.dokumen).map(([key, url]) => (
+                              <button key={key} onClick={() => { setPreviewImage(url); setPreviewLabel(PERSYARATAN_LABEL[key] || key); }}
+                                className="group relative aspect-[3/4] rounded-xl overflow-hidden border border-border bg-muted cursor-pointer">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={url} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all" />
+                                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-1.5">
+                                  <span className="text-white text-[9px] font-medium block truncate">{PERSYARATAN_LABEL[key] || key}</span>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {s.catatan_verifikasi && (
+                        <div className="text-xs text-gray-500 bg-gray-50 rounded-xl p-3 border border-border">
+                          <span className="font-medium">Catatan Verifikasi:</span>
+                          <p className="mt-1">{s.catatan_verifikasi}</p>
+                        </div>
+                      )}
+
+                      {s.verified_at && (
+                        <div className="flex items-center gap-2 text-xs text-green-600">
+                          <CheckCircleIcon className="w-3.5 h-3.5" />
+                          Diverifikasi: {formatDate(s.verified_at, 'dd MMM yyyy HH:mm')}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </>
       )}

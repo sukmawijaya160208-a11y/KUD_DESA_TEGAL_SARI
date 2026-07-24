@@ -11,20 +11,25 @@ import { formatDate } from '@/lib/date';
 import {
   ClipboardDocumentListIcon, CalendarDaysIcon, UsersIcon,
   ArrowLeftIcon, PhotoIcon, DocumentIcon,
-  ShieldCheckIcon, XMarkIcon
+  ShieldCheckIcon, XMarkIcon, CheckCircleIcon,
+  ExclamationCircleIcon, MapPinIcon, FolderOpenIcon,
+  PencilSquareIcon
 } from '@heroicons/react/24/outline';
 
-const PERSYARATAN_LABEL = {
-  foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',
-  foto_pekebun: 'Foto Pekebun', foto_surat_tanah: 'Foto Surat Tanah',
-  keterangan_beda_nama: 'Keterangan Beda Nama',
+const BERKAS_MAPPING = {
+  foto_ktp: { label: 'Foto KTP', field: 'upload_ktp', icon: 'id' },
+  foto_kk: { label: 'Foto KK', field: 'upload_kk', icon: 'id' },
+  akte: { label: 'Akte', field: null, icon: 'doc' },
+  foto_pekebun: { label: 'Foto Pekebun', field: 'foto_pekebun', icon: 'photo' },
+  foto_surat_tanah: { label: 'Foto Surat Tanah', field: 'upload_surat_tanah', icon: 'photo' },
+  keterangan_beda_nama: { label: 'Keterangan Beda Nama', field: 'upload_surat_keterangan', icon: 'doc' },
 };
 
-const PERSYARATAN_ICON = {
-  foto_ktp: PhotoIcon, foto_kk: PhotoIcon, akte: DocumentIcon,
-  foto_pekebun: PhotoIcon, foto_surat_tanah: PhotoIcon,
-  keterangan_beda_nama: DocumentIcon,
-};
+const STEPS = [
+  { num: 1, label: 'Pilih Lahan', icon: MapPinIcon },
+  { num: 2, label: 'Cek Berkas', icon: FolderOpenIcon },
+  { num: 3, label: 'Konfirmasi', icon: PencilSquareIcon },
+];
 
 export default function DaftarProgramPage() {
   const { id } = useParams();
@@ -47,6 +52,7 @@ export default function DaftarProgramPage() {
   const [previewLabel, setPreviewLabel] = useState('');
   const [pengaturan, setPengaturan] = useState(null);
   const [sudahDaftar, setSudahDaftar] = useState(false);
+  const [step, setStep] = useState(1);
 
   const allChecked = useMemo(() => {
     if (program?.aktifkan_surat) {
@@ -101,7 +107,7 @@ export default function DaftarProgramPage() {
       const res = await api.uploadDokumenProgram(file, jenis);
       setDokumens((prev) => ({ ...prev, [jenis]: res.url }));
     } catch (err) {
-      toast.error(`Upload ${PERSYARATAN_LABEL[jenis] || jenis} gagal: ${err.message}`);
+      toast.error(`Upload ${BERKAS_MAPPING[jenis]?.label || jenis} gagal: ${err.message}`);
     }
     setUploading((prev) => ({ ...prev, [jenis]: false }));
   };
@@ -200,6 +206,37 @@ export default function DaftarProgramPage() {
     };
   }, [pekebun, lahanSaya, selectedLahan, program, kadesInfo, logoKudUrl, qrLogoUrl, pengaturan]);
 
+  const getNilaiBerkas = (jenis) => {
+    const map = BERKAS_MAPPING[jenis];
+    if (!map || !map.field) return null;
+    if (jenis === 'foto_surat_tanah' || jenis === 'keterangan_beda_nama') {
+      const l = lahanSaya.find((x) => x.id.toString() === selectedLahan);
+      if (!l) return null;
+      const val = l[map.field];
+      if (!val || val === '-') return null;
+      return val;
+    }
+    if (!pekebun) return null;
+    const val = pekebun[map.field];
+    if (!val || val === '-') return null;
+    return val;
+  };
+
+  const semuaBerkasLengkap = useMemo(() => {
+    if (!program?.persyaratan?.length) return true;
+    return program.persyaratan.every((jenis) => {
+      const map = BERKAS_MAPPING[jenis];
+      if (!map || !map.field) return false;
+      return !!getNilaiBerkas(jenis);
+    });
+  }, [program, pekebun, lahanSaya, selectedLahan]);
+
+  const stepCanProceed = useMemo(() => {
+    if (step === 1) return !!selectedLahan || lahanSaya.length === 0;
+    if (step === 2) return true;
+    return true;
+  }, [step, selectedLahan, lahanSaya]);
+
   if (loading) {
     return <div className="flex items-center justify-center min-h-[60vh]"><div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" /></div>;
   }
@@ -239,195 +276,278 @@ export default function DaftarProgramPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-6">
-        <h2 className="font-bold text-foreground mb-3 flex items-center gap-2">
-          <span className="w-1.5 h-5 bg-primary rounded-full inline-block" />
-          Pilih Lahan
-        </h2>
-        {lahanSaya.length === 0 ? (
-          <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm rounded-xl p-4">
-            Anda belum memiliki data lahan. <a href="/pekebun/lahan" className="text-primary underline font-medium">Daftarkan lahan Anda</a> terlebih dahulu.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {lahanSaya.map((l) => (
-              <label key={l.id} className={`block p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                selectedLahan === l.id.toString() ? 'border-primary bg-primary/5 shadow-sm' : 'border-border hover:border-primary/40 bg-white'
-              }`}>
-                <div className="flex items-start gap-3">
-                  <input type="radio" name="lahan" value={l.id} checked={selectedLahan === l.id.toString()}
-                    onChange={(e) => setSelectedLahan(e.target.value)} className="accent-primary mt-0.5 cursor-pointer" />
-                  <div>
-                    <p className="font-medium text-sm text-foreground">{l.alamat_lahan}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{l.jenis_surat} — {Number(l.luas_lahan_m2 || 0).toLocaleString()} M²</p>
-                    {l.nomor_surat && <p className="text-[11px] text-gray-400 mt-0.5">No. {l.nomor_surat}</p>}
-                  </div>
-                </div>
-              </label>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {program.persyaratan?.length > 0 && (
-        <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-6">
-          <h2 className="font-bold text-foreground mb-3 flex items-center gap-2">
-            <span className="w-1.5 h-5 bg-blue-500 rounded-full inline-block" />
-            Upload Dokumen Persyaratan
-          </h2>
-          <div className="space-y-3">
-            {program.persyaratan.map((jenis) => {
-              const Icon = PERSYARATAN_ICON[jenis] || DocumentIcon;
-              const uploaded = !!dokumens[jenis];
-              return (
-                <div key={jenis} className={`p-4 rounded-xl border-2 transition-all ${uploaded ? 'border-green-300 bg-green-50/50' : 'border-border bg-white'}`}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${uploaded ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">{PERSYARATAN_LABEL[jenis] || jenis}</p>
-                        {uploaded && <p className="text-xs text-green-600 mt-0.5">✓ Terupload</p>}
-                      </div>
-                    </div>
-                    {uploaded ? (
-                      <div className="flex items-center gap-2">
-                        <button onClick={() => { setPreviewImage(dokumens[jenis]); setPreviewLabel(PERSYARATAN_LABEL[jenis] || jenis); }}
-                          className="text-xs text-primary hover:underline cursor-pointer font-medium">Lihat</button>
-                        <button onClick={() => setDokumens((prev) => { const n = { ...prev }; delete n[jenis]; return n; })}
-                          className="text-xs text-red-500 hover:underline cursor-pointer font-medium">Hapus</button>
-                      </div>
-                    ) : (
-                      <label className="relative cursor-pointer">
-                        <span className="px-4 py-2 text-xs font-medium text-primary border border-primary rounded-lg hover:bg-primary/5 transition-colors inline-block">
-                          {uploading[jenis] ? 'Mengunggah...' : 'Pilih File'}
-                        </span>
-                        <input type="file" accept="image/*,application/pdf" className="hidden"
-                          disabled={uploading[jenis]} onChange={(e) => e.target.files[0] && handleFileUpload(jenis, e.target.files[0])} />
-                      </label>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+      {sudahDaftar && (
+        <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-sm text-green-700 mb-6">
+          <CheckCircleIcon className="w-5 h-5 inline-block mr-1.5 -mt-0.5" />
+          Anda sudah mendaftar program ini. <button onClick={() => router.push('/pekebun/program')} className="underline font-medium cursor-pointer">Lihat status pendaftaran →</button>
         </div>
       )}
 
-      {program.aktifkan_surat && (
+      {!sudahDaftar && (
         <>
-          <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-6">
-            <h2 className="font-bold text-foreground mb-2 flex items-center gap-2">
-              <span className="w-1.5 h-5 bg-emerald-500 rounded-full inline-block" />
-              Surat Pernyataan
-            </h2>
-            <p className="text-sm text-gray-500 mb-4">Baca dan setujui setiap surat pernyataan di bawah ini</p>
+          <div className="mb-6">
+            <div className="flex items-center justify-between">
+              {STEPS.map((s, idx) => (
+                <div key={s.num} className="flex items-center flex-1">
+                  <div className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all ${
+                    step === s.num ? 'bg-primary/10 text-primary' :
+                    step > s.num ? 'bg-green-50 text-green-600' : 'bg-gray-50 text-gray-400'
+                  }`}>
+                    <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
+                      step === s.num ? 'bg-primary text-white' :
+                      step > s.num ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'
+                    }`}>
+                      {step > s.num ? <CheckCircleIcon className="w-4 h-4" /> : s.num}
+                    </div>
+                    <span className="text-xs font-medium max-sm:hidden">{s.label}</span>
+                  </div>
+                  {idx < STEPS.length - 1 && (
+                    <div className={`flex-1 h-0.5 mx-2 rounded-full ${
+                      step > s.num ? 'bg-green-300' : 'bg-gray-200'
+                    }`} />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
 
-            {[1, 2, 3].map((i) => {
-              const judul = program[`surat_${i}_judul`];
-              const isi = program[`surat_${i}_isi`];
-              const checked = i === 1 ? surat1 : i === 2 ? surat2 : surat3;
-              const setChecked = i === 1 ? setSurat1 : i === 2 ? setSurat2 : setSurat3;
+          {step === 1 && (
+            <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-6">
+              <h2 className="font-bold text-foreground mb-3 flex items-center gap-2">
+                <span className="w-1.5 h-5 bg-primary rounded-full inline-block" />
+                Pilih Lahan
+              </h2>
+              {lahanSaya.length === 0 ? (
+                <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm rounded-xl p-4">
+                  Anda belum memiliki data lahan. <a href="/pekebun/lahan" className="text-primary underline font-medium">Daftarkan lahan Anda</a> terlebih dahulu.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {lahanSaya.map((l) => (
+                    <label key={l.id} className={`block p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                      selectedLahan === l.id.toString() ? 'border-primary bg-primary/5 shadow-sm' : 'border-border hover:border-primary/40 bg-white'
+                    }`}>
+                      <div className="flex items-start gap-3">
+                        <input type="radio" name="lahan" value={l.id} checked={selectedLahan === l.id.toString()}
+                          onChange={(e) => setSelectedLahan(e.target.value)} className="accent-primary mt-0.5 cursor-pointer" />
+                        <div>
+                          <p className="font-medium text-sm text-foreground">{l.alamat_lahan}</p>
+                          <p className="text-xs text-gray-500 mt-0.5">{l.jenis_surat} — {Number(l.luas_lahan_m2 || 0).toLocaleString()} M²</p>
+                          {l.nomor_surat && <p className="text-[11px] text-gray-400 mt-0.5">No. {l.nomor_surat}</p>}
+                        </div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              )}
+              <div className="flex justify-end mt-6 pt-4 border-t border-border">
+                <Button onClick={() => setStep(2)} disabled={!selectedLahan && lahanSaya.length > 0}>
+                  Lanjut ke Cek Berkas →
+                </Button>
+              </div>
+            </div>
+          )}
 
-              return (
-                <div key={i} className="mb-6 last:mb-0">
-                  <h3 className="font-semibold text-foreground text-sm mb-3 flex items-center gap-2">
-                    <DocumentIcon className="w-4 h-4 text-emerald-500" />
-                    Surat {i}: {judul || `Pernyataan ${i}`}
-                  </h3>
+          {step === 2 && (
+            <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-6">
+              <h2 className="font-bold text-foreground mb-3 flex items-center gap-2">
+                <span className="w-1.5 h-5 bg-blue-500 rounded-full inline-block" />
+                Cek Berkas
+              </h2>
+              <p className="text-sm text-gray-500 mb-4">Kami akan mengecek kelengkapan berkas Anda secara otomatis.</p>
+              {program.persyaratan?.length > 0 ? (
+                <div className="space-y-3">
+                  {program.persyaratan.map((jenis) => {
+                    const map = BERKAS_MAPPING[jenis];
+                    const nilai = getNilaiBerkas(jenis);
+                    const tersedia = !!nilai;
+                    const bukanFieldProfil = !map || !map.field;
+                    return (
+                      <div key={jenis} className={`p-4 rounded-xl border-2 transition-all ${
+                        tersedia ? 'border-green-200 bg-green-50/50' :
+                        bukanFieldProfil ? 'border-yellow-200 bg-yellow-50/50' : 'border-red-200 bg-red-50/50'
+                      }`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                              tersedia ? 'bg-green-100 text-green-600' :
+                              bukanFieldProfil ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-500'
+                            }`}>
+                              {tersedia ? <CheckCircleIcon className="w-5 h-5" /> :
+                               <ExclamationCircleIcon className="w-5 h-5" />}
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-foreground">{map?.label || jenis}</p>
+                              {tersedia && <p className="text-xs text-green-600 mt-0.5">✓ Tersedia</p>}
+                              {bukanFieldProfil && (
+                                <p className="text-xs text-yellow-600 mt-0.5">⚠️ Belum tersedia — upload manual</p>
+                              )}
+                              {!tersedia && !bukanFieldProfil && (
+                                <p className="text-xs text-red-500 mt-0.5">✗ Belum diupload</p>
+                              )}
+                            </div>
+                          </div>
+                          {tersedia && (
+                            <button onClick={() => { setPreviewImage(nilai); setPreviewLabel(map?.label || jenis); }}
+                              className="text-xs text-primary hover:underline cursor-pointer font-medium">Lihat</button>
+                          )}
+                          {!tersedia && !bukanFieldProfil && (
+                            <a href="/pekebun/profil" className="text-xs text-primary underline font-medium">Lengkapi di Profil</a>
+                          )}
+                          {bukanFieldProfil && (
+                            <label className="relative cursor-pointer">
+                              <span className="px-4 py-2 text-xs font-medium text-primary border border-primary rounded-lg hover:bg-primary/5 transition-colors inline-block">
+                                {uploading[jenis] ? 'Mengunggah...' : 'Upload Manual'}
+                              </span>
+                              <input type="file" accept="image/*,application/pdf" className="hidden"
+                                disabled={uploading[jenis]} onChange={(e) => e.target.files[0] && handleFileUpload(jenis, e.target.files[0])} />
+                            </label>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="p-4 bg-gray-50 rounded-xl text-sm text-gray-500 text-center">Tidak ada persyaratan khusus untuk program ini.</div>
+              )}
+              {semuaBerkasLengkap && program.persyaratan?.length > 0 && (
+                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-xl text-sm text-green-700">
+                  <CheckCircleIcon className="w-5 h-5 inline-block mr-1.5 -mt-0.5" />
+                  Semua berkas sudah tersedia! Lanjut ke konfirmasi.
+                </div>
+              )}
+              <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
+                <button onClick={() => setStep(1)} className="text-sm text-gray-500 hover:text-foreground cursor-pointer">&larr; Kembali ke Lahan</button>
+                <Button onClick={() => setStep(3)}>
+                  {program.aktifkan_surat ? 'Lanjut ke Surat & Tanda Tangan →' : 'Lanjut ke Konfirmasi →'}
+                </Button>
+              </div>
+            </div>
+          )}
 
-                  <DocumentViewer
-                      suratIndex={i}
-                      judul={judul}
-                      isi={isi}
-                      data={docData}
-                      program={program || {}}
-                      signature={ttd}
-                      showSignature={!!ttd}
-                    />
+          {step === 3 && (
+            <>
+              {!program.aktifkan_surat && (
+                <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-6">
+                  <h2 className="font-bold text-foreground mb-3 flex items-center gap-2">
+                    <span className="w-1.5 h-5 bg-amber-500 rounded-full inline-block" />
+                    Ringkasan & Konfirmasi
+                  </h2>
+                  <div className="space-y-2 text-sm text-gray-600 mb-4">
+                    <p><span className="text-gray-400">Program:</span> {program.nama}</p>
+                    <p><span className="text-gray-400">Jenis:</span> {program.jenis}</p>
+                    {selectedLahan && (() => {
+                      const l = lahanSaya.find((x) => x.id.toString() === selectedLahan);
+                      return l ? <p><span className="text-gray-400">Lahan:</span> {l.alamat_lahan} — {Number(l.luas_lahan_m2).toLocaleString()} M²</p> : null;
+                    })()}
+                    <p><span className="text-gray-400">Berkas:</span> {program.persyaratan?.filter((p) => dokumens[p] || getNilaiBerkas(p)).length || 0}/{program.persyaratan?.length || 0} lengkap</p>
+                  </div>
+                  <Button className="w-full" size="lg" onClick={handleSubmit} loading={submitting} disabled={!canSubmit || sudahDaftar}>
+                    <ShieldCheckIcon className="w-5 h-5" />
+                    {submitting ? 'Mendaftarkan...' : sudahDaftar ? 'Sudah Mendaftar' : 'Daftar Sekarang'}
+                  </Button>
+                  <div className="flex justify-center mt-4">
+                    <button onClick={() => setStep(2)} className="text-sm text-gray-500 hover:text-foreground cursor-pointer">&larr; Kembali ke Cek Berkas</button>
+                  </div>
+                </div>
+              )}
 
-                  <div className="flex items-center justify-end gap-2 mt-2">
+              {program.aktifkan_surat && (
+                <>
+                  <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-6">
+                    <h2 className="font-bold text-foreground mb-2 flex items-center gap-2">
+                      <span className="w-1.5 h-5 bg-emerald-500 rounded-full inline-block" />
+                      Surat Pernyataan
+                    </h2>
+                    <p className="text-sm text-gray-500 mb-4">Baca dan setujui setiap surat pernyataan di bawah ini</p>
+
+                    {[1, 2, 3].map((i) => {
+                      const judul = program[`surat_${i}_judul`];
+                      const isi = program[`surat_${i}_isi`];
+                      const checked = i === 1 ? surat1 : i === 2 ? surat2 : surat3;
+                      const setChecked = i === 1 ? setSurat1 : i === 2 ? setSurat2 : setSurat3;
+
+                      return (
+                        <div key={i} className="mb-6 last:mb-0">
+                          <h3 className="font-semibold text-foreground text-sm mb-3 flex items-center gap-2">
+                            <DocumentIcon className="w-4 h-4 text-emerald-500" />
+                            Surat {i}: {judul || `Pernyataan ${i}`}
+                          </h3>
+
+                          <DocumentViewer
+                              suratIndex={i}
+                              judul={judul}
+                              isi={isi}
+                              data={docData}
+                              program={program || {}}
+                              signature={ttd}
+                              showSignature={!!ttd}
+                            />
+
+                          <label className="flex items-start gap-3 mt-3 p-3 bg-white rounded-lg border border-border cursor-pointer hover:bg-gray-50 transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={(e) => setChecked(e.target.checked)}
+                              className="w-5 h-5 mt-0.5 rounded border-gray-300 text-primary focus:ring-primary/30 cursor-pointer"
+                            />
+                            <span className="text-sm text-gray-700">
+                              Saya telah membaca, memahami, dan menyetujui seluruh isi dari <strong>{judul || `Surat Pernyataan ${i}`}</strong>
+                            </span>
+                          </label>
+                        </div>
+                      );
+                    })}
                   </div>
 
-                  <label className="flex items-start gap-3 mt-3 p-3 bg-white rounded-lg border border-border cursor-pointer hover:bg-gray-50 transition-colors">
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={(e) => setChecked(e.target.checked)}
-                      className="w-5 h-5 mt-0.5 rounded border-gray-300 text-primary focus:ring-primary/30 cursor-pointer"
-                    />
-                    <span className="text-sm text-gray-700">
-                      Saya telah membaca, memahami, dan menyetujui seluruh isi dari <strong>{judul || `Surat Pernyataan ${i}`}</strong>
-                    </span>
-                  </label>
-                </div>
-              );
-            })}
-          </div>
+                  <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-6">
+                    <h2 className="font-bold text-foreground mb-3 flex items-center gap-2">
+                      <span className="w-1.5 h-5 bg-purple-500 rounded-full inline-block" />
+                      Tanda Tangan Digital
+                    </h2>
+                    <p className="text-sm text-gray-500 mb-4">Gambar tanda tangan Anda. Tanda tangan akan muncul di ketiga surat pernyataan.</p>
+                    <SignaturePad value={ttd} onChange={setTtd} height={200} />
+                  </div>
 
-          <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-6">
-            <h2 className="font-bold text-foreground mb-3 flex items-center gap-2">
-              <span className="w-1.5 h-5 bg-purple-500 rounded-full inline-block" />
-              Tanda Tangan Digital
-            </h2>
-            <p className="text-sm text-gray-500 mb-4">Gambar tanda tangan Anda di atas. Tanda tangan akan muncul di ketiga surat pernyataan.</p>
-            <SignaturePad value={ttd} onChange={setTtd} height={200} />
-          </div>
-        </>
-      )}
+                  <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-8">
+                    <h2 className="font-bold text-foreground mb-3 flex items-center gap-2">
+                      <span className="w-1.5 h-5 bg-amber-500 rounded-full inline-block" />
+                      Ringkasan & Konfirmasi
+                    </h2>
+                    <div className="space-y-2 text-sm text-gray-600 mb-4">
+                      <p><span className="text-gray-400">Program:</span> {program.nama}</p>
+                      <p><span className="text-gray-400">Jenis:</span> {program.jenis}</p>
+                      {selectedLahan && (() => {
+                        const l = lahanSaya.find((x) => x.id.toString() === selectedLahan);
+                        return l ? <p><span className="text-gray-400">Lahan:</span> {l.alamat_lahan} — {Number(l.luas_lahan_m2).toLocaleString()} M²</p> : null;
+                      })()}
+                      <p><span className="text-gray-400">Berkas:</span> {program.persyaratan?.filter((p) => dokumens[p] || getNilaiBerkas(p)).length || 0}/{program.persyaratan?.length || 0} lengkap</p>
+                      <p><span className="text-gray-400">Surat Disetujui:</span> {[surat1, surat2, surat3].filter(Boolean).length}/3</p>
+                      <p><span className="text-gray-400">Tanda Tangan:</span> {ttd ? '✓ Sudah' : '✗ Belum'}</p>
+                    </div>
 
-      <div className="bg-white rounded-2xl border border-border shadow-sm p-6 mb-8">
-        <h2 className="font-bold text-foreground mb-3 flex items-center gap-2">
-          <span className="w-1.5 h-5 bg-amber-500 rounded-full inline-block" />
-          Ringkasan & Konfirmasi
-        </h2>
+                    {(!surat1 || !surat2 || !surat3) && (
+                      <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-700 mb-4">
+                        ⚠️ Semua surat pernyataan harus disetujui dan ditandatangani sebelum mendaftar
+                      </div>
+                    )}
 
-        <div className="space-y-2 text-sm text-gray-600 mb-4">
-          <p><span className="text-gray-400">Program:</span> {program.nama}</p>
-          <p><span className="text-gray-400">Jenis:</span> {program.jenis}</p>
-          {selectedLahan && (() => {
-            const l = lahanSaya.find((x) => x.id.toString() === selectedLahan);
-            return l ? <p><span className="text-gray-400">Lahan:</span> {l.alamat_lahan} — {Number(l.luas_lahan_m2).toLocaleString()} M²</p> : null;
-          })()}
-          <p><span className="text-gray-400">Upload Dokumen:</span> {program.persyaratan?.filter((p) => dokumens[p]).length || 0}/{program.persyaratan?.length || 0} {program.persyaratan?.length ? (program.persyaratan.every((p) => dokumens[p]) ? '✓ Lengkap' : '') : 'Tidak ada upload'}</p>
-          {program.aktifkan_surat && (
-            <>
-              <p><span className="text-gray-400">Surat Disetujui:</span> {[surat1, surat2, surat3].filter(Boolean).length}/3</p>
-              <p><span className="text-gray-400">Tanda Tangan:</span> {ttd ? '✓ Sudah' : '✗ Belum'}</p>
+                    <Button className="w-full" size="lg" onClick={handleSubmit} loading={submitting} disabled={!canSubmit || sudahDaftar}>
+                      <ShieldCheckIcon className="w-5 h-5" />
+                      {submitting ? 'Mendaftarkan...' : sudahDaftar ? 'Sudah Mendaftar' : 'Daftar Sekarang'}
+                    </Button>
+
+                    <div className="flex justify-center mt-4">
+                      <button onClick={() => setStep(2)} className="text-sm text-gray-500 hover:text-foreground cursor-pointer">&larr; Kembali ke Cek Berkas</button>
+                    </div>
+                  </div>
+                </>
+              )}
             </>
           )}
-        </div>
-
-        {sudahDaftar && (
-          <div className="p-3 bg-green-50 border border-green-200 rounded-xl text-xs text-green-700 mb-4">
-            ✓ Anda sudah mendaftar program ini. <button onClick={() => router.push('/pekebun/program')} className="underline font-medium cursor-pointer">Lihat status pendaftaran</button>
-          </div>
-        )}
-
-        {program.aktifkan_surat && (!surat1 || !surat2 || !surat3) && (
-          <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-700 mb-4">
-            ⚠️ Semua surat pernyataan harus disetujui dan ditandatangani sebelum mendaftar
-          </div>
-        )}
-
-        {program.persyaratan?.length > 0 && !program.persyaratan.every((p) => dokumens[p]) && (
-          <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-700 mb-4">
-            ⚠️ Semua dokumen persyaratan harus diupload
-          </div>
-        )}
-
-        <Button
-          className="w-full"
-          size="lg"
-          onClick={handleSubmit}
-          loading={submitting}
-          disabled={!canSubmit}
-        >
-          <ShieldCheckIcon className="w-5 h-5" />
-          {sudahDaftar ? 'Sudah Mendaftar' : canSubmit ? 'Daftar Sekarang' : 'Lengkapi Semua Persyaratan'}
-        </Button>
-      </div>
+        </>
+      )}
 
       {previewImage && (
         <div className="fixed inset-0 z-[9999] bg-black/85 flex items-center justify-center p-4" onClick={() => { setPreviewImage(null); setPreviewLabel(''); }}>

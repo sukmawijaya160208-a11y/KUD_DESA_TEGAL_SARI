@@ -607,14 +607,24 @@ export default function AdminProgramPage() {
             </label>
 
             {form.aktifkan_surat && (
-              <div className="space-y-6">
+              <div className="space-y-5">
+                <div className="flex items-center gap-2 px-1">
+                  <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-primary/60">3 Surat Pernyataan</span>
+                  <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
+                </div>
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="p-4 bg-gray-50 rounded-xl border border-border">
-                    <h4 className="font-semibold text-foreground text-sm mb-3 flex items-center gap-2">
-                      <DocumentTextIcon className="w-4 h-4 text-primary" />
-                      Surat {i}
-                    </h4>
-                    <div className="space-y-3">
+                  <div key={i} className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
+                    <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-primary/5 to-transparent border-b border-border">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                        <DocumentTextIcon className="w-4 h-4 text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-foreground text-sm">Surat Pernyataan {i}</h4>
+                        <p className="text-[11px] text-gray-400">Lampiran {String(i).padStart(2, '0')}</p>
+                      </div>
+                    </div>
+                    <div className="p-4 space-y-4">
                       <Input
                         label="Judul Surat"
                         value={form[`surat_${i}_judul`]}
@@ -622,43 +632,55 @@ export default function AdminProgramPage() {
                         placeholder={`Surat Pernyataan ${i}`}
                       />
                       <div>
-                        <label className="block text-sm font-medium text-foreground/80 mb-1">Isi Surat</label>
+                        <label className="block text-sm font-medium text-foreground/80 mb-1.5">Isi Surat</label>
                         <textarea
                           value={form[`surat_${i}_isi`]}
                           onChange={(e) => setForm({ ...form, [`surat_${i}_isi`]: e.target.value })}
                           rows={6}
-                          className="w-full px-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-y"
-                          placeholder={`Gunakan {{placeholder}} untuk data dinamis:\n{{nama_pekebun}}, {{nik}}, {{alamat}}, {{luas_lahan}}, dll.`}
+                          className="w-full px-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-y font-mono text-gray-700 leading-relaxed"
+                          placeholder={`{{nama_pekebun}}, {{nik}}, {{alamat}}, dll.`}
                         />
-                        <p className="text-[10px] text-gray-400 mt-1">
-                          Placeholder: {`{{nama_pekebun}}, {{nik}}, {{no_kk}}, {{tempat_lahir}}, {{tanggal_lahir}}, {{alamat}}, {{alamat_lahan}}, {{luas_lahan}}, {{nama_program}}`}
+                        <p className="text-[10px] text-gray-400 mt-1.5">
+                          Placeholder: {`{{nama_pekebun}} {{nik}} {{no_kk}} {{tempat_lahir}} {{tanggal_lahir}} {{alamat}} {{alamat_lahan}} {{luas_lahan}} {{nama_program}} {{kades_nama}} {{tanggal_surat}}`}
                         </p>
                       </div>
-                      <details className="text-xs text-gray-500">
-                          <summary className="cursor-pointer hover:text-primary font-medium">Preview Surat {i}</summary>
-                          <div className="mt-2">
-                            <DocumentViewer
-                              suratIndex={i}
-                              judul={form[`surat_${i}_judul`]}
-                              isi={form[`surat_${i}_isi`]}
-                              data={{
-                                nama_pekebun: 'Contoh Nama',
-                                nik: '3512345678901234',
-                                jenis_kelamin: 'LAKI-LAKI',
-                                no_whatsapp: '08123456789',
-                                alamat: 'Desa Tegal Sari',
-                                alamat_lahan: 'Sawit 2 Ha',
-                                luas_lahan: '20.000 M²',
-                                nama_program: form.nama || 'Program',
-                                kades_nama: 'SISWOYO',
-                                tanggal_surat: form.tanggal_mulai || '',
-                                tempat_surat: 'Megang Sakti',
-                              }}
-                              program={{}}
-                              showSignature={false}
-                            />
-                          </div>
-                        </details>
+                      <div className="bg-gray-50 rounded-xl border border-border overflow-hidden">
+                        <div className="px-3 py-2 bg-gray-100/80 border-b border-border flex items-center justify-between">
+                          <span className="text-[11px] font-medium text-gray-500">PREVIEW SURAT {i}</span>
+                          <span className="text-[10px] text-gray-400">Data contoh untuk pratinjau</span>
+                        </div>
+                        <div className="p-3 max-h-48 overflow-y-auto">
+                          <DocumentViewer
+                            suratIndex={i}
+                            judul={form[`surat_${i}_judul`]}
+                            isi={form[`surat_${i}_isi`]}
+                            data={{
+                              nama_pekebun: 'Contoh Nama',
+                              nik: '3512345678901234',
+                              no_kk: '1234567890123456',
+                              jenis_kelamin: 'LAKI-LAKI',
+                              tempat_lahir: 'Tegal Sari',
+                              tanggal_lahir: '17 Agustus 1990',
+                              no_whatsapp: '08123456789',
+                              alamat: 'Desa Tegal Sari, Kec. Megang Sakti',
+                              alamat_lahan: 'Dusun Sawit Makmur',
+                              luas_lahan: '20.000 M² (2 Ha)',
+                              jenis_surat_lahan: 'SHM',
+                              nomor_surat_lahan: '123/SHM/2024',
+                              nama_program: form.nama || 'Program KUD',
+                              kades_nama: 'SISWOYO',
+                              kades_title: 'Kepala Desa Tegalsari',
+                              ketua_kud_nama: 'Dedek Sulaiman, S.Pd.',
+                              tanggal_surat: form.tanggal_mulai || new Date().toISOString().split('T')[0],
+                              tempat_surat: 'Megang Sakti',
+                              logo_kud: '',
+                              kop_kud: 'KOPERASI UNIT DESA (KUD) "SARI SUBUR"',
+                            }}
+                            program={{}}
+                            showSignature={false}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}

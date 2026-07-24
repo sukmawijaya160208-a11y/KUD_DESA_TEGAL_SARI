@@ -194,7 +194,7 @@ export default function AdminHargaTbsPage() {
                     <span className={`text-sm font-semibold ${s === 'expired' ? 'text-gray-400 line-through' : 'text-foreground'}`}>{rupiah(item.harga_per_kg)}</span>
                     <span className="text-[11px] text-gray-400 ml-3">
                       <CalendarDaysIcon className="w-3 h-3 inline mr-0.5 align-text-bottom" />
-                      {friendly(item.dari_tanggal)} — {item.sampai_tanggal ? friendly(item.sampai_tanggal) : '∞'}
+                      {formatDate(item.dari_tanggal)} — {item.sampai_tanggal ? formatDate(item.sampai_tanggal) : '∞'}
                     </span>
                     {item.keterangan && <span className="text-[10px] text-gray-400 ml-2 hidden sm:inline">{item.keterangan}</span>}
                   </div>
