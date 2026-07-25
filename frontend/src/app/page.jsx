@@ -326,7 +326,57 @@ export default function Home() {
   useEffect(() => { api.landing.list('hero').then(r => setHeroData(r.data?.[0] || null)).catch(() => {}); }, []);
   useEffect(() => { api.pengaturan.get().then(setPengaturan).catch(() => {}); }, []);
 
-  const filteredBlogs = blogCategory === 'Semua' ? blogPosts : blogPosts.filter((b) => b.category === blogCategory);
+  const filteredBlogs = blogPosts.filter((b) => {
+    const matchCategory = blogCategory === 'Semua' || b.category === blogCategory;
+    const matchSearch = !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase()) || b.excerpt?.toLowerCase().includes(blogSearch.toLowerCase());
+    return matchCategory && matchSearch;
+  });
+
+  const blogItems = filteredBlogs.length > 0 ? filteredBlogs.map((post, idx) => (
+    <motion.article key={post.slug || post.id} variants={itemVariants} whileHover={{ y: -6, scale: 1.02 }}
+      className="group relative rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer"
+      onClick={() => router.push(`/blog/${post.slug}`)}>
+      <div className="relative h-44 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 via-emerald-50 to-teal-50 z-0" />
+        {post.image || post.media?.[0]?.url ? (
+          <>
+            <img src={post.image || post.media?.[0]?.url} alt={post.title}
+              className="relative w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 z-[1]"
+              loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-[2]" />
+          </>
+        ) : null}
+        <div className="absolute top-3 left-3 z-[2] px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white/90 backdrop-blur-sm text-primary shadow-sm">
+          {post.category}
+        </div>
+        <div className="absolute bottom-3 left-3 z-[2] flex items-center gap-1.5 text-[11px] text-white bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
+          <CalendarDaysIcon className="w-3 h-3" />
+          {post.published_at ? new Date(post.published_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : post.date}
+        </div>
+      </div>
+      <div className="p-5">
+        <h4 className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 text-sm leading-snug mb-2">
+          {post.title}
+        </h4>
+        <p className="text-xs text-gray-500 leading-relaxed line-clamp-2 mb-3">
+          {post.excerpt || (post.content || '').slice(0, 120) + '...'}
+        </p>
+        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+          <span className="text-[11px] text-gray-400">{post.author?.name || post.author || 'Admin KUD'}</span>
+          <span className="text-xs font-semibold text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+            Baca <ArrowRightIcon className="w-3.5 h-3.5" />
+          </span>
+        </div>
+      </div>
+      <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/[0.04] group-hover:ring-primary/20 pointer-events-none transition-all duration-500" />
+    </motion.article>
+  )) : (
+    <div className="col-span-full text-center py-16">
+      <NewspaperIcon className="w-16 h-16 text-gray-200 mx-auto mb-4" />
+      <p className="text-gray-400 text-lg font-medium">Tidak ada artikel ditemukan</p>
+      <p className="text-gray-300 text-sm mt-1">Coba kata kunci atau kategori lain</p>
+    </div>
+  );
 
   const navLinks = [
     { href: '#blog', label: 'Blog', icon: NewspaperIcon },
@@ -759,55 +809,8 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {(() => {
-                const searched = filteredBlogs.filter((b) => !blogSearch || b.title.toLowerCase().includes(blogSearch.toLowerCase()) || b.excerpt?.toLowerCase().includes(blogSearch.toLowerCase()));
-                return searched.length > 0 ? searched.map((post, idx) => (
-                  <motion.article key={post.slug || post.id} variants={itemVariants} whileHover={{ y: -6, scale: 1.02 }}
-                    className="group relative rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer"
-                    onClick={() => router.push(`/blog/${post.slug}`)}>
-                    <div className="relative h-44 overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 via-emerald-50 to-teal-50 z-0" />
-                      {post.image || post.media?.[0]?.url ? (
-                        <>
-                          <img src={post.image || post.media?.[0]?.url} alt={post.title}
-                            className="relative w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 z-[1]"
-                            loading="lazy" onError={(e) => { e.target.style.display = 'none'; }} />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-[2]" />
-                        </>
-                      ) : null}
-                      <div className="absolute top-3 left-3 z-[2] px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white/90 backdrop-blur-sm text-primary shadow-sm">
-                        {post.category}
-                      </div>
-                      <div className="absolute bottom-3 left-3 z-[2] flex items-center gap-1.5 text-[11px] text-white bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                        <CalendarDaysIcon className="w-3 h-3" />
-                        {post.published_at ? new Date(post.published_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : post.date}
-                      </div>
-                    </div>
-                    <div className="p-5">
-                      <h4 className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 text-sm leading-snug mb-2">
-                        {post.title}
-                      </h4>
-                      <p className="text-xs text-gray-500 leading-relaxed line-clamp-2 mb-3">
-                        {post.excerpt || (post.content || '').slice(0, 120) + '...'}
-                      </p>
-                      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                        <span className="text-[11px] text-gray-400">{post.author?.name || post.author || 'Admin KUD'}</span>
-                        <span className="text-xs font-semibold text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
-                          Baca <ArrowRightIcon className="w-3.5 h-3.5" />
-                        </span>
-                      </div>
-                    </div>
-                    <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/[0.04] group-hover:ring-primary/20 pointer-events-none transition-all duration-500" />
-                  </motion.article>
-                )) : (
-                  <div className="col-span-full text-center py-16">
-                    <NewspaperIcon className="w-16 h-16 text-gray-200 mx-auto mb-4" />
-                    <p className="text-gray-400 text-lg font-medium">Tidak ada artikel ditemukan</p>
-                    <p className="text-gray-300 text-sm mt-1">Coba kata kunci atau kategori lain</p>
-                  </div>
-                );
-              })()}
+            <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-start">
+              {blogItems}
             </motion.div>
           )}
         </div>
@@ -1043,8 +1046,26 @@ export default function Home() {
             ))}
           </motion.div>
 
+          {/* Feature Cards */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
+            {[
+              { icon: '📧', label: 'Newsletter Email', desc: 'Info & update langsung ke inbox', color: 'from-emerald-400/20 to-emerald-500/10', border: 'border-emerald-400/20' },
+              { icon: '💬', label: 'WhatsApp', desc: 'Respon cepat & personal', color: 'from-green-400/20 to-green-500/10', border: 'border-green-400/20' },
+              { icon: '📞', label: 'Kontak Admin', desc: 'Call center & alamat kantor', color: 'from-teal-400/20 to-teal-500/10', border: 'border-teal-400/20' },
+            ].map((card, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.35 + i * 0.08 }}
+                className={`relative group p-4 rounded-2xl bg-gradient-to-br ${card.color} backdrop-blur-md border ${card.border} hover:bg-white/15 transition-all duration-300 cursor-default`}
+                whileHover={{ y: -4, scale: 1.02 }}>
+                <div className="text-2xl mb-2">{card.icon}</div>
+                <h4 className="text-white font-semibold text-sm">{card.label}</h4>
+                <p className="text-white/50 text-xs mt-0.5">{card.desc}</p>
+                <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5 group-hover:ring-white/20 transition-all pointer-events-none" />
+              </motion.div>
+            ))}
+          </motion.div>
+
           {/* Tab Content */}
-          <motion.div key={newsletterTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="mt-6 max-w-md mx-auto px-4 sm:px-0">
+          <motion.div key={newsletterTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="mt-8 max-w-md mx-auto px-4 sm:px-0">
             {/* TAB 1: EMAIL */}
             {newsletterTab === 'email' && (
               <div className="space-y-4">
@@ -1225,7 +1246,7 @@ export default function Home() {
       {/* ===== BACK TO TOP ===== */}
       <AnimatePresence>
         {showBackTop && (
-          <motion.button initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }} whileHover={{ scale: 1.1 }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="fixed bottom-20 right-4 md:right-6 z-40 w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all flex items-center justify-center border border-emerald-400/30">
+          <motion.button initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }} whileHover={{ scale: 1.1 }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="fixed bottom-24 right-4 md:right-6 z-40 w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all flex items-center justify-center border border-emerald-400/30">
             <ArrowUpIcon className="w-5 h-5" />
           </motion.button>
         )}

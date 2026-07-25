@@ -19,8 +19,14 @@ const ChatHeader = memo(function ChatHeader({ conversation, myId, onMobileBack, 
         <ArrowLeftIcon className="w-5 h-5 text-foreground" />
       </button>
       <div className="relative shrink-0">
-        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-wa-primary to-wa-primary/60 flex items-center justify-center text-white text-sm font-bold">
-          {other?.name?.charAt(0).toUpperCase() || '?'}
+        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-wa-primary to-wa-primary/60 flex items-center justify-center text-white text-sm font-bold overflow-hidden">
+          {other?.foto_profil ? (
+            <img src={other.foto_profil} alt="" className="w-full h-full object-cover"
+              onError={(e) => { e.target.style.display = 'none'; e.target.nextElementSibling?.classList.remove('hidden'); }} />
+          ) : null}
+          <span className={`text-sm font-bold ${other?.foto_profil ? 'hidden' : ''}`}>
+            {other?.name?.charAt(0).toUpperCase() || '?'}
+          </span>
         </div>
         {online && (
           <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-success border-2 border-surface rounded-full" />
@@ -29,6 +35,15 @@ const ChatHeader = memo(function ChatHeader({ conversation, myId, onMobileBack, 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-semibold text-foreground truncate">{other?.name || 'Unknown'}</h3>
+          {other?.role && (
+            <span className={`shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
+              other.role === 'admin' ? 'bg-blue-100 text-blue-700'
+              : other.role === 'verifikator' ? 'bg-purple-100 text-purple-700'
+              : 'bg-emerald-100 text-emerald-700'
+            }`}>
+              {other.role === 'admin' ? 'Admin' : other.role === 'verifikator' ? 'Verif' : 'Pekebun'}
+            </span>
+          )}
         </div>
         <p className="text-[11px] text-gray-400 truncate">
           {online ? 'Online' : other?.role ? `${other.role.charAt(0).toUpperCase() + other.role.slice(1)}` : ''}

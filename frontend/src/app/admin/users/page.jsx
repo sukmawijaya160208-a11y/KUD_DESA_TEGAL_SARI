@@ -36,6 +36,7 @@ const STATUS_BADGE = {
 const STATUS_LABEL = { verified: 'Terverifikasi', rejected: 'Ditolak', pending: 'Menunggu', default: '-' };
 
 const PAGE_SIZES = [10, 25, 50, 100];
+const ROLE_HIERARCHY = { admin: 0, verifikator: 1, pekebun: 2 };
 
 function avatarColor(name) {
   let hash = 0;
@@ -85,8 +86,8 @@ export default function AdminUsersPage() {
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
 
   // --- Sort ---
-  const [sortKey, setSortKey] = useState('created_at');
-  const [sortDir, setSortDir] = useState('desc');
+  const [sortKey, setSortKey] = useState('role');
+  const [sortDir, setSortDir] = useState('asc');
 
   // --- Pagination ---
   const [page, setPage] = useState(1);
@@ -172,7 +173,7 @@ export default function AdminUsersPage() {
       switch (sortKey) {
         case 'name': va = a.name?.toLowerCase(); vb = b.name?.toLowerCase(); break;
         case 'email': va = a.email?.toLowerCase(); vb = b.email?.toLowerCase(); break;
-        case 'role': va = a.role; vb = b.role; break;
+        case 'role': va = ROLE_HIERARCHY[a.role] ?? 99; vb = ROLE_HIERARCHY[b.role] ?? 99; break;
         case 'status': va = a.pekebun?.status || ''; vb = b.pekebun?.status || ''; break;
         case 'nik': va = a.pekebun?.nik || ''; vb = b.pekebun?.nik || ''; break;
         case 'no_whatsapp': va = a.pekebun?.no_whatsapp || ''; vb = b.pekebun?.no_whatsapp || ''; break;
@@ -528,6 +529,9 @@ export default function AdminUsersPage() {
           <Button variant="outline" size="sm" onClick={() => { setImportData(null); setImportFile(null); setImportResult(null); setImportModal(true); }} className="whitespace-nowrap">
             <DocumentArrowDownIcon className="w-4 h-4 rotate-180" /> Import
           </Button>
+          <Button variant="outline" size="sm" onClick={() => window.print()} className="whitespace-nowrap">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg> Cetak
+          </Button>
         </div>
 
         {/* Active Filter Chips */}
@@ -581,6 +585,9 @@ export default function AdminUsersPage() {
           <Button size="sm" variant="danger" onClick={() => setBulkDeleteModal(true)}><TrashIcon className="w-3.5 h-3.5" /> Hapus</Button>
           <Button size="sm" variant="outline" onClick={() => exportToExcel(data.filter(u => selected.has(u.id)))}>
             <DocumentArrowDownIcon className="w-3.5 h-3.5" /> Export
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => window.print()}>
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg> Cetak
           </Button>
         </div>
       )}
