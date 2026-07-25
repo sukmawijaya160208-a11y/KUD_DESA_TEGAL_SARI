@@ -254,6 +254,8 @@ export const api = {
         fd.append('file', file);
         return request('/upload/landing-media', { method: 'POST', body: fd, headers: {} });
       },
+      getHero: () => request('/admin/landing-page/hero'),
+      saveHero: (data) => request('/admin/landing-page/hero', { method: 'POST', body: JSON.stringify(data) }),
     },
     backupRestore: {
       backup: () => request('/admin/backup'),

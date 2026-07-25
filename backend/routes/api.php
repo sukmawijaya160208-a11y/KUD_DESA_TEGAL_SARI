@@ -165,6 +165,8 @@ Route::get('/newsletter/stats', [NewsletterController::class, 'stats']);
         Route::get('/pekebun/{pekebun}/kartu-anggota', [PekebunController::class, 'kartuAnggotaAdmin']);
 
         // Landing Page CMS (specific routes BEFORE wildcard {landingContent})
+        Route::get('/landing-page/hero', [LandingPageController::class, 'getHero']);
+        Route::post('/landing-page/hero', [LandingPageController::class, 'saveHero']);
         Route::post('/landing-page/bulk-toggle', [LandingPageController::class, 'bulkToggle']);
         Route::post('/landing-page/reorder', [LandingPageController::class, 'reorder']);
         Route::get('/landing-page', [LandingPageController::class, 'index']);

@@ -6,6 +6,7 @@ import { useToast } from '@/components/ToastProvider';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import FormModal from './components/FormModal';
+import HeroSectionCMS from './components/HeroSectionCMS';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   PlusIcon, PencilSquareIcon, TrashIcon, XMarkIcon,
@@ -15,6 +16,7 @@ import {
   QuestionMarkCircleIcon, PhoneIcon,
   ChevronUpIcon, ChevronDownIcon, EyeIcon, EyeSlashIcon,
   CalendarDaysIcon, BuildingOfficeIcon, MapPinIcon,
+  NewspaperIcon,
 } from '@heroicons/react/24/outline';
 
 const containerAnim = {
@@ -28,6 +30,7 @@ const fadeUp = {
 };
 
 const TABS = [
+  { id: 'hero', label: 'Hero Section', icon: NewspaperIcon, color: 'from-emerald-500 to-teal-600' },
   { id: 'langkah', label: '6 Langkah', icon: ClipboardDocumentListIcon, color: 'from-blue-500 to-blue-600' },
   { id: 'sertifikasi', label: 'Sertifikasi', icon: AcademicCapIcon, color: 'from-purple-500 to-purple-600' },
   { id: 'dokumentasi', label: 'Dokumentasi', icon: PhotoIcon, color: 'from-green-500 to-green-600' },
@@ -42,6 +45,7 @@ const TABS = [
 ];
 
 const SECTION_LABELS = {
+  hero: { title: 'Hero Section', desc: 'Atur teks utama landing page KUD', icon: NewspaperIcon, color: 'from-emerald-500 to-teal-600' },
   langkah: { title: '6 Langkah Jadi Anggota', desc: 'Atur alur pendaftaran anggota KUD', icon: ClipboardDocumentListIcon, color: 'from-blue-500 to-blue-600' },
   sertifikasi: { title: 'Sertifikasi & Penghargaan', desc: 'Kelola sertifikasi, penghargaan, dan akreditasi', icon: AcademicCapIcon, color: 'from-purple-500 to-purple-600' },
   dokumentasi: { title: 'Dokumentasi Kegiatan', desc: 'Upload foto dokumentasi kegiatan KUD', icon: PhotoIcon, color: 'from-green-500 to-green-600' },
@@ -270,7 +274,11 @@ export default function LandingPageAdmin() {
     : sortedItems;
 
   return (
-    <motion.div variants={containerAnim} initial="hidden" animate="show" className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 space-y-6 overflow-x-hidden">
+    <>
+      {activeTab === 'hero' ? (
+        <HeroSectionCMS />
+      ) : (
+      <motion.div variants={containerAnim} initial="hidden" animate="show" className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 space-y-6 overflow-x-hidden">
       {/* HEADER */}
       <motion.div variants={fadeUp} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -371,5 +379,7 @@ export default function LandingPageAdmin() {
         </div>
       </Modal>
     </motion.div>
+      )}
+    </>
   );
 }

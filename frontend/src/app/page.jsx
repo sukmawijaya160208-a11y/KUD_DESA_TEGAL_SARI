@@ -281,6 +281,7 @@ export default function Home() {
   const [dokumentasiData, setDokumentasiData] = useState([]);
   const [sertifikasiDetail, setSertifikasiDetail] = useState(null);
   const [pengaturan, setPengaturan] = useState({});
+  const [heroData, setHeroData] = useState(null);
   const [newsletterTab, setNewsletterTab] = useState('email');
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [subscribeState, setSubscribeState] = useState('idle');
@@ -322,6 +323,7 @@ export default function Home() {
   useEffect(() => { api.landing.list('layanan').then(r => setLayananData(r.data || [])).catch(() => {}); }, []);
   useEffect(() => { api.landing.list('faq').then(r => setFaqs(r.data || [])).catch(() => {}); }, []);
   useEffect(() => { api.landing.list('dokumentasi').then(r => setDokumentasiData(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.landing.list('hero').then(r => setHeroData(r.data?.[0] || null)).catch(() => {}); }, []);
   useEffect(() => { api.pengaturan.get().then(setPengaturan).catch(() => {}); }, []);
 
   const filteredBlogs = blogCategory === 'Semua' ? blogPosts : blogPosts.filter((b) => b.category === blogCategory);
@@ -397,7 +399,7 @@ export default function Home() {
       </motion.nav>
 
       {/* ===== HERO SECTION ===== */}
-      <section ref={heroRef} className="relative min-h-[60vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900">
+      <section ref={heroRef} className="relative min-h-[50vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.4),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(6,182,212,0.3),transparent_50%)]" />
@@ -407,36 +409,43 @@ export default function Home() {
           <div className="absolute top-1/3 right-1/3 w-48 h-48 bg-green-400/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
           <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-cyan-400/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 pb-10 md:pt-24 md:pb-16">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-14 pb-6 md:pt-24 md:pb-16">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <motion.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-6">
-              Koperasi Unit Desa Tegal Sari
+            <motion.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="inline-block px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-3 sm:mb-6">
+              {heroData?.meta_data?.sub_judul || 'Koperasi Unit Desa Tegal Sari'}
             </motion.span>
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold font-heading text-white leading-tight max-w-5xl mx-auto">
-            Maju Bersama{' '}
-            <span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD Sari Subur</span>
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold font-heading text-white leading-tight max-w-5xl mx-auto px-1">
+            {heroData?.title ? (
+              heroData.title.includes('KUD') ? (
+                <>{heroData.title.split('KUD')[0]}<span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD{heroData.title.split('KUD')[1] || ''}</span></>
+              ) : heroData.title
+            ) : (
+              <>Maju Bersama{' '}<span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD Sari Subur</span></>
+            )}
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-4 sm:mt-6 text-sm sm:text-lg md:text-xl text-white/70 max-w-3xl mx-auto leading-relaxed px-2">
-            Koperasi petani kelapa sawit yang berkomitmen meningkatkan kesejahteraan anggota melalui kemitraan berkelanjutan, inovasi, dan gotong royong. Berdiri sejak 2019, KUD Sari Subur telah melayani lebih dari 371 pekebun aktif dengan total lahan kelola 850 hektar dan produksi TBS mencapai 5.000 ton per tahun.
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-2 sm:mt-6 text-[11px] sm:text-lg md:text-xl text-white/70 max-w-3xl mx-auto leading-snug sm:leading-relaxed px-2">
+            {heroData?.meta_data?.deskripsi || heroData?.description || 'Koperasi petani kelapa sawit yang berkomitmen meningkatkan kesejahteraan anggota melalui kemitraan berkelanjutan, inovasi, dan gotong royong.'}
           </motion.p>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.8 }} className="mt-3 text-xs sm:text-sm md:text-base text-white/50 max-w-2xl mx-auto leading-relaxed px-2 italic">
-            Berbadan hukum, terverifikasi Dinas Koperasi & UKM, dan berkomitmen pada prinsip transparansi, akuntabilitas, serta kemandirian anggota.
-          </motion.p>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4">
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => router.push('/login?tab=register')} className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center justify-center gap-2 text-sm sm:text-base overflow-hidden">
+          {(heroData?.meta_data?.catatan_hukum) && (
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.8 }} className="mt-1.5 sm:mt-3 text-[10px] sm:text-sm md:text-base text-white/50 max-w-2xl mx-auto leading-snug sm:leading-relaxed px-2 italic">
+              {heroData.meta_data.catatan_hukum}
+            </motion.p>
+          )}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-4 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-4">
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => router.push('/login?tab=register')} className="group relative w-full sm:w-auto px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center justify-center gap-2 text-xs sm:text-base overflow-hidden">
               <span className="absolute inset-0 bg-gradient-to-r from-emerald-100 via-white to-emerald-100 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="relative z-10">Jadi Anggota</span> <ArrowRightIcon className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 transition-transform" />
+              <span className="relative z-10">Jadi Anggota</span> <ArrowRightIcon className="relative z-10 w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:translate-x-0.5 transition-transform" />
             </motion.button>
-            <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} href="#tentang" className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-sm sm:text-base backdrop-blur-sm overflow-hidden">
+            <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} href="#tentang" className="group relative w-full sm:w-auto px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-xl border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-xs sm:text-base backdrop-blur-sm overflow-hidden">
               <span className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="relative z-10">Pelajari Lebih Lanjut</span> <ChevronDownIcon className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-y-0.5 transition-transform" />
+              <span className="relative z-10">Pelajari Lebih Lanjut</span> <ChevronDownIcon className="relative z-10 w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:translate-y-0.5 transition-transform" />
             </motion.a>
           </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-4 sm:mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:gap-10 text-white/60 text-sm">
-            <div className="flex items-center gap-2"><ShieldCheckIcon className="w-4 h-4 text-green-400" />Terpercaya</div>
-            <div className="flex items-center gap-2"><UserGroupIcon className="w-4 h-4 text-green-400" />371+ Anggota</div>
-            <div className="flex items-center gap-2"><HeartIcon className="w-4 h-4 text-green-400" />Ramah Lingkungan</div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-3 sm:mt-12 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 md:gap-10 text-white/60 text-xs sm:text-sm">
+            <div className="flex items-center gap-1.5"><ShieldCheckIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400" />Terpercaya</div>
+            <div className="flex items-center gap-1.5"><UserGroupIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400" />371+ Anggota</div>
+            <div className="flex items-center gap-1.5"><HeartIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400" />Ramah Lingkungan</div>
           </motion.div>
         </div>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="hidden sm:block absolute bottom-8 left-1/2 -translate-x-1/2">

@@ -187,6 +187,67 @@ class LandingPageController extends Controller
         }
     }
 
+    public function getHero()
+    {
+        $hero = LandingContent::where('section_type', 'hero')->first();
+
+        if (!$hero) {
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'sub_judul' => '',
+                    'judul_utama' => '',
+                    'deskripsi' => '',
+                    'catatan_hukum' => '',
+                ],
+            ]);
+        }
+
+        $meta = $hero->meta_data ?: [];
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'sub_judul' => $meta['sub_judul'] ?? '',
+                'judul_utama' => $hero->title ?? '',
+                'deskripsi' => $meta['deskripsi'] ?? '',
+                'catatan_hukum' => $meta['catatan_hukum'] ?? '',
+            ],
+        ]);
+    }
+
+    public function saveHero(Request $request)
+    {
+        $validated = $request->validate([
+            'sub_judul' => 'nullable|string|max:255',
+            'judul_utama' => 'nullable|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'catatan_hukum' => 'nullable|string',
+        ]);
+
+        $hero = LandingContent::firstOrNew(['section_type' => 'hero']);
+        $hero->title = strip_tags($validated['judul_utama'] ?? '');
+        $hero->meta_data = [
+            'sub_judul' => strip_tags($validated['sub_judul'] ?? ''),
+            'deskripsi' => strip_tags($validated['deskripsi'] ?? ''),
+            'catatan_hukum' => strip_tags($validated['catatan_hukum'] ?? ''),
+        ];
+        $hero->is_active = true;
+        $hero->order = 0;
+        $hero->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Hero section berhasil disimpan',
+            'data' => [
+                'sub_judul' => $hero->meta_data['sub_judul'] ?? '',
+                'judul_utama' => $hero->title ?? '',
+                'deskripsi' => $hero->meta_data['deskripsi'] ?? '',
+                'catatan_hukum' => $hero->meta_data['catatan_hukum'] ?? '',
+            ],
+        ]);
+    }
+
     public function publicIndex($section = null)
     {
         $query = LandingContent::where('is_active', true)->orderBy('order');
