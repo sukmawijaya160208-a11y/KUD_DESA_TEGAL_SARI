@@ -44,35 +44,6 @@ const TEMPLATES = {
   },
 };
 
-const MODERN_CONFIG = {
-  template: 'modern-clean',
-  fields: {
-    border_deco: { show: true },
-    watermark: { show: false, opacity: 0.03 },
-    logo_kud: { show: true, width: 60 },
-    nama_kud: { show: true, fontSize: 14, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'bold' },
-    badan_hukum: { show: true, fontSize: 8, color: '#94a3b8' },
-    garis_header: { show: true },
-    judul: { show: true, fontSize: 18, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'bold' },
-    no_registrasi: { show: true, fontSize: 8, color: '#94a3b8' },
-    pembukaan: { show: true, fontSize: 10, color: '#475569', text: 'Pengurus Koperasi Unit Desa (KUD) Sari Subur dengan ini menerangkan dan mengesahkan bahwa:' },
-    nama_pekebun: { show: true, fontSize: 18, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'bold' },
-    grid_data: { show: true, fontSize: 10, color: '#475569' },
-    legal_text: { show: true, fontSize: 9, color: '#64748b', text: 'Dinyatakan secara sah terdaftar sebagai Anggota Aktif KUD Sari Subur. Pemegang sertifikat ini berhak atas seluruh fasilitas kemitraan kelapa sawit, pelayanan unit usaha koperasi, serta pembagian Sisa Hasil Usaha (SHU) sesuai AD/ART yang berlaku.' },
-    tanggal_terbit: { show: true, fontSize: 9, color: '#94a3b8' },
-    ttd_ketua: { show: true, width: 120, height: 45 },
-    stempel: { show: true, width: 75 },
-    nama_ketua: { show: true, fontSize: 11, color: '#0f172a', fontWeight: 'bold' },
-    jabatan_ketua: { show: true, fontSize: 9, color: '#94a3b8' },
-  },
-  background: {
-    type: 'gradient',
-    color1: '#ffffff',
-    color2: '#f8fafc',
-    angle: 135,
-  },
-};
-
 function formatDateLocal(dateStr) {
   if (!dateStr) return '-';
   const d = new Date(dateStr);
@@ -173,7 +144,7 @@ function SertifikatContent({ data, config, width }) {
           <div style={{ textAlign: 'center' }}>
             {f.nama_kud?.show !== false && (
               <div style={{
-                fontFamily: f.nama_kud.fontFamily || 'Inter',
+                fontFamily: f.nama_kud?.fontFamily || 'Inter',
                 fontSize: s(f.nama_kud.fontSize || 16),
                 fontWeight: f.nama_kud.fontWeight || 'bold',
                 color: f.nama_kud.color || '#064e3b',
@@ -211,7 +182,7 @@ function SertifikatContent({ data, config, width }) {
         <div style={{ textAlign: 'center', flexShrink: 0, marginTop: s(2) }}>
           {f.judul?.show !== false && (
             <div style={{
-              fontFamily: f.judul.fontFamily || (isClassic ? 'Playfair Display' : 'Inter'),
+              fontFamily: f.judul?.fontFamily || (isClassic ? 'Playfair Display' : 'Inter'),
               fontSize: s(f.judul.fontSize || 20),
               fontWeight: f.judul.fontWeight || 'bold',
               color: f.judul.color || '#92400e',
@@ -255,7 +226,7 @@ function SertifikatContent({ data, config, width }) {
           {f.nama_pekebun?.show !== false && (
             <div style={{
               textAlign: 'center',
-              fontFamily: f.nama_pekebun.fontFamily || (isClassic ? 'Playfair Display' : 'Inter'),
+              fontFamily: f.nama_pekebun?.fontFamily || (isClassic ? 'Playfair Display' : 'Inter'),
               fontSize: s(f.nama_pekebun.fontSize || 20),
               fontWeight: f.nama_pekebun.fontWeight || 'bold',
               color: f.nama_pekebun.color || '#0f172a',

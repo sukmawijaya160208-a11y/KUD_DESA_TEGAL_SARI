@@ -186,8 +186,8 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
   };
 
   const usedFonts = [...new Set([
-    ...Object.values(fFields).map((ff) => ff.fontFamily),
-    ...Object.values(bFields).map((bf) => bf.fontFamily),
+    ...Object.values(fFields).map((ff) => ff?.fontFamily),
+    ...Object.values(bFields).map((bf) => bf?.fontFamily),
   ].filter(Boolean))];
 
   const buildPrintHtml = () => {
