@@ -229,6 +229,20 @@ export const api = {
       update: (data) => request('/admin/setting-kud', { method: 'PUT', body: JSON.stringify(data) }),
       kartuAnggota: (pekebunId) => request(`/admin/pekebun/${pekebunId}/kartu-anggota`),
     },
+    landing: {
+      list: (section) => {
+        const qs = section ? '?section=' + encodeURIComponent(section) : '';
+        return request('/admin/landing-page' + qs);
+      },
+      create: (data) => request('/admin/landing-page', { method: 'POST', body: JSON.stringify(data) }),
+      update: (id, data) => request(`/admin/landing-page/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+      delete: (id) => request(`/admin/landing-page/${id}`, { method: 'DELETE' }),
+      uploadMedia: (file) => {
+        const fd = new FormData();
+        fd.append('file', file);
+        return request('/upload/landing-media', { method: 'POST', body: fd, headers: {} });
+      },
+    },
     backupRestore: {
       backup: () => request('/admin/backup'),
       restore: (data) => request('/admin/restore', { method: 'POST', body: JSON.stringify(data) }),

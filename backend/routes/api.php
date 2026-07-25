@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\Admin\ProgramKudController;
 use App\Http\Controllers\Api\Admin\SettingKudController;
+use App\Http\Controllers\Api\Admin\LandingPageController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BackupController;
 use App\Http\Controllers\Api\BlogController;
@@ -58,6 +59,7 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::post('/upload/dokumen-program', [UploadController::class, 'dokumenProgram']);
         Route::post('/upload/video-tentang-aplikasi', [UploadController::class, 'videoTentangAplikasi']);
         Route::post('/upload/chat', [UploadController::class, 'chatUpload']);
+        Route::post('/upload/landing-media', [UploadController::class, 'landingMedia']);
     });
 
     // Notifikasi
@@ -157,6 +159,12 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::put('/setting-kud', [SettingKudController::class, 'update']);
         // Kartu Anggota (admin view any pekebun's card)
         Route::get('/pekebun/{pekebun}/kartu-anggota', [PekebunController::class, 'kartuAnggotaAdmin']);
+
+        // Landing Page CMS
+        Route::get('/landing-page', [LandingPageController::class, 'index']);
+        Route::post('/landing-page', [LandingPageController::class, 'store']);
+        Route::put('/landing-page/{landingContent}', [LandingPageController::class, 'update']);
+        Route::delete('/landing-page/{landingContent}', [LandingPageController::class, 'destroy']);
 
         // === EXPORT ===
         Route::prefix('export')->group(function () {

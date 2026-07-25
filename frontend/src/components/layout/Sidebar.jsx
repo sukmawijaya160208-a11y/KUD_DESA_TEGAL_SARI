@@ -12,7 +12,7 @@ import {
   DocumentTextIcon, ArrowRightOnRectangleIcon, Bars3Icon,
   BellIcon, MapPinIcon, ShieldExclamationIcon, UserGroupIcon,
   BookOpenIcon, CurrencyDollarIcon, ArrowDownTrayIcon, ChatBubbleLeftRightIcon, InformationCircleIcon,
-  ChevronDoubleLeftIcon, ChevronDoubleRightIcon, NewspaperIcon
+  ChevronDoubleLeftIcon, ChevronDoubleRightIcon, NewspaperIcon, Squares2X2Icon
 } from '@heroicons/react/24/outline';
 
 const iconMap = {
@@ -26,6 +26,7 @@ const iconMap = {
   'Harga TBS': CurrencyDollarIcon,
   'Backup & Restore': ArrowDownTrayIcon,
   Blog: NewspaperIcon,
+  'Landing Page': Squares2X2Icon,
   Pesan: ChatBubbleLeftRightIcon,
   'Tentang Aplikasi': InformationCircleIcon,
 };
@@ -43,6 +44,7 @@ const menuTheme = {
   Pengaturan: 'from-gray-500 to-gray-600',
   'Backup & Restore': 'from-teal-500 to-teal-600',
   Blog: 'from-rose-500 to-rose-600',
+  'Landing Page': 'from-yellow-500 to-amber-600',
   Pesan: 'from-sky-500 to-blue-600',
   'Tentang Aplikasi': 'from-sky-500 to-sky-600',
   'Verifikasi Pekebun': 'from-blue-500 to-indigo-600',
@@ -66,6 +68,7 @@ const menuItems = {
     { label: 'Pengaturan', href: '/admin/pengaturan' },
     { label: 'Backup & Restore', href: '/admin/backup-restore' },
     { label: 'Blog', href: '/admin/blog' },
+    { label: 'Landing Page', href: '/admin/landing-page' },
     { label: 'Pesan', href: '/admin/pesan' },
     { label: 'Tentang Aplikasi', href: '/admin/tentang-aplikasi' },
   ],

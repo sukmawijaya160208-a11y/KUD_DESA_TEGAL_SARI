@@ -210,4 +210,17 @@ class UploadController extends Controller
             return response()->json(['message' => 'Upload gagal: '.$e->getMessage()], 500);
         }
     }
+
+    public function landingMedia(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:jpg,jpeg,png,gif,webp,svg|max:5120',
+        ]);
+        try {
+            $result = $this->storeFile($request->file('file'), 'landing-media');
+            return response()->json(['url' => $result['url']]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Upload gagal: '.$e->getMessage()], 500);
+        }
+    }
 }
