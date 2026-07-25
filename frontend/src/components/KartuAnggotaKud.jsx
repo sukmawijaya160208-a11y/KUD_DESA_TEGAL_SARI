@@ -1,8 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { PrinterIcon, ArrowDownTrayIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
+import { PrinterIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 
 function formatTgl(d) {
   if (!d) return '-';
@@ -38,7 +37,6 @@ function BarcodeSvg({ value }) {
 export default function KartuAnggotaKud({ data, width = 360, showActions = true, onClose }) {
   const printRef = useRef(null);
   const cardRef = useRef(null);
-  const [flipped, setFlipped] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
   const {
@@ -346,11 +344,6 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-foreground">Kartu Anggota KUD</h3>
             <div className="flex items-center gap-2">
-              <button onClick={() => setFlipped(!flipped)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 bg-white text-foreground rounded-xl text-sm font-semibold border border-border hover:bg-muted transition-all cursor-pointer">
-                <ArrowsRightLeftIcon className="w-4 h-4" />
-                {flipped ? 'Depan' : 'Belakang'}
-              </button>
               <button onClick={handleDownloadPng} disabled={downloading}
                 className="inline-flex items-center gap-1.5 px-3 py-2 bg-white text-foreground rounded-xl text-sm font-semibold border border-border hover:bg-muted transition-all cursor-pointer disabled:opacity-50">
                 <ArrowDownTrayIcon className="w-4 h-4" />
@@ -370,24 +363,24 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
           </div>
         )}
 
-        <div className="flex justify-center" ref={cardRef}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={flipped ? 'back' : 'front'}
-              initial={{ rotateY: flipped ? 90 : -90, opacity: 0 }}
-              animate={{ rotateY: 0, opacity: 1 }}
-              exit={{ rotateY: flipped ? -90 : 90, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              style={{ transformStyle: 'preserve-3d', width: '100%', maxWidth: cardW + 'px' }}
-            >
-              {flipped ? backCard() : frontCard()}
-            </motion.div>
-          </AnimatePresence>
+        <div className="flex flex-col items-center gap-4" ref={cardRef}>
+          <div className="w-full max-w-full" style={{ maxWidth: cardW + 'px' }}>
+            <div className="text-center mb-1">
+              <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 px-2 py-0.5 rounded-full">Sisi Belakang</span>
+            </div>
+            {backCard()}
+          </div>
+          <div className="w-full max-w-full" style={{ maxWidth: cardW + 'px' }}>
+            <div className="text-center mb-1">
+              <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 px-2 py-0.5 rounded-full">Sisi Depan</span>
+            </div>
+            {frontCard()}
+          </div>
         </div>
 
         <div className="text-center mt-3">
           <p className="text-[10px] text-gray-400">
-            {flipped ? 'Sisi Belakang' : 'Sisi Depan'} • Klik tombol flip untuk ganti sisi
+            Cetak: sisi depan &bull; sisi belakang (2 halaman)
           </p>
         </div>
       </div>

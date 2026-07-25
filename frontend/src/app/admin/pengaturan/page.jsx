@@ -1,20 +1,20 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
-import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 import Modal from '@/components/ui/Modal';
 import { motion } from 'framer-motion';
 import KartuAnggotaKud from '@/components/KartuAnggotaKud';
+import SignaturePad from '@/components/SignaturePad';
 import {
   Cog6ToothIcon, TrashIcon, PlusIcon, CreditCardIcon, BuildingOfficeIcon,
   UserIcon, ShieldCheckIcon, ServerIcon, KeyIcon,
   EyeIcon, EyeSlashIcon, ArrowRightOnRectangleIcon,
-  CheckCircleIcon, XMarkIcon, ArrowUpTrayIcon, ExclamationCircleIcon,
+  ArrowUpTrayIcon, ExclamationCircleIcon,
   DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 
@@ -64,7 +64,6 @@ export default function AdminPengaturanPage() {
   const [savingKud, setSavingKud] = useState(false);
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoKartuUploading, setLogoKartuUploading] = useState(false);
-  const [ttdUploading, setTtdUploading] = useState(false);
   const [stempelUploading, setStempelUploading] = useState(false);
   const [profilUploading, setProfilUploading] = useState(false);
   const [newKey, setNewKey] = useState('');
@@ -82,6 +81,11 @@ export default function AdminPengaturanPage() {
   // Maintenance
   const [maintenanceMode, setMaintenanceMode] = useState(false);
   const [savingMaintenance, setSavingMaintenance] = useState(false);
+
+  // Bulk save helpers
+  const [savingAdmin, setSavingAdmin] = useState(false);
+  const [savingVisiMisi, setSavingVisiMisi] = useState(false);
+  const [savingInfoKud, setSavingInfoKud] = useState(false);
 
   // WhatsApp Gateway
   const [waGateway, setWaGateway] = useState({ wa_url: '', wa_api_key: '', wa_aktif: false });
@@ -112,9 +116,11 @@ export default function AdminPengaturanPage() {
         wa_aktif: s?.wa_gateway_aktif === '1',
       });
       setDefaultKuota(s?.default_kuota || '');
-    }).catch((e) => toast.error(e.message))
+    })    .catch((e) => toast.error(e.message))
     .finally(() => setLoading(false));
   }, [toast]);
+
+
 
   const updateSetting = async (key, value) => {
     setSaving(key);
@@ -154,11 +160,47 @@ export default function AdminPengaturanPage() {
         setProfile((prev) => ({ ...prev, foto_profil: res.url }));
         toast.success('Foto profil berhasil diupload');
       } else {
-        const res = await api.upload('/auth/upload-profil', file);
+        await api.upload('/upload/profil', file);
+        const me = await api.auth.me();
+        setProfile(me);
         toast.success('Foto profil berhasil diupload');
       }
     } catch (err) { toast.error('Upload gagal: ' + err.message); }
     setProfilUploading(false);
+  };
+
+  const handleSaveProfile = async () => {
+    setSavingAdmin(true);
+    try {
+      await api.admin.pengaturan.update({ key: 'nama_admin', value: settings.nama_admin });
+      await api.admin.pengaturan.update({ key: 'email_admin', value: settings.email_admin });
+      await api.admin.pengaturan.update({ key: 'wa_admin', value: settings.wa_admin });
+      await api.admin.pengaturan.update({ key: 'jabatan_admin', value: settings.jabatan_admin });
+      setSettings({ ...settings });
+      toast.success('Profil admin berhasil disimpan');
+    } catch (err) { toast.error(err.message); }
+    setSavingAdmin(false);
+  };
+
+  const handleSaveVisiMisi = async () => {
+    setSavingVisiMisi(true);
+    try {
+      await api.admin.pengaturan.update({ key: 'visi_kud', value: settings.visi_kud });
+      await api.admin.pengaturan.update({ key: 'misi_kud', value: settings.misi_kud });
+      toast.success('Visi & Misi berhasil disimpan');
+    } catch (err) { toast.error(err.message); }
+    setSavingVisiMisi(false);
+  };
+
+  const handleSaveInfoKud = async () => {
+    setSavingInfoKud(true);
+    try {
+      for (const f of predefinedFields) {
+        await api.admin.pengaturan.update({ key: f.key, value: settings[f.key] || '' });
+      }
+      toast.success('Informasi KUD berhasil disimpan');
+    } catch (err) { toast.error(err.message); }
+    setSavingInfoKud(false);
   };
 
   const handleKudChange = (field, value) => {
@@ -184,17 +226,6 @@ export default function AdminPengaturanPage() {
       toast.success('Logo kartu berhasil diupload');
     } catch (err) { toast.error('Upload gagal: ' + err.message); }
     setLogoKartuUploading(false);
-  };
-
-  const handleTtdUpload = async (e) => {
-    const file = e.target.files[0]; if (!file) return;
-    setTtdUploading(true);
-    try {
-      const res = await api.upload('/upload/kartu-ttd', file);
-      handleKudChange('kartu_ttd', res.url);
-      toast.success('Tanda tangan berhasil diupload');
-    } catch (err) { toast.error('Upload gagal: ' + err.message); }
-    setTtdUploading(false);
   };
 
   const handleStempelUpload = async (e) => {
@@ -368,20 +399,15 @@ export default function AdminPengaturanPage() {
                   onChange={(e) => setSettings({ ...settings, jabatan_admin: e.target.value })} placeholder="Administrator KUD" />
               </div>
               <div className="flex justify-end pt-2">
-                <Button size="sm" loading={saving === 'nama_admin'} onClick={() => {
-                  updateSetting('nama_admin', settings.nama_admin);
-                  updateSetting('email_admin', settings.email_admin);
-                  updateSetting('wa_admin', settings.wa_admin);
-                  updateSetting('jabatan_admin', settings.jabatan_admin);
-                }}>Simpan Profil</Button>
+                <Button size="sm" loading={savingAdmin} onClick={handleSaveProfile}>Simpan Profil</Button>
               </div>
             </FormSection>
           </div>
           <div className="space-y-5">
             <FormSection title="Foto Profil" icon={ArrowUpTrayIcon} description="Foto yang akan muncul di dashboard">
               <div className="flex flex-col items-center gap-4">
-                {settings.foto_admin || profile?.foto_profil ? (
-                  <img src={settings.foto_admin || profile?.foto_profil} alt="Foto Profil"
+                {profile?.foto_profil ? (
+                  <img src={profile.foto_profil} alt="Foto Profil"
                     className="w-28 h-28 rounded-2xl object-cover border-4 border-primary/10 shadow-md" />
                 ) : (
                   <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border-2 border-dashed border-primary/20">
@@ -413,11 +439,7 @@ export default function AdminPengaturanPage() {
                 ))}
               </div>
               <div className="flex justify-end pt-2">
-                <Button size="sm" loading={saving === 'simpan_info'} onClick={() => {
-                  setSaving('simpan_info');
-                  Promise.all(predefinedFields.map((f) => updateSetting(f.key, settings[f.key] || '')))
-                    .finally(() => setSaving(null));
-                }}>Simpan Informasi KUD</Button>
+                <Button size="sm" loading={savingInfoKud} onClick={handleSaveInfoKud}>Simpan Informasi KUD</Button>
               </div>
             </FormSection>
 
@@ -428,10 +450,7 @@ export default function AdminPengaturanPage() {
               <Textarea label="Misi" value={settings.misi_kud || ''}
                 onChange={(e) => setSettings({ ...settings, misi_kud: e.target.value })} rows={4} />
               <div className="flex justify-end pt-2">
-                <Button size="sm" loading={saving === 'visi_misi'} onClick={() => {
-                  updateSetting('visi_kud', settings.visi_kud);
-                  updateSetting('misi_kud', settings.misi_kud);
-                }}>Simpan Visi Misi</Button>
+                <Button size="sm" loading={savingVisiMisi} onClick={handleSaveVisiMisi}>Simpan Visi Misi</Button>
               </div>
             </FormSection>
           </div>
@@ -555,17 +574,15 @@ export default function AdminPengaturanPage() {
                     </p>
                   </div>
                 </div>
-                <button type="button" onClick={handleToggle2FA}
-                  className={`relative w-12 h-6 rounded-full transition-all cursor-pointer ${twoFactorEnabled ? 'bg-purple-600' : 'bg-gray-300'}`}>
+                <button type="button" onClick={handleToggle2FA} disabled={saving2FA}
+                  className={`relative w-12 h-6 rounded-full transition-all cursor-pointer ${twoFactorEnabled ? 'bg-purple-600' : 'bg-gray-300'} ${saving2FA ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${twoFactorEnabled ? 'translate-x-6' : 'translate-x-0'}`} />
                 </button>
               </div>
-              {twoFactorEnabled && (
-                <p className="text-xs text-gray-400 flex items-start gap-1.5 mt-2">
-                  <ExclamationCircleIcon className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
-                  <span>Fitur 2FA memerlukan konfigurasi email atau authenticator app. Hubungi pengembang untuk setup lengkap.</span>
-                </p>
-              )}
+              <div className={`p-3 rounded-xl text-xs flex items-start gap-1.5 ${twoFactorEnabled ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-slate-50 text-slate-500 border border-slate-200'}`}>
+                <ExclamationCircleIcon className="w-4 h-4 shrink-0 mt-0.5" />
+                <span>{twoFactorEnabled ? '2FA hanya menyimpan preferensi. Implementasi autentikasi dua faktor membutuhkan integrasi email/authenticator di backend.' : '2FA saat ini nonaktif. Aktifkan hanya jika backend sudah mendukung authenticator app atau email OTP.'}</span>
+              </div>
             </FormSection>
 
             <FormSection title="Sesi Perangkat" icon={ArrowRightOnRectangleIcon} description="Kelola sesi login di semua perangkat">
@@ -605,19 +622,17 @@ export default function AdminPengaturanPage() {
                     </p>
                   </div>
                 </div>
-                <button type="button" onClick={handleToggleMaintenance}
-                  className={`relative w-12 h-6 rounded-full transition-all cursor-pointer ${maintenanceMode ? 'bg-red-500' : 'bg-gray-300'}`}>
+                <button type="button" onClick={handleToggleMaintenance} disabled={savingMaintenance}
+                  className={`relative w-12 h-6 rounded-full transition-all cursor-pointer ${maintenanceMode ? 'bg-red-500' : 'bg-gray-300'} ${savingMaintenance ? 'opacity-50 cursor-not-allowed' : ''}`}>
                   <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${maintenanceMode ? 'translate-x-6' : 'translate-x-0'}`} />
                 </button>
               </div>
-              {maintenanceMode && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
-                  <p className="text-xs text-red-700 flex items-center gap-1.5">
-                    <ExclamationCircleIcon className="w-4 h-4 shrink-0" />
-                    Mode maintenance aktif — semua halaman publik akan menampilkan halaman maintenance. Halaman admin tetap dapat diakses.
-                  </p>
-                </div>
-              )}
+              <div className={`p-3 rounded-xl text-xs flex items-start gap-1.5 ${maintenanceMode ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-slate-50 border border-slate-200 text-slate-500'}`}>
+                <ExclamationCircleIcon className="w-4 h-4 shrink-0 mt-0.5" />
+                <span>{maintenanceMode
+                  ? 'Mode maintenance aktif — menyimpan preferensi. Untuk benar-benar memblokir akses publik, middleware backend perlu mengecek setting ini.'
+                  : 'Mode maintenance nonaktif. Aktifkan untuk menyiapkan halaman maintenance sebelum mengaktifkan middleware backend.'}</span>
+              </div>
             </FormSection>
 
             <FormSection title="Kuota Default Program" icon={Cog6ToothIcon} description="Nilai kuota default saat membuat program baru">
@@ -749,15 +764,12 @@ export default function AdminPengaturanPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="p-4 bg-white rounded-xl border border-border">
                   <label className="block text-sm font-medium text-foreground/80 mb-2">Tanda Tangan Digital</label>
-                  {kud.kartu_ttd ? (
-                    <img src={kud.kartu_ttd} alt="TTD" className="h-16 object-contain mb-3 rounded-lg border border-border p-2 bg-white" />
-                  ) : (
-                    <div className="h-16 flex items-center justify-center bg-muted rounded-lg border border-dashed border-border mb-3 text-xs text-gray-400">Belum upload TTD</div>
-                  )}
-                  <label className={`px-4 py-2 ${ttdUploading ? 'bg-gray-400' : 'bg-primary'} text-white rounded-xl text-xs font-medium cursor-pointer hover:bg-primary/90 transition-colors inline-block`}>
-                    {ttdUploading ? 'Uploading...' : 'Upload TTD'}
-                    <input type="file" className="hidden" accept="image/*" onChange={handleTtdUpload} disabled={ttdUploading} />
-                  </label>
+                  <p className="text-xs text-gray-400 mb-2">Gambar tanda tangan langsung di canvas di bawah</p>
+                  <SignaturePad
+                    value={kud.kartu_ttd || ''}
+                    onChange={(dataUrl) => handleKudChange('kartu_ttd', dataUrl)}
+                    height={130}
+                  />
                 </div>
                 <div className="p-4 bg-white rounded-xl border border-border">
                   <label className="block text-sm font-medium text-foreground/80 mb-2">Stempel KUD</label>

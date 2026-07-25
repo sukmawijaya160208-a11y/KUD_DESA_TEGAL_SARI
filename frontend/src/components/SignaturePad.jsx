@@ -1,25 +1,14 @@
 'use client';
 
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { ArrowPathIcon, CheckIcon } from '@heroicons/react/24/outline';
 
-function getCanvasPoint(canvas, e) {
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
-  const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
-  const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
-  return {
-    x: (clientX - rect.left) * scaleX,
-    y: (clientY - rect.top) * scaleY,
-  };
-}
-
-export default function SignaturePad({ value, onChange, height = 180 }) {
+export default function SignaturePad({ value, onChange, height = 150 }) {
   const canvasRef = useRef(null);
-  const isDrawing = useRef(false);
-  const hasDrawn = useRef(false);
+  const drawingRef = useRef(false);
+  const [drawn, setDrawn] = useState(false);
 
-  const setupCanvas = useCallback(() => {
+  const renderImage = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -27,112 +16,114 @@ export default function SignaturePad({ value, onChange, height = 180 }) {
     ctx.lineWidth = 2.5;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-  }, []);
-
-  useEffect(() => {
-    setupCanvas();
-  }, [setupCanvas]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas || !value) return;
-    if (hasDrawn.current) return;
-    const img = new Image();
-    img.onload = () => {
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      hasDrawn.current = true;
-    };
-    img.src = value;
+    if (value) {
+      const img = new Image();
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+      img.src = value;
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
   }, [value]);
 
-  const handlePointerDown = (e) => {
+  useEffect(() => {
+    renderImage();
+  }, [renderImage]);
+
+  const getPos = (e) => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const ctx = canvas.getContext('2d');
-    const point = getCanvasPoint(canvas, e);
-    ctx.beginPath();
-    ctx.moveTo(point.x, point.y);
-    isDrawing.current = true;
-    hasDrawn.current = true;
-    canvas.setPointerCapture(e.pointerId);
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * (canvas.width / rect.width),
+      y: (clientY - rect.top) * (canvas.height / rect.height),
+    };
   };
 
-  const handlePointerMove = (e) => {
-    if (!isDrawing.current) return;
+  const startDraw = (e) => {
+    e.preventDefault();
     const canvas = canvasRef.current;
-    if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    const point = getCanvasPoint(canvas, e);
-    ctx.lineTo(point.x, point.y);
+    const pos = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+    drawingRef.current = true;
+    setDrawn(true);
+  };
+
+  const draw = (e) => {
+    if (!drawingRef.current) return;
+    e.preventDefault();
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const pos = getPos(e);
+    ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
   };
 
-  const handlePointerUp = (e) => {
-    if (!isDrawing.current) return;
-    isDrawing.current = false;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    ctx.closePath();
-    if (onChange) {
-      onChange(canvas.toDataURL('image/png'));
-    }
+  const endDraw = () => {
+    drawingRef.current = false;
   };
 
-  const clearCanvas = () => {
+  const handleClear = () => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    hasDrawn.current = false;
-    if (onChange) onChange(null);
+    setDrawn(false);
+    onChange('');
+  };
+
+  const handleSave = () => {
+    const canvas = canvasRef.current;
+    const dataUrl = canvas.toDataURL('image/png');
+    onChange(dataUrl);
   };
 
   return (
     <div className="space-y-3">
-      <div
-        className="border-2 border-dashed border-gray-300 rounded-xl overflow-hidden bg-white relative"
-        style={{ touchAction: 'none' }}
+      <div className="relative bg-white rounded-xl border-2 border-dashed border-gray-300 overflow-hidden"
+        style={{ height: height + 'px' }}
+        onTouchStart={startDraw}
+        onTouchMove={draw}
+        onTouchEnd={endDraw}
       >
-        {!value && !hasDrawn.current && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-            <span className="text-gray-300 text-sm font-medium">Tanda tangan di sini</span>
-          </div>
-        )}
         <canvas
           ref={canvasRef}
           width={600}
-          height={height}
-          style={{
-            width: '100%',
-            height: `${height}px`,
-            touchAction: 'none',
-            userSelect: 'none',
-            WebkitUserSelect: 'none',
-            display: 'block',
-            cursor: 'crosshair',
-          }}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerLeave={handlePointerUp}
+          height={height * 2}
+          className="w-full h-full cursor-crosshair touch-none"
+          onMouseDown={startDraw}
+          onMouseMove={draw}
+          onMouseUp={endDraw}
+          onMouseLeave={endDraw}
         />
+        {!drawn && !value && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span className="text-gray-400 text-sm font-medium">Tanda tangan di sini</span>
+          </div>
+        )}
       </div>
       <div className="flex items-center gap-2">
         <button
-          type="button"
-          onClick={clearCanvas}
-          className="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors cursor-pointer"
+          onClick={handleClear}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors cursor-pointer"
         >
-          Ulangi Tanda Tangan
+          <ArrowPathIcon className="w-3.5 h-3.5" />
+          Hapus
         </button>
-        {!value && !hasDrawn.current && (
-          <p className="text-xs text-gray-400">Gambar tanda tangan Anda di atas</p>
-        )}
-        {(value || hasDrawn.current) && (
-          <p className="text-xs text-green-600 font-medium">✓ Tanda tangan sudah diisi</p>
+        <button
+          onClick={handleSave}
+          disabled={!drawn}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-emerald-600 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <CheckIcon className="w-3.5 h-3.5" />
+          Gunakan
+        </button>
+        {value && (
+          <span className="text-xs text-emerald-600 font-medium ml-auto">Tersimpan</span>
         )}
       </div>
     </div>
