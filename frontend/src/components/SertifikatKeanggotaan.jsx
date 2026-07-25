@@ -106,7 +106,7 @@ function SertifikatContent({ data, config, width }) {
       )}
 
       {/* Corner ornaments */}
-      {isClassic && f.border_deco?.show !== false && (
+      {isClassic && f.border_deco && f.border_deco.show !== false && (
         <>
           <div style={{ position: 'absolute', top: '18px', left: '18px', width: '24px', height: '24px', borderTop: '3px solid #b8860b', borderLeft: '3px solid #b8860b', zIndex: 11 }} />
           <div style={{ position: 'absolute', top: '18px', right: '18px', width: '24px', height: '24px', borderTop: '3px solid #b8860b', borderRight: '3px solid #b8860b', zIndex: 11 }} />
@@ -116,7 +116,7 @@ function SertifikatContent({ data, config, width }) {
       )}
 
       {/* Watermark */}
-      {f.watermark?.show !== false && kud?.logo && (
+      {f.watermark && f.watermark.show !== false && kud?.logo && (
         <div style={{
           position: 'absolute', inset: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -137,12 +137,12 @@ function SertifikatContent({ data, config, width }) {
       }}>
         {/* ===== HEADER ===== */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: s(10), flexShrink: 0 }}>
-          {f.logo_kud?.show !== false && kud?.logo && (
+          {f.logo_kud && f.logo_kud.show !== false && kud?.logo && (
             <img src={kud.logo} alt="Logo"
               style={{ width: s(f.logo_kud.width || 70), height: s(f.logo_kud.width || 70), objectFit: 'contain', flexShrink: 0 }} />
           )}
           <div style={{ textAlign: 'center' }}>
-            {f.nama_kud?.show !== false && (
+            {f.nama_kud && f.nama_kud.show !== false && (
               <div style={{
                 fontFamily: f.nama_kud?.fontFamily || 'Inter',
                 fontSize: s(f.nama_kud.fontSize || 16),
@@ -155,7 +155,7 @@ function SertifikatContent({ data, config, width }) {
                 {kud.nama_kud || 'KUD Sari Subur'}
               </div>
             )}
-            {f.badan_hukum?.show !== false && (
+            {f.badan_hukum && f.badan_hukum.show !== false && (
               <div style={{
                 fontSize: s(f.badan_hukum.fontSize || 8),
                 color: f.badan_hukum.color || '#92400e',
@@ -169,7 +169,7 @@ function SertifikatContent({ data, config, width }) {
         </div>
 
         {/* Divider */}
-        {f.garis_header?.show !== false && (
+        {f.garis_header && f.garis_header.show !== false && (
           <div style={{
             height: '2px',
             background: `linear-gradient(to right, transparent, ${isClassic ? '#b8860b' : '#14b8a6'}, transparent)`,
@@ -180,7 +180,7 @@ function SertifikatContent({ data, config, width }) {
 
         {/* ===== JUDUL ===== */}
         <div style={{ textAlign: 'center', flexShrink: 0, marginTop: s(2) }}>
-          {f.judul?.show !== false && (
+          {f.judul && f.judul.show !== false && (
             <div style={{
               fontFamily: f.judul?.fontFamily || (isClassic ? 'Playfair Display' : 'Inter'),
               fontSize: s(f.judul.fontSize || 20),
@@ -193,7 +193,7 @@ function SertifikatContent({ data, config, width }) {
               SERTIFIKAT KEANGGOTAAN
             </div>
           )}
-          {f.no_registrasi?.show !== false && (
+          {f.no_registrasi && f.no_registrasi.show !== false && (
             <div style={{
               fontSize: s(f.no_registrasi.fontSize || 8),
               color: f.no_registrasi.color || '#64748b',
@@ -208,7 +208,7 @@ function SertifikatContent({ data, config, width }) {
         {/* ===== BODY ===== */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: s(3), padding: `0 ${s(10)}px` }}>
           {/* Pembukaan */}
-          {f.pembukaan?.show !== false && (
+          {f.pembukaan && f.pembukaan.show !== false && (
             <div style={{
               textAlign: 'center',
               fontSize: s(f.pembukaan.fontSize || 10),
@@ -223,7 +223,7 @@ function SertifikatContent({ data, config, width }) {
           )}
 
           {/* Nama */}
-          {f.nama_pekebun?.show !== false && (
+          {f.nama_pekebun && f.nama_pekebun.show !== false && (
             <div style={{
               textAlign: 'center',
               fontFamily: f.nama_pekebun?.fontFamily || (isClassic ? 'Playfair Display' : 'Inter'),
@@ -243,7 +243,7 @@ function SertifikatContent({ data, config, width }) {
           )}
 
           {/* Grid data */}
-          {f.grid_data?.show !== false && (
+          {f.grid_data && f.grid_data.show !== false && (
             <div style={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
@@ -261,7 +261,7 @@ function SertifikatContent({ data, config, width }) {
           )}
 
           {/* Legal text */}
-          {f.legal_text?.show !== false && (
+          {f.legal_text && f.legal_text.show !== false && (
             <div style={{
               textAlign: 'center',
               fontSize: s(f.legal_text.fontSize || 9),
@@ -287,7 +287,7 @@ function SertifikatContent({ data, config, width }) {
         }}>
           {/* Left: Date */}
           <div>
-            {f.tanggal_terbit?.show !== false && (
+            {f.tanggal_terbit && f.tanggal_terbit.show !== false && (
               <div style={{
                 fontSize: s(f.tanggal_terbit.fontSize || 9),
                 color: f.tanggal_terbit.color || '#64748b',
@@ -318,7 +318,7 @@ function SertifikatContent({ data, config, width }) {
               justifyContent: 'center',
               marginBottom: s(2),
             }}>
-              {f.stempel?.show !== false && kud?.kartu_stempel && (
+              {f.stempel && f.stempel.show !== false && kud?.kartu_stempel && (
                 <img
                   src={kud.kartu_stempel}
                   alt="Stempel"
@@ -336,7 +336,7 @@ function SertifikatContent({ data, config, width }) {
                   }}
                 />
               )}
-              {f.ttd_ketua?.show !== false && kud?.kartu_ttd && (
+              {f.ttd_ketua && f.ttd_ketua.show !== false && kud?.kartu_ttd && (
                 <img
                   src={kud.kartu_ttd}
                   alt="TTD"
@@ -352,7 +352,7 @@ function SertifikatContent({ data, config, width }) {
               )}
             </div>
 
-            {f.nama_ketua?.show !== false && (
+            {f.nama_ketua && f.nama_ketua.show !== false && (
               <div style={{
                 fontSize: s(f.nama_ketua.fontSize || 11),
                 fontWeight: f.nama_ketua.fontWeight || 'bold',
@@ -363,7 +363,7 @@ function SertifikatContent({ data, config, width }) {
                 {kud.kartu_ketua_nama || kud.nama_ketua || 'NAMA KETUA'}
               </div>
             )}
-            {f.jabatan_ketua?.show !== false && (
+            {f.jabatan_ketua && f.jabatan_ketua.show !== false && (
               <div style={{
                 fontSize: s(f.jabatan_ketua.fontSize || 9),
                 color: f.jabatan_ketua.color || '#64748b',
