@@ -21,7 +21,8 @@ import {
   ChevronLeftIcon, ChevronRightIcon, MagnifyingGlassIcon,
   DocumentTextIcon, GlobeAltIcon,
   BellAlertIcon, FolderIcon,
-  BuildingOfficeIcon
+  BuildingOfficeIcon, PhotoIcon, VideoCameraIcon,
+  SparklesIcon, ClipboardDocumentListIcon, BuildingOffice2Icon
 } from '@heroicons/react/24/outline';
 
 const containerVariants = {
@@ -59,24 +60,6 @@ function LogoDisplay({ logoUrl, className }) {
   return <PalmSvg />;
 }
 
-const YT_VIDEOS = [
-  { id: 'o7k3SZ0sIVQ', title: 'Profil KUD Desa Sari Subur' },
-  { id: 'GtjnnCBx5bY', title: 'Panen Raya Kelapa Sawit' },
-  { id: 'Q2WCqyTHYHk', title: 'Program Kemitraan Petani' },
-  { id: 'XS-ZFdyJNwg', title: 'Teknologi Pengolahan TBS' },
-  { id: 'JOAETvOj5OY', title: 'Wawancara Ketua KUD' },
-  { id: 'n3pzigELRcg', title: 'Kegiatan Sosial KUD' },
-];
-
-const TESTIMONI = [
-  { nama: 'Suparman', asal: 'Desa Tegal Sari', rating: 5, quote: 'Sejak bergabung dengan KUD, hasil kebun saya meningkat 40%. Pelayanan ramah dan harga TBS transparan.', warna: 'from-emerald-400 to-green-500' },
-  { nama: 'Rohmatiah', asal: 'Desa Sumber Makmur', rating: 5, quote: 'KUD benar-benar membantu petani kecil. Program kemitraannya sangat menguntungkan dan bibit berkualitas.', warna: 'from-blue-400 to-indigo-500' },
-  { nama: 'Karsono', asal: 'Desa Tegal Sari', rating: 4, quote: 'Saya sudah 10 tahun menjadi anggota. Alhamdulillah, KUD selalu tepat waktu dalam pembayaran TBS.', warna: 'from-amber-400 to-orange-500' },
-  { nama: 'Sri Mulyani', asal: 'Desa Marga Asih', rating: 5, quote: 'Program simpan pinjam KUD sangat membantu modal usaha tani saya. Bunganya ringan dan prosesnya cepat.', warna: 'from-pink-400 to-rose-500' },
-  { nama: 'H. Ahmad', asal: 'Desa Tegal Sari', rating: 5, quote: 'KUD membuktikan bahwa koperasi bisa maju. Pengurusnya amanah dan transparan. Saya percaya penuh.', warna: 'from-purple-400 to-violet-500' },
-  { nama: 'Wahyuni', asal: 'Desa Sumber Rejeki', rating: 4, quote: 'Pelatihan budidaya sawit dari KUD sangat bermanfaat. Sekarang saya bisa panen 2x lebih banyak.', warna: 'from-teal-400 to-cyan-500' },
-];
-
 const JENIS_ICON = {
   PSR: AcademicCapIcon,
   Intensifikasi: ChartBarIcon,
@@ -97,36 +80,18 @@ const JENIS_COLORS = {
 
 const DEFAULT_COLOR = { bg: 'bg-gray-50', icon: 'text-gray-600', card: 'gray' };
 
-const FAQ_DATA = [
-  { q: 'Apa itu KUD Desa Sari Subur?', a: 'KUD (Koperasi Unit Desa) Sari Subur adalah koperasi petani kelapa sawit di Desa Tegal Sari yang bertujuan meningkatkan kesejahteraan petani melalui berbagai program kemitraan, simpan pinjam, dan pelatihan.' },
-  { q: 'Bagaimana cara menjadi anggota?', a: 'Calon anggota dapat mendaftar ke kantor KUD dengan membawa KTP, KK, dan surat keterangan dari kepala desa. Setelah verifikasi data, calon anggota akan mengikuti masa orientasi selama 1 bulan.' },
-  { q: 'Berapa harga TBS saat ini?', a: 'Harga TBS (Tandan Buah Segar) diperbarui setiap minggu berdasarkan harga pasar dan kesepakatan Rapat Anggota. Cek halaman utama atau hubungi kantor KUD untuk harga terbaru.' },
-  { q: 'Apa saja syarat pinjaman?', a: 'Syarat pinjaman: anggota aktif minimal 6 bulan, memiliki agunan ringan, mengisi formulir permohonan, dan mendapatkan persetujuan dari 2 orang penjamin yang juga anggota KUD.' },
-  { q: 'Bagaimana cara menghubungi KUD?', a: 'Kantor KUD buka Senin-Jumat pukul 08.00-16.00 WITA. Alamat: Jl. Tegal Sari No. 123, Kec. Tegal Sari. Telepon/WA: 085169883337.' },
-  { q: 'Apakah ada program untuk pemuda tani?', a: 'Ya, KUD memiliki program Petani Muda Berdikari yang memberikan pelatihan, pendampingan, dan akses permodalan khusus untuk petani milenial usia 18-35 tahun.' },
-];
-
 const BLOG_CATEGORIES = ['Semua', 'Pelatihan', 'Sosial', 'Pendidikan'];
 
-const LAYANAN = [
-  { icon: PhoneIcon, title: 'Call Center', desc: 'Hubungi kami setiap hari kerja pukul 08.00-16.00 WITA', contact: '085169883337' },
-  { icon: MapPinIcon, title: 'Kantor Pusat', desc: 'Jalan Tegal Sari No. 123, Kecamatan Tegal Sari', contact: 'Lihat di Google Maps' },
-  { icon: GlobeAltIcon, title: 'Layanan Online', desc: 'Pantau harga, jadwal, dan informasi terbaru lewat website', contact: 'kud-sari-subur.my.id' },
-];
-
-const MITRA = [
-  { name: 'Dinas Perkebunan', icon: BuildingOfficeIcon },
-  { name: 'PTPN VII', icon: BuildingOfficeIcon },
-  { name: 'Kementerian Pertanian RI', icon: BuildingOfficeIcon },
-  { name: 'Dinas Koperasi dan UKM', icon: BuildingOfficeIcon },
-  { name: 'PT. Inti Guna Nabati', icon: BuildingOfficeIcon },
-  { name: 'BPJS Ketenagakerjaan', icon: ShieldCheckIcon },
-  { name: 'Politeknik Jambi', icon: AcademicCapIcon },
-  { name: 'Universitas Pelalawan Riau', icon: AcademicCapIcon },
-  { name: 'Universitas Pasir Pangaraian Riau', icon: AcademicCapIcon },
-  { name: 'Politeknik Samarinda Kalimantan Timur', icon: AcademicCapIcon },
-  { name: 'Universitas Venezuela', icon: GlobeAltIcon },
-];
+const ICON_MAP = {
+  DocumentTextIcon, FolderIcon, ShieldCheckIcon, HandRaisedIcon,
+  UserGroupIcon, CheckBadgeIcon, CurrencyDollarIcon, AcademicCapIcon,
+  ChartBarIcon, GlobeAltIcon, StarIcon, PhoneIcon, MapPinIcon,
+  ChatBubbleLeftRightIcon, Squares2X2Icon, CalendarDaysIcon,
+  BellAlertIcon, BuildingOfficeIcon, ArrowRightIcon, HeartIcon,
+  PlayIcon, NewspaperIcon, QuestionMarkCircleIcon, PhotoIcon,
+  VideoCameraIcon, SparklesIcon, ClipboardDocumentListIcon,
+  BuildingOffice2Icon,
+};
 
 
 
@@ -303,6 +268,16 @@ export default function Home() {
   const [showBackTop, setShowBackTop] = useState(false);
   const [programs, setPrograms] = useState([]);
   const [loadingPrograms, setLoadingPrograms] = useState(true);
+  const [videos, setVideos] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [faqs, setFaqs] = useState([]);
+  const [layananData, setLayananData] = useState([]);
+  const [mitraData, setMitraData] = useState([]);
+  const [langkah, setLangkah] = useState([]);
+  const [sertifikasi, setSertifikasi] = useState([]);
+  const [keuntungan, setKeuntungan] = useState([]);
+  const [fiturData, setFiturData] = useState([]);
+  const [angkaData, setAngkaData] = useState([]);
   const heroRef = useRef(null);
   const blogTimer = useRef(null);
 
@@ -325,6 +300,16 @@ export default function Home() {
       setBlogPosts([]);
     }).finally(() => setLoadingBlogs(false));
   }, []);
+  useEffect(() => { api.landing.list('langkah').then(r => setLangkah(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.landing.list('sertifikasi').then(r => setSertifikasi(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.landing.list('video').then(r => setVideos(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.landing.list('keuntungan').then(r => setKeuntungan(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.landing.list('fitur').then(r => setFiturData(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.landing.list('angka').then(r => setAngkaData(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.landing.list('mitra').then(r => setMitraData(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.landing.list('testimoni').then(r => setTestimonials(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.landing.list('layanan').then(r => setLayananData(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.landing.list('faq').then(r => setFaqs(r.data || [])).catch(() => {}); }, []);
 
   const filteredBlogs = blogCategory === 'Semua' ? blogPosts : blogPosts.filter((b) => b.category === blogCategory);
 
@@ -525,22 +510,15 @@ export default function Home() {
           <div className="relative">
             <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/40 via-primary/20 to-transparent hidden md:block" />
             <div className="space-y-8 md:space-y-0">
-              {[
-                { icon: DocumentTextIcon, step: 1, title: 'Isi Formulir', desc: 'Ambil dan isi formulir pendaftaran di kantor KUD atau unduh dari website.' },
-                { icon: FolderIcon, step: 2, title: 'Siapkan Berkas', desc: 'Lengkapi persyaratan: KTP, KK, surat keterangan desa, dan pas foto 3x4.' },
-                { icon: ShieldCheckIcon, step: 3, title: 'Verifikasi Data', desc: 'Petugas KUD akan memverifikasi kelengkapan dan keabsahan data Anda.' },
-                { icon: HandRaisedIcon, step: 4, title: 'Ikuti Orientasi', desc: 'Ikuti masa orientasi anggota selama 1 bulan untuk memahami AD/ART KUD.' },
-                { icon: UserGroupIcon, step: 5, title: 'Bayar Simpanan', desc: 'Bayar simpanan pokok dan simpanan wajib sesuai ketentuan koperasi.' },
-                { icon: CheckBadgeIcon, step: 6, title: 'Jadi Anggota', desc: 'Resmi menjadi anggota aktif KUD dan nikmati seluruh layanan dan program.' },
-              ].map((item, idx) => {
-                const Icn = item.icon;
+              {langkah.map((item, idx) => {
+                const Icn = ICON_MAP[item.meta_data?.icon] || DocumentTextIcon;
                 const isLeft = idx % 2 === 0;
                 return (
-                  <motion.div key={item.step} initial={{ opacity: 0, x: isLeft ? -30 : 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.15 }} className={`relative flex items-start gap-6 md:gap-0 md:flex ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'} py-4 md:py-0 md:h-40`}>
+                  <motion.div key={item.id || item.order || idx} initial={{ opacity: 0, x: isLeft ? -30 : 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.15 }} className={`relative flex items-start gap-6 md:gap-0 md:flex ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'} py-4 md:py-0 md:h-40`}>
                     <div className="hidden md:flex md:w-1/2 items-center">
                       <div className={`${isLeft ? 'md:pr-12 md:text-right' : 'md:pl-12'} w-full`}>
                         <h4 className="font-bold font-heading text-foreground text-lg">{item.title}</h4>
-                        <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
+                        <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
                       </div>
                     </div>
                     <div className="flex-shrink-0 relative z-10 md:absolute md:left-1/2 md:-translate-x-1/2">
@@ -550,7 +528,7 @@ export default function Home() {
                     </div>
                     <div className="md:hidden flex-1 min-w-0">
                       <h4 className="font-bold font-heading text-foreground text-sm sm:text-lg">{item.title}</h4>
-                      <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">{item.desc}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">{item.description}</p>
                     </div>
                   </motion.div>
                 );
@@ -571,19 +549,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Pengakuan" title="Sertifikasi & Penghargaan" subtitle="Berbagai sertifikasi dan penghargaan yang telah diraih KUD Desa Sari Subur." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { icon: ShieldCheckIcon, title: 'ISO 9001:2015', desc: 'Sistem Manajemen Mutu' },
-              { icon: GlobeAltIcon, title: 'ISPO', desc: 'Indonesian Sustainable Palm Oil' },
-              { icon: StarIcon, title: 'Koperasi Teladan', desc: 'Tingkat Provinsi 2023' },
-              { icon: GlobeAltIcon, title: 'SNI 8900', desc: 'Sistem Koperasi Indonesia' },
-            ].map((item, idx) => {
-              const Icn = item.icon;
+            {sertifikasi.map((item, idx) => {
+              const Icn = ICON_MAP[item.meta_data?.icon] || ShieldCheckIcon;
               return (
-                <motion.div key={idx} variants={scaleIn} whileHover={{ y: -4, scale: 1.02 }} className="group relative p-4 sm:p-6 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all text-center">
+                <motion.div key={item.id || idx} variants={scaleIn} whileHover={{ y: -4, scale: 1.02 }} className="group relative p-4 sm:p-6 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all text-center">
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent pointer-events-none" />
                   <div className="relative z-10 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-md shadow-emerald-500/20"><Icn className="w-5 h-5 sm:w-7 sm:h-7 text-white" /></div>
                   <h4 className="relative z-10 font-bold font-heading text-foreground">{item.title}</h4>
-                  <p className="relative z-10 text-xs text-muted-foreground mt-1">{item.desc}</p>
+                  <p className="relative z-10 text-xs text-muted-foreground mt-1">{item.description}</p>
                   <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-emerald-400/0 via-emerald-400/50 to-emerald-400/0 scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
                 </motion.div>
               );
@@ -613,21 +586,24 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Multimedia" title="Video KUD Sari Subur" subtitle="Tonton berbagai kegiatan, profil, dan informasi seputar KUD Desa Sari Subur." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {YT_VIDEOS.map((video, idx) => (
-              <motion.div key={video.id} variants={itemVariants} whileHover={{ y: -6, scale: 1.02 }} className="group cursor-pointer rounded-xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all" onClick={() => setVideoModal(video.id)}>
-                <div className="relative aspect-video bg-gray-200 overflow-hidden">
-                  <img src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-white transition-all"><PlayIcon className="w-6 h-6 text-emerald-700 ml-0.5" /></div>
+            {videos.map((video, idx) => {
+              const vidId = video.media_url || video.meta_data?.youtube_id || '';
+              return (
+                <motion.div key={video.id || idx} variants={itemVariants} whileHover={{ y: -6, scale: 1.02 }} className="group cursor-pointer rounded-xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all" onClick={() => setVideoModal(vidId)}>
+                  <div className="relative aspect-video bg-gray-200 overflow-hidden">
+                    <img src={`https://img.youtube.com/vi/${vidId}/hqdefault.jpg`} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-white transition-all"><PlayIcon className="w-6 h-6 text-emerald-700 ml-0.5" /></div>
+                    </div>
                   </div>
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-foreground text-sm group-hover:text-primary transition-colors line-clamp-2">{video.title}</h4>
-                  <p className="text-xs text-muted-foreground mt-1">KUD Sari Subur</p>
-                </div>
-              </motion.div>
-            ))}
+                  <div className="p-4">
+                    <h4 className="font-semibold text-foreground text-sm group-hover:text-primary transition-colors line-clamp-2">{video.title}</h4>
+                    <p className="text-xs text-muted-foreground mt-1">{video.description || 'KUD Sari Subur'}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>
@@ -640,20 +616,15 @@ export default function Home() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Mengapa KUD" title="Keuntungan Bergabung" subtitle="Rasakan manfaat nyata menjadi bagian dari keluarga besar KUD Desa Sari Subur." light />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: CurrencyDollarIcon, title: 'Harga TBS Kompetitif', desc: 'Harga terbaik untuk TBS anggota dengan sistem bagi hasil yang transparan dan adil.' },
-              { icon: AcademicCapIcon, title: 'Pendampingan Teknis', desc: 'Tim ahli siap mendampingi petani dalam teknik budidaya sawit yang baik dan benar.' },
-              { icon: ShieldCheckIcon, title: 'Jaminan Pembelian', desc: 'KUD menjamin pembelian seluruh hasil panen anggota dengan harga pasar yang wajar.' },
-              { icon: UserGroupIcon, title: 'Komunitas Solid', desc: 'Bergabung dengan komunitas petani yang solid, saling mendukung, dan berbagai pengalaman.' },
-            ].map((item, idx) => {
-              const Icn = item.icon;
+            {keuntungan.map((item, idx) => {
+              const Icn = ICON_MAP[item.meta_data?.icon] || CurrencyDollarIcon;
               return (
-                <motion.div key={idx} variants={itemVariants} whileHover={{ y: -6, scale: 1.03 }} className="group relative p-5 sm:p-6 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all shadow-lg shadow-black/10">
+                <motion.div key={item.id || idx} variants={itemVariants} whileHover={{ y: -6, scale: 1.03 }} className="group relative p-5 sm:p-6 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all shadow-lg shadow-black/10">
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/5 to-transparent pointer-events-none" />
                   <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-400/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
                   <div className="relative z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 group-hover:bg-white/20 transition-all border border-white/10"><Icn className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-300" /></div>
                   <h3 className="relative z-10 text-base sm:text-lg font-bold font-heading text-white">{item.title}</h3>
-                  <p className="relative z-10 mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/60">{item.desc}</p>
+                  <p className="relative z-10 mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/60">{item.description}</p>
                 </motion.div>
               );
             })}
@@ -774,22 +745,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Layanan Digital" title="Fitur Aplikasi KUD" subtitle="Nikmati kemudahan akses informasi dan layanan KUD melalui aplikasi digital kami." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: ChartBarIcon, title: 'Pantau Harga', desc: 'Cek harga TBS terkini secara real-time langsung dari smartphone Anda.' },
-              { icon: DocumentTextIcon, title: 'Riwayat Transaksi', desc: 'Akses riwayat setoran TBS, penjualan, dan peminjaman kapan saja.' },
-              { icon: BellAlertIcon, title: 'Notifikasi Cerdas', desc: 'Dapatkan pemberitahuan otomatis untuk harga baru, jadwal, dan pengumuman.' },
-              { icon: MapPinIcon, title: 'Lacak Pengiriman', desc: 'Pantau status pengiriman TBS dari kebun ke pabrik secara langsung.' },
-              { icon: CalendarDaysIcon, title: 'Jadwal Kegiatan', desc: 'Lihat jadwal pelatihan, penyuluhan, dan kegiatan KUD lainnya.' },
-              { icon: ChatBubbleLeftRightIcon, title: 'Konsultasi Online', desc: 'Tanya langsung ke tim penyuluh KUD lewat fitur chat terintegrasi.' },
-            ].map((item, idx) => {
-              const Icn = item.icon;
+            {fiturData.map((item, idx) => {
+              const Icn = ICON_MAP[item.meta_data?.icon] || SparklesIcon;
               const bento = idx === 0 ? 'lg:col-span-2 lg:row-span-1' : '';
               return (
-                <motion.div key={idx} variants={itemVariants} whileHover={{ y: -6, scale: 1.02 }} className={`group relative p-6 rounded-2xl overflow-hidden bg-gradient-to-br from-white to-emerald-50/40 border border-emerald-100/60 shadow-md hover:shadow-xl transition-all ${bento}`}>
+                <motion.div key={item.id || idx} variants={itemVariants} whileHover={{ y: -6, scale: 1.02 }} className={`group relative p-6 rounded-2xl overflow-hidden bg-gradient-to-br from-white to-emerald-50/40 border border-emerald-100/60 shadow-md hover:shadow-xl transition-all ${bento}`}>
                   <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-200/20 to-transparent rounded-bl-full" />
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all shadow-md shadow-emerald-500/20"><Icn className="w-6 h-6 text-white" /></div>
                   <h3 className="text-lg font-bold font-heading text-foreground">{item.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{item.desc}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400/0 via-emerald-400/40 to-emerald-400/0 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </motion.div>
               );
@@ -805,17 +769,16 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Statistik" title="KUD dalam Angka" subtitle="Capaian dan dampak nyata KUD Desa Sari Subur bagi petani kelapa sawit di wilayah Kecamatan Tegal Sari." />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
-            {[
-              { end: 371, suffix: '+', label: 'Anggota Aktif' },
-              { end: 850, suffix: '+', label: 'Hektar Lahan' },
-              { end: 5000, suffix: ' Ton', label: 'TBS per Tahun' },
-              { end: 7, suffix: '+', label: 'Tahun Berdiri' },
-            ].map((item, idx) => (
-              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="relative p-4 sm:p-6 rounded-2xl bg-white/70 backdrop-blur-sm border border-white/40 shadow-md text-center group hover:shadow-lg transition-all">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent rounded-2xl pointer-events-none" />
-                <Counter end={item.end} suffix={item.suffix} label={item.label} />
-              </motion.div>
-            ))}
+            {angkaData.map((item, idx) => {
+              const nilai = parseInt(item.meta_data?.nilai) || 0;
+              const satuan = item.meta_data?.satuan || '';
+              return (
+                <motion.div key={item.id || idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="relative p-4 sm:p-6 rounded-2xl bg-white/70 backdrop-blur-sm border border-white/40 shadow-md text-center group hover:shadow-lg transition-all">
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent rounded-2xl pointer-events-none" />
+                  <Counter end={nilai} suffix={satuan} label={item.title} />
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -827,16 +790,19 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kolaborasi" title="Mitra & Kolaborasi" subtitle="Kemitraan strategis dengan berbagai lembaga untuk mendukung kemajuan KUD." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {MITRA.map((mitra, idx) => {
-              const Icon = mitra.icon;
-              const initials = mitra.name.split(' ').slice(0, 2).map((w) => w[0]).join('');
+            {mitraData.map((mitra, idx) => {
+              const initials = mitra.title.split(' ').slice(0, 2).map((w) => w[0]).join('');
               return (
-                <motion.div key={idx} variants={scaleIn} whileHover={{ y: -6, scale: 1.04 }} className="group relative p-5 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-xl transition-all text-center">
+                <motion.div key={mitra.id || idx} variants={scaleIn} whileHover={{ y: -6, scale: 1.04 }} className="group relative p-5 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-xl transition-all text-center">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-emerald-50/30 pointer-events-none" />
-                  <div className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20">
-                    <Icon className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="relative z-10 text-xs font-semibold text-foreground/80 leading-tight">{mitra.name}</div>
+                  {mitra.media_url ? (
+                    <img src={mitra.media_url} alt={mitra.title} className="relative z-10 w-12 h-12 mx-auto mb-3 object-contain group-hover:scale-110 transition-transform" />
+                  ) : (
+                    <div className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20">
+                      <span className="text-white text-xs font-bold">{initials}</span>
+                    </div>
+                  )}
+                  <div className="relative z-10 text-xs font-semibold text-foreground/80 leading-tight">{mitra.title}</div>
                   <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-emerald-400/0 via-emerald-400/40 to-emerald-400/0 scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
                 </motion.div>
               );
@@ -856,31 +822,40 @@ export default function Home() {
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Testimoni" title="Apa Kata Anggota?" subtitle="Pengalaman nyata dari para anggota yang telah merasakan manfaat bergabung dengan KUD." light />
           <div className="relative max-w-4xl mx-auto">
-            <motion.div key={testiIdx} initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} transition={{ duration: 0.5 }} className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 md:p-12 text-center overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400/0 via-emerald-400/60 to-emerald-400/0" />
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">
-                {TESTIMONI[testiIdx].nama.charAt(0)}
+            {testimonials.length > 0 ? (
+              <>
+                <motion.div key={testiIdx} initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} transition={{ duration: 0.5 }} className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 md:p-12 text-center overflow-hidden">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400/0 via-emerald-400/60 to-emerald-400/0" />
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">
+                    {(testimonials[testiIdx]?.title || 'A').charAt(0)}
+                  </div>
+                  <div className="flex items-center justify-center gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <StarIcon key={i} className={`w-5 h-5 ${i < (testimonials[testiIdx]?.meta_data?.rating || 5) ? 'text-amber-400 fill-amber-400' : 'text-white/20'}`} />
+                    ))}
+                  </div>
+                  <p className="text-base sm:text-xl md:text-2xl text-white/90 leading-relaxed font-medium italic">{'\u201C'}{testimonials[testiIdx]?.description}{'\u201D'}</p>
+                  <div className="mt-6 pt-6 border-t border-white/10">
+                    <div className="font-bold text-white text-lg">{testimonials[testiIdx]?.title}</div>
+                    <div className="text-white/50 text-sm">{testimonials[testiIdx]?.meta_data?.alamat || ''}</div>
+                  </div>
+                </motion.div>
+                <div className="flex items-center justify-center gap-3 mt-8">
+                  {testimonials.map((_, idx) => (
+                    <button key={idx} onClick={() => setTestiIdx(idx)} className={`w-2.5 h-2.5 rounded-full transition-all ${idx === testiIdx ? 'bg-white w-8' : 'bg-white/30 hover:bg-white/50'}`} />
+                  ))}
+                </div>
+                <div className="flex justify-between mt-6">
+                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setTestiIdx((prev) => (prev - 1 + testimonials.length) % testimonials.length)} className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"><ChevronLeftIcon className="w-5 h-5" /></motion.button>
+                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setTestiIdx((prev) => (prev + 1) % testimonials.length)} className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"><ChevronRightIcon className="w-5 h-5" /></motion.button>
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <ChatBubbleLeftRightIcon className="w-16 h-16 mx-auto text-white/20 mb-4" />
+                <p className="text-white/50">Belum ada testimoni</p>
               </div>
-              <div className="flex items-center justify-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <StarIcon key={i} className={`w-5 h-5 ${i < TESTIMONI[testiIdx].rating ? 'text-amber-400 fill-amber-400' : 'text-white/20'}`} />
-                ))}
-              </div>
-              <p className="text-base sm:text-xl md:text-2xl text-white/90 leading-relaxed font-medium italic">{'\u201C'}{TESTIMONI[testiIdx].quote}{'\u201D'}</p>
-              <div className="mt-6 pt-6 border-t border-white/10">
-                <div className="font-bold text-white text-lg">{TESTIMONI[testiIdx].nama}</div>
-                <div className="text-white/50 text-sm">{TESTIMONI[testiIdx].asal}</div>
-              </div>
-            </motion.div>
-            <div className="flex items-center justify-center gap-3 mt-8">
-              {TESTIMONI.map((_, idx) => (
-                <button key={idx} onClick={() => setTestiIdx(idx)} className={`w-2.5 h-2.5 rounded-full transition-all ${idx === testiIdx ? 'bg-white w-8' : 'bg-white/30 hover:bg-white/50'}`} />
-              ))}
-            </div>
-            <div className="flex justify-between mt-6">
-              <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setTestiIdx((prev) => (prev - 1 + TESTIMONI.length) % TESTIMONI.length)} className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"><ChevronLeftIcon className="w-5 h-5" /></motion.button>
-              <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setTestiIdx((prev) => (prev + 1) % TESTIMONI.length)} className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"><ChevronRightIcon className="w-5 h-5" /></motion.button>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -892,15 +867,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kontak" title="Layanan & Dukungan" subtitle="Hubungi kami melalui berbagai saluran yang tersedia." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {LAYANAN.map((item, idx) => {
-              const Icn = item.icon;
+            {layananData.map((item, idx) => {
+              const Icn = ICON_MAP[item.meta_data?.icon] || PhoneIcon;
               return (
-                <motion.div key={idx} variants={itemVariants} whileHover={{ y: -5, scale: 1.02 }} className="group relative p-5 sm:p-6 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all text-center">
+                <motion.div key={item.id || idx} variants={itemVariants} whileHover={{ y: -5, scale: 1.02 }} className="group relative p-5 sm:p-6 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all text-center">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-emerald-50/30 pointer-events-none" />
                   <div className="relative z-10 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20"><Icn className="w-6 h-6 sm:w-7 sm:h-7 text-white" /></div>
                   <h4 className="relative z-10 font-bold font-heading text-foreground text-sm sm:text-base">{item.title}</h4>
-                  <p className="relative z-10 text-sm text-muted-foreground mt-2">{item.desc}</p>
-                  <p className="relative z-10 text-sm font-semibold text-primary mt-3">{item.contact}</p>
+                  <p className="relative z-10 text-sm text-muted-foreground mt-2">{item.description}</p>
+                  <p className="relative z-10 text-sm font-semibold text-primary mt-3">{item.meta_data?.kontak || ''}</p>
                 </motion.div>
               );
             })}
@@ -915,16 +890,16 @@ export default function Home() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Tanya Jawab" title="Pertanyaan Umum" subtitle="Temukan jawaban atas pertanyaan yang sering diajukan tentang KUD Desa Sari Subur." />
           <div className="space-y-3">
-            {FAQ_DATA.map((faq, idx) => (
-              <motion.div key={idx} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.05 }} className="rounded-xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-lg transition-all">
+            {faqs.map((faq, idx) => (
+              <motion.div key={faq.id || idx} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.05 }} className="rounded-xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-lg transition-all">
                 <button onClick={() => setFaqOpen(faqOpen === idx ? null : idx)} className="w-full flex items-center justify-between p-4 md:p-5 text-left">
-                  <span className="font-medium text-foreground text-sm md:text-base pr-4">{faq.q}</span>
+                  <span className="font-medium text-foreground text-sm md:text-base pr-4">{faq.title}</span>
                   <ChevronDownIcon className={`w-5 h-5 flex-shrink-0 text-muted-foreground transition-transform duration-300 ${faqOpen === idx ? 'rotate-180 text-primary' : ''}`} />
                 </button>
                 <AnimatePresence>
                   {faqOpen === idx && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
-                      <div className="px-4 md:px-5 pb-4 md:pb-5 text-sm text-muted-foreground leading-relaxed border-t border-white/10 pt-3">{faq.a}</div>
+                      <div className="px-4 md:px-5 pb-4 md:pb-5 text-sm text-muted-foreground leading-relaxed border-t border-white/10 pt-3">{faq.description}</div>
                     </motion.div>
                   )}
                 </AnimatePresence>

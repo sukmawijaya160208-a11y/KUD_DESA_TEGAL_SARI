@@ -596,16 +596,16 @@ export default function AdminUsersPage() {
                     onChange={toggleSelectAll} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer" />
                 </th>
                 <th className="py-3 px-2 w-8" />
-                {renderSortHeader('name', 'Nama', 'min-w-[180px]')}
-                {renderSortHeader('email', 'Email', 'min-w-[180px]')}
+                {renderSortHeader('name', 'Nama', 'min-w-[140px]')}
+                {renderSortHeader('email', 'Email', 'min-w-[160px] hidden md:table-cell')}
                 {renderSortHeader('role', 'Role')}
                 {renderSortHeader('status', 'Status Pekebun')}
-                {renderSortHeader('nik', 'NIK')}
-                {renderSortHeader('no_whatsapp', 'Kontak')}
-                <th className="text-left py-3 px-3 font-semibold text-foreground/70">Dokumen</th>
-                {renderSortHeader('lahan', 'Lahan', 'text-center')}
-                {renderSortHeader('program', 'Program', 'text-center')}
-                {renderSortHeader('created_at', 'Tgl Daftar')}
+                {renderSortHeader('nik', 'NIK', 'hidden md:table-cell')}
+                {renderSortHeader('no_whatsapp', 'Kontak', 'hidden md:table-cell')}
+                <th className="text-left py-3 px-3 font-semibold text-foreground/70 hidden md:table-cell">Dokumen</th>
+                {renderSortHeader('lahan', 'Lahan', 'text-center hidden md:table-cell')}
+                {renderSortHeader('program', 'Program', 'text-center hidden md:table-cell')}
+                {renderSortHeader('created_at', 'Tgl Daftar', 'hidden md:table-cell')}
                 <th className="text-left py-3 px-3 font-semibold text-foreground/70">Aksi</th>
               </tr>
             </thead>
@@ -638,7 +638,7 @@ export default function AdminUsersPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="py-3 px-3 text-gray-500">{u.email}</td>
+                    <td className="py-3 px-3 text-gray-500 hidden md:table-cell">{u.email}</td>
                     <td className="py-3 px-3"><RoleBadge role={u.role} /></td>
                     <td className="py-3 px-3">
                       {u.pekebun ? (
@@ -648,8 +648,8 @@ export default function AdminUsersPage() {
                         </div>
                       ) : <span className="text-gray-400 text-xs">-</span>}
                     </td>
-                    <td className="py-3 px-3 text-xs font-mono text-gray-500">{u.pekebun?.nik || '-'}</td>
-                    <td className="py-3 px-3 text-xs text-gray-500">
+                    <td className="py-3 px-3 text-xs font-mono text-gray-500 hidden md:table-cell">{u.pekebun?.nik || '-'}</td>
+                    <td className="py-3 px-3 text-xs text-gray-500 hidden md:table-cell">
                       {u.pekebun ? (
                         <div className="flex flex-col gap-0.5">
                           {u.pekebun.no_whatsapp && <span className="flex items-center gap-1"><PhoneIcon className="w-3 h-3" /> {u.pekebun.no_whatsapp}</span>}
@@ -657,7 +657,7 @@ export default function AdminUsersPage() {
                         </div>
                       ) : '-'}
                     </td>
-                    <td className="py-3 px-3">
+                    <td className="py-3 px-3 hidden md:table-cell">
                       {u.pekebun && (u.pekebun.foto_pekebun || u.pekebun.upload_ktp || u.pekebun.upload_kk) ? (
                         <div className="flex -space-x-1.5">
                           {u.pekebun.foto_pekebun && (
@@ -681,7 +681,7 @@ export default function AdminUsersPage() {
                         </div>
                       ) : <span className="text-gray-400 text-xs">-</span>}
                     </td>
-                    <td className="py-3 px-3 text-center">
+                    <td className="py-3 px-3 text-center hidden md:table-cell">
                       {u.pekebun ? (
                         <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600">
                           <MapPinIcon className="w-3.5 h-3.5 text-gray-400" />
@@ -689,7 +689,7 @@ export default function AdminUsersPage() {
                         </span>
                       ) : <span className="text-gray-300">-</span>}
                     </td>
-                    <td className="py-3 px-3 text-center">
+                    <td className="py-3 px-3 text-center hidden md:table-cell">
                       {u.pekebun ? (
                         <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-600">
                           <ClipboardDocumentListIcon className="w-3.5 h-3.5 text-gray-400" />
@@ -697,7 +697,7 @@ export default function AdminUsersPage() {
                         </span>
                       ) : <span className="text-gray-300">-</span>}
                     </td>
-                    <td className="py-3 px-3 text-xs text-gray-500">
+                    <td className="py-3 px-3 text-xs text-gray-500 hidden md:table-cell">
                       <div className="flex flex-col">
                         <span>{formatDate(u.created_at)}</span>
                         <span className="text-[10px] text-gray-400">{formatRelative(u.created_at)}</span>

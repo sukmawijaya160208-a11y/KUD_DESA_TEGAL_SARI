@@ -37,6 +37,7 @@ Route::post('/blog/{slug}/view', [BlogController::class, 'incrementViews']);
 Route::get('/blog/{slug}/related', [BlogController::class, 'related']);
 Route::get('/blog/{slug}', [BlogController::class, 'show']);
 Route::get('/program', [AdminController::class, 'programPublic']);
+Route::get('/landing-page/{section?}', [LandingPageController::class, 'publicIndex']);
 
 // === AUTHENTICATED ===
 Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {

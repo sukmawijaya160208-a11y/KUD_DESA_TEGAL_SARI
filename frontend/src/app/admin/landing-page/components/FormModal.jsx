@@ -9,20 +9,6 @@ import Textarea from '@/components/ui/Textarea';
 import Modal from '@/components/ui/Modal';
 import { PlusIcon, PencilSquareIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
-function FormSection({ title, icon: Icon, children }) {
-  return (
-    <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
-      <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-primary/5 to-transparent border-b border-border">
-        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-          {Icon && <Icon className="w-4 h-4 text-primary" />}
-        </div>
-        <h4 className="font-semibold text-foreground text-sm">{title}</h4>
-      </div>
-      <div className="p-4 space-y-4">{children}</div>
-    </div>
-  );
-}
-
 const SECTION_FIELDS = {
   langkah: [
     { key: 'title', label: 'Judul Langkah', type: 'text', required: true },
@@ -43,7 +29,7 @@ const SECTION_FIELDS = {
   ],
   video: [
     { key: 'title', label: 'Nama Kegiatan', type: 'text', required: true },
-    { key: 'meta_data.youtube_id', label: 'YouTube ID', type: 'text', required: true, placeholder: 'Contoh: dQw4w9WgXcQ' },
+    { key: 'youtube_url', label: 'Link URL / YouTube ID', type: 'text', required: true, placeholder: 'Tempel link YouTube atau ID video' },
     { key: 'description', label: 'Deskripsi', type: 'textarea' },
   ],
   keuntungan: [
@@ -72,6 +58,17 @@ const SECTION_FIELDS = {
     { key: 'meta_data.rating', label: 'Rating Bintang (1-5)', type: 'number' },
     { key: 'media_url', label: 'Foto', type: 'media' },
   ],
+  faq: [
+    { key: 'title', label: 'Pertanyaan', type: 'text', required: true },
+    { key: 'description', label: 'Jawaban', type: 'textarea', required: true },
+    { key: 'order', label: 'Urutan', type: 'number' },
+  ],
+  layanan: [
+    { key: 'title', label: 'Nama Layanan', type: 'text', required: true },
+    { key: 'description', label: 'Deskripsi', type: 'textarea', required: true },
+    { key: 'meta_data.kontak', label: 'Kontak/Detail', type: 'text' },
+    { key: 'meta_data.icon', label: 'Ikon', type: 'text' },
+  ],
 };
 
 function getNestedValue(obj, path) {
@@ -88,9 +85,17 @@ function setNestedValue(obj, path, value) {
   target[last] = value;
 }
 
+function extractYouTubeId(input) {
+  if (!input) return '';
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = input.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : input.trim();
+}
+
 export default function FormModal({ open, onClose, editing, sectionType, onSaved }) {
   const toast = useToast();
   const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const fields = SECTION_FIELDS[sectionType] || [];
 
   const [form, setForm] = useState({});
@@ -101,6 +106,11 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
     fields.forEach((f) => {
       if (f.type === 'media') init.media_url = '';
       else if (f.key.startsWith('meta_data.')) setNestedValue(init, f.key, '');
+      else if (f.key === 'youtube_url') {
+        init.youtube_url = '';
+        init.meta_data = init.meta_data || {};
+        init.meta_data.youtube_id = '';
+      }
       else init[f.key] = '';
     });
     init.meta_data = init.meta_data || {};
@@ -108,16 +118,21 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
   }, [fields]);
 
   useEffect(() => {
+    setErrorMessage('');
     if (editing) {
       const init = {};
       fields.forEach((f) => {
-        const val = f.key.startsWith('meta_data.')
-          ? getNestedValue(editing, f.key)
-          : editing[f.key] || '';
-        if (f.key.startsWith('meta_data.')) setNestedValue(init, f.key, val);
-        else init[f.key] = val;
+        if (f.key === 'youtube_url') {
+          init.youtube_url = editing.meta_data?.youtube_id || '';
+          init.meta_data = { ...(editing.meta_data || {}) };
+          init.meta_data.youtube_id = editing.meta_data?.youtube_id || '';
+        } else if (f.key.startsWith('meta_data.')) {
+          setNestedValue(init, f.key, getNestedValue(editing, f.key));
+        } else {
+          init[f.key] = editing[f.key] || '';
+        }
       });
-      init.meta_data = editing.meta_data || {};
+      if (!init.meta_data) init.meta_data = { ...(editing.meta_data || {}) };
       setForm(init);
     } else {
       resetForm();
@@ -126,7 +141,7 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
 
   const handleField = (key, value) => {
     setForm((prev) => {
-      const next = { ...prev, meta_data: { ...prev.meta_data } };
+      const next = { ...prev, meta_data: { ...(prev.meta_data || {}) } };
       if (key.startsWith('meta_data.')) setNestedValue(next, key, value);
       else next[key] = value;
       return next;
@@ -150,9 +165,31 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
+    setErrorMessage('');
     try {
-      const payload = { section_type: sectionType, ...form };
-      if (sectionType === 'langkah') payload.order = parseInt(payload.order) || 0;
+      const payload = { section_type: sectionType };
+
+      fields.forEach((f) => {
+        if (f.key === 'youtube_url') {
+          payload.title = form.title || '';
+          const rawUrl = form.youtube_url || '';
+          const cleanId = extractYouTubeId(rawUrl);
+          payload.meta_data = { ...(form.meta_data || {}), youtube_id: cleanId };
+          payload.media_url = cleanId;
+        } else if (f.key.startsWith('meta_data.')) {
+          if (!payload.meta_data) payload.meta_data = {};
+          setNestedValue(payload, f.key, getNestedValue(form, f.key));
+        } else if (f.key !== 'title') {
+          const val = form[f.key];
+          if (val !== undefined && val !== '') payload[f.key] = val;
+        } else {
+          payload.title = form.title || '';
+        }
+      });
+
+      if (sectionType === 'langkah' || sectionType === 'faq') {
+        payload.order = parseInt(form.order) || 0;
+      }
 
       if (editing) {
         await api.admin.landing.update(editing.id, payload);
@@ -164,7 +201,13 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
       onSaved?.();
       onClose();
     } catch (err) {
-      toast.error(err.message);
+      if (err.status === 422 && err.data?.errors) {
+        const errors = err.data.errors;
+        const firstField = Object.keys(errors)[0];
+        setErrorMessage(errors[firstField]?.[0] || 'Data tidak valid');
+      } else {
+        setErrorMessage(err.message || 'Terjadi kesalahan');
+      }
     }
     setSubmitting(false);
   };
@@ -177,6 +220,12 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
       maxWidth="max-w-xl"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
+        {errorMessage && (
+          <div className="p-3 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl">
+            {errorMessage}
+          </div>
+        )}
+
         {fields.map((f) => (
           <div key={f.key}>
             {f.type === 'textarea' ? (
@@ -208,14 +257,21 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
                 )}
               </div>
             ) : (
-              <Input
-                label={f.label}
-                type={f.type || 'text'}
-                value={getNestedValue(form, f.key)}
-                onChange={(e) => handleField(f.key, e.target.value)}
-                required={f.required}
-                placeholder={f.placeholder}
-              />
+              <div>
+                <Input
+                  label={f.label}
+                  type={f.type || 'text'}
+                  value={getNestedValue(form, f.key)}
+                  onChange={(e) => handleField(f.key, e.target.value)}
+                  required={f.required}
+                  placeholder={f.placeholder}
+                />
+                {f.key === 'youtube_url' && (
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    Bisa masukkan link langsung (https://youtu.be/xxx) atau ID aja
+                  </p>
+                )}
+              </div>
             )}
           </div>
         ))}

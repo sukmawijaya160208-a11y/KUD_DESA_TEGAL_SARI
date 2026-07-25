@@ -11,7 +11,8 @@ import {
   PlusIcon, PencilSquareIcon, TrashIcon,
   ClipboardDocumentListIcon, AcademicCapIcon, PhotoIcon,
   VideoCameraIcon, StarIcon, SparklesIcon,
-  ChartBarIcon, BuildingOffice2Icon, ChatBubbleLeftRightIcon
+  ChartBarIcon, BuildingOffice2Icon, ChatBubbleLeftRightIcon,
+  QuestionMarkCircleIcon, PhoneIcon
 } from '@heroicons/react/24/outline';
 
 const containerAnim = {
@@ -34,6 +35,8 @@ const TABS = [
   { id: 'angka', label: 'KUD Angka', icon: ChartBarIcon, color: 'from-emerald-500 to-emerald-600' },
   { id: 'mitra', label: 'Mitra', icon: BuildingOffice2Icon, color: 'from-cyan-500 to-cyan-600' },
   { id: 'testimoni', label: 'Testimoni', icon: ChatBubbleLeftRightIcon, color: 'from-pink-500 to-pink-600' },
+  { id: 'faq', label: 'FAQ', icon: QuestionMarkCircleIcon, color: 'from-violet-500 to-violet-600' },
+  { id: 'layanan', label: 'Layanan', icon: PhoneIcon, color: 'from-rose-500 to-rose-600' },
 ];
 
 const SECTION_LABELS = {
@@ -45,7 +48,9 @@ const SECTION_LABELS = {
   fitur: { title: 'Fitur Aplikasi', desc: 'Kelola fitur-fitur aplikasi KUD', icon: SparklesIcon, color: 'from-indigo-500 to-indigo-600' },
   angka: { title: 'KUD dalam Angka', desc: 'Atur statistik dan angka KUD', icon: ChartBarIcon, color: 'from-emerald-500 to-emerald-600' },
   mitra: { title: 'Mitra & Kolaborasi', desc: 'Kelola daftar mitra KUD', icon: BuildingOffice2Icon, color: 'from-cyan-500 to-cyan-600' },
-  testimoni: { title: 'Testimoni Anggota', desc: 'Atur testimoni anggota KUD', icon: ChatBubbleLeftRightIcon, color: 'from-pink-500 to-pink-600' },
+  testimoni: { title: 'Testimoni Anggota', desc: 'Kelola testimoni anggota KUD', icon: ChatBubbleLeftRightIcon, color: 'from-pink-500 to-pink-600' },
+  faq: { title: 'FAQ', desc: 'Pertanyaan yang sering diajukan', icon: QuestionMarkCircleIcon, color: 'from-violet-500 to-violet-600' },
+  layanan: { title: 'Layanan', desc: 'Daftar layanan KUD', icon: PhoneIcon, color: 'from-rose-500 to-rose-600' },
 };
 
 export default function LandingPageAdmin() {

@@ -34,14 +34,17 @@ class LandingPageController extends Controller
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'media_url' => 'nullable|string|max:500',
-            'meta_data' => 'nullable|json',
+            'meta_data' => 'nullable|array',
             'order' => 'nullable|integer|min:0',
             'is_active' => 'nullable|boolean',
         ]);
 
-        if (isset($validated['meta_data']) && is_string($validated['meta_data'])) {
-            $validated['meta_data'] = json_decode($validated['meta_data'], true);
+        $meta = $validated['meta_data'] ?? [];
+        if (is_string($meta)) {
+            $decoded = json_decode($meta, true);
+            $meta = is_array($decoded) ? $decoded : [];
         }
+        $validated['meta_data'] = $meta;
 
         DB::beginTransaction();
         try {
@@ -55,10 +58,17 @@ class LandingPageController extends Controller
 
             $item = LandingContent::create($validated);
             DB::commit();
-            return response()->json($item, 201);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil disimpan',
+                'data' => $item,
+            ], 201);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Gagal menyimpan: ' . $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan: ' . $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -68,14 +78,17 @@ class LandingPageController extends Controller
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'media_url' => 'nullable|string|max:500',
-            'meta_data' => 'nullable|json',
+            'meta_data' => 'nullable|array',
             'order' => 'nullable|integer|min:0',
             'is_active' => 'nullable|boolean',
         ]);
 
-        if (isset($validated['meta_data']) && is_string($validated['meta_data'])) {
-            $validated['meta_data'] = json_decode($validated['meta_data'], true);
+        $meta = $validated['meta_data'] ?? null;
+        if (is_string($meta)) {
+            $decoded = json_decode($meta, true);
+            $meta = is_array($decoded) ? $decoded : [];
         }
+        $validated['meta_data'] = $meta;
 
         DB::beginTransaction();
         try {
@@ -88,10 +101,17 @@ class LandingPageController extends Controller
 
             $landingContent->update($validated);
             DB::commit();
-            return response()->json($landingContent);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil diperbarui',
+                'data' => $landingContent->fresh(),
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Gagal memperbarui: ' . $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui: ' . $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -101,10 +121,35 @@ class LandingPageController extends Controller
         try {
             $landingContent->delete();
             DB::commit();
-            return response()->json(['message' => 'Data berhasil dihapus']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil dihapus',
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Gagal menghapus data'], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus data',
+            ], 500);
         }
+    }
+
+    public function publicIndex($section = null)
+    {
+        $query = LandingContent::where('is_active', true)->orderBy('order');
+
+        if ($section) {
+            $query->where('section_type', $section);
+        }
+
+        $data = $query->get()->map(function ($item) {
+            $item->meta_data = $item->meta_data ?: new \stdClass();
+            return $item;
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+        ]);
     }
 }

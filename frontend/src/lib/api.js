@@ -122,6 +122,12 @@ export const api = {
   program: {
     list: () => request('/program'),
   },
+  landing: {
+    list: (section) => {
+      const path = section ? `/landing-page/${encodeURIComponent(section)}` : '/landing-page';
+      return request(path);
+    },
+  },
 
   admin: {
     dashboard: () => request('/admin/dashboard'),
