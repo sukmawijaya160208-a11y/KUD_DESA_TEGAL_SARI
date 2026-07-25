@@ -805,7 +805,7 @@ export default function AdminPengaturanPage() {
                       user: {},
                     },
                     setting_kud: kud,
-                    pengaturan,
+                    pengaturan: settings,
                     nomor_anggota: 'KUD-00001/2026',
                     tanggal_terbit: '2026-07-25',
                     masa_berlaku: '2031-07-25',
