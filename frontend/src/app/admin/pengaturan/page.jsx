@@ -8,15 +8,13 @@ import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 import Modal from '@/components/ui/Modal';
 import { motion } from 'framer-motion';
-import KartuAnggotaKud from '@/components/KartuAnggotaKud';
-import SignaturePad from '@/components/SignaturePad';
+import CardDesignEditor from '@/components/CardDesignEditor';
 import SertifikatDesignEditor from '@/components/SertifikatDesignEditor';
 import {
   Cog6ToothIcon, TrashIcon, PlusIcon, CreditCardIcon, BuildingOfficeIcon,
   UserIcon, ShieldCheckIcon, ServerIcon, KeyIcon,
   EyeIcon, EyeSlashIcon, ArrowRightOnRectangleIcon,
   ArrowUpTrayIcon, ExclamationCircleIcon,
-  DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 
 const TABS = [
@@ -66,7 +64,6 @@ export default function AdminPengaturanPage() {
   const [savingKud, setSavingKud] = useState(false);
   const [logoUploading, setLogoUploading] = useState(false);
   const [logoKartuUploading, setLogoKartuUploading] = useState(false);
-  const [stempelUploading, setStempelUploading] = useState(false);
   const [profilUploading, setProfilUploading] = useState(false);
   const [newKey, setNewKey] = useState('');
   const [newVal, setNewVal] = useState('');
@@ -228,17 +225,6 @@ export default function AdminPengaturanPage() {
       toast.success('Logo kartu berhasil diupload');
     } catch (err) { toast.error('Upload gagal: ' + err.message); }
     setLogoKartuUploading(false);
-  };
-
-  const handleStempelUpload = async (e) => {
-    const file = e.target.files[0]; if (!file) return;
-    setStempelUploading(true);
-    try {
-      const res = await api.upload('/upload/kartu-stempel', file);
-      handleKudChange('kartu_stempel', res.url);
-      toast.success('Stempel berhasil diupload');
-    } catch (err) { toast.error('Upload gagal: ' + err.message); }
-    setStempelUploading(false);
   };
 
   const handleAddSetting = async () => {
@@ -707,130 +693,13 @@ export default function AdminPengaturanPage() {
 
       {/* ===== TAB 5: DESAIN KARTU ===== */}
       {tab === 'desain-kartu' && (
-        <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
-          {/* LEFT: FORM */}
-          <div className="xl:col-span-3 space-y-5">
-            <FormSection title="Tampilan Depan Kartu" icon={CreditCardIcon} description="Judul, warna, dan informasi sisi depan kartu anggota">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input label="Judul Kartu" value={kud.kartu_judul_depan || 'KARTU TANDA ANGGOTA'} onChange={(e) => handleKudChange('kartu_judul_depan', e.target.value)} helperText="Teks judul utama di kartu depan" />
-                <Input label="Subjudul Kartu" value={kud.kartu_subjudul_depan || 'KOPERASI UNIT DESA SARI SUBUR'} onChange={(e) => handleKudChange('kartu_subjudul_depan', e.target.value)} helperText="Teks subjudul di bawah judul" />
-                <Input label="Kota Terbit" value={kud.kartu_kota_terbit || 'Megang Sakti'} onChange={(e) => handleKudChange('kartu_kota_terbit', e.target.value)} helperText="Nama kota pada tanggal terbit" />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-foreground/80 mb-1.5">Warna Utama</label>
-                  <div className="flex gap-2">
-                    <input type="color" value={kud.kartu_warna_primary || '#059669'} onChange={(e) => handleKudChange('kartu_warna_primary', e.target.value)} className="w-10 h-10 rounded-lg border border-border cursor-pointer" />
-                    <input value={kud.kartu_warna_primary || '#059669'} onChange={(e) => handleKudChange('kartu_warna_primary', e.target.value)} className="flex-1 px-3 py-2 rounded-xl border border-border text-sm font-mono" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-foreground/80 mb-1.5">Warna Sekunder</label>
-                  <div className="flex gap-2">
-                    <input type="color" value={kud.kartu_warna_secondary || '#047857'} onChange={(e) => handleKudChange('kartu_warna_secondary', e.target.value)} className="w-10 h-10 rounded-lg border border-border cursor-pointer" />
-                    <input value={kud.kartu_warna_secondary || '#047857'} onChange={(e) => handleKudChange('kartu_warna_secondary', e.target.value)} className="flex-1 px-3 py-2 rounded-xl border border-border text-sm font-mono" />
-                  </div>
-                </div>
-              </div>
-            </FormSection>
-
-            <FormSection title="Tampilan Belakang Kartu" icon={DocumentTextIcon} description="Aturan dan informasi sisi belakang kartu anggota">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-foreground/80 mb-1.5">Warna Header</label>
-                  <div className="flex gap-2">
-                    <input type="color" value={kud.kartu_belakang_warna || '#028143'} onChange={(e) => handleKudChange('kartu_belakang_warna', e.target.value)} className="w-10 h-10 rounded-lg border border-border cursor-pointer" />
-                    <input value={kud.kartu_belakang_warna || '#028143'} onChange={(e) => handleKudChange('kartu_belakang_warna', e.target.value)} className="flex-1 px-3 py-2 rounded-xl border border-border text-sm font-mono" />
-                  </div>
-                </div>
-                <Input label="Slogan" value={kud.kartu_slogan || 'SAWIT ADALAH KITA'} onChange={(e) => handleKudChange('kartu_slogan', e.target.value)} helperText="Slogan besar di sisi belakang" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground/80 mb-1.5">Aturan / Ketentuan</label>
-                <p className="text-xs text-gray-400 mb-2">Satu poin per baris — akan otomatis menjadi bullet list di kartu</p>
-                <textarea
-                  value={Array.isArray(kud.kartu_aturan) ? kud.kartu_aturan.join('\n') : ''}
-                  onChange={(e) => handleKudChange('kartu_aturan', e.target.value.split('\n'))}
-                  className="w-full px-4 py-3 rounded-xl border border-border text-sm bg-white min-h-[120px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                  placeholder="Pemegang kartu ini adalah Anggota Resmi KUD Sari Subur.&#10;Pemegang kartu tunduk dan taat kepada AD/ART KUD Sari Subur.&#10;..."
-                  rows={5}
-                />
-              </div>
-            </FormSection>
-
-            <FormSection title="Tanda Tangan & Stempel" icon={ShieldCheckIcon} description="Upload tanda tangan digital dan stempel untuk kartu anggota">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input label="Nama Ketua" value={kud.kartu_ketua_nama || kud.nama_ketua || ''} onChange={(e) => handleKudChange('kartu_ketua_nama', e.target.value)} helperText="Nama yang tercetak di kartu" />
-                <Input label="Jabatan Ketua" value={kud.kartu_ketua_jabatan || 'Ketua KUD Sari Subur'} onChange={(e) => handleKudChange('kartu_ketua_jabatan', e.target.value)} helperText="Jabatan yang tercetak di kartu" />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-4 bg-white rounded-xl border border-border">
-                  <label className="block text-sm font-medium text-foreground/80 mb-2">Tanda Tangan Digital</label>
-                  <p className="text-xs text-gray-400 mb-2">Gambar tanda tangan langsung di canvas di bawah</p>
-                  <SignaturePad
-                    value={kud.kartu_ttd || ''}
-                    onChange={(dataUrl) => handleKudChange('kartu_ttd', dataUrl)}
-                    height={130}
-                  />
-                </div>
-                <div className="p-4 bg-white rounded-xl border border-border">
-                  <label className="block text-sm font-medium text-foreground/80 mb-2">Stempel KUD</label>
-                  {kud.kartu_stempel ? (
-                    <img src={kud.kartu_stempel} alt="Stempel" className="h-16 object-contain mb-3 rounded-lg border border-border p-2 bg-white" />
-                  ) : (
-                    <div className="h-16 flex items-center justify-center bg-muted rounded-lg border border-dashed border-border mb-3 text-xs text-gray-400">Belum upload stempel</div>
-                  )}
-                  <label className={`px-4 py-2 ${stempelUploading ? 'bg-gray-400' : 'bg-primary'} text-white rounded-xl text-xs font-medium cursor-pointer hover:bg-primary/90 transition-colors inline-block`}>
-                    {stempelUploading ? 'Uploading...' : 'Upload Stempel'}
-                    <input type="file" className="hidden" accept="image/*" onChange={handleStempelUpload} disabled={stempelUploading} />
-                  </label>
-                </div>
-              </div>
-            </FormSection>
-
-            <div className="flex justify-end">
-              <Button onClick={handleSaveKud} loading={savingKud} size="lg">
-                <CreditCardIcon className="w-5 h-5" /> Simpan Desain Kartu
-              </Button>
-            </div>
-          </div>
-
-          {/* RIGHT: LIVE PREVIEW */}
-          <div className="xl:col-span-2">
-            <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden sticky top-6">
-              <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-emerald-500/5 to-transparent border-b border-border">
-                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0">
-                  <CreditCardIcon className="w-5 h-5 text-emerald-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground text-sm">Pratinjau Langsung</h3>
-                  <p className="text-xs text-gray-400 mt-0.5">Perubahan akan terlihat secara real-time</p>
-                </div>
-              </div>
-              <div className="p-4 overflow-x-auto">
-                <KartuAnggotaKud
-                  data={{
-                    pekebun: {
-                      nama: 'BUDI SANTOSO',
-                      nik: '1601234567890001',
-                      alamat: 'Jl. Sawit Raya No. 45, Dusun Tegal Sari, Desa Tegal Sari, Kec. Megang Sakti, Kab. Musi Rawas, Sumatera Selatan',
-                      tempat_lahir: 'Musi Rawas',
-                      tanggal_lahir: '1990-01-15',
-                      user: {},
-                    },
-                    setting_kud: kud,
-                    pengaturan: settings,
-                    nomor_anggota: 'KUD-00001/2026',
-                    tanggal_terbit: '2026-07-25',
-                    masa_berlaku: '2031-07-25',
-                  }}
-                  width={380}
-                  showActions={false}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        <CardDesignEditor
+          settingKud={kud}
+          settings={settings}
+          onSave={() => {
+            api.admin.settingKud.get().then(setSettingKud).catch(() => {});
+          }}
+        />
       )}
 
       {/* ===== TAB 6: DESAIN SERTIFIKAT ===== */}

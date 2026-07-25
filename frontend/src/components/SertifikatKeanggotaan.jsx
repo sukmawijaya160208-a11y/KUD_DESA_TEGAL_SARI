@@ -6,21 +6,22 @@ const DEFAULT_CONFIG = {
   template: 'classic-gold',
   fields: {
     border_deco: { show: true },
-    logo_kud: { show: true, width: 75 },
-    judul: { show: true, fontSize: 26, color: '#b8860b', fontFamily: 'Playfair Display', fontWeight: 'bold' },
-    subjudul: { show: true, fontSize: 13, color: '#8b6914' },
-    garis_dekorasi: { show: true },
-    pembukaan: { show: true, fontSize: 11, color: '#4a5568' },
-    nama_pekebun: { show: true, fontSize: 24, color: '#1a202c', fontFamily: 'Playfair Display', fontWeight: 'bold' },
-    no_anggota: { show: true, fontSize: 11, color: '#4a5568' },
-    data_lengkap: { show: true, fontSize: 11, color: '#718096' },
-    status_teks: { show: true, fontSize: 11, color: '#4a5568' },
-    tanggal_terbit: { show: true, fontSize: 11, color: '#718096' },
-    ttd_ketua: { show: true, width: 120, height: 42 },
-    nama_ketua: { show: true, fontSize: 12, color: '#1a202c', fontWeight: 'bold' },
-    jabatan_ketua: { show: true, fontSize: 10, color: '#718096' },
+    watermark: { show: true, opacity: 0.04 },
+    logo_kud: { show: true, width: 70 },
+    nama_kud: { show: true, fontSize: 16, color: '#064e3b', fontFamily: 'Inter', fontWeight: 'bold' },
+    badan_hukum: { show: true, fontSize: 8, color: '#92400e' },
+    garis_header: { show: true },
+    judul: { show: true, fontSize: 20, color: '#92400e', fontFamily: 'Playfair Display', fontWeight: 'bold' },
+    no_registrasi: { show: true, fontSize: 8, color: '#64748b' },
+    pembukaan: { show: true, fontSize: 10, color: '#475569', text: 'Pengurus Koperasi Unit Desa (KUD) Sari Subur dengan ini menerangkan dan mengesahkan bahwa:' },
+    nama_pekebun: { show: true, fontSize: 20, color: '#0f172a', fontFamily: 'Playfair Display', fontWeight: 'bold' },
+    grid_data: { show: true, fontSize: 10, color: '#334155' },
+    legal_text: { show: true, fontSize: 9, color: '#475569', text: 'Dinyatakan secara sah terdaftar sebagai Anggota Aktif KUD Sari Subur. Pemegang sertifikat ini berhak atas seluruh fasilitas kemitraan kelapa sawit, pelayanan unit usaha koperasi, serta pembagian Sisa Hasil Usaha (SHU) sesuai AD/ART yang berlaku.' },
+    tanggal_terbit: { show: true, fontSize: 9, color: '#64748b' },
+    ttd_ketua: { show: true, width: 130, height: 50 },
     stempel: { show: true, width: 80 },
-    kota_terbit: { show: true, fontSize: 11, color: '#718096' },
+    nama_ketua: { show: true, fontSize: 11, color: '#0f172a', fontWeight: 'bold' },
+    jabatan_ketua: { show: true, fontSize: 9, color: '#64748b' },
   },
   background: {
     type: 'gradient',
@@ -32,16 +33,43 @@ const DEFAULT_CONFIG = {
 
 const TEMPLATES = {
   'classic-gold': {
-    borderOuter: '3px double #b8860b',
-    borderInner: '1px solid #d4a853',
+    borderOuter: '12px solid #b8860b',
+    borderInner: '3px solid #d4a853',
     bodyFont: 'Georgia, "Times New Roman", serif',
-    cornerOrnament: true,
   },
   'modern-clean': {
     borderOuter: '1px solid #e2e8f0',
     borderInner: 'none',
     bodyFont: 'Inter, sans-serif',
-    cornerOrnament: false,
+  },
+};
+
+const MODERN_CONFIG = {
+  template: 'modern-clean',
+  fields: {
+    border_deco: { show: true },
+    watermark: { show: false, opacity: 0.03 },
+    logo_kud: { show: true, width: 60 },
+    nama_kud: { show: true, fontSize: 14, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'bold' },
+    badan_hukum: { show: true, fontSize: 8, color: '#94a3b8' },
+    garis_header: { show: true },
+    judul: { show: true, fontSize: 18, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'bold' },
+    no_registrasi: { show: true, fontSize: 8, color: '#94a3b8' },
+    pembukaan: { show: true, fontSize: 10, color: '#475569', text: 'Pengurus Koperasi Unit Desa (KUD) Sari Subur dengan ini menerangkan dan mengesahkan bahwa:' },
+    nama_pekebun: { show: true, fontSize: 18, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'bold' },
+    grid_data: { show: true, fontSize: 10, color: '#475569' },
+    legal_text: { show: true, fontSize: 9, color: '#64748b', text: 'Dinyatakan secara sah terdaftar sebagai Anggota Aktif KUD Sari Subur. Pemegang sertifikat ini berhak atas seluruh fasilitas kemitraan kelapa sawit, pelayanan unit usaha koperasi, serta pembagian Sisa Hasil Usaha (SHU) sesuai AD/ART yang berlaku.' },
+    tanggal_terbit: { show: true, fontSize: 9, color: '#94a3b8' },
+    ttd_ketua: { show: true, width: 120, height: 45 },
+    stempel: { show: true, width: 75 },
+    nama_ketua: { show: true, fontSize: 11, color: '#0f172a', fontWeight: 'bold' },
+    jabatan_ketua: { show: true, fontSize: 9, color: '#94a3b8' },
+  },
+  background: {
+    type: 'gradient',
+    color1: '#ffffff',
+    color2: '#f8fafc',
+    angle: 135,
   },
 };
 
@@ -61,6 +89,7 @@ function SertifikatContent({ data, config, width }) {
 
   const pekebun = data?.pekebun || {};
   const kud = data?.setting_kud || {};
+  const pengaturan = data?.pengaturan || {};
   const nomorAnggota = data?.nomor_anggota || '-';
   const tanggalTerbit = data?.tanggal_terbit ? formatDateLocal(data.tanggal_terbit) : '-';
   const tglLahir = pekebun.tanggal_lahir ? formatDateLocal(pekebun.tanggal_lahir) : '-';
@@ -70,12 +99,10 @@ function SertifikatContent({ data, config, width }) {
     bgStyle = { backgroundColor: bg.color1 || '#ffffff' };
   } else if (bg.type === 'gradient') {
     bgStyle = { background: `linear-gradient(${bg.angle || 135}deg, ${bg.color1 || '#ffffff'} 0%, ${bg.color2 || '#f5e6c8'} 100%)` };
-  } else if (bg.type === 'image' && bg.value) {
-    bgStyle = { backgroundImage: `url(${bg.value})`, backgroundSize: 'cover', backgroundPosition: 'center' };
   }
 
   const scale = width / 800;
-  const s = (v) => v * scale;
+  const s = (v) => Math.round(v * scale * 10) / 10;
 
   return (
     <div style={{
@@ -85,274 +112,296 @@ function SertifikatContent({ data, config, width }) {
       overflow: 'hidden',
       fontFamily: tpl.bodyFont,
       ...bgStyle,
-      border: tpl.borderOuter,
-      borderRadius: isClassic ? '6px' : '4px',
+      border: isClassic ? 'none' : tpl.borderOuter,
+      borderRadius: isClassic ? '8px' : '4px',
       boxSizing: 'border-box',
     }}>
-      {/* Inner border for classic */}
+      {/* Classic gold double frame */}
       {isClassic && (
         <div style={{
-          position: 'absolute',
-          inset: '8px',
-          border: tpl.borderInner,
-          borderRadius: '3px',
-          pointerEvents: 'none',
-          zIndex: 1,
-        }} />
+          position: 'absolute', inset: 0,
+          border: '12px solid #b8860b',
+          borderRadius: '8px',
+          pointerEvents: 'none', zIndex: 10,
+          boxSizing: 'border-box',
+        }}>
+          <div style={{
+            position: 'absolute', inset: '4px',
+            border: '2px solid rgba(180, 83, 9, 0.4)',
+            borderRadius: '4px',
+            pointerEvents: 'none',
+          }} />
+        </div>
       )}
 
-      {/* Corner ornaments for classic */}
+      {/* Corner ornaments */}
       {isClassic && f.border_deco?.show !== false && (
         <>
-          <div style={{ position: 'absolute', top: '14px', left: '14px', fontSize: '18px', color: '#b8860b', lineHeight: 1, zIndex: 2 }}>╔</div>
-          <div style={{ position: 'absolute', top: '14px', right: '14px', fontSize: '18px', color: '#b8860b', lineHeight: 1, zIndex: 2 }}>╗</div>
-          <div style={{ position: 'absolute', bottom: '14px', left: '14px', fontSize: '18px', color: '#b8860b', lineHeight: 1, zIndex: 2 }}>╚</div>
-          <div style={{ position: 'absolute', bottom: '14px', right: '14px', fontSize: '18px', color: '#b8860b', lineHeight: 1, zIndex: 2 }}>╝</div>
+          <div style={{ position: 'absolute', top: '18px', left: '18px', width: '24px', height: '24px', borderTop: '3px solid #b8860b', borderLeft: '3px solid #b8860b', zIndex: 11 }} />
+          <div style={{ position: 'absolute', top: '18px', right: '18px', width: '24px', height: '24px', borderTop: '3px solid #b8860b', borderRight: '3px solid #b8860b', zIndex: 11 }} />
+          <div style={{ position: 'absolute', bottom: '18px', left: '18px', width: '24px', height: '24px', borderBottom: '3px solid #b8860b', borderLeft: '3px solid #b8860b', zIndex: 11 }} />
+          <div style={{ position: 'absolute', bottom: '18px', right: '18px', width: '24px', height: '24px', borderBottom: '3px solid #b8860b', borderRight: '3px solid #b8860b', zIndex: 11 }} />
         </>
+      )}
+
+      {/* Watermark */}
+      {f.watermark?.show !== false && kud?.logo && (
+        <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          opacity: f.watermark.opacity ?? 0.04,
+          pointerEvents: 'none', zIndex: 1,
+        }}>
+          <img src={kud.logo} alt="" style={{ width: '50%', height: '50%', objectFit: 'contain' }} />
+        </div>
       )}
 
       {/* Content */}
       <div style={{
-        position: 'relative',
-        zIndex: 3,
+        position: 'relative', zIndex: 5,
         height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: isClassic ? '20px 30px 16px 30px' : '24px 32px 18px 32px',
+        display: 'flex', flexDirection: 'column',
+        padding: isClassic ? '28px 36px 20px 36px' : '24px 32px 18px 32px',
         boxSizing: 'border-box',
       }}>
-        {/* TOP: Logo + Title */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', flexShrink: 0 }}>
-          {f.logo_kud?.show !== false && (kud?.logo) && (
-            <img src={kud.logo} alt="Logo KUD"
-              style={{
-                width: s(f.logo_kud.width || 75),
-                height: s(f.logo_kud.width || 75),
-                objectFit: 'contain',
-                flexShrink: 0,
-              }}
-            />
+        {/* ===== HEADER ===== */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: s(10), flexShrink: 0 }}>
+          {f.logo_kud?.show !== false && kud?.logo && (
+            <img src={kud.logo} alt="Logo"
+              style={{ width: s(f.logo_kud.width || 70), height: s(f.logo_kud.width || 70), objectFit: 'contain', flexShrink: 0 }} />
           )}
-          <div style={{ flex: 1, textAlign: 'center' }}>
-            {f.judul?.show !== false && (
+          <div style={{ textAlign: 'center' }}>
+            {f.nama_kud?.show !== false && (
               <div style={{
-                fontFamily: f.judul.fontFamily || (isClassic ? 'Playfair Display' : 'Inter'),
-                fontSize: s(f.judul.fontSize || 26),
-                fontWeight: f.judul.fontWeight || 'bold',
-                color: f.judul.color || (isClassic ? '#b8860b' : '#0f766e'),
-                letterSpacing: isClassic ? '3px' : '2px',
+                fontFamily: f.nama_kud.fontFamily || 'Inter',
+                fontSize: s(f.nama_kud.fontSize || 16),
+                fontWeight: f.nama_kud.fontWeight || 'bold',
+                color: f.nama_kud.color || '#064e3b',
+                letterSpacing: s(3),
                 textTransform: 'uppercase',
                 lineHeight: 1.2,
               }}>
-                SERTIFIKAT KEANGGOTAAN
+                {kud.nama_kud || 'KUD Sari Subur'}
               </div>
             )}
-            {f.subjudul?.show !== false && (
+            {f.badan_hukum?.show !== false && (
               <div style={{
-                fontFamily: f.subjudul.fontFamily || tpl.bodyFont,
-                fontSize: s(f.subjudul.fontSize || 13),
-                color: f.subjudul.color || (isClassic ? '#8b6914' : '#14b8a6'),
-                letterSpacing: isClassic ? '5px' : '3px',
-                textTransform: 'uppercase',
-                marginTop: s(4),
+                fontSize: s(f.badan_hukum.fontSize || 8),
+                color: f.badan_hukum.color || '#92400e',
+                fontWeight: 600,
+                marginTop: s(2),
               }}>
-                {kud.nama_kud || 'KUD Desa Sari Subur'}
+                No. Badan Hukum: {pengaturan?.no_badan_hukum || 'AHU-0001234.AH.01.26.TAHUN 2026'}
               </div>
             )}
           </div>
         </div>
 
-        {/* Decorative divider */}
-        {f.garis_dekorasi?.show !== false && (
+        {/* Divider */}
+        {f.garis_header?.show !== false && (
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            margin: `${s(isClassic ? 8 : 10)}px 0 ${s(isClassic ? 6 : 8)}px 0`,
+            height: '2px',
+            background: `linear-gradient(to right, transparent, ${isClassic ? '#b8860b' : '#14b8a6'}, transparent)`,
+            margin: `${s(6)}px ${s(20)}px ${s(4)}px ${s(20)}px`,
             flexShrink: 0,
-          }}>
-            <div style={{ flex: 1, height: isClassic ? '1px' : '1px', background: isClassic ? '#d4a853' : '#e2e8f0' }} />
-            <span style={{
-              fontSize: s(isClassic ? 12 : 10),
-              color: isClassic ? '#b8860b' : '#cbd5e1',
-              lineHeight: 1,
-            }}>{isClassic ? '✦' : '◆'}</span>
-            <div style={{ flex: 1, height: isClassic ? '1px' : '1px', background: isClassic ? '#d4a853' : '#e2e8f0' }} />
-          </div>
+          }} />
         )}
 
-        {/* BODY */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        {/* ===== JUDUL ===== */}
+        <div style={{ textAlign: 'center', flexShrink: 0, marginTop: s(2) }}>
+          {f.judul?.show !== false && (
+            <div style={{
+              fontFamily: f.judul.fontFamily || (isClassic ? 'Playfair Display' : 'Inter'),
+              fontSize: s(f.judul.fontSize || 20),
+              fontWeight: f.judul.fontWeight || 'bold',
+              color: f.judul.color || '#92400e',
+              letterSpacing: s(3),
+              textTransform: 'uppercase',
+              lineHeight: 1.2,
+            }}>
+              SERTIFIKAT KEANGGOTAAN
+            </div>
+          )}
+          {f.no_registrasi?.show !== false && (
+            <div style={{
+              fontSize: s(f.no_registrasi.fontSize || 8),
+              color: f.no_registrasi.color || '#64748b',
+              fontFamily: 'monospace',
+              marginTop: s(2),
+            }}>
+              Nomor Registrasi: {nomorAnggota}
+            </div>
+          )}
+        </div>
+
+        {/* ===== BODY ===== */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: s(3), padding: `0 ${s(10)}px` }}>
+          {/* Pembukaan */}
           {f.pembukaan?.show !== false && (
             <div style={{
               textAlign: 'center',
-              fontSize: s(f.pembukaan.fontSize || 11),
-              color: f.pembukaan.color || '#4a5568',
-              fontStyle: isClassic ? 'italic' : 'normal',
-              marginBottom: s(4),
+              fontSize: s(f.pembukaan.fontSize || 10),
+              color: f.pembukaan.color || '#475569',
+              fontStyle: 'italic',
+              lineHeight: 1.5,
+              maxWidth: '90%',
+              margin: '0 auto',
             }}>
-              Dengan ini menyatakan bahwa:
+              {f.pembukaan.text || 'Pengurus Koperasi Unit Desa (KUD) Sari Subur dengan ini menerangkan dan mengesahkan bahwa:'}
             </div>
           )}
 
+          {/* Nama */}
           {f.nama_pekebun?.show !== false && (
             <div style={{
               textAlign: 'center',
               fontFamily: f.nama_pekebun.fontFamily || (isClassic ? 'Playfair Display' : 'Inter'),
-              fontSize: s(f.nama_pekebun.fontSize || 24),
+              fontSize: s(f.nama_pekebun.fontSize || 20),
               fontWeight: f.nama_pekebun.fontWeight || 'bold',
-              color: f.nama_pekebun.color || '#1a202c',
-              letterSpacing: isClassic ? '2px' : '1px',
+              color: f.nama_pekebun.color || '#0f172a',
+              letterSpacing: s(1),
               textTransform: 'uppercase',
-              marginBottom: s(6),
-              padding: `${s(4)}px ${s(16)}px`,
-              borderBottom: isClassic ? `2px solid ${f.judul?.color || '#b8860b'}33` : 'none',
+              lineHeight: 1.2,
+              padding: `${s(4)}px ${s(20)}px`,
+              borderBottom: isClassic ? `2px solid ${f.judul?.color || '#92400e'}33` : 'none',
               display: 'inline-block',
-              lineHeight: 1.3,
+              margin: '0 auto',
             }}>
               {pekebun.nama || 'NAMA PEKEBUN'}
             </div>
           )}
 
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: s(2),
-            paddingLeft: isClassic ? s(20) : s(16),
-            marginBottom: s(4),
-          }}>
-            {f.no_anggota?.show !== false && (
-              <div style={{
-                fontSize: s(f.no_anggota.fontSize || 11),
-                color: f.no_anggota.color || '#4a5568',
-                display: 'flex',
-                gap: s(8),
-              }}>
-                <span style={{ minWidth: s(110), opacity: 0.7 }}>Nomor Anggota</span>
-                <span style={{ fontWeight: 600 }}>: {nomorAnggota}</span>
-              </div>
-            )}
-            {f.data_lengkap?.show !== false && (
-              <>
-                <div style={{
-                  fontSize: s(f.data_lengkap.fontSize || 11),
-                  color: f.data_lengkap.color || '#718096',
-                  display: 'flex',
-                  gap: s(8),
-                }}>
-                  <span style={{ minWidth: s(110), opacity: 0.7 }}>Tempat, Tgl Lahir</span>
-                  <span>: {pekebun.tempat_lahir || '-'}, {tglLahir}</span>
-                </div>
-              </>
-            )}
-          </div>
+          {/* Grid data */}
+          {f.grid_data?.show !== false && (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: `${s(2)}px ${s(16)}px`,
+              maxWidth: '80%',
+              margin: `${s(4)}px auto 0`,
+              fontSize: s(f.grid_data.fontSize || 10),
+              color: f.grid_data.color || '#334155',
+            }}>
+              <div><span style={{ opacity: 0.6, fontWeight: 500 }}>NIK</span><br/><span style={{ fontWeight: 700 }}>{pekebun.nik || '-'}</span></div>
+              <div><span style={{ opacity: 0.6, fontWeight: 500 }}>No. Anggota</span><br/><span style={{ fontWeight: 700 }}>{nomorAnggota}</span></div>
+              <div><span style={{ opacity: 0.6, fontWeight: 500 }}>Tempat/Tgl Lahir</span><br/><span style={{ fontWeight: 700 }}>{pekebun.tempat_lahir || '-'}, {tglLahir}</span></div>
+              <div><span style={{ opacity: 0.6, fontWeight: 500 }}>Status Keanggotaan</span><br/><span style={{ fontWeight: 700, color: isClassic ? '#15803d' : '#059669' }}>Pekebun Kelapa Sawit Aktif</span></div>
+            </div>
+          )}
 
-          {f.status_teks?.show !== false && (
+          {/* Legal text */}
+          {f.legal_text?.show !== false && (
             <div style={{
               textAlign: 'center',
-              fontSize: s(f.status_teks.fontSize || 11),
-              color: f.status_teks.color || '#4a5568',
-              fontStyle: isClassic ? 'italic' : 'normal',
-              padding: `0 ${s(20)}px`,
-              marginBottom: s(4),
+              fontSize: s(f.legal_text.fontSize || 9),
+              color: f.legal_text.color || '#475569',
+              fontStyle: 'italic',
+              lineHeight: 1.5,
+              maxWidth: '85%',
+              margin: `${s(4)}px auto 0`,
+              padding: `${s(4)}px ${s(8)}px`,
+              borderTop: `1px solid ${isClassic ? '#d4a853' : '#e2e8f0'}`,
             }}>
-              Adalah anggota aktif KUD Desa Sari Subur
+              {f.legal_text.text || 'Dinyatakan secara sah terdaftar sebagai Anggota Aktif KUD Sari Subur. Pemegang sertifikat ini berhak atas seluruh fasilitas kemitraan kelapa sawit, pelayanan unit usaha koperasi, serta pembagian Sisa Hasil Usaha (SHU) sesuai AD/ART yang berlaku.'}
             </div>
           )}
         </div>
 
-        {/* FOOTER */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexShrink: 0, marginTop: s(4) }}>
-          {/* Left: Date & City */}
-          <div style={{ textAlign: 'left' }}>
-            {f.kota_terbit?.show !== false && (
+        {/* ===== FOOTER ===== */}
+        <div style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+          flexShrink: 0, marginTop: s(4),
+          borderTop: `1px solid ${isClassic ? '#d4a853' : '#e2e8f0'}`,
+          paddingTop: s(4),
+        }}>
+          {/* Left: Date */}
+          <div>
+            {f.tanggal_terbit?.show !== false && (
               <div style={{
-                fontSize: s(f.kota_terbit.fontSize || 11),
-                color: f.kota_terbit.color || '#718096',
-                fontStyle: isClassic ? 'italic' : 'normal',
+                fontSize: s(f.tanggal_terbit.fontSize || 9),
+                color: f.tanggal_terbit.color || '#64748b',
+                fontStyle: 'italic',
+                lineHeight: 1.6,
               }}>
-                {kud.kartu_kota_terbit || 'Kota'}, {tanggalTerbit}
+                <div>Diterbitkan di: <span style={{ fontWeight: 600, color: '#334155' }}>{kud.kartu_kota_terbit || 'Kota'}</span></div>
+                <div>Pada Tanggal: <span style={{ fontWeight: 600, color: '#334155' }}>{tanggalTerbit}</span></div>
               </div>
             )}
           </div>
 
-          {/* Right: Signature */}
-          <div style={{ textAlign: 'center', minWidth: s(160) }}>
-            {f.ttd_ketua?.show !== false && kud?.kartu_ttd && (
-              <img
-                src={kud.kartu_ttd}
-                alt="TTD"
-                style={{
-                  width: s(f.ttd_ketua.width || 120),
-                  height: s(f.ttd_ketua.height || 42),
-                  objectFit: 'contain',
-                  marginBottom: s(2),
-                }}
-              />
-            )}
+          {/* Right: Signature + Stamp */}
+          <div style={{ textAlign: 'center', minWidth: s(180) }}>
+            <div style={{ fontSize: s(9), fontWeight: 700, color: '#334155', marginBottom: s(2) }}>
+              Pengurus KUD Sari Subur
+            </div>
+            <div style={{ fontSize: s(8), color: '#64748b', marginBottom: s(4), fontStyle: 'italic' }}>
+              Ketua Umum
+            </div>
+
+            {/* TTD + Stempel WRAPPER — FIX SIZE */}
             <div style={{
+              position: 'relative',
+              minHeight: s(70),
               display: 'flex',
-              justifyContent: 'center',
               alignItems: 'center',
-              gap: s(8),
-              marginTop: s(2),
+              justifyContent: 'center',
+              marginBottom: s(2),
             }}>
               {f.stempel?.show !== false && kud?.kartu_stempel && (
                 <img
                   src={kud.kartu_stempel}
                   alt="Stempel"
                   style={{
+                    position: 'absolute',
+                    left: '10%',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
                     width: s(f.stempel.width || 80),
                     height: s(f.stempel.width || 80),
                     objectFit: 'contain',
-                    opacity: 0.85,
-                    marginRight: s(8),
+                    opacity: 0.8,
+                    mixBlendMode: 'multiply',
+                    zIndex: 1,
                   }}
                 />
               )}
-              <div>
-                {f.nama_ketua?.show !== false && (
-                  <div style={{
-                    fontFamily: f.nama_ketua.fontFamily || tpl.bodyFont,
-                    fontSize: s(f.nama_ketua.fontSize || 12),
-                    fontWeight: f.nama_ketua.fontWeight || 'bold',
-                    color: f.nama_ketua.color || '#1a202c',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                  }}>
-                    {kud.kartu_ketua_nama || kud.nama_ketua || 'NAMA KETUA'}
-                  </div>
-                )}
-                {f.jabatan_ketua?.show !== false && (
-                  <div style={{
-                    fontSize: s(f.jabatan_ketua.fontSize || 10),
-                    color: f.jabatan_ketua.color || '#718096',
-                    fontStyle: isClassic ? 'italic' : 'normal',
-                  }}>
-                    {kud.kartu_ketua_jabatan || 'Ketua KUD'}
-                  </div>
-                )}
-              </div>
+              {f.ttd_ketua?.show !== false && kud?.kartu_ttd && (
+                <img
+                  src={kud.kartu_ttd}
+                  alt="TTD"
+                  style={{
+                    height: s(56),
+                    width: 'auto',
+                    objectFit: 'contain',
+                    position: 'relative',
+                    zIndex: 2,
+                    mixBlendMode: 'multiply',
+                  }}
+                />
+              )}
             </div>
+
+            {f.nama_ketua?.show !== false && (
+              <div style={{
+                fontSize: s(f.nama_ketua.fontSize || 11),
+                fontWeight: f.nama_ketua.fontWeight || 'bold',
+                color: f.nama_ketua.color || '#0f172a',
+                textTransform: 'uppercase',
+                letterSpacing: s(1),
+              }}>
+                {kud.kartu_ketua_nama || kud.nama_ketua || 'NAMA KETUA'}
+              </div>
+            )}
+            {f.jabatan_ketua?.show !== false && (
+              <div style={{
+                fontSize: s(f.jabatan_ketua.fontSize || 9),
+                color: f.jabatan_ketua.color || '#64748b',
+              }}>
+                {kud.kartu_ketua_jabatan || 'Ketua KUD Sari Subur'}
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Bottom decorative line for modern */}
-        {!isClassic && f.garis_dekorasi?.show !== false && (
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            marginTop: s(6),
-            flexShrink: 0,
-          }}>
-            <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
-            {kud?.logo && (
-              <img src={kud.logo} alt="" style={{ width: s(24), height: s(24), objectFit: 'contain', opacity: 0.4 }} />
-            )}
-            <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
-          </div>
-        )}
       </div>
     </div>
   );
@@ -375,18 +424,14 @@ export default function SertifikatKeanggotaan({ data, config: configProp, width 
     try {
       const html2canvas = (await import('html2canvas')).default;
       const canvas = await html2canvas(containerRef.current, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: false,
+        scale: 2, useCORS: true, allowTaint: false,
         backgroundColor: isClassic ? '#fffaed' : '#ffffff',
       });
       const link = document.createElement('a');
       link.download = `sertifikat-${data?.pekebun?.nama?.toLowerCase().replace(/\s+/g, '-') || 'anggota'}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
-    } catch (e) {
-      console.error('Download failed:', e);
-    }
+    } catch (e) { console.error(e); }
     setDownloading(false);
   }, [downloading, data, isClassic]);
 
@@ -396,8 +441,7 @@ export default function SertifikatKeanggotaan({ data, config: configProp, width 
     if (!printWin) return;
     const certHtml = containerRef.current.innerHTML;
     printWin.document.write(`
-      <html>
-      <head>
+      <html><head>
         <title>Sertifikat Keanggotaan</title>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
         <style>
@@ -406,14 +450,10 @@ export default function SertifikatKeanggotaan({ data, config: configProp, width 
           body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
           .cert-wrapper { width: 100%; max-width: 1000px; }
         </style>
-      </head>
-      <body>
+      </head><body>
         <div class="cert-wrapper">${certHtml}</div>
-        <script>
-          window.onload = function() { window.print(); window.close(); };
-        <\/script>
-      </body>
-      </html>
+        <script>window.onload=function(){window.print();window.close();};<\/script>
+      </body></html>
     `);
     printWin.document.close();
   }, []);
@@ -425,14 +465,10 @@ export default function SertifikatKeanggotaan({ data, config: configProp, width 
       <div ref={containerRef} style={{ width: `${width}px`, maxWidth: '100%' }}>
         <SertifikatContent data={data} config={config} width={width} />
       </div>
-
       {showActions && (
         <div className="flex gap-2 flex-wrap justify-center">
-          <button
-            onClick={handleDownloadPNG}
-            disabled={downloading}
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-white rounded-xl text-xs font-semibold hover:bg-primary/90 transition-all shadow-sm disabled:opacity-50 cursor-pointer"
-          >
+          <button onClick={handleDownloadPNG} disabled={downloading}
+            className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-white rounded-xl text-xs font-semibold hover:bg-primary/90 transition-all shadow-sm disabled:opacity-50 cursor-pointer">
             {downloading ? (
               <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
@@ -442,10 +478,8 @@ export default function SertifikatKeanggotaan({ data, config: configProp, width 
             )}
             Download PNG
           </button>
-          <button
-            onClick={handlePrint}
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-foreground rounded-xl text-xs font-semibold border border-border hover:bg-slate-50 transition-all shadow-sm cursor-pointer"
-          >
+          <button onClick={handlePrint}
+            className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-foreground rounded-xl text-xs font-semibold border border-border hover:bg-slate-50 transition-all shadow-sm cursor-pointer">
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
             </svg>

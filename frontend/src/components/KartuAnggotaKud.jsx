@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { PrinterIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 
 function formatTgl(d) {
@@ -9,33 +9,80 @@ function formatTgl(d) {
   return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
-
-
-function BarcodeSvg({ value }) {
-  if (!value) return null;
-  const chars = (value || 'KUD').split('');
-  const barWidth = 2;
-  const totalWidth = chars.length * 7 * barWidth;
-  const bars = [];
-  chars.forEach((ch, ci) => {
-    const code = ch.charCodeAt(0).toString(2).padStart(7, '0');
-    code.split('').forEach((bit, bi) => {
-      if (bit === '1') {
-        bars.push({ x: ci * 7 * barWidth + bi * barWidth, width: barWidth });
-      }
+function QRCodeSvg({ value, size = 60 }) {
+  const [svg, setSvg] = useState(null);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    import('qrcode').then((QRCode) => {
+      QRCode.toString(value || 'KUD', { type: 'svg', width: size, margin: 1 }, (err, str) => {
+        if (!err) setSvg(str);
+      });
     });
-  });
-  return (
-    <svg viewBox={`0 0 ${totalWidth || 100} 30`} className="w-full h-full">
-      {bars.map((b, i) => (
-        <rect key={i} x={b.x} y={0} width={b.width} height={30} fill="#000" />
-      ))}
-    </svg>
-  );
+  }, [value, size]);
+  if (!svg) return <div style={{ width: size, height: size }} className="bg-gray-100 rounded" />;
+  return <div style={{ width: size, height: size }} dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 
+const DEFAULT_CONFIG = {
+  template: 'classic',
+  front: {
+    fields: {
+      logo_kud: { show: true, width: 52 },
+      nama_kud: { show: true, fontSize: 10, color: '#ffffff', fontFamily: 'Inter', fontWeight: 'bold' },
+      foto_pekebun: { show: true, width: 50, height: 66 },
+      judul: { show: true, fontSize: 11, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black' },
+      subjudul: { show: true, fontSize: 7, color: '#059669', fontFamily: 'Inter', fontWeight: 'bold' },
+      nama_anggota: { show: true, fontSize: 13, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black' },
+      nomor_anggota: { show: true, fontSize: 9, color: '#059669', fontFamily: 'monospace', fontWeight: 'bold' },
+      nik: { show: true, fontSize: 8, color: '#475569' },
+      ttl: { show: true, fontSize: 8, color: '#475569' },
+      jenis_kelamin: { show: true, fontSize: 8, color: '#475569' },
+      no_wa: { show: true, fontSize: 8, color: '#475569' },
+      no_kk: { show: true, fontSize: 8, color: '#475569' },
+      alamat: { show: true, fontSize: 8, color: '#475569' },
+      berlaku: { show: true, fontSize: 7, color: '#94a3b8' },
+      qr_code: { show: true },
+      watermark: { show: true, opacity: 0.04 },
+    },
+    background: { type: 'gradient', color1: '#059669', color2: '#047857', angle: 135 },
+  },
+  back: {
+    fields: {
+      header_website: { show: true, fontSize: 6, color: '#ffffff', fontWeight: 'bold' },
+      aturan_list: { show: true, fontSize: 7, color: '#475569' },
+      sekretariat: { show: true, fontSize: 7, color: '#475569' },
+      slogan: { show: true, fontSize: 16, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black' },
+      kota_tanggal: { show: true, fontSize: 7, color: '#64748b' },
+      jabatan_ketua: { show: true, fontSize: 8, color: '#475569', fontWeight: 'semibold' },
+      ttd_stempel: { show: true },
+      nama_ketua: { show: true, fontSize: 8, color: '#0f172a', fontWeight: 'black' },
+    },
+    background: { type: 'gradient', color1: '#028143', color2: '#059669', angle: 135 },
+  },
+};
+
+const TEMPLATE_STYLES = {
+  classic: {
+    frontLeftBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2}, #0f172a)`,
+    backHeaderBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2})`,
+    leftPanelPct: 35,
+    corner: 'rounded-xl',
+  },
+  modern: {
+    frontLeftBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2})`,
+    backHeaderBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2})`,
+    leftPanelPct: 32,
+    corner: 'rounded-lg',
+  },
+  compact: {
+    frontLeftBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2})`,
+    backHeaderBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2})`,
+    leftPanelPct: 30,
+    corner: 'rounded-md',
+  },
+};
+
 export default function KartuAnggotaKud({ data, width = 360, showActions = true, onClose }) {
-  const printRef = useRef(null);
   const cardRef = useRef(null);
   const [downloading, setDownloading] = useState(false);
 
@@ -43,6 +90,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
     pekebun = {},
     setting_kud = {},
     pengaturan = {},
+    kartu_config: rawConfig,
     nomor_anggota = '',
     tanggal_terbit = '',
     masa_berlaku = '',
@@ -54,35 +102,52 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
   const logo = s?.logo || pengaturan?.logo_kud || '';
   const nama = pekebun?.nama || user?.name || '-';
   const nik = pekebun?.nik || '-';
+  const ttlText = pekebun?.tempat_lahir
+    ? `${pekebun.tempat_lahir}, ${formatTgl(pekebun.tanggal_lahir)}`
+    : (pekebun?.tanggal_lahir ? formatTgl(pekebun.tanggal_lahir) : '-');
+  const jenisKelamin = pekebun?.jenis_kelamin === 'L' ? 'Laki-laki' : pekebun?.jenis_kelamin === 'P' ? 'Perempuan' : '-';
+  const noWa = pekebun?.no_whatsapp || '-';
+  const noKk = pekebun?.no_kk || '-';
   const alamatJalan = pekebun?.alamat || '';
   const initial = nama.charAt(0) || '?';
 
-  const namaKud = s?.nama_kud || 'KUD Sari Subur';
-  const alamatKud = s?.alamat || 'Jl. Tegal Sari No. 123, Kec. Tegal Sari';
-  const warnaPrimary = s?.kartu_warna_primary || '#059669';
-  const warnaSecondary = s?.kartu_warna_secondary || '#047857';
-  const warnaBelakang = s?.kartu_belakang_warna || '#028143';
-  const ttdUrl = s?.kartu_ttd || '';
-  const stempelUrl = s?.kartu_stempel || '';
-  const ketuaNama = s?.kartu_ketua_nama || s?.nama_ketua || '-';
-  const ketuaJabatan = s?.kartu_ketua_jabatan || 'Ketua KUD Sari Subur';
-  const aturan = Array.isArray(s?.kartu_aturan) ? s.kartu_aturan : [
-    'Pemegang kartu ini adalah Anggota Resmi KUD Sari Subur.',
-    'Pemegang kartu tunduk dan taat kepada AD/ART KUD Sari Subur.',
-    'Dilarang menggunakan kartu ini untuk kegiatan yang melanggar hukum.',
-    'Kartu ini milik KUD, jika ditemukan harap dikembalikan ke sekretariat.',
-  ];
-  const slogan = s?.kartu_slogan || 'SAWIT ADALAH KITA';
-  const website = s?.website || 'kud-sari-subur.my.id';
-  const kotaTerbit = s?.kartu_kota_terbit || 'Megang Sakti';
-  const judulDepan = s?.kartu_judul_depan || 'KARTU TANDA ANGGOTA';
-  const subjudulDepan = s?.kartu_subjudul_depan || 'KOPERASI UNIT DESA SARI SUBUR';
+  const config = rawConfig || s?.kartu_config || DEFAULT_CONFIG;
+  const templateKey = config.template || 'classic';
+  const templateStyle = TEMPLATE_STYLES[templateKey] || TEMPLATE_STYLES.classic;
+  const fFields = config.front?.fields || DEFAULT_CONFIG.front.fields;
+  const bFields = config.back?.fields || DEFAULT_CONFIG.back.fields;
+  const fBg = config.front?.background || DEFAULT_CONFIG.front.background;
+  const bBg = config.back?.background || DEFAULT_CONFIG.back.background;
 
+  const f = (key) => fFields[key] || { show: false };
+  const b = (key) => bFields[key] || { show: false };
+
+  const ttdUrl = config.ttd || s?.kartu_ttd || '';
+  const stempelUrl = config.stempel || s?.kartu_stempel || '';
+  const ketuaNama = config.ketua_nama || s?.kartu_ketua_nama || s?.nama_ketua || '-';
+  const ketuaJabatan = config.ketua_jabatan || s?.kartu_ketua_jabatan || 'Ketua KUD Sari Subur';
+  const aturan = Array.isArray(config.aturan) && config.aturan.length > 0
+    ? config.aturan
+    : (Array.isArray(s?.kartu_aturan) && s.kartu_aturan.length > 0
+        ? s.kartu_aturan
+        : [
+            'Pemegang kartu ini adalah Anggota Resmi KUD Sari Subur.',
+            'Pemegang kartu tunduk dan taat kepada AD/ART KUD Sari Subur.',
+            'Dilarang menggunakan kartu ini untuk kegiatan yang melanggar hukum.',
+            'Kartu ini milik KUD, jika ditemukan harap dikembalikan ke sekretariat.',
+          ]);
+  const slogan = config.slogan || s?.kartu_slogan || 'SAWIT ADALAH KITA';
+  const website = config.website || s?.website || 'kud-sari-subur.my.id';
+  const kotaTerbit = config.kota_terbit || s?.kartu_kota_terbit || 'Megang Sakti';
   const terbit = formatTgl(tanggal_terbit);
   const berlaku = formatTgl(masa_berlaku);
   const cardW = Math.min(width, 500);
-  const leftPanelW = Math.round(cardW * 0.35);
+  const leftPanelPct = templateStyle.leftPanelPct;
+  const leftPanelW = Math.round(cardW * leftPanelPct / 100);
   const rightPanelW = cardW - leftPanelW;
+
+  const fc = (key, prop) => f(key)?.[prop];
+  const bc = (key, prop) => b(key)?.[prop];
 
   const handlePrint = () => {
     const html = buildPrintHtml();
@@ -120,111 +185,81 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
     setDownloading(false);
   };
 
+  const usedFonts = [...new Set([
+    ...Object.values(fFields).map((ff) => ff.fontFamily),
+    ...Object.values(bFields).map((bf) => bf.fontFamily),
+  ].filter(Boolean))];
+
   const buildPrintHtml = () => {
-    const leftBg = `linear-gradient(135deg, ${warnaPrimary}, ${warnaSecondary}, #0f172a)`;
-    const backBg = `linear-gradient(135deg, ${warnaBelakang}, ${warnaPrimary})`;
+    const leftBg = templateStyle.frontLeftBg(fBg);
+    const backBg = templateStyle.backHeaderBg(bBg);
 
-    const logoHtml = logo
-      ? `<img src="${logo}" alt="Logo" class="logo" />`
-      : `<div class="logo-fb">KUD</div>`;
-
-    const fotoHtml = foto
-      ? `<img src="${foto}" alt="" class="foto" />`
-      : `<div class="foto-fb">${initial}</div>`;
-
-    const ttdHtml = ttdUrl
-      ? `<img src="${ttdUrl}" alt="TTD" class="ttd-img" />`
-      : '';
-
-    const stempelHtml = stempelUrl
-      ? `<img src="${stempelUrl}" alt="Stempel" class="stempel-img" />`
-      : '';
+    const logoHtml = logo ? `<img src="${logo}" alt="" style="width:${fc('logo_kud', 'width') || 52}px;height:${fc('logo_kud', 'width') || 52}px;object-fit:contain;border-radius:2mm;border:1px solid rgba(255,255,255,0.3);" />`
+      : '<div style="width:52px;height:52px;border-radius:2mm;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:10pt;font-weight:800;color:rgba(255,255,255,0.5);">KUD</div>';
+    const fotoHtml = foto ? `<img src="${foto}" alt="" style="width:${fc('foto_pekebun', 'width') || 50}px;height:${fc('foto_pekebun', 'height') || 66}px;object-fit:cover;border-radius:1.5mm;border:2px solid rgba(255,255,255,0.5);" />`
+      : `<div style="width:50px;height:66px;border-radius:1.5mm;border:2px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:8pt;font-weight:700;color:rgba(255,255,255,0.4);">${initial}</div>`;
+    const ttdHtml = ttdUrl ? `<img src="${ttdUrl}" alt="TTD" style="height:30px;width:auto;object-fit:contain;" />` : '';
+    const stempelHtml = stempelUrl ? `<img src="${stempelUrl}" alt="Stempel" style="height:50px;width:auto;object-fit:contain;margin-right:4px;mix-blend-mode:multiply;" />` : '';
 
     const aturanHtml = aturan.map((a) => `<li>${a}</li>`).join('');
+    const fontLinks = usedFonts.map((f) => `https://fonts.googleapis.com/css2?family=${f.replace(/ /g, '+')}:wght@300;400;500;600;700;800;900&display=swap`).join('\n');
 
     return `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><title>Kartu Anggota - ${nama}</title>
+<link href="${fontLinks}" rel="stylesheet">
 <style>
   @page { size: 85.6mm 53.98mm; margin: 0; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .page { width: 85.6mm; height: 53.98mm; position: relative; overflow: hidden; page-break-after: always; }
-
   .front { display: flex; }
-  .front-left { width: 35%; padding: 3mm 2mm; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
-  .front-left .logo { width: 14mm; height: 14mm; object-fit: contain; border-radius: 2mm; border: 1px solid rgba(255,255,255,0.3); }
-  .front-left .logo-fb { width: 14mm; height: 14mm; border-radius: 2mm; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 10pt; font-weight: 800; color: rgba(255,255,255,0.5); }
-  .front-left .kud-name { font-size: 6pt; font-weight: 800; text-align: center; text-transform: uppercase; letter-spacing: 0.3px; color: rgba(255,255,255,0.9); line-height: 1.2; margin-top: 1mm; }
-  .front-left .foto { width: 13mm; height: 17mm; object-fit: cover; border-radius: 1.5mm; border: 2px solid rgba(255,255,255,0.5); }
-  .front-left .foto-fb { width: 13mm; height: 17mm; border-radius: 1.5mm; border: 2px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 8pt; font-weight: 700; color: rgba(255,255,255,0.4); }
-
-  .front-right { width: 65%; background: white; padding: 2.5mm 3mm; display: flex; flex-direction: column; position: relative; }
-  .front-right .watermark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.04; pointer-events: none; }
-  .front-right .watermark img { width: 40mm; height: 40mm; object-fit: contain; }
-  .front-right .title { font-size: 7pt; font-weight: 900; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 0.5px solid #e2e8f0; padding-bottom: 0.5mm; margin-bottom: 0.3mm; }
-  .front-right .subtitle { font-size: 5pt; font-weight: 700; color: ${warnaPrimary}; text-transform: uppercase; margin-bottom: 1mm; }
-  .front-right .member-name { font-size: 8pt; font-weight: 900; color: #0f172a; text-transform: uppercase; line-height: 1.1; }
-  .front-right .member-no { font-size: 5.5pt; font-family: monospace; font-weight: 700; color: ${warnaPrimary}; background: #f0fdf4; padding: 0.3mm 1mm; border-radius: 0.5mm; display: inline-block; margin: 0.5mm 0; }
-  .front-right .alamat { font-size: 5pt; color: #475569; line-height: 1.4; margin-top: 0.3mm; }
-  .front-right .footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 0.3mm; border-top: 0.5px solid #f1f5f9; }
-  .front-right .footer .berlaku { font-size: 4.5pt; color: #94a3b8; }
-  .front-right .footer .berlaku .val { font-size: 5.5pt; font-weight: 700; color: #0f172a; }
-  .front-right .footer .barcode { height: 6mm; width: 18mm; }
-
+  .front-left { width: ${leftPanelPct}%; padding: 3mm 2mm; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+  .front-right { width: ${100 - leftPanelPct}%; background: white; padding: 2.5mm 3mm; display: flex; flex-direction: column; position: relative; overflow: hidden; }
   .back { display: flex; flex-direction: column; }
-  .back-header { padding: 1.5mm 3mm; text-align: center; font-size: 6pt; font-weight: 700; letter-spacing: 0.5px; color: white; }
+  .back-header { padding: 1.5mm 3mm; text-align: center; }
   .back-body { flex: 1; padding: 2mm 3mm; display: flex; flex-direction: column; justify-content: space-between; }
-  .back-body .aturan-title { font-size: 5.5pt; font-weight: 700; color: #0f172a; margin-bottom: 0.5mm; }
-  .back-body .aturan-list { list-style: none; padding: 0; margin: 0; }
-  .back-body .aturan-list li { font-size: 4.5pt; color: #475569; line-height: 1.5; padding-left: 2mm; position: relative; }
-  .back-body .aturan-list li::before { content: ''; position: absolute; left: 0; top: 2.5pt; width: 1.5pt; height: 1.5pt; border-radius: 50%; background: ${warnaPrimary}; }
-  .back-body .sekret { font-size: 4.5pt; color: #475569; margin-top: 0.5mm; padding-top: 0.5mm; border-top: 0.5px solid #e2e8f0; }
-  .back-body .sekret .label { font-weight: 700; color: #0f172a; }
   .back-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 0.5mm; }
-  .back-footer .slogan { font-size: 9pt; font-weight: 900; font-style: italic; color: #0f172a; text-transform: uppercase; letter-spacing: 0.3px; }
-  .back-footer .ttd-area { text-align: right; font-size: 4.5pt; color: #475569; }
-  .back-footer .ttd-area .sign-row { display: flex; align-items: center; justify-content: flex-end; gap: 1mm; margin: 0.5mm 0; }
-  .back-footer .ttd-area .stempel-img { height: 8mm; width: auto; }
-  .back-footer .ttd-area .ttd-img { height: 4mm; width: auto; }
-  .back-footer .ttd-area .nama { font-weight: 700; font-size: 5pt; color: #0f172a; text-transform: uppercase; }
-
+  .ttd-stempel-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 2px; min-height: 55px; }
   @media screen { body { padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 4mm; background: #f8fafc; } .page { border-radius: 3mm; box-shadow: 0 4px 24px rgba(0,0,0,0.15); } }
 </style></head><body>
-  <div class="page front" style="background: white; border-radius: 3mm;">
-    <div class="front-left" style="background: ${leftBg}; border-radius: 3mm 0 0 3mm;">
-      ${logoHtml}
-      <div class="kud-name">${namaKud}</div>
-      ${fotoHtml}
+  <div class="page front" style="background:white;">
+    <div class="front-left" style="background:${leftBg};">
+      ${f('logo_kud').show !== false ? logoHtml : ''}
+      ${f('nama_kud').show !== false ? `<div style="font-size:${fc('nama_kud', 'fontSize') || 10}pt;font-weight:${fc('nama_kud', 'fontWeight') || 'bold'};color:${fc('nama_kud', 'color') || '#ffffff'};text-align:center;text-transform:uppercase;font-family:'${fc('nama_kud', 'fontFamily') || 'Inter'},sans-serif';">${s?.nama_kud || 'KUD Sari Subur'}</div>` : ''}
+      ${f('foto_pekebun').show !== false ? fotoHtml : ''}
     </div>
     <div class="front-right">
-      <div class="watermark">${logo ? `<img src="${logo}" />` : ''}</div>
-      <div class="title">${judulDepan}</div>
-      <div class="subtitle">${subjudulDepan}</div>
-      <div class="member-name">${nama}</div>
-      <div class="member-no">${nomor_anggota || 'KUD-00000'}</div>
-      <div class="alamat">${alamatJalan || '-'}</div>
-      <div class="footer">
-        <div class="berlaku">Berlaku: <span class="val">${terbit} - ${berlaku}</span></div>
-        <div class="barcode"><svg viewBox="0 0 100 30" style="width:100%;height:100%">${Array.from({length: 30}, (_, i) => i % 2 === 0 ? `<rect x="${i*3.3}" y="0" width="2" height="30" fill="#000"/>` : '').join('')}</svg></div>
+      ${f('watermark').show !== false && logo ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:${fc('watermark', 'opacity') || 0.04};pointer-events:none;"><img src="${logo}" style="width:40mm;height:40mm;object-fit:contain;" /></div>` : ''}
+      ${f('judul').show !== false ? `<div style="font-size:${fc('judul', 'fontSize') || 11}pt;font-weight:${fc('judul', 'fontWeight') || 'black'};color:${fc('judul', 'color') || '#0f172a'};text-transform:uppercase;letter-spacing:0.5px;border-bottom:0.5px solid #e2e8f0;padding-bottom:0.5mm;margin-bottom:0.3mm;font-family:'${fc('judul', 'fontFamily') || 'Inter'},sans-serif';">${s?.kartu_judul_depan || 'KARTU TANDA ANGGOTA'}</div>` : ''}
+      ${f('subjudul').show !== false ? `<div style="font-size:${fc('subjudul', 'fontSize') || 7}pt;font-weight:${fc('subjudul', 'fontWeight') || 'bold'};color:${fc('subjudul', 'color') || '#059669'};text-transform:uppercase;margin-bottom:1mm;font-family:'${fc('subjudul', 'fontFamily') || 'Inter'},sans-serif';">${s?.kartu_subjudul_depan || 'KOPERASI UNIT DESA SARI SUBUR'}</div>` : ''}
+      ${f('nama_anggota').show !== false ? `<div style="font-size:${fc('nama_anggota', 'fontSize') || 13}pt;font-weight:${fc('nama_anggota', 'fontWeight') || 'black'};color:${fc('nama_anggota', 'color') || '#0f172a'};text-transform:uppercase;line-height:1.1;font-family:'${fc('nama_anggota', 'fontFamily') || 'Inter'},sans-serif';">${nama}</div>` : ''}
+      ${f('nomor_anggota').show !== false ? `<div style="font-size:${fc('nomor_anggota', 'fontSize') || 9}pt;font-weight:${fc('nomor_anggota', 'fontWeight') || 'bold'};color:${fc('nomor_anggota', 'color') || '#059669'};font-family:monospace;background:#f0fdf4;padding:0.3mm 1mm;border-radius:0.5mm;display:inline-block;margin:0.5mm 0;">${nomor_anggota || 'KUD-00000'}</div>` : ''}
+      ${f('nik').show !== false && nik !== '-' ? `<div style="font-size:${fc('nik', 'fontSize') || 8}pt;color:${fc('nik', 'color') || '#475569'};line-height:1.4;">NIK: ${nik}</div>` : ''}
+      ${f('ttl').show !== false ? `<div style="font-size:${fc('ttl', 'fontSize') || 8}pt;color:${fc('ttl', 'color') || '#475569'};line-height:1.4;">TTL: ${ttlText}</div>` : ''}
+      ${f('jenis_kelamin').show !== false ? `<div style="font-size:${fc('jenis_kelamin', 'fontSize') || 8}pt;color:${fc('jenis_kelamin', 'color') || '#475569'};line-height:1.4;">JK: ${jenisKelamin}</div>` : ''}
+      ${f('no_wa').show !== false ? `<div style="font-size:${fc('no_wa', 'fontSize') || 8}pt;color:${fc('no_wa', 'color') || '#475569'};line-height:1.4;">WA: ${noWa}</div>` : ''}
+      ${f('no_kk').show !== false ? `<div style="font-size:${fc('no_kk', 'fontSize') || 8}pt;color:${fc('no_kk', 'color') || '#475569'};line-height:1.4;">No KK: ${noKk}</div>` : ''}
+      ${f('alamat').show !== false && alamatJalan ? `<div style="font-size:${fc('alamat', 'fontSize') || 8}pt;color:${fc('alamat', 'color') || '#475569'};line-height:1.4;">${alamatJalan}</div>` : ''}
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:0.3mm;border-top:0.5px solid #f1f5f9;">
+        ${f('berlaku').show !== false ? `<div style="font-size:${fc('berlaku', 'fontSize') || 7}pt;color:${fc('berlaku', 'color') || '#94a3b8'};"><span style="font-weight:700;font-size:9pt;color:#0f172a;">${terbit} - ${berlaku}</span></div>` : ''}
+        ${f('qr_code').show !== false ? `<div style="width:18mm;height:18mm;">[QR]</div>` : ''}
       </div>
     </div>
   </div>
-
-  <div class="page back" style="background: white; border-radius: 3mm;">
-    <div class="back-header" style="background: ${backBg};">${website}</div>
+  <div class="page back" style="background:white;">
+    ${b('header_website').show !== false ? `<div class="back-header" style="font-size:${bc('header_website', 'fontSize') || 6}pt;font-weight:${bc('header_website', 'fontWeight') || 'bold'};color:${bc('header_website', 'color') || '#ffffff'};background:${backBg};">${website}</div>` : ''}
     <div class="back-body">
       <div>
-        <div class="aturan-title">Kartu Tanda Anggota KUD Sari Subur:</div>
-        <ul class="aturan-list">${aturanHtml}</ul>
-        <div class="sekret"><span class="label">Sekretariat KUD:</span> ${s?.alamat || alamatKud}</div>
+        ${b('aturan_list').show !== false ? `<div style="font-size:${bc('aturan_list', 'fontSize') || 7}pt;color:${bc('aturan_list', 'color') || '#475569'};"><div style="font-size:8pt;font-weight:700;color:#0f172a;margin-bottom:0.5mm;">Kartu Tanda Anggota:</div><ul style="list-style:none;padding:0;margin:0;">${aturanHtml}</ul></div>` : ''}
+        ${b('sekretariat').show !== false ? `<div style="font-size:${bc('sekretariat', 'fontSize') || 7}pt;color:${bc('sekretariat', 'color') || '#475569'};margin-top:0.5mm;padding-top:0.5mm;border-top:0.5px solid #e2e8f0;"><span style="font-weight:700;color:#0f172a;">Sekretariat:</span> ${s?.alamat || '-'}</div>` : ''}
       </div>
       <div class="back-footer">
-        <div class="slogan">${slogan}</div>
-        <div class="ttd-area">
-          <div>${kotaTerbit}, ${terbit}</div>
-          <div>${ketuaJabatan}</div>
-          <div class="sign-row">${stempelHtml}${ttdHtml}</div>
-          <div class="nama">${ketuaNama}</div>
+        ${b('slogan').show !== false ? `<div style="font-size:${bc('slogan', 'fontSize') || 16}pt;font-weight:${bc('slogan', 'fontWeight') || 'black'};font-style:italic;color:${bc('slogan', 'color') || '#0f172a'};text-transform:uppercase;font-family:'${bc('slogan', 'fontFamily') || 'Inter'},sans-serif';">${slogan}</div>` : ''}
+        <div style="text-align:right;font-size:${bc('kota_tanggal', 'fontSize') || 7}pt;color:${bc('kota_tanggal', 'color') || '#64748b'};">
+          ${b('kota_tanggal').show !== false ? `<div>${kotaTerbit}, ${terbit}</div>` : ''}
+          ${b('jabatan_ketua').show !== false ? `<div style="font-weight:${bc('jabatan_ketua', 'fontWeight') || 'semibold'};color:${bc('jabatan_ketua', 'color') || '#475569'};font-size:${bc('jabatan_ketua', 'fontSize') || 8}pt;">${ketuaJabatan}</div>` : ''}
+          ${b('ttd_stempel').show !== false ? `<div class="ttd-stempel-wrap">${stempelHtml}${ttdHtml}</div>` : ''}
+          ${b('nama_ketua').show !== false ? `<div style="font-weight:${bc('nama_ketua', 'fontWeight') || 'black'};color:${bc('nama_ketua', 'color') || '#0f172a'};font-size:${bc('nama_ketua', 'fontSize') || 8}pt;text-transform:uppercase;">${ketuaNama}</div>` : ''}
         </div>
       </div>
     </div>
@@ -233,104 +268,161 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
   };
 
   const frontCard = () => (
-    <div className="flex rounded-xl overflow-hidden" style={{
+    <div className={`flex overflow-hidden ${templateStyle.corner}`} style={{
       width: '100%', maxWidth: cardW + 'px',
       boxShadow: '0 4px 24px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.06)',
     }}>
-      <div className="flex flex-col items-center justify-between shrink-0 p-3 text-white" style={{
+      <div className="flex flex-col items-center justify-between shrink-0 p-3" style={{
         width: leftPanelW + 'px',
-        background: `linear-gradient(135deg, ${warnaPrimary}, ${warnaSecondary}, #0f172a)`,
+        background: templateStyle.frontLeftBg(fBg),
         minHeight: 190,
       }}>
-        {logo ? (
-          <img src={logo} alt="" className="w-[52px] h-[52px] object-contain rounded-xl border border-white/20 shadow-lg" />
+        {f('logo_kud').show !== false && (logo ? (
+          <img src={logo} alt="" className="object-contain rounded-xl border border-white/20 shadow-lg" style={{ width: fc('logo_kud', 'width') || 52, height: fc('logo_kud', 'width') || 52 }} />
         ) : (
           <div className="w-[52px] h-[52px] rounded-xl bg-white/10 flex items-center justify-center text-sm font-bold text-white/60">KUD</div>
+        ))}
+        {f('nama_kud').show !== false && (
+          <div className="text-center">
+            <div className="uppercase tracking-wider leading-tight" style={{
+              fontSize: (fc('nama_kud', 'fontSize') || 10) + 'px',
+              fontWeight: fc('nama_kud', 'fontWeight') || 'bold',
+              color: fc('nama_kud', 'color') || '#ffffff',
+              fontFamily: `'${fc('nama_kud', 'fontFamily') || 'Inter'}', sans-serif`,
+            }}>{s?.nama_kud || 'KUD Sari Subur'}</div>
+          </div>
         )}
-        <div className="text-center">
-          <div className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-100 leading-tight">{namaKud}</div>
-        </div>
-        {foto ? (
-          <img src={foto} alt="" className="w-[50px] h-[66px] object-cover rounded-lg border-2 border-white/40 shadow-md" />
+        {f('foto_pekebun').show !== false && (foto ? (
+          <img src={foto} alt="" className="object-cover rounded-lg border-2 border-white/40 shadow-md" style={{ width: fc('foto_pekebun', 'width') || 50, height: fc('foto_pekebun', 'height') || 66 }} />
         ) : (
-          <div className="w-[50px] h-[66px] rounded-lg border-2 border-white/40 bg-white/10 flex items-center justify-center text-lg font-bold text-white/40">{initial}</div>
-        )}
+          <div className="rounded-lg border-2 border-white/40 bg-white/10 flex items-center justify-center text-lg font-bold text-white/40" style={{ width: fc('foto_pekebun', 'width') || 50, height: fc('foto_pekebun', 'height') || 66 }}>{initial}</div>
+        ))}
       </div>
-
       <div className="bg-white p-3.5 flex flex-col relative" style={{ width: rightPanelW + 'px' }}>
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04]">
-          {logo ? <img src={logo} alt="" className="w-32 h-32 object-contain" /> : null}
+        {f('watermark').show !== false && logo && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ opacity: fc('watermark', 'opacity') || 0.04 }}>
+            <img src={logo} alt="" className="w-32 h-32 object-contain" />
+          </div>
+        )}
+        {f('judul').show !== false && (
+          <div className="tracking-wide uppercase border-b border-slate-200 pb-0.5" style={{
+            fontSize: (fc('judul', 'fontSize') || 11) + 'px',
+            fontWeight: fc('judul', 'fontWeight') || 'black',
+            color: fc('judul', 'color') || '#0f172a',
+            fontFamily: `'${fc('judul', 'fontFamily') || 'Inter'}', sans-serif`,
+          }}>{s?.kartu_judul_depan || 'KARTU TANDA ANGGOTA'}</div>
+        )}
+        {f('subjudul').show !== false && (
+          <div className="uppercase mb-1.5" style={{
+            fontSize: (fc('subjudul', 'fontSize') || 7) + 'px',
+            fontWeight: fc('subjudul', 'fontWeight') || 'bold',
+            color: fc('subjudul', 'color') || '#059669',
+            fontFamily: `'${fc('subjudul', 'fontFamily') || 'Inter'}', sans-serif`,
+          }}>{s?.kartu_subjudul_depan || 'KOPERASI UNIT DESA SARI SUBUR'}</div>
+        )}
+        {f('nama_anggota').show !== false && (
+          <div className="uppercase leading-tight" style={{
+            fontSize: (fc('nama_anggota', 'fontSize') || 13) + 'px',
+            fontWeight: fc('nama_anggota', 'fontWeight') || 'black',
+            color: fc('nama_anggota', 'color') || '#0f172a',
+            fontFamily: `'${fc('nama_anggota', 'fontFamily') || 'Inter'}', sans-serif`,
+          }}>{nama}</div>
+        )}
+        {f('nomor_anggota').show !== false && (
+          <div className="inline-block mt-0.5 mb-1 px-1.5 py-0.5 rounded font-mono" style={{
+            fontSize: (fc('nomor_anggota', 'fontSize') || 9) + 'px',
+            fontWeight: fc('nomor_anggota', 'fontWeight') || 'bold',
+            color: fc('nomor_anggota', 'color') || '#059669',
+            background: `${fc('nomor_anggota', 'color') || '#059669'}15`,
+          }}>{nomor_anggota || '-'}</div>
+        )}
+        <div className="space-y-0.5 font-medium" style={{ fontSize: (fc('nik', 'fontSize') || 8) + 'px', color: fc('nik', 'color') || '#475569' }}>
+          {f('nik').show !== false && nik !== '-' && <p>NIK: {nik}</p>}
+          {f('ttl').show !== false && <p>TTL: {ttlText}</p>}
+          {f('jenis_kelamin').show !== false && <p>JK: {jenisKelamin}</p>}
+          {f('no_wa').show !== false && <p>WA: {noWa}</p>}
+          {f('no_kk').show !== false && <p>No KK: {noKk}</p>}
+          {f('alamat').show !== false && alamatJalan && <p className="leading-snug">{alamatJalan}</p>}
         </div>
-
-        <div className="text-[11px] font-black text-slate-900 tracking-wide uppercase border-b border-slate-200 pb-0.5">
-          {judulDepan}
-        </div>
-        <div className="text-[7px] font-bold uppercase mb-1.5" style={{ color: warnaPrimary }}>
-          {subjudulDepan}
-        </div>
-
-        <div className="text-[13px] font-black text-slate-900 uppercase leading-tight">{nama}</div>
-        <div className="text-[9px] font-bold font-mono mt-0.5 mb-1 inline-block px-1.5 py-0.5 rounded" style={{
-          background: `${warnaPrimary}15`, color: warnaPrimary,
-        }}>
-          {nomor_anggota || '-'}
-        </div>
-
-        <div className="text-[8px] text-slate-600 leading-snug space-y-0.5 font-medium">
-          {alamatJalan && <p>{alamatJalan}</p>}
-          {nik !== '-' && <p className="text-slate-400">NIK: {nik}</p>}
-        </div>
-
         <div className="flex items-end justify-between mt-auto pt-1 border-t border-slate-100">
-          <div>
-            <p className="text-[7px] text-slate-400 font-semibold">Berlaku</p>
-            <p className="text-[9px] font-bold text-slate-800">{terbit} - {berlaku}</p>
-          </div>
-          <div className="h-[18px] w-[52px]">
-            <BarcodeSvg value={nomor_anggota} />
-          </div>
+          {f('berlaku').show !== false && (
+            <div>
+              <p className="text-[7px] text-slate-400 font-semibold">Berlaku</p>
+              <p className="font-bold text-slate-800" style={{ fontSize: (fc('berlaku', 'fontSize') || 9) + 'px', color: fc('berlaku', 'color') || '#0f172a' }}>{terbit} - {berlaku}</p>
+            </div>
+          )}
+          {f('qr_code').show !== false && (
+            <div className="shrink-0">
+              <QRCodeSvg value={nomor_anggota} size={55} />
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 
   const backCard = () => (
-    <div className="rounded-xl overflow-hidden" style={{
+    <div className={`overflow-hidden ${templateStyle.corner}`} style={{
       width: '100%', maxWidth: cardW + 'px',
       boxShadow: '0 4px 24px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.06)',
     }}>
-      <div className="text-white text-center py-1.5 font-bold text-xs tracking-wider" style={{
-        background: `linear-gradient(135deg, ${warnaBelakang}, ${warnaPrimary})`,
-      }}>
-        {website}
-      </div>
+      {b('header_website').show !== false && (
+        <div className="text-white text-center py-1.5 font-bold text-xs tracking-wider" style={{
+          fontSize: (bc('header_website', 'fontSize') || 6) + 'px',
+          fontWeight: bc('header_website', 'fontWeight') || 'bold',
+          color: bc('header_website', 'color') || '#ffffff',
+          background: templateStyle.backHeaderBg(bBg),
+        }}>
+          {website}
+        </div>
+      )}
       <div className="bg-white p-3.5 flex flex-col min-h-[190px]">
         <div className="flex-1">
-          <h4 className="text-[9px] font-bold text-slate-900 mb-1">Kartu Tanda Anggota:</h4>
-          <ul className="space-y-0.5">
-            {aturan.map((item, i) => (
-              <li key={i} className="text-[7px] text-slate-600 leading-tight flex items-start gap-1">
-                <span className="mt-[3px] w-[4px] h-[4px] rounded-full shrink-0" style={{ background: warnaPrimary }} />
-                {item}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-1.5 pt-1 border-t border-slate-100 text-[7px] text-slate-600">
-            <span className="font-bold text-slate-800">Sekretariat KUD:</span> {s?.alamat || alamatKud}
-          </div>
+          {b('aturan_list').show !== false && (
+            <>
+              <h4 className="text-[9px] font-bold text-slate-900 mb-1">Kartu Tanda Anggota:</h4>
+              <ul className="space-y-0.5">
+                {aturan.map((item, i) => (
+                  <li key={i} className="flex items-start gap-1 leading-tight" style={{ fontSize: (bc('aturan_list', 'fontSize') || 7) + 'px', color: bc('aturan_list', 'color') || '#475569' }}>
+                    <span className="mt-[3px] w-[4px] h-[4px] rounded-full shrink-0" style={{ background: fc('subjudul', 'color') || '#059669' }} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          {b('sekretariat').show !== false && (
+            <div className="mt-1.5 pt-1 border-t border-slate-100" style={{ fontSize: (bc('sekretariat', 'fontSize') || 7) + 'px', color: bc('sekretariat', 'color') || '#475569' }}>
+              <span className="font-bold text-slate-800">Sekretariat KUD:</span> {s?.alamat || '-'}
+            </div>
+          )}
         </div>
         <div className="flex items-end justify-between mt-1.5">
-          <div className="text-[16px] font-black italic text-slate-900 uppercase tracking-wider leading-none">
-            {slogan}
-          </div>
-          <div className="text-right text-[7px] text-slate-600">
-            <p className="text-slate-500">{kotaTerbit}, {terbit}</p>
-            <p className="font-semibold text-slate-700">{ketuaJabatan}</p>
-            <div className="flex items-center justify-end gap-1 my-0.5">
-              {stempelUrl && <img src={stempelUrl} alt="" className="h-[26px] w-auto object-contain" />}
-              {ttdUrl && <img src={ttdUrl} alt="" className="h-[14px] w-auto object-contain" />}
-            </div>
-            <p className="font-black text-slate-900 uppercase text-[8px]">{ketuaNama}</p>
+          {b('slogan').show !== false && (
+            <div className="font-black italic uppercase tracking-wider leading-none" style={{
+              fontSize: (bc('slogan', 'fontSize') || 16) + 'px',
+              color: bc('slogan', 'color') || '#0f172a',
+              fontFamily: `'${bc('slogan', 'fontFamily') || 'Inter'}', sans-serif`,
+            }}>{slogan}</div>
+          )}
+          <div className="text-right" style={{ fontSize: (bc('kota_tanggal', 'fontSize') || 7) + 'px', color: bc('kota_tanggal', 'color') || '#64748b' }}>
+            {b('kota_tanggal').show !== false && <p className="text-slate-500">{kotaTerbit}, {terbit}</p>}
+            {b('jabatan_ketua').show !== false && (
+              <p className="text-slate-700" style={{ fontWeight: bc('jabatan_ketua', 'fontWeight') || 'semibold', color: bc('jabatan_ketua', 'color') || '#475569', fontSize: (bc('jabatan_ketua', 'fontSize') || 8) + 'px' }}>
+                {ketuaJabatan}
+              </p>
+            )}
+            {b('ttd_stempel').show !== false && (
+              <div className="flex items-center justify-end gap-0.5 my-0.5 min-h-[55px]">
+                {stempelUrl && <img src={stempelUrl} alt="" className="object-contain mix-blend-multiply" style={{ height: 50, width: 'auto' }} />}
+                {ttdUrl && <img src={ttdUrl} alt="" className="object-contain" style={{ height: 30, width: 'auto' }} />}
+              </div>
+            )}
+            {b('nama_ketua').show !== false && (
+              <p className="uppercase" style={{ fontWeight: bc('nama_ketua', 'fontWeight') || 'black', color: bc('nama_ketua', 'color') || '#0f172a', fontSize: (bc('nama_ketua', 'fontSize') || 8) + 'px' }}>
+                {ketuaNama}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -338,7 +430,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
   );
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-border" ref={printRef}>
+    <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-border">
       <div className="p-4 sm:p-6">
         {showActions && (
           <div className="flex items-center justify-between mb-4">
@@ -350,7 +442,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
                 {downloading ? '...' : 'PNG'}
               </button>
               <button onClick={handlePrint}
-                className="inline-flex items-center gap-2 px-4 py-2 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all cursor-pointer" style={{ background: warnaPrimary }}>
+                className="inline-flex items-center gap-2 px-4 py-2 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all cursor-pointer" style={{ background: fc('subjudul', 'color') || '#059669' }}>
                 <PrinterIcon className="w-4 h-4" />
                 Cetak
               </button>
@@ -362,7 +454,6 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
             </div>
           </div>
         )}
-
         <div className="flex flex-col items-center gap-4" ref={cardRef}>
           <div className="w-full max-w-full" style={{ maxWidth: cardW + 'px' }}>
             <div className="text-center mb-1">
@@ -377,11 +468,8 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
             {frontCard()}
           </div>
         </div>
-
         <div className="text-center mt-3">
-          <p className="text-[10px] text-gray-400">
-            Cetak: sisi depan &bull; sisi belakang (2 halaman)
-          </p>
+          <p className="text-[10px] text-gray-400">Cetak: sisi depan &bull; sisi belakang (2 halaman)</p>
         </div>
       </div>
     </div>

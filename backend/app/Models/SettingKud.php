@@ -20,11 +20,13 @@ class SettingKud extends Model
         'kartu_judul_depan', 'kartu_subjudul_depan',
         'kartu_label_anggota', 'kartu_format_no_anggota',
         'sertifikat_config',
+        'kartu_config',
     ];
 
     protected $casts = [
         'tanda_tangan_kartu' => 'boolean',
         'kartu_aturan' => 'array',
         'sertifikat_config' => 'array',
+        'kartu_config' => 'array',
     ];
 }
