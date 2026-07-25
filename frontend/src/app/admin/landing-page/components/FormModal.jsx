@@ -114,6 +114,7 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
       else init[f.key] = '';
     });
     init.meta_data = init.meta_data || {};
+    init.is_active = true;
     setForm(init);
   }, [fields]);
 
@@ -133,6 +134,7 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
         }
       });
       if (!init.meta_data) init.meta_data = { ...(editing.meta_data || {}) };
+      init.is_active = editing.is_active !== undefined ? editing.is_active : true;
       setForm(init);
     } else {
       resetForm();
@@ -190,6 +192,8 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
       if (sectionType === 'langkah' || sectionType === 'faq') {
         payload.order = parseInt(form.order) || 0;
       }
+
+      payload.is_active = form.is_active !== false;
 
       if (editing) {
         await api.admin.landing.update(editing.id, payload);
@@ -275,6 +279,22 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
             )}
           </div>
         ))}
+
+        {/* IS ACTIVE TOGGLE */}
+        <div className="flex items-center justify-between py-2">
+          <span className="text-sm font-medium text-foreground/80">Status Aktif</span>
+          <button
+            type="button"
+            onClick={() => setForm((prev) => ({ ...prev, is_active: !prev.is_active }))}
+            className={`relative w-11 h-6 rounded-full transition-all cursor-pointer ${
+              form.is_active ? 'bg-emerald-500' : 'bg-gray-300'
+            }`}
+          >
+            <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${
+              form.is_active ? 'translate-x-5' : 'translate-x-0'
+            }`} />
+          </button>
+        </div>
 
         <div className="flex items-center justify-between pt-2">
           <div />

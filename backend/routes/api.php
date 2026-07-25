@@ -161,7 +161,9 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         // Kartu Anggota (admin view any pekebun's card)
         Route::get('/pekebun/{pekebun}/kartu-anggota', [PekebunController::class, 'kartuAnggotaAdmin']);
 
-        // Landing Page CMS
+        // Landing Page CMS (specific routes BEFORE wildcard {landingContent})
+        Route::post('/landing-page/bulk-toggle', [LandingPageController::class, 'bulkToggle']);
+        Route::post('/landing-page/reorder', [LandingPageController::class, 'reorder']);
         Route::get('/landing-page', [LandingPageController::class, 'index']);
         Route::post('/landing-page', [LandingPageController::class, 'store']);
         Route::put('/landing-page/{landingContent}', [LandingPageController::class, 'update']);

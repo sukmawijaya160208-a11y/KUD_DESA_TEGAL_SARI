@@ -243,6 +243,8 @@ export const api = {
       create: (data) => request('/admin/landing-page', { method: 'POST', body: JSON.stringify(data) }),
       update: (id, data) => request(`/admin/landing-page/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
       delete: (id) => request(`/admin/landing-page/${id}`, { method: 'DELETE' }),
+      bulkToggle: (ids, is_active) => request('/admin/landing-page/bulk-toggle', { method: 'POST', body: JSON.stringify({ ids, is_active }) }),
+      reorder: (items) => request('/admin/landing-page/reorder', { method: 'POST', body: JSON.stringify({ items }) }),
       uploadMedia: (file) => {
         const fd = new FormData();
         fd.append('file', file);

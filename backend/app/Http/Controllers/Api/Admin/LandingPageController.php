@@ -134,6 +134,59 @@ class LandingPageController extends Controller
         }
     }
 
+    public function bulkToggle(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:landing_contents,id',
+            'is_active' => 'required|boolean',
+        ]);
+
+        try {
+            $count = LandingContent::whereIn('id', $request->ids)
+                ->update(['is_active' => $request->is_active]);
+
+            return response()->json([
+                'success' => true,
+                'message' => $count . ' data berhasil diperbarui',
+                'count' => $count,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui status: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'items' => 'required|array',
+            'items.*.id' => 'required|integer|exists:landing_contents,id',
+            'items.*.order' => 'required|integer|min:0',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            foreach ($request->items as $item) {
+                LandingContent::where('id', $item['id'])->update(['order' => $item['order']]);
+            }
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Urutan berhasil diperbarui',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengatur ulang urutan: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function publicIndex($section = null)
     {
         $query = LandingContent::where('is_active', true)->orderBy('order');

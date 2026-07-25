@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLogo } from '@/hooks/useLogo';
 import { api } from '@/lib/api';
-import KegiatanGallery from '@/components/KegiatanGallery';
 import MapSection from '@/components/MapSection';
 import TbsCalculator from '@/components/TbsCalculator';
 
@@ -278,6 +277,7 @@ export default function Home() {
   const [keuntungan, setKeuntungan] = useState([]);
   const [fiturData, setFiturData] = useState([]);
   const [angkaData, setAngkaData] = useState([]);
+  const [dokumentasiData, setDokumentasiData] = useState([]);
   const heroRef = useRef(null);
   const blogTimer = useRef(null);
 
@@ -310,6 +310,7 @@ export default function Home() {
   useEffect(() => { api.landing.list('testimoni').then(r => setTestimonials(r.data || [])).catch(() => {}); }, []);
   useEffect(() => { api.landing.list('layanan').then(r => setLayananData(r.data || [])).catch(() => {}); }, []);
   useEffect(() => { api.landing.list('faq').then(r => setFaqs(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.landing.list('dokumentasi').then(r => setDokumentasiData(r.data || [])).catch(() => {}); }, []);
 
   const filteredBlogs = blogCategory === 'Semua' ? blogPosts : blogPosts.filter((b) => b.category === blogCategory);
 
@@ -554,7 +555,13 @@ export default function Home() {
               return (
                 <motion.div key={item.id || idx} variants={scaleIn} whileHover={{ y: -4, scale: 1.02 }} className="group relative p-4 sm:p-6 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all text-center">
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent pointer-events-none" />
-                  <div className="relative z-10 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-md shadow-emerald-500/20"><Icn className="w-5 h-5 sm:w-7 sm:h-7 text-white" /></div>
+                  {item.media_url ? (
+                    <div className="relative z-10 w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-2 sm:mb-3 rounded-full overflow-hidden ring-2 ring-emerald-200 group-hover:ring-emerald-400 transition-all shadow-md">
+                      <img src={item.media_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
+                    </div>
+                  ) : (
+                    <div className="relative z-10 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-md shadow-emerald-500/20"><Icn className="w-5 h-5 sm:w-7 sm:h-7 text-white" /></div>
+                  )}
                   <h4 className="relative z-10 font-bold font-heading text-foreground">{item.title}</h4>
                   <p className="relative z-10 text-xs text-muted-foreground mt-1">{item.description}</p>
                   <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-emerald-400/0 via-emerald-400/50 to-emerald-400/0 scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
@@ -571,8 +578,17 @@ export default function Home() {
       <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Dokumentasi" title="Kegiatan Kami" subtitle="Dokumentasi berbagai kegiatan dan program yang telah dilaksanakan KUD Desa Sari Subur." />
+          {dokumentasiData.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                <PhotoIcon className="w-8 h-8 text-gray-400" />
+              </div>
+              <p className="text-gray-500">Belum ada dokumentasi</p>
+            </div>
+          ) : (
+            <DokumentasiGallery items={dokumentasiData} />
+          )}
         </div>
-        <KegiatanGallery />
       </section>
 
       
@@ -751,7 +767,13 @@ export default function Home() {
               return (
                 <motion.div key={item.id || idx} variants={itemVariants} whileHover={{ y: -6, scale: 1.02 }} className={`group relative p-6 rounded-2xl overflow-hidden bg-gradient-to-br from-white to-emerald-50/40 border border-emerald-100/60 shadow-md hover:shadow-xl transition-all ${bento}`}>
                   <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-200/20 to-transparent rounded-bl-full" />
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all shadow-md shadow-emerald-500/20"><Icn className="w-6 h-6 text-white" /></div>
+                  {item.media_url ? (
+                    <div className="w-full aspect-[16/9] rounded-xl overflow-hidden mb-4 shadow-sm group-hover:shadow-md transition-shadow">
+                      <img src={item.media_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    </div>
+                  ) : (
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all shadow-md shadow-emerald-500/20"><Icn className="w-6 h-6 text-white" /></div>
+                  )}
                   <h3 className="text-lg font-bold font-heading text-foreground">{item.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400/0 via-emerald-400/40 to-emerald-400/0 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -826,8 +848,14 @@ export default function Home() {
               <>
                 <motion.div key={testiIdx} initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} transition={{ duration: 0.5 }} className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 md:p-12 text-center overflow-hidden">
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400/0 via-emerald-400/60 to-emerald-400/0" />
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg">
-                    {(testimonials[testiIdx]?.title || 'A').charAt(0)}
+                  <div className="w-20 h-20 rounded-full mx-auto mb-6 shadow-lg overflow-hidden ring-4 ring-emerald-400/30">
+                    {testimonials[testiIdx]?.media_url ? (
+                      <img src={testimonials[testiIdx].media_url} alt={testimonials[testiIdx].title} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center text-white text-2xl font-bold">
+                        {(testimonials[testiIdx]?.title || 'A').charAt(0)}
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center justify-center gap-1 mb-4">
                     {[...Array(5)].map((_, i) => (
@@ -1027,5 +1055,99 @@ export default function Home() {
       {/* ===== VIDEO MODAL ===== */}
       <VideoModal videoId={videoModal} onClose={() => setVideoModal(null)} />
     </div>
+  );
+}
+
+/* ===== DOKUMENTASI GALLERY ===== */
+function DokumentasiGallery({ items }) {
+  const [open, setOpen] = useState(false);
+  const [currentIdx, setCurrentIdx] = useState(0);
+
+  const imgItems = items.filter(i => i.media_url);
+  if (imgItems.length === 0) {
+    return (
+      <div className="text-center py-16">
+        <PhotoIcon className="w-16 h-16 text-gray-300 mx-auto mb-3" />
+        <p className="text-gray-500">Belum ada foto dokumentasi</p>
+      </div>
+    );
+  }
+
+  const openLightbox = (idx) => { setCurrentIdx(idx); setOpen(true); };
+
+  return (
+    <>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+          {imgItems.map((item, idx) => (
+            <motion.div
+              key={item.id}
+              layout
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.05 }}
+              className="break-inside-avoid cursor-pointer group relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+              onClick={() => openLightbox(idx)}
+            >
+              <img
+                src={item.media_url}
+                alt={item.title || 'Dokumentasi'}
+                className="w-full object-cover transition-all duration-500 group-hover:scale-105"
+                style={{ minHeight: '200px' }}
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                {item.title && <h4 className="text-white font-semibold text-sm drop-shadow-lg">{item.title}</h4>}
+                {item.description && <p className="text-white/80 text-xs mt-0.5 drop-shadow-lg line-clamp-2">{item.description}</p>}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* LIGHTBOX */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+            onClick={() => setOpen(false)}
+          >
+            <button onClick={() => setOpen(false)} className="absolute top-4 right-4 text-white/70 hover:text-white z-10 cursor-pointer">
+              <XMarkIcon className="w-8 h-8" />
+            </button>
+            {imgItems.length > 1 && (
+              <>
+                <button onClick={(e) => { e.stopPropagation(); setCurrentIdx((currentIdx - 1 + imgItems.length) % imgItems.length); }} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white z-10 cursor-pointer">
+                  <ChevronLeftIcon className="w-10 h-10" />
+                </button>
+                <button onClick={(e) => { e.stopPropagation(); setCurrentIdx((currentIdx + 1) % imgItems.length); }} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white z-10 cursor-pointer">
+                  <ChevronRightIcon className="w-10 h-10" />
+                </button>
+              </>
+            )}
+            <motion.img
+              key={currentIdx}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+              src={imgItems[currentIdx]?.media_url}
+              alt={imgItems[currentIdx]?.title || 'Dokumentasi'}
+              className="max-w-full max-h-[85vh] object-contain rounded-xl"
+            />
+            {imgItems[currentIdx]?.title && (
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm" onClick={(e) => e.stopPropagation()}>
+                {imgItems[currentIdx]?.title}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
