@@ -10,6 +10,7 @@ import Modal from '@/components/ui/Modal';
 import { motion } from 'framer-motion';
 import KartuAnggotaKud from '@/components/KartuAnggotaKud';
 import SignaturePad from '@/components/SignaturePad';
+import SertifikatDesignEditor from '@/components/SertifikatDesignEditor';
 import {
   Cog6ToothIcon, TrashIcon, PlusIcon, CreditCardIcon, BuildingOfficeIcon,
   UserIcon, ShieldCheckIcon, ServerIcon, KeyIcon,
@@ -24,6 +25,7 @@ const TABS = [
   { id: 'keamanan', label: 'Keamanan & Akses', icon: ShieldCheckIcon, color: 'from-purple-500 to-purple-600' },
   { id: 'sistem', label: 'Konfigurasi Sistem', icon: ServerIcon, color: 'from-amber-500 to-amber-600' },
   { id: 'desain-kartu', label: 'Desain Kartu', icon: CreditCardIcon, color: 'from-emerald-600 to-emerald-700' },
+  { id: 'desain-sertifikat', label: 'Desain Sertifikat', icon: ShieldCheckIcon, color: 'from-amber-600 to-amber-700' },
 ];
 
 const containerAnim = {
@@ -829,6 +831,16 @@ export default function AdminPengaturanPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* ===== TAB 6: DESAIN SERTIFIKAT ===== */}
+      {tab === 'desain-sertifikat' && (
+        <SertifikatDesignEditor
+          settingKud={kud}
+          onSave={() => {
+            api.admin.settingKud.get().then(setSettingKud).catch(() => {});
+          }}
+        />
       )}
 
       {/* LOGOUT ALL CONFIRM MODAL */}

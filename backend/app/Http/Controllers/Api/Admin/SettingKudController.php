@@ -44,6 +44,7 @@ class SettingKudController extends Controller
             'kartu_subjudul_depan' => 'nullable|string|max:255',
             'kartu_label_anggota' => 'nullable|string|max:255',
             'kartu_format_no_anggota' => 'nullable|string|max:255',
+            'sertifikat_config' => 'nullable|array',
         ]);
 
         $setting = SettingKud::first() ?? new SettingKud;

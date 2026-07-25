@@ -225,5 +225,6 @@ Route::get('/newsletter/stats', [NewsletterController::class, 'stats']);
         Route::put('/tbs/{tbsSync}', [PekebunController::class, 'tbsUpdate']);
         Route::delete('/tbs/{tbsSync}', [PekebunController::class, 'tbsDestroy']);
         Route::get('/kartu-anggota', [PekebunController::class, 'kartuAnggota']);
+        Route::get('/sertifikat', [PekebunController::class, 'sertifikat']);
     });
 });

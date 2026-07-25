@@ -16,13 +16,15 @@ class SettingKud extends Model
         'kartu_background', 'tanda_tangan_kartu',
         'kartu_aturan', 'kartu_slogan', 'kartu_ketua_nama',
         'kartu_ketua_jabatan', 'kartu_ttd', 'kartu_stempel',
-        'kartu_kota_terbit', 'kartu_belakang_warna',
+        'kartu_kota_terbit',         'kartu_belakang_warna',
         'kartu_judul_depan', 'kartu_subjudul_depan',
         'kartu_label_anggota', 'kartu_format_no_anggota',
+        'sertifikat_config',
     ];
 
     protected $casts = [
         'tanda_tangan_kartu' => 'boolean',
         'kartu_aturan' => 'array',
+        'sertifikat_config' => 'array',
     ];
 }

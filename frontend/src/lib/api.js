@@ -331,6 +331,7 @@ export const api = {
     daftarProgram: (data) => request('/pekebun/daftar-program', { method: 'POST', body: JSON.stringify(data) }),
     programSaya: () => request('/pekebun/program-saya'),
     kartuAnggota: () => request('/pekebun/kartu-anggota'),
+    sertifikat: () => request('/pekebun/sertifikat'),
     tbs: {
       list: () => request('/pekebun/tbs'),
       create: (data) => request('/pekebun/tbs', { method: 'POST', body: JSON.stringify(data) }),
