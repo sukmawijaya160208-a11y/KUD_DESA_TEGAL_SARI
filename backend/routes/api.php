@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\ExportController;
 use App\Http\Controllers\Api\HargaTbsController;
 use App\Http\Controllers\Api\NotifikasiController;
+use App\Http\Controllers\Api\NewsletterController;
 use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\PekebunController;
 use App\Http\Controllers\Api\UploadController;
@@ -107,7 +108,9 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::put('/program/{programKud}/toggle-aktif', [ProgramKudController::class, 'toggleAktif']);
         Route::delete('/program/{programKud}', [ProgramKudController::class, 'destroy']);
         // Pengaturan
-        Route::get('/pengaturan', [AdminController::class, 'pengaturanIndex']);
+Route::get('/pengaturan', [AdminController::class, 'pengaturanIndex']);
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->middleware('throttle:5,60');
+Route::get('/newsletter/stats', [NewsletterController::class, 'stats']);
         Route::put('/pengaturan', [AdminController::class, 'pengaturanUpdate']);
         Route::delete('/pengaturan/{key}', [AdminController::class, 'pengaturanDestroy']);
         // Laporan

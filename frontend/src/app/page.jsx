@@ -7,6 +7,7 @@ import { useLogo } from '@/hooks/useLogo';
 import { api } from '@/lib/api';
 import MapSection from '@/components/MapSection';
 import TbsCalculator from '@/components/TbsCalculator';
+import Modal from '@/components/ui/Modal';
 
 import {
   Squares2X2Icon, ChatBubbleLeftRightIcon,
@@ -278,6 +279,16 @@ export default function Home() {
   const [fiturData, setFiturData] = useState([]);
   const [angkaData, setAngkaData] = useState([]);
   const [dokumentasiData, setDokumentasiData] = useState([]);
+  const [sertifikasiDetail, setSertifikasiDetail] = useState(null);
+  const [pengaturan, setPengaturan] = useState({});
+  const [newsletterTab, setNewsletterTab] = useState('email');
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [subscribeState, setSubscribeState] = useState('idle');
+  const [subscribeMsg, setSubscribeMsg] = useState('');
+  const [contactName, setContactName] = useState('');
+  const [contactMsg, setContactMsg] = useState('');
+  const [contactState, setContactState] = useState('idle');
+  const [contactStatus, setContactStatus] = useState('');
   const heroRef = useRef(null);
   const blogTimer = useRef(null);
 
@@ -311,6 +322,7 @@ export default function Home() {
   useEffect(() => { api.landing.list('layanan').then(r => setLayananData(r.data || [])).catch(() => {}); }, []);
   useEffect(() => { api.landing.list('faq').then(r => setFaqs(r.data || [])).catch(() => {}); }, []);
   useEffect(() => { api.landing.list('dokumentasi').then(r => setDokumentasiData(r.data || [])).catch(() => {}); }, []);
+  useEffect(() => { api.pengaturan.get().then(setPengaturan).catch(() => {}); }, []);
 
   const filteredBlogs = blogCategory === 'Semua' ? blogPosts : blogPosts.filter((b) => b.category === blogCategory);
 
@@ -549,28 +561,66 @@ export default function Home() {
       <section className="py-14 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Pengakuan" title="Sertifikasi & Penghargaan" subtitle="Berbagai sertifikasi dan penghargaan yang telah diraih KUD Desa Sari Subur." />
-          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {sertifikasi.map((item, idx) => {
               const Icn = ICON_MAP[item.meta_data?.icon] || ShieldCheckIcon;
               return (
-                <motion.div key={item.id || idx} variants={scaleIn} whileHover={{ y: -4, scale: 1.02 }} className="group relative p-4 sm:p-6 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all text-center">
-                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent pointer-events-none" />
+                <motion.div key={item.id || idx} variants={scaleIn} whileHover={{ y: -4 }} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-shadow">
                   {item.media_url ? (
-                    <div className="relative z-10 w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-2 sm:mb-3 rounded-full overflow-hidden ring-2 ring-emerald-200 group-hover:ring-emerald-400 transition-all shadow-md">
-                      <img src={item.media_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
+                    <div className="h-36 sm:h-40 overflow-hidden">
+                      <img src={item.media_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                     </div>
                   ) : (
-                    <div className="relative z-10 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-md shadow-emerald-500/20"><Icn className="w-5 h-5 sm:w-7 sm:h-7 text-white" /></div>
+                    <div className="h-36 sm:h-40 bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
+                      <Icn className="w-14 h-14 text-white/60" />
+                    </div>
                   )}
-                  <h4 className="relative z-10 font-bold font-heading text-foreground">{item.title}</h4>
-                  <p className="relative z-10 text-xs text-muted-foreground mt-1">{item.description}</p>
-                  <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-emerald-400/0 via-emerald-400/50 to-emerald-400/0 scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+                  <div className="p-4 sm:p-5 space-y-2.5">
+                    <h4 className="font-bold font-heading text-foreground leading-snug text-sm sm:text-base">{item.title}</h4>
+                    {item.meta_data?.lembaga && (
+                      <span className="inline-flex items-center px-2 py-0.5 bg-purple-50 text-purple-700 rounded-full text-[10px] font-medium border border-purple-100">
+                        {item.meta_data.lembaga}
+                      </span>
+                    )}
+                    {item.description && <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{item.description}</p>}
+                    <div className="pt-1">
+                      <button onClick={() => setSertifikasiDetail(item)}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors cursor-pointer">
+                        <DocumentTextIcon className="w-3.5 h-3.5" /> Detail
+                      </button>
+                    </div>
+                  </div>
                 </motion.div>
               );
             })}
           </motion.div>
         </div>
       </section>
+
+      <Modal open={!!sertifikasiDetail} onClose={() => setSertifikasiDetail(null)} title={sertifikasiDetail?.title || 'Detail Sertifikasi'} maxWidth="max-w-lg">
+        {sertifikasiDetail && (
+          <div className="space-y-4">
+            {sertifikasiDetail.media_url && (
+              <img src={sertifikasiDetail.media_url} alt={sertifikasiDetail.title} className="w-full h-48 object-cover rounded-xl" />
+            )}
+            <div>
+              {sertifikasiDetail.meta_data?.lembaga && (
+                <span className="inline-flex items-center px-2.5 py-0.5 bg-purple-50 text-purple-700 rounded-full text-xs font-medium border border-purple-100 mb-2">
+                  {sertifikasiDetail.meta_data.lembaga}
+                </span>
+              )}
+              {sertifikasiDetail.meta_data?.nomor && (
+                <p className="text-xs text-gray-400 mt-1">No: {sertifikasiDetail.meta_data.nomor}</p>
+              )}
+            </div>
+            {sertifikasiDetail.description ? (
+              <p className="text-sm text-gray-600 leading-relaxed">{sertifikasiDetail.description}</p>
+            ) : (
+              <p className="text-sm text-gray-400">Tidak ada informasi detail tersedia.</p>
+            )}
+          </div>
+        )}
+      </Modal>
 
       
 
@@ -965,9 +1015,147 @@ export default function Home() {
           <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="mt-4 text-white/70 text-lg max-w-xl mx-auto">
             Berlangganan newsletter kami untuk mendapatkan update harga TBS, program, dan kegiatan KUD.
           </motion.p>
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="mt-8 max-w-md mx-auto flex flex-col sm:flex-row gap-3 px-4 sm:px-0">
-            <input type="email" placeholder="Masukkan email Anda" className="w-full sm:flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/30 focus:border-emerald-400/50 backdrop-blur-sm transition-all" />
-            <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold shadow-xl shadow-emerald-600/30 hover:shadow-2xl hover:shadow-emerald-600/40 transition-all text-sm hover:from-emerald-600 hover:to-emerald-700">Langganan</motion.button>
+
+          {/* Tab Navigation */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.25 }} className="mt-8 flex items-center justify-center gap-2">
+            {[
+              { id: 'email', label: '📧 Email', desc: 'Langganan newsletter' },
+              { id: 'wa', label: '💬 WhatsApp', desc: 'Hubungi via WA' },
+              { id: 'kontak', label: '📞 Kontak', desc: 'Info kontak admin' },
+            ].map((t) => (
+              <button key={t.id} onClick={() => setNewsletterTab(t.id)}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  newsletterTab === t.id
+                    ? 'bg-white text-emerald-900 shadow-lg'
+                    : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
+                }`}>
+                {t.label}
+              </button>
+            ))}
+          </motion.div>
+
+          {/* Tab Content */}
+          <motion.div key={newsletterTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="mt-6 max-w-md mx-auto px-4 sm:px-0">
+            {/* TAB 1: EMAIL */}
+            {newsletterTab === 'email' && (
+              <div className="space-y-4">
+                {subscribeState === 'success' ? (
+                  <div className="p-5 bg-emerald-500/20 border border-emerald-400/30 rounded-xl backdrop-blur-sm">
+                    <p className="text-emerald-300 font-semibold text-sm">✅ {subscribeMsg}</p>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-white/60 text-sm">Masukkan email Anda untuk mendapatkan info terbaru langsung ke inbox.</p>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <input type="email" value={newsletterEmail} onChange={(e) => setNewsletterEmail(e.target.value)}
+                        placeholder="Masukkan email Anda"
+                        className="w-full sm:flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/30 focus:border-emerald-400/50 backdrop-blur-sm transition-all" />
+                      <button onClick={async () => {
+                        if (!newsletterEmail || !/\S+@\S+\.\S+/.test(newsletterEmail)) {
+                          setSubscribeState('error'); setSubscribeMsg('Email tidak valid');
+                          return;
+                        }
+                        setSubscribeState('loading');
+                        try {
+                          const res = await api.newsletter.subscribe(newsletterEmail);
+                          setSubscribeState('success'); setSubscribeMsg(res.message || 'Berhasil berlangganan!');
+                          setNewsletterEmail('');
+                        } catch (err) {
+                          setSubscribeState('error'); setSubscribeMsg(err.message || 'Gagal, coba lagi nanti');
+                        }
+                      }} disabled={subscribeState === 'loading'}
+                        className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold shadow-xl shadow-emerald-600/30 hover:shadow-2xl hover:shadow-emerald-600/40 transition-all text-sm hover:from-emerald-600 hover:to-emerald-700 disabled:opacity-50 cursor-pointer">
+                        {subscribeState === 'loading' ? 'Mengirim...' : 'Langganan'}
+                      </button>
+                    </div>
+                    {subscribeState === 'error' && (
+                      <p className="text-red-300 text-xs flex items-center gap-1 mt-1">{subscribeMsg}</p>
+                    )}
+                  </>
+                )}
+                {subscribeState === 'success' && (
+                  <button onClick={() => { setSubscribeState('idle'); setSubscribeMsg(''); }}
+                    className="text-white/50 hover:text-white text-xs underline transition-colors cursor-pointer">
+                    Kirim ulang dengan email lain
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* TAB 2: WHATSAPP */}
+            {newsletterTab === 'wa' && (
+              <div className="space-y-4">
+                <p className="text-white/60 text-sm">Punya pertanyaan atau ingin konsultasi? Hubungi kami langsung via WhatsApp.</p>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-14 h-14 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                      <ChatBubbleLeftRightIcon className="w-7 h-7 text-emerald-400" />
+                    </div>
+                    <p className="text-white/80 text-sm font-medium">Admin KUD Sari Subur</p>
+                    <p className="text-emerald-400 font-bold text-lg">{pengaturan.wa_admin || '08xxxxxxxxx'}</p>
+                    <a href={`https://wa.me/${(pengaturan.wa_admin || '').replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-white font-bold shadow-xl shadow-emerald-600/30 hover:bg-emerald-600 transition-all text-sm">
+                      <ChatBubbleLeftRightIcon className="w-4 h-4" /> Hubungi via WhatsApp
+                    </a>
+                  </div>
+                </div>
+                <p className="text-white/40 text-xs">Klik tombol di atas untuk memulai percakapan di WhatsApp.</p>
+              </div>
+            )}
+
+            {/* TAB 3: KONTAK */}
+            {newsletterTab === 'kontak' && (
+              <div className="space-y-4">
+                <p className="text-white/60 text-sm">Hubungi kami melalui kontak resmi KUD Desa Sari Subur.</p>
+                <div className="grid grid-cols-1 gap-3">
+                  <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm text-left">
+                    <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center shrink-0">
+                      <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    </div>
+                    <div>
+                      <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">Email</p>
+                      <p className="text-white font-medium text-sm">{pengaturan.email_admin || 'admin@kud-sari-subur.my.id'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm text-left">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0">
+                      <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                    </div>
+                    <div>
+                      <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">WhatsApp</p>
+                      <p className="text-white font-medium text-sm">{pengaturan.wa_admin || '08xxxxxxxxx'}</p>
+                    </div>
+                  </div>
+                  {pengaturan.alamat_kud && (
+                    <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm text-left">
+                      <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0">
+                        <MapPinIcon className="w-5 h-5 text-amber-400" />
+                      </div>
+                      <div>
+                        <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">Alamat</p>
+                        <p className="text-white font-medium text-sm">{pengaturan.alamat_kud}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Stats */}
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mt-8 flex items-center justify-center gap-6 text-white/40 text-xs">
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              {sertifikasi.length} Sertifikasi
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              {programs.length} Program Aktif
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              {blogPosts.length} Artikel
+            </span>
           </motion.div>
         </div>
       </section>

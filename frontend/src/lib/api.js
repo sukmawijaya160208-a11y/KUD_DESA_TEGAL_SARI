@@ -83,6 +83,10 @@ export const api = {
     list: () => request('/harga-tbs'),
     latest: () => request('/harga-tbs/latest'),
   },
+  newsletter: {
+    subscribe: (email) => request('/newsletter/subscribe', { method: 'POST', body: JSON.stringify({ email }) }),
+    stats: () => request('/newsletter/stats'),
+  },
   auth: {
     login: (data) => request('/auth/login', { method: 'POST', body: JSON.stringify(data) }),
     register: (data) => request('/auth/register', { method: 'POST', body: JSON.stringify(data) }),

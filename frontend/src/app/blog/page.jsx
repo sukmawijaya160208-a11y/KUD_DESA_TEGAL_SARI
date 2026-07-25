@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, startTransition, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useTransition } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { formatDateLong } from '@/lib/date';
 import { api } from '@/lib/api';
@@ -94,7 +94,9 @@ export default function BlogPage() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [viewsCount, setViewsCount] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const searchTimer = useRef(null);
+  const searchRef = useRef('');
   const topRef = useRef(null);
 
   const { scrollYProgress } = useScroll();
@@ -109,20 +111,20 @@ export default function BlogPage() {
   }, []);
 
   const fetchData = useCallback(() => {
-    setLoading(true);
+    if (posts.length === 0) setLoading(true);
     const params = { page, perPage: 12 };
     if (filterCategory) params.category = filterCategory;
     if (search) params.search = search;
     api.blog.list(params)
-      .then((res) => startTransition(() => {
+      .then((res) => {
         if (res.data) {
           setPosts(res.data);
           setMeta({ currentPage: res.current_page, lastPage: res.last_page, total: res.total });
         }
-      }))
+      })
       .catch(() => setError('Gagal memuat postingan'))
-      .finally(() => setLoading(false));
-  }, [page, search, filterCategory]);
+      .finally(() => { if (posts.length === 0) setLoading(false); });
+  }, [page, search, filterCategory]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchCategories = useCallback(() => {
     api.blog.categories()
@@ -140,9 +142,12 @@ export default function BlogPage() {
   }, [relatedPosts.length]);
 
   const handleSearch = (v) => {
-    setSearch(v);
+    searchRef.current = v;
     if (searchTimer.current) clearTimeout(searchTimer.current);
-    searchTimer.current = setTimeout(() => startTransition(() => setPage(1)), 300);
+    searchTimer.current = setTimeout(() => startTransition(() => {
+      setSearch(searchRef.current);
+      setPage(1);
+    }), 400);
   };
 
   const openDetail = useCallback((post) => {
@@ -242,7 +247,7 @@ export default function BlogPage() {
             <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               placeholder="Cari artikel..."
-              defaultValue={search}
+              value={search}
               onChange={(e) => handleSearch(e.target.value)}
               className="w-full pl-9 pr-3 py-2 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all"
             />
@@ -288,7 +293,7 @@ export default function BlogPage() {
               </div>
             ))}
           </div>
-        ) : posts.length === 0 ? (
+          ) : posts.length === 0 && !isPending ? (
           <div className="text-center py-16">
             {error ? (
               <>
