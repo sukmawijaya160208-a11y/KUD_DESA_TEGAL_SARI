@@ -325,9 +325,9 @@ function SideEditor({ side, label, fields, background, onToggle, onUpdate, onMov
 
 function buildKartuConfig(editorConfig, settingKud) {
   const buildSide = (side) => {
-    const sideConfig = editorConfig[side];
+    const sideConfig = editorConfig[side] || {};
     const result = { fields: {}, background: sideConfig.background };
-    sideConfig.fields.forEach((f) => {
+    (sideConfig.fields || []).forEach((f) => {
       result.fields[f.key] = { show: f.show };
       if (f.fontSize !== undefined) result.fields[f.key].fontSize = f.fontSize;
       if (f.color !== undefined) result.fields[f.key].color = f.color;
@@ -386,7 +386,7 @@ function CardDesignEditorInner({ settingKud, settings, onSave }) {
   const [confirmTemplate, setConfirmTemplate] = useState(null);
 
   const getSide = (side) => editorConfig[side];
-  const getFields = (side) => getSide(side).fields;
+  const getFields = (side) => getSide(side)?.fields || [];
 
   const updateSide = (side, updater) => {
     setEditorConfig((prev) => ({

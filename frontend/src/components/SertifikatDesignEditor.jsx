@@ -172,7 +172,7 @@ function FieldCard({ fieldKey, field, onChange }) {
 
 export default function SertifikatDesignEditor({ settingKud, onSave }) {
   const toast = useToast();
-  const [config, setConfig] = useState(() => settingKud?.sertifikat_config || DEFAULT_CONFIG);
+  const [config, setConfig] = useState(() => { const c = settingKud?.sertifikat_config || DEFAULT_CONFIG; return { ...c, fields: c.fields || DEFAULT_CONFIG.fields, background: c.background || DEFAULT_CONFIG.background }; });
   const [saving, setSaving] = useState(false);
   const [confirmTemplate, setConfirmTemplate] = useState(null);
 

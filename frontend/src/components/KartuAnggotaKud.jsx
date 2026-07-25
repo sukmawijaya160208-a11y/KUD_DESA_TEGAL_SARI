@@ -63,20 +63,20 @@ const DEFAULT_CONFIG = {
 
 const TEMPLATE_STYLES = {
   classic: {
-    frontLeftBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2}, #0f172a)`,
-    backHeaderBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2})`,
+    frontLeftBg: (cfg) => `linear-gradient(${cfg?.angle || 135}deg, ${cfg?.color1 || '#059669'}, ${cfg?.color2 || '#047857'}, #0f172a)`,
+    backHeaderBg: (cfg) => `linear-gradient(${cfg?.angle || 135}deg, ${cfg?.color1 || '#059669'}, ${cfg?.color2 || '#047857'})`,
     leftPanelPct: 35,
     corner: 'rounded-xl',
   },
   modern: {
-    frontLeftBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2})`,
-    backHeaderBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2})`,
+    frontLeftBg: (cfg) => `linear-gradient(${cfg?.angle || 135}deg, ${cfg?.color1 || '#0d9488'}, ${cfg?.color2 || '#0f766e'})`,
+    backHeaderBg: (cfg) => `linear-gradient(${cfg?.angle || 135}deg, ${cfg?.color1 || '#0d9488'}, ${cfg?.color2 || '#0f766e'})`,
     leftPanelPct: 32,
     corner: 'rounded-lg',
   },
   compact: {
-    frontLeftBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2})`,
-    backHeaderBg: (cfg) => `linear-gradient(${cfg.background.angle || 135}deg, ${cfg.background.color1}, ${cfg.background.color2})`,
+    frontLeftBg: (cfg) => `linear-gradient(${cfg?.angle || 135}deg, ${cfg?.color1 || '#0284c7'}, ${cfg?.color2 || '#0369a1'})`,
+    backHeaderBg: (cfg) => `linear-gradient(${cfg?.angle || 135}deg, ${cfg?.color1 || '#0284c7'}, ${cfg?.color2 || '#0369a1'})`,
     leftPanelPct: 30,
     corner: 'rounded-md',
   },
