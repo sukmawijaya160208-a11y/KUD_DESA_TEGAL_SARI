@@ -1250,6 +1250,7 @@ export default function Home() {
 function DokumentasiGallery({ items }) {
   const [open, setOpen] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [detailItem, setDetailItem] = useState(null);
 
   const imgItems = items.filter(i => i.media_url);
   if (imgItems.length === 0) {
@@ -1275,25 +1276,63 @@ function DokumentasiGallery({ items }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.05 }}
-              className="break-inside-avoid cursor-pointer group relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
-              onClick={() => openLightbox(idx)}
+              className="break-inside-avoid group relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
             >
               <img
                 src={item.media_url}
                 alt={item.title || 'Dokumentasi'}
-                className="w-full object-cover transition-all duration-500 group-hover:scale-105"
+                className="w-full object-cover transition-all duration-500 group-hover:scale-105 cursor-pointer"
                 style={{ minHeight: '200px' }}
                 loading="lazy"
+                onClick={() => openLightbox(idx)}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                {item.title && <h4 className="text-white font-semibold text-sm drop-shadow-lg">{item.title}</h4>}
-                {item.description && <p className="text-white/80 text-xs mt-0.5 drop-shadow-lg line-clamp-2">{item.description}</p>}
+              <div className="p-3 space-y-1.5 bg-white">
+                {item.title && <h4 className="font-semibold text-foreground text-sm leading-snug">{item.title}</h4>}
+                {item.description && <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{item.description}</p>}
+                <button onClick={() => setDetailItem(item)}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors cursor-pointer mt-1">
+                  <DocumentTextIcon className="w-3.5 h-3.5" /> Detail
+                </button>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* DETAIL MODAL */}
+      <Modal open={!!detailItem} onClose={() => setDetailItem(null)} title={detailItem?.title || 'Detail Dokumentasi'} maxWidth="max-w-lg">
+        {detailItem && (
+          <div className="space-y-4">
+            {detailItem.media_url && (
+              <img src={detailItem.media_url} alt={detailItem.title} className="w-full h-48 object-cover rounded-xl" />
+            )}
+            <div>
+              {detailItem.created_at && (
+                <p className="text-xs text-gray-400 mb-1">{new Date(detailItem.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+              )}
+              {detailItem.title && <h3 className="font-bold text-foreground text-lg">{detailItem.title}</h3>}
+            </div>
+            {detailItem.description ? (
+              <p className="text-sm text-gray-600 leading-relaxed">{detailItem.description}</p>
+            ) : (
+              <p className="text-sm text-gray-400">Tidak ada informasi detail tersedia.</p>
+            )}
+            {detailItem.meta_data && Object.keys(detailItem.meta_data).length > 0 && (
+              <div className="border-t border-gray-100 pt-3 mt-2">
+                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Informasi Tambahan</h4>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  {Object.entries(detailItem.meta_data).map(([k, v]) => (
+                    <div key={k} className="bg-gray-50 rounded-lg p-2">
+                      <span className="text-gray-400 block">{k}</span>
+                      <span className="text-foreground font-medium">{v}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
 
       {/* LIGHTBOX */}
       <AnimatePresence>
