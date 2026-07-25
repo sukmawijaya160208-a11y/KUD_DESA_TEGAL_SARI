@@ -62,15 +62,14 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
 
   return (
     <motion.div
-      layout
-      className={`bg-white rounded-2xl border shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 group ${
+      className={`bg-white rounded-2xl border shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 group will-change-transform ${
         isPenuh ? 'border-amber-200' : isAktif ? 'border-border' : 'border-red-200 bg-red-50/20'
       }`}
     >
       {/* HERO */}
       {fotoUrl ? (
         <div className="h-44 bg-gradient-to-br from-slate-900 to-slate-700 overflow-hidden relative">
-          <img src={fotoUrl} alt="" className="w-full h-full object-cover opacity-60" />
+          <img src={fotoUrl} alt="" className="w-full h-full object-cover opacity-60" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/30 to-transparent" />
           <div className="absolute bottom-3 left-4 right-4">
             <h3 className="text-white font-bold text-lg drop-shadow-sm leading-tight">{program.nama}</h3>
@@ -81,8 +80,8 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
           </div>
           <div className="absolute top-3 right-3 flex gap-1">
             <button onClick={() => onDetail(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-all cursor-pointer" title="Detail"><EyeIcon className="w-3.5 h-3.5" /></button>
-            <button onClick={() => onEdit(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-all cursor-pointer" title="Edit"><PencilSquareIcon className="w-3.5 h-3.5" /></button>
-            <button onClick={() => onDelete(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-red-400/60 transition-all cursor-pointer" title="Hapus"><TrashIcon className="w-3.5 h-3.5" /></button>
+            <button onClick={() => onEdit(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-150 cursor-pointer" title="Edit"><PencilSquareIcon className="w-3.5 h-3.5" /></button>
+            <button onClick={() => onDelete(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-red-400/60 transition-colors duration-150 cursor-pointer" title="Hapus"><TrashIcon className="w-3.5 h-3.5" /></button>
           </div>
         </div>
       ) : (
@@ -97,8 +96,8 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
           </div>
           <div className="absolute top-3 right-3 flex gap-1">
             <button onClick={() => onDetail(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-all cursor-pointer" title="Detail"><EyeIcon className="w-3.5 h-3.5" /></button>
-            <button onClick={() => onEdit(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-all cursor-pointer" title="Edit"><PencilSquareIcon className="w-3.5 h-3.5" /></button>
-            <button onClick={() => onDelete(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-red-400/60 transition-all cursor-pointer" title="Hapus"><TrashIcon className="w-3.5 h-3.5" /></button>
+            <button onClick={() => onEdit(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-150 cursor-pointer" title="Edit"><PencilSquareIcon className="w-3.5 h-3.5" /></button>
+            <button onClick={() => onDelete(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-red-400/60 transition-colors duration-150 cursor-pointer" title="Hapus"><TrashIcon className="w-3.5 h-3.5" /></button>
           </div>
         </div>
       )}
@@ -169,7 +168,7 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
               </div>
               <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full transition-all duration-700 ${
+                  className={`h-full rounded-full transition-[width] duration-700 ease-out ${
                     progress >= 100 ? 'bg-amber-500' : progress >= 80 ? 'bg-orange-400' : progress >= 50 ? 'bg-blue-500' : 'bg-emerald-500'
                   }`}
                   style={{ width: `${Math.min(progress, 100)}%` }}
@@ -194,7 +193,7 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
           {pendaftar.length > 0 && (
             <div>
               <button onClick={() => setExpanded(!expanded)}
-                className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors cursor-pointer">
+                className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-150 cursor-pointer">
                 {expanded ? <ChevronUpIcon className="w-3.5 h-3.5" /> : <ChevronDownIcon className="w-3.5 h-3.5" />}
                 Lihat Pendaftar ({pendaftarCount})
               </button>
@@ -242,7 +241,7 @@ const ProgramCardMemo = memo(ProgramCard);
 
 const containerAnim = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.04 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.015 } },
 };
 
 const cardAnim = {
@@ -255,9 +254,9 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.25 } },
 };
 
-function StatsCard({ label, value, sub, icon: Icon, color }) {
+const StatsCard = memo(function StatsCard({ label, value, sub, icon: Icon, color }) {
   return (
-    <motion.div variants={fadeUp} className="bg-white rounded-xl border border-border p-4 flex items-center gap-3 shadow-sm hover:shadow-md transition-all">
+    <motion.div variants={fadeUp} className="bg-white rounded-xl border border-border p-4 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow">
       <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${color}`}>
         <Icon className="w-5 h-5 text-white" />
       </div>
@@ -268,7 +267,7 @@ function StatsCard({ label, value, sub, icon: Icon, color }) {
       </div>
     </motion.div>
   );
-}
+});
 
 export default function AdminProgramPage() {
   const toast = useToast();
@@ -404,13 +403,13 @@ export default function AdminProgramPage() {
         <div className="relative flex-1 min-w-[180px] max-w-sm">
           <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           <input type="text" placeholder="Cari program..." value={search} onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
+            className="w-full pl-9 pr-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-[border,box-shadow]" />
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
           <div className="relative">
             <FunnelIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
             <select value={filterStatus} onChange={(e) => handleFilterStatus(e.target.value)}
-              className="pl-8 pr-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none cursor-pointer">
+              className="pl-8 pr-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-[border,box-shadow] appearance-none cursor-pointer">
               <option value="">Semua Status</option>
               <option value="aktif">Aktif</option>
               <option value="nonaktif">Nonaktif</option>
@@ -418,12 +417,12 @@ export default function AdminProgramPage() {
             </select>
           </div>
           <select value={filterJenis} onChange={(e) => handleFilterJenis(e.target.value)}
-            className="px-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer">
+            className="px-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-[border,box-shadow] cursor-pointer">
             <option value="">Semua Jenis</option>
             {JENIS_OPTIONS.filter(j => j.value).map((j) => (<option key={j.value} value={j.value}>{j.label}</option>))}
           </select>
           <select value={sortOrder} onChange={(e) => handleSort(e.target.value)}
-            className="px-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer">
+            className="px-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-[border,box-shadow] cursor-pointer">
             {SORT_OPTIONS.map((s) => (<option key={s.value} value={s.value}>{s.label}</option>))}
           </select>
         </div>
@@ -456,7 +455,7 @@ export default function AdminProgramPage() {
           <p className="text-gray-400 text-sm mt-1">Coba ubah kata kunci atau filter pencarian</p>
         </motion.div>
       ) : (
-        <motion.div variants={containerAnim} className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+        <motion.div variants={containerAnim} className="card-grid grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           {data.map((p) => (
             <ProgramCardMemo key={p.id} program={p} onEdit={openEdit} onDelete={setDeleteModal} onDetail={setDetailProgram} onToggleAktif={handleToggleAktif} />
           ))}
@@ -468,7 +467,7 @@ export default function AdminProgramPage() {
         <motion.div variants={fadeUp} className="flex items-center justify-center gap-1.5">
           {Array.from({ length: meta.last_page }, (_, i) => i + 1).map((page) => (
             <button key={page} onClick={() => fetchData({ page })}
-              className={`w-8 h-8 rounded-lg text-sm font-medium transition-all cursor-pointer ${meta.current_page === page ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-border hover:bg-gray-50'}`}>
+              className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors cursor-pointer ${meta.current_page === page ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-border hover:bg-gray-50'}`}>
               {page}
             </button>
           ))}

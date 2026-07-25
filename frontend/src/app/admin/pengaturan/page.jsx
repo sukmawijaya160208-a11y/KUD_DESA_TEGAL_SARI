@@ -25,7 +25,7 @@ const TABS = [
 
 const containerAnim = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.04 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.015 } },
 };
 
 const fadeUp = {
@@ -35,7 +35,7 @@ const fadeUp = {
 
 function FormSection({ title, icon: Icon, description, children }) {
   return (
-    <motion.div variants={fadeUp} className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden hover:shadow-md transition-all">
+    <motion.div variants={fadeUp} className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-primary/5 to-transparent border-b border-border">
         {Icon && <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0"><Icon className="w-5 h-5 text-primary" /></div>}
         <div>
@@ -313,7 +313,7 @@ export default function AdminPengaturanPage() {
           const isActive = tab === t.id;
           return (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all cursor-pointer shrink-0 ${
+              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-colors duration-150 cursor-pointer shrink-0 ${
                 isActive
                   ? `bg-gradient-to-r ${t.color} text-white shadow-md`
                   : 'bg-white text-slate-600 border border-border hover:bg-slate-50'
@@ -361,7 +361,7 @@ export default function AdminPengaturanPage() {
                     <UserIcon className="w-10 h-10 text-primary/30" />
                   </div>
                 )}
-                <label className="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-medium cursor-pointer hover:bg-primary/90 transition-all shadow-sm">
+                <label className="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-medium cursor-pointer hover:bg-primary/90 transition-colors shadow-sm">
                   {profilUploading ? 'Uploading...' : 'Upload Foto'}
                   <input type="file" className="hidden" accept="image/*" onChange={handleProfilePhotoUpload} disabled={profilUploading} />
                 </label>
@@ -418,7 +418,7 @@ export default function AdminPengaturanPage() {
                 ) : (
                   <div className="w-36 h-36 bg-muted rounded-xl flex items-center justify-center text-gray-400 text-sm border-2 border-dashed border-border">Belum ada logo</div>
                 )}
-                <label className="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-medium cursor-pointer hover:bg-primary/90 transition-all shadow-sm w-full text-center">
+                <label className="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-medium cursor-pointer hover:bg-primary/90 transition-colors shadow-sm w-full text-center">
                   {logoUploading ? 'Uploading...' : 'Upload Logo'}
                   <input type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} disabled={logoUploading} />
                 </label>
@@ -447,7 +447,7 @@ export default function AdminPengaturanPage() {
                 <Input label="Logo di Kartu" value={kud.logo || ''} onChange={(e) => handleKudChange('logo', e.target.value)} placeholder="URL logo" />
                 <div className="flex items-center gap-3">
                   {kud.logo ? <img src={kud.logo} alt="" className="w-12 h-12 object-contain rounded-lg border border-border" /> : null}
-                  <label className="px-4 py-2 bg-primary/10 text-primary rounded-xl text-xs font-medium cursor-pointer hover:bg-primary/20 transition-all">
+                  <label className="px-4 py-2 bg-primary/10 text-primary rounded-xl text-xs font-medium cursor-pointer hover:bg-primary/20 transition-colors">
                     {logoKartuUploading ? 'Upload...' : 'Upload Logo'}
                     <input type="file" className="hidden" accept="image/*" onChange={handleLogoKudUpload} disabled={logoKartuUploading} />
                   </label>

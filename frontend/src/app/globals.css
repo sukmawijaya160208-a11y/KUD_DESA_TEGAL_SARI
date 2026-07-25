@@ -252,3 +252,26 @@ body {
     size: A4;
   }
 }
+
+/* === Performance: skip rendering offscreen cards === */
+.card-grid > * {
+  content-visibility: auto;
+  contain: content;
+  contain-intrinsic-size: 280px;
+}
+
+/* === GPU-accelerated animations === */
+.gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* === Reduce motion for accessibility === */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

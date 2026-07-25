@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, startTransition } from 'react';
+import { useEffect, useState, useCallback, memo, startTransition } from 'react';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Button from '@/components/ui/Button';
@@ -19,7 +19,7 @@ import {
 
 const containerAnim = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.03 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.015 } },
 };
 
 const fadeUp = {
@@ -55,9 +55,9 @@ const SECTION_LABELS = {
   layanan: { title: 'Layanan', desc: 'Daftar layanan KUD', icon: PhoneIcon, color: 'from-rose-500 to-rose-600' },
 };
 
-function SertifikasiCard({ item, onEdit, onDelete }) {
+const SertifikasiCard = memo(function SertifikasiCard({ item, onEdit, onDelete }) {
   return (
-    <motion.div variants={fadeUp} className="bg-white rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all duration-300 group">
+    <motion.div variants={fadeUp} className="bg-white rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-shadow duration-300 group will-change-transform">
       {/* HEADER */}
       <div className="relative h-20 bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(168,85,247,0.3),transparent_50%)]" />
@@ -102,22 +102,22 @@ function SertifikasiCard({ item, onEdit, onDelete }) {
       {/* FOOTER */}
       <div className="flex items-center justify-between px-4 py-3 bg-gray-50/80 border-t border-border">
         <button onClick={() => onEdit(item)}
-          className="flex items-center gap-1 text-xs font-medium text-purple-600 hover:text-purple-800 hover:bg-purple-50 px-3 py-1.5 rounded-lg transition-all cursor-pointer">
+          className="flex items-center gap-1 text-xs font-medium text-purple-600 hover:text-purple-800 hover:bg-purple-50 px-3 py-1.5 rounded-lg transition-colors duration-150 cursor-pointer">
           <PencilSquareIcon className="w-3.5 h-3.5" /> Edit Data
         </button>
         <button onClick={() => onDelete(item)}
-          className="flex items-center gap-1 text-xs font-medium text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all cursor-pointer">
+          className="flex items-center gap-1 text-xs font-medium text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors duration-150 cursor-pointer">
           <TrashIcon className="w-3.5 h-3.5" /> Hapus
         </button>
       </div>
     </motion.div>
   );
-}
+});
 
-function DefaultCard({ item, activeTab, onEdit, onDelete, onLightbox }) {
+const DefaultCard = memo(function DefaultCard({ item, activeTab, onEdit, onDelete, onLightbox }) {
   return (
     <motion.div variants={fadeUp}
-      className={`bg-white rounded-2xl border p-4 hover:shadow-lg transition-all duration-200 group relative ${
+      className={`bg-white rounded-2xl border p-4 hover:shadow-lg transition-shadow duration-200 group relative will-change-transform ${
         item.is_active === false ? 'border-red-200 bg-red-50/30' : 'border-border'
       }`}
     >
@@ -192,11 +192,11 @@ function DefaultCard({ item, activeTab, onEdit, onDelete, onLightbox }) {
       <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
         <div className="flex items-center gap-1">
           <button onClick={() => onEdit(item)}
-            className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1.5 rounded-lg transition-all cursor-pointer">
+            className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1.5 rounded-lg transition-colors duration-150 cursor-pointer">
             <PencilSquareIcon className="w-3.5 h-3.5" /> Edit
           </button>
           <button onClick={() => onDelete(item)}
-            className="flex items-center gap-1 text-xs font-medium text-red-600 hover:text-red-800 hover:bg-red-50 px-2 py-1.5 rounded-lg transition-all cursor-pointer">
+            className="flex items-center gap-1 text-xs font-medium text-red-600 hover:text-red-800 hover:bg-red-50 px-2 py-1.5 rounded-lg transition-colors duration-150 cursor-pointer">
             <TrashIcon className="w-3.5 h-3.5" /> Hapus
           </button>
         </div>
@@ -207,7 +207,7 @@ function DefaultCard({ item, activeTab, onEdit, onDelete, onLightbox }) {
             <ChevronUpIcon className="w-3.5 h-3.5" />
           </button>
           <button onClick={() => {}}
-            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all cursor-pointer"
+            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-150 cursor-pointer"
             title="Turun">
             <ChevronDownIcon className="w-3.5 h-3.5" />
           </button>
@@ -215,7 +215,7 @@ function DefaultCard({ item, activeTab, onEdit, onDelete, onLightbox }) {
       </div>
     </motion.div>
   );
-}
+});
 
 export default function LandingPageAdmin() {
   const toast = useToast();
@@ -295,7 +295,7 @@ export default function LandingPageAdmin() {
           const count = isActive ? items.length : null;
           return (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer shrink-0 ${
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors duration-150 cursor-pointer shrink-0 ${
                 isActive
                   ? `bg-gradient-to-r ${tab.color} text-white shadow-md`
                   : 'bg-white text-slate-600 border border-border hover:bg-slate-50 hover:border-slate-300'
@@ -313,7 +313,7 @@ export default function LandingPageAdmin() {
         <div className="relative w-full sm:w-72">
           <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Cari data di tab ini..."
-            className="w-full pl-3 pr-8 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
+            className="w-full pl-3 pr-8 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors" />
           {searchQuery && (
             <button onClick={() => setSearchQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer">
               <XMarkIcon className="w-4 h-4" />
@@ -336,7 +336,7 @@ export default function LandingPageAdmin() {
           <p className="text-gray-300 text-sm mt-1">{searchQuery ? 'Coba kata kunci lain' : 'Klik "Tambah Data" untuk mulai'}</p>
         </motion.div>
       ) : (
-        <motion.div variants={containerAnim} className={activeTab === 'sertifikasi' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5' : 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'}>
+        <motion.div variants={containerAnim} className={'card-grid ' + (activeTab === 'sertifikasi' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5' : 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4')}>
           {filteredItems.map((item) =>
             activeTab === 'sertifikasi' ? (
               <SertifikasiCard key={item.id} item={item} onEdit={setEditing} onDelete={setDeleteModal} />
