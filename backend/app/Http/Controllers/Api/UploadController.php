@@ -223,4 +223,26 @@ class UploadController extends Controller
             return response()->json(['message' => 'Upload gagal: '.$e->getMessage()], 500);
         }
     }
+
+    public function kartuTtd(Request $request)
+    {
+        $request->validate(['file' => 'required|file|mimes:jpg,jpeg,png|max:2048']);
+        try {
+            $result = $this->storeFile($request->file('file'), 'kartu-ttd');
+            return response()->json(['url' => $result['url']]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Upload gagal: '.$e->getMessage()], 500);
+        }
+    }
+
+    public function kartuStempel(Request $request)
+    {
+        $request->validate(['file' => 'required|file|mimes:jpg,jpeg,png|max:2048']);
+        try {
+            $result = $this->storeFile($request->file('file'), 'kartu-stempel');
+            return response()->json(['url' => $result['url']]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Upload gagal: '.$e->getMessage()], 500);
+        }
+    }
 }

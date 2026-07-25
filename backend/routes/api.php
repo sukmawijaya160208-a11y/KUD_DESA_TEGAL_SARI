@@ -62,6 +62,8 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::post('/upload/video-tentang-aplikasi', [UploadController::class, 'videoTentangAplikasi']);
         Route::post('/upload/chat', [UploadController::class, 'chatUpload']);
         Route::post('/upload/landing-media', [UploadController::class, 'landingMedia']);
+        Route::post('/upload/kartu-ttd', [UploadController::class, 'kartuTtd']);
+        Route::post('/upload/kartu-stempel', [UploadController::class, 'kartuStempel']);
     });
 
     // Notifikasi

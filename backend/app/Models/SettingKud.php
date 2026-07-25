@@ -14,9 +14,15 @@ class SettingKud extends Model
         'tahun_anggaran', 'website',
         'kartu_warna_primary', 'kartu_warna_secondary',
         'kartu_background', 'tanda_tangan_kartu',
+        'kartu_aturan', 'kartu_slogan', 'kartu_ketua_nama',
+        'kartu_ketua_jabatan', 'kartu_ttd', 'kartu_stempel',
+        'kartu_kota_terbit', 'kartu_belakang_warna',
+        'kartu_judul_depan', 'kartu_subjudul_depan',
+        'kartu_label_anggota', 'kartu_format_no_anggota',
     ];
 
     protected $casts = [
         'tanda_tangan_kartu' => 'boolean',
+        'kartu_aturan' => 'array',
     ];
 }

@@ -31,6 +31,19 @@ class SettingKudController extends Controller
             'kartu_warna_secondary' => 'nullable|string|max:20',
             'kartu_background' => 'nullable|string',
             'tanda_tangan_kartu' => 'nullable|boolean',
+            'kartu_aturan' => 'nullable|array',
+            'kartu_aturan.*' => 'nullable|string',
+            'kartu_slogan' => 'nullable|string|max:255',
+            'kartu_ketua_nama' => 'nullable|string|max:255',
+            'kartu_ketua_jabatan' => 'nullable|string|max:255',
+            'kartu_ttd' => 'nullable|string',
+            'kartu_stempel' => 'nullable|string',
+            'kartu_kota_terbit' => 'nullable|string|max:255',
+            'kartu_belakang_warna' => 'nullable|string|max:20',
+            'kartu_judul_depan' => 'nullable|string|max:255',
+            'kartu_subjudul_depan' => 'nullable|string|max:255',
+            'kartu_label_anggota' => 'nullable|string|max:255',
+            'kartu_format_no_anggota' => 'nullable|string|max:255',
         ]);
 
         $setting = SettingKud::first() ?? new SettingKud;
