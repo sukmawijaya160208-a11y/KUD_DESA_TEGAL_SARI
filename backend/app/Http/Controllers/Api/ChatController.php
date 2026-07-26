@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Models\MessageSetting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -95,9 +96,15 @@ class ChatController extends Controller
     public function messages(Request $request, Conversation $conversation)
     {
         $user = $request->user();
-        if (! $conversation->users()->where('user_id', $user->id)->exists()) {
+        if (!$conversation->users()->where('user_id', $user->id)->exists()) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
+
+        // Mark sender's messages as delivered when recipient fetches them
+        $conversation->messages()
+            ->where('sender_id', '!=', $user->id)
+            ->where('status', 'sent')
+            ->update(['status' => 'delivered']);
 
         $perPage = min((int) ($request->per_page ?? 50), 100);
         $messages = $conversation->messages()
@@ -112,6 +119,7 @@ class ChatController extends Controller
                 'sender_role' => $m->sender->role,
                 'message' => $m->message,
                 'attachment' => $m->attachment,
+                'status' => $m->status,
                 'created_at' => $m->created_at,
                 'is_mine' => $m->sender_id === $user->id,
             ]);
@@ -122,7 +130,7 @@ class ChatController extends Controller
     public function send(Request $request, Conversation $conversation)
     {
         $user = $request->user();
-        if (! $conversation->users()->where('user_id', $user->id)->exists()) {
+        if (!$conversation->users()->where('user_id', $user->id)->exists()) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
@@ -139,6 +147,7 @@ class ChatController extends Controller
             'sender_id' => $user->id,
             'message' => strip_tags($request->message ?? ''),
             'attachment' => $request->attachment,
+            'status' => 'sent',
         ]);
 
         return response()->json([
@@ -149,6 +158,7 @@ class ChatController extends Controller
             'sender_role' => $user->role,
             'message' => $message->message,
             'attachment' => $message->attachment,
+            'status' => $message->status,
             'created_at' => $message->created_at,
             'is_mine' => true,
         ], 201);
@@ -160,6 +170,12 @@ class ChatController extends Controller
         $conversation->users()->updateExistingPivot($user->id, [
             'last_read_at' => now(),
         ]);
+
+        // Mark all unread messages from other user as read
+        $conversation->messages()
+            ->where('sender_id', '!=', $user->id)
+            ->whereIn('status', ['sent', 'delivered'])
+            ->update(['status' => 'read']);
 
         return response()->json(['message' => 'OK']);
     }
@@ -187,5 +203,80 @@ class ChatController extends Controller
             ->get(['id', 'name', 'email', 'role', 'foto_profil']);
 
         return response()->json($users);
+    }
+
+    // ====== TYPING INDICATOR ======
+
+    public function typing(Request $request, Conversation $conversation)
+    {
+        $user = $request->user();
+        if (!$conversation->users()->where('user_id', $user->id)->exists()) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $conversation->users()->updateExistingPivot($user->id, [
+            'typing_at' => now(),
+        ]);
+
+        return response()->json(['message' => 'OK']);
+    }
+
+    public function typingStatus(Request $request, Conversation $conversation)
+    {
+        $user = $request->user();
+        if (!$conversation->users()->where('user_id', $user->id)->exists()) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $otherUser = $conversation->users()->where('user_id', '!=', $user->id)->first();
+
+        if (!$otherUser || !$otherUser->pivot->typing_at) {
+            return response()->json(['typing' => false]);
+        }
+
+        $isTyping = now()->diffInSeconds($otherUser->pivot->typing_at, true) < 5;
+
+        return response()->json([
+            'typing' => $isTyping,
+            'user_id' => $otherUser->id,
+            'name' => $otherUser->name,
+        ]);
+    }
+
+    // ====== MESSAGE SETTINGS ======
+
+    public function getSettings(Request $request)
+    {
+        $user = $request->user();
+        $settings = MessageSetting::firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'notif_on' => true,
+                'notif_sound' => 'default',
+                'wallpaper' => null,
+                'enter_to_send' => true,
+            ]
+        );
+
+        return response()->json($settings);
+    }
+
+    public function updateSettings(Request $request)
+    {
+        $user = $request->user();
+
+        $request->validate([
+            'notif_on' => 'boolean',
+            'notif_sound' => 'nullable|string|max:50',
+            'wallpaper' => 'nullable|string|max:100',
+            'enter_to_send' => 'boolean',
+        ]);
+
+        $settings = MessageSetting::updateOrCreate(
+            ['user_id' => $user->id],
+            $request->only(['notif_on', 'notif_sound', 'wallpaper', 'enter_to_send'])
+        );
+
+        return response()->json($settings);
     }
 }

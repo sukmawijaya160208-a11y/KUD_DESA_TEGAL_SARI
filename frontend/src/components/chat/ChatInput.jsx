@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
 import { PaperAirplaneIcon, PaperClipIcon, FaceSmileIcon, PhotoIcon, MusicalNoteIcon } from '@heroicons/react/24/outline';
@@ -35,7 +35,7 @@ function AttachmentPreviewInline({ file, onRemove }) {
   );
 }
 
-export default function ChatInput({ onSend, replyTo, onClearReply }) {
+export default function ChatInput({ onSend, replyTo, onClearReply, conversationId }) {
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const [attachFile, setAttachFile] = useState(null);
@@ -44,6 +44,7 @@ export default function ChatInput({ onSend, replyTo, onClearReply }) {
   const [recording, setRecording] = useState(false);
   const textRef = useRef(null);
   const fileRef = useRef(null);
+  const typingTimer = useRef(null);
 
   const autoResize = useCallback(() => {
     const el = textRef.current;
@@ -52,10 +53,27 @@ export default function ChatInput({ onSend, replyTo, onClearReply }) {
     el.style.height = Math.min(el.scrollHeight, 132) + 'px';
   }, []);
 
+  // Debounced typing indicator
+  const sendTyping = useCallback(() => {
+    if (!conversationId) return;
+    api.chat.typing(conversationId).catch(() => {});
+  }, [conversationId]);
+
   const handleChange = (e) => {
     setInput(e.target.value);
     setTimeout(autoResize, 0);
+    // Debounce typing indicator: send immediately, then stop after 2s of inactivity
+    if (typingTimer.current) clearTimeout(typingTimer.current);
+    sendTyping();
+    typingTimer.current = setTimeout(() => {}, 2000);
   };
+
+  // Cleanup typing timer
+  useEffect(() => {
+    return () => {
+      if (typingTimer.current) clearTimeout(typingTimer.current);
+    };
+  }, []);
 
   const handleSend = async () => {
     if ((!input.trim() && !attachFile) || sending) return;

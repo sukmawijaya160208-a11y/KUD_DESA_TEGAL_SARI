@@ -40,7 +40,7 @@ class CallController extends Controller
             'status' => 'ringing',
         ]);
 
-        return response()->json($call, 201);
+        return response()->json($call->load(['caller', 'receiver', 'conversation.users']), 201);
     }
 
     public function pending(Request $request)
@@ -71,7 +71,7 @@ class CallController extends Controller
             'started_at' => now(),
         ]);
 
-        return response()->json($call);
+        return response()->json($call->load(['caller', 'receiver', 'conversation.users']));
     }
 
     public function reject(Request $request, Call $call)
@@ -109,8 +109,8 @@ class CallController extends Controller
     {
         $user = $request->user();
         $call = Call::where(function ($q) use ($user) {
-                $q->where('caller_id', $user->id)->orWhere('receiver_id', $user->id);
-            })
+            $q->where('caller_id', $user->id)->orWhere('receiver_id', $user->id);
+        })
             ->whereIn('status', ['ringing', 'ongoing'])
             ->with(['caller', 'receiver', 'conversation.users'])
             ->first();
@@ -132,5 +132,89 @@ class CallController extends Controller
             ->get();
 
         return response()->json($calls);
+    }
+
+    // ====== WEBRTC SIGNALING ======
+
+    public function sendOffer(Request $request, Call $call)
+    {
+        $user = $request->user();
+        if ($call->caller_id !== $user->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $request->validate(['sdp' => 'required|string']);
+
+        $call->update(['offer_sdp' => $request->sdp]);
+
+        return response()->json(['message' => 'OK']);
+    }
+
+    public function getOffer(Request $request, Call $call)
+    {
+        $user = $request->user();
+        if ($call->receiver_id !== $user->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        return response()->json(['sdp' => $call->offer_sdp]);
+    }
+
+    public function sendAnswer(Request $request, Call $call)
+    {
+        $user = $request->user();
+        if ($call->receiver_id !== $user->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $request->validate(['sdp' => 'required|string']);
+
+        $call->update(['answer_sdp' => $request->sdp]);
+
+        return response()->json(['message' => 'OK']);
+    }
+
+    public function getAnswer(Request $request, Call $call)
+    {
+        $user = $request->user();
+        if ($call->caller_id !== $user->id && $call->receiver_id !== $user->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        return response()->json(['sdp' => $call->answer_sdp]);
+    }
+
+    public function sendIceCandidate(Request $request, Call $call)
+    {
+        $user = $request->user();
+        if ($call->caller_id !== $user->id && $call->receiver_id !== $user->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $request->validate([
+            'candidate' => 'required|string',
+            'from' => 'required|in:caller,receiver',
+        ]);
+
+        $column = $request->from === 'caller' ? 'ice_caller' : 'ice_receiver';
+        $candidates = json_decode($call->$column ?? '[]', true);
+        $candidates[] = $request->candidate;
+        $call->update([$column => json_encode($candidates)]);
+
+        return response()->json(['message' => 'OK']);
+    }
+
+    public function getIceCandidates(Request $request, Call $call)
+    {
+        $user = $request->user();
+        if ($call->caller_id !== $user->id && $call->receiver_id !== $user->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $isCaller = $call->caller_id === $user->id;
+        $fromColumn = $isCaller ? 'ice_receiver' : 'ice_caller';
+        $candidates = json_decode($call->$fromColumn ?? '[]', true);
+
+        return response()->json(['candidates' => $candidates]);
     }
 }

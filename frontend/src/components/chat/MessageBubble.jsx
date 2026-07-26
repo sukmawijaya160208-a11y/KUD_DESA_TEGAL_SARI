@@ -16,10 +16,10 @@ function isAudio(type) { return type?.startsWith('audio/'); }
 function isVideoFile(type) { return type?.startsWith('video/'); }
 
 function ReadReceipt({ status }) {
-  if (status === 'sending') return <span className="text-[9px] text-foreground/40 ml-1">⏳</span>;
-  if (status === 'sent') return <span className="text-[9px] text-foreground/50 ml-1">✓</span>;
-  if (status === 'delivered') return <span className="text-[9px] text-foreground/50 ml-1">✓✓</span>;
-  if (status === 'read') return <span className="text-[9px] text-[#53bdeb] ml-1">✓✓</span>;
+  if (status === 'sending') return <span className="text-[11px] text-foreground/40 ml-1.5">&#x23F3;</span>;
+  if (status === 'sent') return <span className="text-[11px] text-foreground/40 ml-1.5">&#x2713;</span>;
+  if (status === 'delivered') return <span className="text-[11px] text-foreground/40 ml-1.5">&#x2713;&#x2713;</span>;
+  if (status === 'read') return <span className="text-[11px] text-[#53bdeb] ml-1.5">&#x2713;&#x2713;</span>;
   return null;
 }
 
@@ -93,7 +93,7 @@ function AttachmentContent({ attachment, isMine }) {
   if (isImage(attachment.type)) {
     return (
       <>
-        <button onClick={() => setLightbox(true)} className="block w-full cursor-pointer -mx-1 -mt-1">
+        <button onClick={() => setLightbox(true)} className="block w-full cursor-pointer">
           <img src={attachment.url} alt={attachment.name} className="max-w-full rounded-xl max-h-64 object-contain bg-black/5" loading="lazy" />
         </button>
         {lightbox && (
@@ -155,12 +155,12 @@ const MessageBubble = memo(function MessageBubble({ message, isMine, onReply, on
       animate={{ opacity: 1, y: 0 }}
       className={`flex ${isMine ? 'justify-end' : 'justify-start'} px-4 mb-1`}
     >
-      <div className={`max-w-[80%] lg:max-w-[65%] ${isMine ? 'order-1' : 'order-1'}`}>
+      <div className={`max-w-[80%] lg:max-w-[65%] relative ${isMine ? 'order-1' : 'order-1'}`}>
         <div
           className={`relative rounded-2xl px-4 py-2.5 ${
             isMine
-              ? 'bg-wa-primary-light text-foreground rounded-br-sm'
-              : 'bg-white text-foreground rounded-bl-sm border border-border shadow-sm'
+              ? 'bg-wa-primary-light text-foreground rounded-br-sm bubble-tail-out'
+              : 'bg-white text-foreground rounded-bl-sm bubble-tail-in border border-border shadow-sm'
           }`}
           onClick={handleContext}
         >
@@ -185,7 +185,7 @@ const MessageBubble = memo(function MessageBubble({ message, isMine, onReply, on
             <span className={`text-[10px] ${isMine ? 'text-foreground/50' : 'text-gray-400'}`}>
               {formatTime(message.created_at)}
             </span>
-            {isMine && message.status && <ReadReceipt status={message.status} />}
+            {isMine && <ReadReceipt status={message.status} />}
           </div>
         </div>
       </div>
@@ -193,7 +193,7 @@ const MessageBubble = memo(function MessageBubble({ message, isMine, onReply, on
       {context && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setContext(false)} />
-          <div className={`absolute ${isMine ? 'right-0' : 'left-0'} top-full mt-1 z-50 bg-white rounded-xl shadow-xl border border-border py-1 min-w-[140px]`}>
+          <div className={`absolute ${isMine ? 'right-4' : 'left-4'} top-full mt-1 z-50 bg-white rounded-xl shadow-xl border border-border py-1 min-w-[140px]`}>
             {onReply && (
               <button onClick={handleReply} className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors cursor-pointer flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>

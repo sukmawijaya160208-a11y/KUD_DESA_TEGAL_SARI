@@ -8,7 +8,8 @@ import ChatWindow from './ChatWindow';
 import NewChatModal from './NewChatModal';
 import IncomingCall from './IncomingCall';
 import CallScreen from './CallScreen';
-import { ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
+import MessageSettingsModal from './MessageSettingsModal';
+import { ChatBubbleLeftRightIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
 
 const POLL_INTERVAL = 3000;
 
@@ -23,7 +24,9 @@ function ChatPageInner() {
   const [messages, setMessages] = useState([]);
   const [convLoading, setConvLoading] = useState(true);
   const [newChatOpen, setNewChatOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [mobileView, setMobileView] = useState('list');
+  const [otherTyping, setOtherTyping] = useState(false);
   const call = useCall();
 
   useEffect(() => {
@@ -60,6 +63,19 @@ function ChatPageInner() {
     return () => { cancelled = true; clearInterval(msgPoll); };
   }, [activeConv?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Typing indicator polling
+  useEffect(() => {
+    if (!activeConv) { setOtherTyping(false); return; }
+    let cancelled = false;
+    const poll = setInterval(async () => {
+      try {
+        const res = await api.chat.typingStatus(activeConv.id);
+        if (!cancelled) setOtherTyping(res?.typing || false);
+      } catch {}
+    }, POLL_INTERVAL);
+    return () => { cancelled = true; clearInterval(poll); };
+  }, [activeConv?.id]);
+
   const handleSelect = useCallback((conv) => {
     setActiveConv(conv);
     setMobileView('chat');
@@ -86,7 +102,7 @@ function ChatPageInner() {
     };
     setMessages((prev) => [...prev, optimistic]);
     const sent = await api.chat.send(activeConv.id, text, attachment);
-    setMessages((prev) => prev.map((m) => (m.id === tempId ? { ...sent, is_mine: true, status: 'delivered' } : m)));
+    setMessages((prev) => prev.map((m) => (m.id === tempId ? { ...sent, is_mine: true, status: sent.status || 'delivered' } : m)));
     loadConversations();
   }, [activeConv, user.id, loadConversations]);
 
@@ -127,8 +143,14 @@ function ChatPageInner() {
     <>
       <IncomingCall />
       <CallScreen />
-      <div className="flex h-dvh overflow-hidden">
-        <div className={`${mobileView === 'chat' ? 'hidden lg:flex' : 'flex'} lg:w-[400px] xl:w-[420px] border-r border-border bg-white flex-col w-full`}>
+      <div className="flex h-dvh overflow-hidden bg-white">
+        {/* Mobile overlay when chat is open */}
+        {mobileView === 'chat' && (
+          <div className="fixed inset-0 bg-black/30 z-10 lg:hidden" onClick={handleBack} />
+        )}
+
+        {/* Sidebar */}
+        <div className={`${mobileView === 'chat' ? 'hidden lg:flex' : 'flex'} lg:w-[400px] xl:w-[420px] border-r border-border bg-white flex-col w-full relative z-20 transition-transform duration-300`}>
           <ConversationList
             conversations={conversations}
             activeId={activeConv?.id}
@@ -137,9 +159,17 @@ function ChatPageInner() {
             myId={user.id}
             loading={convLoading}
           />
+          <button
+            onClick={() => setSettingsOpen(true)}
+            className="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-wa-primary hover:bg-wa-primary-dark text-white flex items-center justify-center shadow-lg transition-colors cursor-pointer z-10"
+            title="Pengaturan Pesan"
+          >
+            <Cog6ToothIcon className="w-5 h-5" />
+          </button>
         </div>
 
-        <div className={`flex-1 flex flex-col min-w-0 ${mobileView === 'list' ? 'hidden lg:flex' : 'flex'}`}>
+        {/* Chat area */}
+        <div className={`flex-1 flex flex-col min-w-0 relative z-20 transition-transform duration-300 ${mobileView === 'list' ? 'hidden lg:flex' : 'flex'}`}>
           {activeConv ? (
             <ChatWindow
               conversation={activeConv}
@@ -150,6 +180,7 @@ function ChatPageInner() {
               onCall={handleCall}
               onVideoCall={handleVideoCall}
               onMobileBack={handleBack}
+              otherTyping={otherTyping}
             />
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center px-8 bg-chat-pattern">
@@ -169,6 +200,11 @@ function ChatPageInner() {
         open={newChatOpen}
         onClose={() => setNewChatOpen(false)}
         onStart={handleStartChat}
+      />
+
+      <MessageSettingsModal
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
       />
     </>
   );

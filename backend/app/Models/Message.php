@@ -12,12 +12,14 @@ class Message extends Model
         'sender_id',
         'message',
         'attachment',
+        'status',
     ];
 
     protected function casts(): array
     {
         return [
             'attachment' => 'array',
+            'status' => 'string',
         ];
     }
 

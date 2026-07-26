@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState, useMemo } from 'react';
-import { ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
+import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import { ChatBubbleLeftRightIcon, PhoneIcon } from '@heroicons/react/24/outline';
 import ChatHeader from './ChatHeader';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
+import CallHistoryModal from './CallHistoryModal';
 
 function groupByDate(messages) {
   const groups = [];
@@ -31,8 +32,9 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-export default function ChatWindow({ conversation, messages, myId, onSend, onDeleteMessage, onCall, onVideoCall, onMobileBack }) {
+export default function ChatWindow({ conversation, messages, myId, onSend, onDeleteMessage, onCall, onVideoCall, onMobileBack, otherTyping }) {
   const [replyTo, setReplyTo] = useState(null);
+  const [showCallHistory, setShowCallHistory] = useState(false);
   const bottomRef = useRef(null);
   const msgContainerRef = useRef(null);
 
@@ -53,13 +55,13 @@ export default function ChatWindow({ conversation, messages, myId, onSend, onDel
     return onSend(text, attachment, reply);
   };
 
-  const handleReply = (msg) => {
+  const handleReply = useCallback((msg) => {
     setReplyTo(msg);
-  };
+  }, []);
 
-  const handleDelete = (messageId) => {
+  const handleDelete = useCallback((messageId) => {
     if (onDeleteMessage) onDeleteMessage(messageId);
-  };
+  }, [onDeleteMessage]);
 
   const dateGroups = useMemo(() => groupByDate(messages), [messages]);
 
@@ -85,13 +87,14 @@ export default function ChatWindow({ conversation, messages, myId, onSend, onDel
         onMobileBack={onMobileBack}
         onCall={onCall}
         onVideoCall={onVideoCall}
+        otherTyping={otherTyping}
       />
 
       <div ref={msgContainerRef} className="flex-1 overflow-y-auto py-2 scroll-smooth">
         {dateGroups.map((group) => (
           <div key={group.date}>
-            <div className="flex justify-center my-2">
-              <span className="px-2.5 py-1 bg-white/80 text-gray-500 text-[11px] font-medium rounded-full shadow-sm border border-white/50">
+            <div className="flex justify-center my-3">
+              <span className="px-3 py-1 bg-white/90 text-gray-500 text-[11px] font-medium rounded-full shadow-sm">
                 {formatDate(group.date)}
               </span>
             </div>
@@ -109,7 +112,23 @@ export default function ChatWindow({ conversation, messages, myId, onSend, onDel
         <div ref={bottomRef} />
       </div>
 
-      <ChatInput onSend={handleSend} active={conversation} replyTo={replyTo} onClearReply={() => setReplyTo(null)} />
+      <div className="flex items-center justify-center border-t border-border bg-white px-2 py-1">
+        <button
+          onClick={() => setShowCallHistory(true)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-muted transition-colors cursor-pointer text-xs text-gray-500"
+        >
+          <PhoneIcon className="w-3.5 h-3.5" />
+          Riwayat Panggilan
+        </button>
+      </div>
+
+      <ChatInput onSend={handleSend} active={conversation} replyTo={replyTo} onClearReply={() => setReplyTo(null)} conversationId={conversation.id} />
+
+      <CallHistoryModal
+        open={showCallHistory}
+        onClose={() => setShowCallHistory(false)}
+        conversationId={conversation.id}
+      />
     </div>
   );
 }

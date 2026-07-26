@@ -281,6 +281,10 @@ export const api = {
       fd.append('file', file);
       return request('/upload/chat', { method: 'POST', body: fd, headers: {} });
     },
+    typing: (conversationId) => request(`/chat/conversations/${conversationId}/typing`, { method: 'POST' }),
+    typingStatus: (conversationId) => request(`/chat/conversations/${conversationId}/typing`),
+    getSettings: () => request('/chat/settings'),
+    updateSettings: (data) => request('/chat/settings', { method: 'PUT', body: JSON.stringify(data) }),
   },
   calls: {
     initiate: (conversationId, type) => request('/calls', { method: 'POST', body: JSON.stringify({ conversation_id: conversationId, type }) }),
@@ -289,6 +293,13 @@ export const api = {
     accept: (callId) => request(`/calls/${callId}/accept`, { method: 'POST' }),
     reject: (callId) => request(`/calls/${callId}/reject`, { method: 'POST' }),
     end: (callId) => request(`/calls/${callId}/end`, { method: 'POST' }),
+    sendOffer: (callId, sdp) => request(`/calls/${callId}/offer`, { method: 'POST', body: JSON.stringify({ sdp }) }),
+    getOffer: (callId) => request(`/calls/${callId}/offer`),
+    sendAnswer: (callId, sdp) => request(`/calls/${callId}/answer`, { method: 'POST', body: JSON.stringify({ sdp }) }),
+    getAnswer: (callId) => request(`/calls/${callId}/answer`),
+    sendIce: (callId, candidate, from) => request(`/calls/${callId}/ice`, { method: 'POST', body: JSON.stringify({ candidate, from }) }),
+    getIce: (callId) => request(`/calls/${callId}/ice`),
+    history: (conversationId) => request(`/conversations/${conversationId}/calls`),
   },
   blog: {
     list: (params) => {

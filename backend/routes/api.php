@@ -85,6 +85,14 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::put('/chat/conversations/{conversation}/read', [ChatController::class, 'markAsRead']);
     Route::delete('/chat/conversations/{conversation}/messages/{message}', [ChatController::class, 'destroy']);
 
+    // Chat typing
+    Route::post('/chat/conversations/{conversation}/typing', [ChatController::class, 'typing']);
+    Route::get('/chat/conversations/{conversation}/typing', [ChatController::class, 'typingStatus']);
+
+    // Chat settings
+    Route::get('/chat/settings', [ChatController::class, 'getSettings']);
+    Route::put('/chat/settings', [ChatController::class, 'updateSettings']);
+
     // Calls
     Route::post('/calls', [CallController::class, 'initiate']);
     Route::get('/calls/pending', [CallController::class, 'pending']);
@@ -93,6 +101,14 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::post('/calls/{call}/reject', [CallController::class, 'reject']);
     Route::post('/calls/{call}/end', [CallController::class, 'end']);
     Route::get('/conversations/{conversation}/calls', [CallController::class, 'history']);
+
+    // Call signaling
+    Route::post('/calls/{call}/offer', [CallController::class, 'sendOffer']);
+    Route::get('/calls/{call}/offer', [CallController::class, 'getOffer']);
+    Route::post('/calls/{call}/answer', [CallController::class, 'sendAnswer']);
+    Route::get('/calls/{call}/answer', [CallController::class, 'getAnswer']);
+    Route::post('/calls/{call}/ice', [CallController::class, 'sendIceCandidate']);
+    Route::get('/calls/{call}/ice', [CallController::class, 'getIceCandidates']);
 
     // === ADMIN ===
     Route::middleware('role:admin')->prefix('admin')->group(function () {
