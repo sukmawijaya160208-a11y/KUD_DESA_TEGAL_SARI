@@ -1,26 +1,12 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { PrinterIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 
 function formatTgl(d) {
   if (!d) return '-';
   const date = new Date(d);
   return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-}
-
-function QRCodeSvg({ value, size = 60 }) {
-  const [svg, setSvg] = useState(null);
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    import('qrcode').then((QRCode) => {
-      QRCode.toString(value || 'KUD', { type: 'svg', width: size, margin: 1 }, (err, str) => {
-        if (!err) setSvg(str);
-      });
-    });
-  }, [value, size]);
-  if (!svg) return <div style={{ width: size, height: size }} className="bg-gray-100 rounded" />;
-  return <div style={{ width: size, height: size }} dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 
 const DEFAULT_CONFIG = {
@@ -254,7 +240,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
           </div>
           <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:4px;border-top:1px solid #f1f5f9;">
             ${f('berlaku').show !== false ? `<div><div style="font-size:7px;color:#94a3b8;">Berlaku</div><div style="font-size:9px;font-weight:bold;color:#0f172a;">${terbit} - ${berlaku}</div></div>` : ''}
-            ${f('qr_code').show !== false ? `<div style="width:55px;height:55px;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(nomor_anggota || 'KUD')}" alt="QR" style="width:100%;height:100%;" /></div>` : ''}
+            ${f('qr_code').show !== false ? `<div style="width:55px;height:55px;"><img src="/images/qr-link-kud.jpg" alt="QR" style="width:100%;height:100%;" /></div>` : ''}
           </div>
         </div>
       </div>
@@ -271,7 +257,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
           <div style="text-align:right;font-size:${bc('kota_tanggal', 'fontSize') || 7}px;color:${bc('kota_tanggal', 'color') || '#64748b'};">
             ${b('kota_tanggal').show !== false ? `<div>${kotaTerbit}, ${terbit}</div>` : ''}
             ${b('jabatan_ketua').show !== false ? `<div style="font-weight:600;font-size:${bc('jabatan_ketua', 'fontSize') || 8}px;color:${bc('jabatan_ketua', 'color') || '#475569'};">${ketuaJabatan}</div>` : ''}
-            ${b('ttd_stempel').show !== false ? `<div style="display:flex;align-items:center;justify-content:flex-end;gap:2px;min-height:55px;">${stempelHtml}${ttdHtml}</div>` : ''}
+            ${b('ttd_stempel').show !== false ? `<div style="display:flex;align-items:center;justify-content:flex-end;gap:2px;min-height:55px;">${stempelHtml}${ttdHtml}<img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" style="width:28px;height:28px;border-radius:2px;border:1px solid #e2e8f0;" /></div>` : ''}
             ${b('nama_ketua').show !== false ? `<div style="font-weight:900;color:#0f172a;font-size:${bc('nama_ketua', 'fontSize') || 8}px;text-transform:uppercase;">${ketuaNama}</div>` : ''}
           </div>
         </div>
@@ -351,7 +337,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
       ${f('alamat').show !== false && alamatJalan ? `<div style="font-size:${fc('alamat', 'fontSize') || 8}pt;color:${fc('alamat', 'color') || '#475569'};line-height:1.4;">${alamatJalan}</div>` : ''}
       <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:0.3mm;border-top:0.5px solid #f1f5f9;">
         ${f('berlaku').show !== false ? `<div style="font-size:${fc('berlaku', 'fontSize') || 7}pt;color:${fc('berlaku', 'color') || '#94a3b8'};"><span style="font-weight:700;font-size:9pt;color:#0f172a;">${terbit} - ${berlaku}</span></div>` : ''}
-        ${f('qr_code').show !== false ? `<div style="width:18mm;height:18mm;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(nomor_anggota || 'KUD')}" alt="QR" style="width:100%;height:100%;image-rendering:pixelated;" /></div>` : ''}
+        ${f('qr_code').show !== false ? `<div style="width:18mm;height:18mm;"><img src="/images/qr-link-kud.jpg" alt="QR" style="width:100%;height:100%;" /></div>` : ''}
       </div>
     </div>
   </div>
@@ -367,7 +353,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
         <div style="text-align:right;font-size:${bc('kota_tanggal', 'fontSize') || 7}pt;color:${bc('kota_tanggal', 'color') || '#64748b'};">
           ${b('kota_tanggal').show !== false ? `<div>${kotaTerbit}, ${terbit}</div>` : ''}
           ${b('jabatan_ketua').show !== false ? `<div style="font-weight:${bc('jabatan_ketua', 'fontWeight') || 'semibold'};color:${bc('jabatan_ketua', 'color') || '#475569'};font-size:${bc('jabatan_ketua', 'fontSize') || 8}pt;">${ketuaJabatan}</div>` : ''}
-          ${b('ttd_stempel').show !== false ? `<div class="ttd-stempel-wrap">${stempelHtml}${ttdHtml}</div>` : ''}
+          ${b('ttd_stempel').show !== false ? `<div class="ttd-stempel-wrap">${stempelHtml}${ttdHtml}<img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" style="width:28px;height:28px;border-radius:2px;border:1px solid #e2e8f0;" /></div>` : ''}
           ${b('nama_ketua').show !== false ? `<div style="font-weight:${bc('nama_ketua', 'fontWeight') || 'black'};color:${bc('nama_ketua', 'color') || '#0f172a'};font-size:${bc('nama_ketua', 'fontSize') || 8}pt;text-transform:uppercase;">${ketuaNama}</div>` : ''}
         </div>
       </div>
@@ -463,7 +449,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
           )}
           {f('qr_code').show !== false && (
             <div className="shrink-0">
-              <QRCodeSvg value={nomor_anggota} size={55} />
+              <img src="/images/qr-link-kud.jpg" alt="QR" style={{ width: 55, height: 55 }} />
             </div>
           )}
         </div>
@@ -526,6 +512,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
               <div className="flex items-center justify-end gap-0.5 my-0.5 min-h-[55px]">
                 {stempelUrl && <img src={stempelUrl} alt="" className="object-contain mix-blend-multiply" style={{ height: 50, width: 'auto' }} />}
                 {ttdUrl && <img src={ttdUrl} alt="" className="object-contain" style={{ height: 30, width: 'auto' }} />}
+                <img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" className="rounded border border-slate-200" style={{ width: 28, height: 28 }} />
               </div>
             )}
             {b('nama_ketua').show !== false && (

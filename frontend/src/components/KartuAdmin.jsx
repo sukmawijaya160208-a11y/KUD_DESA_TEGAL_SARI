@@ -1,26 +1,12 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { PrinterIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 
 function formatTgl(d) {
   if (!d) return '-';
   const date = new Date(d);
   return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-}
-
-function QRCodeSvg({ value, size = 50 }) {
-  const [svg, setSvg] = useState(null);
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    import('qrcode').then((QRCode) => {
-      QRCode.toString(value || 'ADMIN', { type: 'svg', width: size, margin: 1 }, (err, str) => {
-        if (!err) setSvg(str);
-      });
-    });
-  }, [value, size]);
-  if (!svg) return <div style={{ width: size, height: size }} className="bg-gray-100 rounded" />;
-  return <div style={{ width: size, height: size }} dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 
 const DEFAULT_CONFIG = {
@@ -229,7 +215,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
       </div>
       <div style="position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;">
         <div style="width:72px;height:72px;padding:4px;border-radius:6px;background:#ffffff;border:2px solid #d4af37;display:flex;align-items:center;justify-content:center;">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(nomor_induk || nama)}" alt="QR" style="width:64px;height:64px;" />
+          <img src="/images/qr-link-kud.jpg" alt="QR" style="width:64px;height:64px;" />
         </div>
         <span style="font-size:7px;color:#d4af37;font-family:monospace;letter-spacing:0.5px;">ID: ${nomor_induk || 'ADM-001'}</span>
       </div>
@@ -242,8 +228,9 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
         <div style="font-size:16px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#d4af37;">${s?.nama_kud || 'KUD SARI SUBUR'}</div>
         <div style="font-size:8px;color:#9ca3af;letter-spacing:1px;margin-top:2px;text-transform:uppercase;">Koperasi Modern & Terpercaya</div>
       </div>
-      <div style="width:100%;background:linear-gradient(135deg,#d4af37 0%,#f3e5ab 40%,#aa7c11 100%);border-radius:6px;padding:5px 0;text-align:center;">
+      <div style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#d4af37 0%,#f3e5ab 40%,#aa7c11 100%);border-radius:6px;padding:5px 10px;">
         <span style="color:#121212;font-weight:900;font-size:8px;letter-spacing:2px;text-transform:uppercase;">${website || 'www.kud-sari-subur.my.id'}</span>
+        <img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" style="width:22px;height:22px;border-radius:2px;border:1px solid rgba(18,18,18,0.2);" />
       </div>
     </div>
   </div>`;
@@ -278,7 +265,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
           ${f('nip').show !== false && nip !== '-' ? `<div style="font-size:${fc('nip', 'fontSize') || 8}px;color:${fc('nip', 'color') || '#475569'};">NIP: ${nip}</div>` : ''}
           <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:4px;border-top:1px solid #f1f5f9;">
             <div><div style="font-size:7px;color:#94a3b8;">Berlaku</div><div style="font-size:8px;font-weight:bold;color:#0f172a;">${terbit} - ${berlakuTxt}</div></div>
-            ${f('qr_code').show !== false ? `<div style="width:48px;height:48px;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(nomor_induk || nama)}" alt="QR" style="width:100%;height:100%;" /></div>` : ''}
+            ${f('qr_code').show !== false ? `<div style="width:48px;height:48px;"><img src="/images/qr-link-kud.jpg" alt="QR" style="width:100%;height:100%;" /></div>` : ''}
           </div>
         </div>
       </div>
@@ -295,7 +282,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
           <div style="text-align:right;font-size:${bc('kota_tanggal', 'fontSize') || 7}px;color:${bc('kota_tanggal', 'color') || '#64748b'};">
             ${b('kota_tanggal').show !== false ? `<div>${kotaTerbit}, ${terbit}</div>` : ''}
             ${b('jabatan_ketua').show !== false ? `<div style="font-weight:600;font-size:${bc('jabatan_ketua', 'fontSize') || 8}px;color:${bc('jabatan_ketua', 'color') || '#475569'};">${ketuaJabatan}</div>` : ''}
-            ${b('ttd_stempel').show !== false ? `<div style="display:flex;align-items:center;justify-content:flex-end;gap:2px;min-height:48px;">${stempelHtml}${ttdHtml}</div>` : ''}
+            ${b('ttd_stempel').show !== false ? `<div style="display:flex;align-items:center;justify-content:flex-end;gap:2px;min-height:48px;">${stempelHtml}${ttdHtml}<img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" style="width:28px;height:28px;border-radius:2px;border:1px solid #e2e8f0;" /></div>` : ''}
             ${b('nama_ketua').show !== false ? `<div style="font-weight:900;color:#0f172a;font-size:${bc('nama_ketua', 'fontSize') || 8}px;text-transform:uppercase;">${ketuaNama}</div>` : ''}
           </div>
         </div>
@@ -368,7 +355,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
       ${f('nip').show !== false && nip !== '-' ? `<div style="font-size:${fc('nip', 'fontSize') || 8}pt;color:${fc('nip', 'color') || '#475569'};line-height:1.4;">NIP: ${nip}</div>` : ''}
       <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:0.3mm;border-top:0.5px solid #f1f5f9;">
         <div style="font-size:7pt;color:#94a3b8;"><span style="font-weight:700;font-size:8pt;color:#0f172a;">${terbit} - ${berlakuTxt}</span></div>
-        ${f('qr_code').show !== false ? `<div style="width:16mm;height:16mm;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(nomor_induk || 'ADMIN')}" alt="QR" style="width:100%;height:100%;image-rendering:pixelated;" /></div>` : ''}
+        ${f('qr_code').show !== false ? `<div style="width:16mm;height:16mm;"><img src="/images/qr-link-kud.jpg" alt="QR" style="width:100%;height:100%;" /></div>` : ''}
       </div>
     </div>
   </div>
@@ -384,7 +371,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
         <div style="text-align:right;font-size:${bc('kota_tanggal', 'fontSize') || 7}pt;color:${bc('kota_tanggal', 'color') || '#64748b'};">
           ${b('kota_tanggal').show !== false ? `<div>${kotaTerbit}, ${terbit}</div>` : ''}
           ${b('jabatan_ketua').show !== false ? `<div style="font-weight:${bc('jabatan_ketua', 'fontWeight') || 'semibold'};color:${bc('jabatan_ketua', 'color') || '#475569'};font-size:${bc('jabatan_ketua', 'fontSize') || 8}pt;">${ketuaJabatan}</div>` : ''}
-          ${b('ttd_stempel').show !== false ? `<div class="ttd-stempel-wrap">${stempelHtml}${ttdHtml}</div>` : ''}
+          ${b('ttd_stempel').show !== false ? `<div class="ttd-stempel-wrap">${stempelHtml}${ttdHtml}<img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" style="width:28px;height:28px;border-radius:2px;border:1px solid #e2e8f0;" /></div>` : ''}
           ${b('nama_ketua').show !== false ? `<div style="font-weight:${bc('nama_ketua', 'fontWeight') || 'black'};color:${bc('nama_ketua', 'color') || '#0f172a'};font-size:${bc('nama_ketua', 'fontSize') || 8}pt;text-transform:uppercase;">${ketuaNama}</div>` : ''}
         </div>
       </div>
@@ -451,7 +438,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
               background: '#ffffff', border: `2px solid ${goldColor}`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <QRCodeSvg value={nomor_induk || nama} size={64} />
+              <img src="/images/qr-link-kud.jpg" alt="QR" style={{ width: 64, height: 64 }} />
             </div>
             <span style={{ fontSize: 7, color: goldColor, fontFamily: 'monospace', letterSpacing: '0.5px' }}>
               ID: {nomor_induk || 'ADM-001'}
@@ -549,7 +536,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
             </div>
             {f('qr_code').show !== false && (
               <div className="shrink-0">
-                <QRCodeSvg value={nomor_induk || nama} size={48} />
+                <img src="/images/qr-link-kud.jpg" alt="QR" style={{ width: 48, height: 48 }} />
               </div>
             )}
           </div>
@@ -597,13 +584,13 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
             </div>
           </div>
 
-          {/* Gold footer bar */}
+          {/* Gold footer bar with QR TTD */}
           <div style={{
             width: '100%',
             background: `linear-gradient(135deg, ${goldColor} 0%, ${goldLight} 40%, ${goldDark} 100%)`,
             borderRadius: 6,
-            padding: '5px 0',
-            textAlign: 'center',
+            padding: '5px 10px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
           }}>
             <span style={{
               color: '#121212', fontWeight: 900, fontSize: 8,
@@ -611,6 +598,8 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
             }}>
               {website || 'www.kud-sari-subur.my.id'}
             </span>
+            <img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi"
+              style={{ width: 22, height: 22, borderRadius: 2, border: '1px solid rgba(18,18,18,0.2)' }} />
           </div>
         </div>
       );
@@ -671,6 +660,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
                 <div className="flex items-center justify-end gap-0.5 my-0.5 min-h-[48px]">
                   {stempelUrl && <img src={stempelUrl} alt="" className="object-contain mix-blend-multiply" style={{ height: 44, width: 'auto' }} />}
                   {ttdUrl && <img src={ttdUrl} alt="" className="object-contain" style={{ height: 26, width: 'auto' }} />}
+                  <img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" className="rounded border border-slate-200" style={{ width: 28, height: 28 }} />
                 </div>
               )}
               {b('nama_ketua').show !== false && (

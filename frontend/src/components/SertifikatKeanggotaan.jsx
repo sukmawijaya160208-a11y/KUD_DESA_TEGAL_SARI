@@ -322,19 +322,23 @@ function SertifikatContent({ data, config, width }) {
           borderTop: `1px solid ${isClassic ? '#d4a853' : '#e2e8f0'}`,
           paddingTop: s(4),
         }}>
-          {/* Left: Date */}
-          <div>
-            {f.tanggal_terbit && f.tanggal_terbit.show !== false && (
-              <div style={{
-                fontSize: s(f.tanggal_terbit.fontSize || 9),
-                color: f.tanggal_terbit.color || '#64748b',
-                fontStyle: 'italic',
-                lineHeight: 1.6,
-              }}>
-                <div>Diterbitkan di: <span style={{ fontWeight: 600, color: '#334155' }}>{kud.kartu_kota_terbit || 'Kota'}</span></div>
-                <div>Pada Tanggal: <span style={{ fontWeight: 600, color: '#334155' }}>{tanggalTerbit}</span></div>
-              </div>
-            )}
+          {/* Left: Date + QR LINK */}
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: s(6) }}>
+            <div>
+              {f.tanggal_terbit && f.tanggal_terbit.show !== false && (
+                <div style={{
+                  fontSize: s(f.tanggal_terbit.fontSize || 9),
+                  color: f.tanggal_terbit.color || '#64748b',
+                  fontStyle: 'italic',
+                  lineHeight: 1.6,
+                }}>
+                  <div>Diterbitkan di: <span style={{ fontWeight: 600, color: '#334155' }}>{kud.kartu_kota_terbit || 'Kota'}</span></div>
+                  <div>Pada Tanggal: <span style={{ fontWeight: 600, color: '#334155' }}>{tanggalTerbit}</span></div>
+                </div>
+              )}
+            </div>
+            <img src="/images/qr-link-kud.jpg" alt="QR KUD"
+              style={{ width: s(36), height: s(36), borderRadius: s(2), border: `1px solid ${isClassic ? '#d4a853' : '#e2e8f0'}` }} />
           </div>
 
           {/* Right: Signature + Stamp */}
@@ -346,7 +350,7 @@ function SertifikatContent({ data, config, width }) {
               Ketua Umum
             </div>
 
-            {/* TTD + Stempel WRAPPER — FIX SIZE */}
+            {/* TTD + Stempel + QR TTD WRAPPER */}
             <div style={{
               position: 'relative',
               minHeight: s(70),
@@ -387,6 +391,20 @@ function SertifikatContent({ data, config, width }) {
                   }}
                 />
               )}
+              <img src="/images/qr-ttd-ketua.jpg" alt="QR TTD"
+                style={{
+                  position: 'absolute',
+                  right: '5%',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: s(36),
+                  height: s(36),
+                  objectFit: 'contain',
+                  zIndex: 3,
+                  borderRadius: s(2),
+                  border: `1px solid ${isClassic ? '#d4a853' : '#e2e8f0'}`,
+                }}
+              />
             </div>
 
             {f.nama_ketua && f.nama_ketua.show !== false && (

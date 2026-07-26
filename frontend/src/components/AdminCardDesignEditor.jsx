@@ -35,7 +35,7 @@ const FRONT_FIELD_META = {
   nama_admin: { label: 'Nama Admin', type: 'text' },
   jabatan: { label: 'Jabatan', type: 'text' },
   nip: { label: 'NIP/NIK', type: 'text' },
-  qr_code: { label: 'QR Code', type: 'toggle' },
+  qr_code: { label: 'QR Link Website', type: 'toggle' },
   watermark: { label: 'Watermark', type: 'opacity' },
 };
 
