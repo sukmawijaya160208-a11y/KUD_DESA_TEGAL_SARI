@@ -21,6 +21,7 @@ class SettingKud extends Model
         'kartu_label_anggota', 'kartu_format_no_anggota',
         'sertifikat_config',
         'kartu_config',
+        'admin_card_config',
     ];
 
     protected $casts = [
@@ -28,5 +29,6 @@ class SettingKud extends Model
         'kartu_aturan' => 'array',
         'sertifikat_config' => 'array',
         'kartu_config' => 'array',
+        'admin_card_config' => 'array',
     ];
 }

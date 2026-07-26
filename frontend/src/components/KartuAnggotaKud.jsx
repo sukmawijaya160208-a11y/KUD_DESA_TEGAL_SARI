@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { PrinterIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 
 function formatTgl(d) {
@@ -84,7 +84,22 @@ const TEMPLATE_STYLES = {
 
 export default function KartuAnggotaKud({ data, width = 360, showActions = true, onClose }) {
   const cardRef = useRef(null);
+  const containerRef = useRef(null);
   const [downloading, setDownloading] = useState(false);
+  const [actualWidth, setActualWidth] = useState(width);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const w = entry.contentBoxSize?.[0]?.inlineSize || entry.contentRect?.width;
+        if (w) setActualWidth(Math.round(w));
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const {
     pekebun = {},
@@ -141,7 +156,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
   const kotaTerbit = config.kota_terbit || s?.kartu_kota_terbit || 'Megang Sakti';
   const terbit = formatTgl(tanggal_terbit);
   const berlaku = formatTgl(masa_berlaku);
-  const cardW = Math.min(width, 540);
+  const cardW = Math.min(actualWidth, 540);
   const leftPanelPct = templateStyle.leftPanelPct;
   const leftPanelW = Math.round(cardW * leftPanelPct / 100);
   const rightPanelW = cardW - leftPanelW;
@@ -151,17 +166,22 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
 
   const handlePrint = () => {
     const html = buildPrintHtml();
-    const iframe = document.createElement('iframe');
-    iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;opacity:0;pointer-events:none';
-    document.body.appendChild(iframe);
-    const doc = iframe.contentWindow.document;
-    doc.open();
-    doc.write(html);
-    doc.close();
-    setTimeout(() => {
-      try { iframe.contentWindow.focus(); iframe.contentWindow.print(); } catch { window.print(); }
-    }, 1000);
-    setTimeout(() => { if (iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 120000);
+    const printWin = window.open('', '_blank');
+    if (!printWin) {
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;opacity:0;pointer-events:none';
+      document.body.appendChild(iframe);
+      const doc = iframe.contentWindow.document;
+      doc.open(); doc.write(html); doc.close();
+      setTimeout(() => {
+        try { iframe.contentWindow.focus(); iframe.contentWindow.print(); } catch { window.print(); }
+      }, 1500);
+      setTimeout(() => { if (iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 120000);
+      return;
+    }
+    printWin.document.open();
+    printWin.document.write(html);
+    printWin.document.close();
   };
 
   const handleDownloadPng = async () => {
@@ -475,7 +495,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
           </div>
         )}
         <div className="flex flex-col items-center gap-4" ref={cardRef}>
-          <div className="w-full max-w-full" style={{ maxWidth: cardW + 'px' }}>
+          <div ref={containerRef} className="w-full max-w-full" style={{ maxWidth: '540px' }}>
             <div className="text-center mb-1">
               <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 px-2 py-0.5 rounded-full">Sisi Belakang</span>
             </div>
