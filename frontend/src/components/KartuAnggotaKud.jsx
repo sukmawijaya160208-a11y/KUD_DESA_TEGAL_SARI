@@ -189,12 +189,19 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
     setDownloading(true);
     try {
       const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(cardRef.current, {
+      const cardHtml = buildCardHtml();
+      const container = document.createElement('div');
+      container.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:540px;background:#ffffff;z-index:-9999;padding:8px';
+      container.innerHTML = cardHtml;
+      document.body.appendChild(container);
+      await new Promise((r) => setTimeout(r, 2000));
+      const canvas = await html2canvas(container, {
         scale: 3,
         backgroundColor: '#ffffff',
         useCORS: true,
         allowTaint: false,
       });
+      document.body.removeChild(container);
       const link = document.createElement('a');
       link.download = `KARTU_ANGGOTA_${nama.replace(/\s+/g, '_')}.png`;
       link.href = canvas.toDataURL('image/png');
@@ -209,6 +216,69 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
     ...Object.values(fFields).map((ff) => ff?.fontFamily),
     ...Object.values(bFields).map((bf) => bf?.fontFamily),
   ].filter(Boolean))];
+
+  const buildCardHtml = () => {
+    const leftBg = templateStyle.frontLeftBg(fBg);
+    const backBg = templateStyle.backHeaderBg(bBg);
+
+    const logoHtml = logo ? `<img src="${logo}" alt="" style="width:${fc('logo_kud', 'width') || 52}px;height:${fc('logo_kud', 'width') || 52}px;object-fit:contain;border-radius:4px;border:1px solid rgba(255,255,255,0.3);" />`
+      : '<div style="width:52px;height:52px;border-radius:4px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:10pt;font-weight:800;color:rgba(255,255,255,0.5);">KUD</div>';
+    const fotoHtml = foto ? `<img src="${foto}" alt="" style="width:${fc('foto_pekebun', 'width') || 50}px;height:${fc('foto_pekebun', 'height') || 66}px;object-fit:cover;border-radius:3px;border:2px solid rgba(255,255,255,0.5);" />`
+      : `<div style="width:50px;height:66px;border-radius:3px;border:2px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:8pt;font-weight:700;color:rgba(255,255,255,0.4);">${initial}</div>`;
+    const ttdHtml = ttdUrl ? `<img src="${ttdUrl}" alt="TTD" style="height:30px;width:auto;object-fit:contain;" />` : '';
+    const stempelHtml = stempelUrl ? `<img src="${stempelUrl}" alt="Stempel" style="height:50px;width:auto;object-fit:contain;margin-right:4px;mix-blend-mode:multiply;" />` : '';
+    const aturanHtml = aturan.map((a) => `<li>${a}</li>`).join('');
+
+    return `
+  <div style="display:flex;flex-direction:column;align-items:center;gap:12px;font-family:Inter,'Segoe UI',Roboto,system-ui,sans-serif;">
+    <div style="width:540px;overflow:hidden;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
+      <div style="display:flex;">
+        <div style="width:${leftPanelPct}%;padding:16px 8px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:${leftBg};">
+          ${f('logo_kud').show !== false ? logoHtml : ''}
+          ${f('nama_kud').show !== false ? `<div style="font-size:${fc('nama_kud', 'fontSize') || 10}px;font-weight:${fc('nama_kud', 'fontWeight') || 'bold'};color:${fc('nama_kud', 'color') || '#ffffff'};text-align:center;text-transform:uppercase;">${fc('nama_kud', 'text') || s?.nama_kud || 'KUD Sari Subur'}</div>` : ''}
+          ${f('foto_pekebun').show !== false ? fotoHtml : ''}
+        </div>
+        <div style="width:${100 - leftPanelPct}%;background:#ffffff;padding:12px 14px;display:flex;flex-direction:column;position:relative;">
+          ${f('watermark').show !== false && logo ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:${fc('watermark', 'opacity') || 0.04};pointer-events:none;"><img src="${logo}" style="width:128px;height:128px;object-fit:contain;" /></div>` : ''}
+          ${f('judul').show !== false ? `<div style="font-size:${fc('judul', 'fontSize') || 11}px;font-weight:${fc('judul', 'fontWeight') || '900'};color:${fc('judul', 'color') || '#0f172a'};text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #e2e8f0;padding-bottom:2px;margin-bottom:2px;">${fc('judul', 'text') || s?.kartu_judul_depan || 'KARTU TANDA ANGGOTA'}</div>` : ''}
+          ${f('subjudul').show !== false ? `<div style="font-size:${fc('subjudul', 'fontSize') || 7}px;font-weight:${fc('subjudul', 'fontWeight') || 'bold'};color:${fc('subjudul', 'color') || '#059669'};text-transform:uppercase;margin-bottom:4px;">${fc('subjudul', 'text') || s?.kartu_subjudul_depan || 'KOPERASI UNIT DESA SARI SUBUR'}</div>` : ''}
+          ${f('nama_anggota').show !== false ? `<div style="font-size:${fc('nama_anggota', 'fontSize') || 13}px;font-weight:${fc('nama_anggota', 'fontWeight') || '900'};color:${fc('nama_anggota', 'color') || '#0f172a'};text-transform:uppercase;line-height:1.2;">${nama}</div>` : ''}
+          ${f('nomor_anggota').show !== false ? `<div style="font-size:${fc('nomor_anggota', 'fontSize') || 9}px;font-weight:${fc('nomor_anggota', 'fontWeight') || 'bold'};color:${fc('nomor_anggota', 'color') || '#059669'};font-family:monospace;background:#f0fdf4;padding:1px 4px;border-radius:2px;display:inline-block;margin:2px 0;">${nomor_anggota || '-'}</div>` : ''}
+          <div style="font-size:${fc('nik', 'fontSize') || 8}px;color:${fc('nik', 'color') || '#475569'};line-height:1.5;">
+            ${f('nik').show !== false && nik !== '-' ? `<div>NIK: ${nik}</div>` : ''}
+            ${f('ttl').show !== false ? `<div>TTL: ${ttlText}</div>` : ''}
+            ${f('jenis_kelamin').show !== false ? `<div>JK: ${jenisKelamin}</div>` : ''}
+            ${f('no_wa').show !== false ? `<div>WA: ${noWa}</div>` : ''}
+            ${f('no_kk').show !== false ? `<div>No KK: ${noKk}</div>` : ''}
+            ${f('alamat').show !== false && alamatJalan ? `<div>${alamatJalan}</div>` : ''}
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:4px;border-top:1px solid #f1f5f9;">
+            ${f('berlaku').show !== false ? `<div><div style="font-size:7px;color:#94a3b8;">Berlaku</div><div style="font-size:9px;font-weight:bold;color:#0f172a;">${terbit} - ${berlaku}</div></div>` : ''}
+            ${f('qr_code').show !== false ? `<div style="width:55px;height:55px;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(nomor_anggota || 'KUD')}" alt="QR" style="width:100%;height:100%;" /></div>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="width:540px;overflow:hidden;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
+      ${b('header_website').show !== false ? `<div style="font-size:${bc('header_website', 'fontSize') || 6}px;font-weight:${bc('header_website', 'fontWeight') || 'bold'};color:${bc('header_website', 'color') || '#ffffff'};text-align:center;padding:4px 12px;background:${backBg};">${b('header_website').text || website}</div>` : ''}
+      <div style="background:#ffffff;padding:14px;display:flex;flex-direction:column;min-height:190px;">
+        <div style="flex:1;">
+          ${b('aturan_list').show !== false ? `<div style="font-size:${bc('aturan_list', 'fontSize') || 7}px;color:${bc('aturan_list', 'color') || '#475569'};"><div style="font-size:9px;font-weight:bold;color:#0f172a;margin-bottom:2px;">${b('aturan_list').text || 'Kartu Tanda Anggota:'}</div><ul style="list-style:none;padding:0;margin:0;">${aturanHtml}</ul></div>` : ''}
+          ${b('sekretariat').show !== false ? `<div style="font-size:${bc('sekretariat', 'fontSize') || 7}px;color:${bc('sekretariat', 'color') || '#475569'};margin-top:4px;padding-top:4px;border-top:1px solid #e2e8f0;"><span style="font-weight:bold;color:#0f172a;">Sekretariat:</span> ${s?.alamat || '-'}</div>` : ''}
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:4px;">
+          ${b('slogan').show !== false ? `<div style="font-size:${bc('slogan', 'fontSize') || 16}px;font-weight:${bc('slogan', 'fontWeight') || '900'};font-style:italic;color:${bc('slogan', 'color') || '#0f172a'};text-transform:uppercase;">${slogan}</div>` : ''}
+          <div style="text-align:right;font-size:${bc('kota_tanggal', 'fontSize') || 7}px;color:${bc('kota_tanggal', 'color') || '#64748b'};">
+            ${b('kota_tanggal').show !== false ? `<div>${kotaTerbit}, ${terbit}</div>` : ''}
+            ${b('jabatan_ketua').show !== false ? `<div style="font-weight:600;font-size:${bc('jabatan_ketua', 'fontSize') || 8}px;color:${bc('jabatan_ketua', 'color') || '#475569'};">${ketuaJabatan}</div>` : ''}
+            ${b('ttd_stempel').show !== false ? `<div style="display:flex;align-items:center;justify-content:flex-end;gap:2px;min-height:55px;">${stempelHtml}${ttdHtml}</div>` : ''}
+            ${b('nama_ketua').show !== false ? `<div style="font-weight:900;color:#0f172a;font-size:${bc('nama_ketua', 'fontSize') || 8}px;text-transform:uppercase;">${ketuaNama}</div>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  };
 
   const buildPrintHtml = () => {
     const leftBg = templateStyle.frontLeftBg(fBg);

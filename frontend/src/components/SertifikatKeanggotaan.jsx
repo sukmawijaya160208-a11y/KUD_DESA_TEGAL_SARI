@@ -445,7 +445,9 @@ export default function SertifikatKeanggotaan({ data, config: configProp, width 
     setDownloading(true);
     try {
       const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(containerRef.current, {
+      const certEl = containerRef.current.firstElementChild;
+      if (!certEl) return;
+      const canvas = await html2canvas(certEl, {
         scale: 2, useCORS: true, allowTaint: false,
         backgroundColor: isClassic ? '#fffaed' : '#ffffff',
       });

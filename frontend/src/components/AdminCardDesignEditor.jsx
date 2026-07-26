@@ -23,6 +23,7 @@ const TEMPLATE_OPTIONS = [
   { value: 'classic', label: 'Classic', colors: ['#6366f1', '#4f46e5'] },
   { value: 'modern', label: 'Modern', colors: ['#0d9488', '#0f766e'] },
   { value: 'dark', label: 'Dark', colors: ['#334155', '#1e293b'] },
+  { value: 'luxury', label: 'Luxury', colors: ['#121212', '#d4af37'] },
 ];
 
 const FRONT_FIELD_META = {
@@ -337,24 +338,28 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
                     ))}
                   </div>
                 </div>
-                <div>
-                  <label className="text-xs font-semibold text-foreground mb-2 block">Warna Depan (gradient)</label>
-                  <div className="flex gap-2 items-center">
-                    <input type="color" value={frontBgColor} onChange={(e) => setFrontBgColor(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
-                    <ArrowPathIcon className="w-4 h-4 text-gray-400" />
-                    <input type="color" value={frontBgColor2} onChange={(e) => setFrontBgColor2(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
-                    <span className="text-[10px] text-gray-400 ml-1">{frontBgColor} → {frontBgColor2}</span>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-foreground mb-2 block">Warna Belakang (gradient)</label>
-                  <div className="flex gap-2 items-center">
-                    <input type="color" value={backBgColor} onChange={(e) => setBackBgColor(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
-                    <ArrowPathIcon className="w-4 h-4 text-gray-400" />
-                    <input type="color" value={backBgColor2} onChange={(e) => setBackBgColor2(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
-                    <span className="text-[10px] text-gray-400 ml-1">{backBgColor} → {backBgColor2}</span>
-                  </div>
-                </div>
+                {template !== 'luxury' && (
+                  <>
+                    <div>
+                      <label className="text-xs font-semibold text-foreground mb-2 block">Warna Depan (gradient)</label>
+                      <div className="flex gap-2 items-center">
+                        <input type="color" value={frontBgColor} onChange={(e) => setFrontBgColor(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
+                        <ArrowPathIcon className="w-4 h-4 text-gray-400" />
+                        <input type="color" value={frontBgColor2} onChange={(e) => setFrontBgColor2(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
+                        <span className="text-[10px] text-gray-400 ml-1">{frontBgColor} → {frontBgColor2}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-foreground mb-2 block">Warna Belakang (gradient)</label>
+                      <div className="flex gap-2 items-center">
+                        <input type="color" value={backBgColor} onChange={(e) => setBackBgColor(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
+                        <ArrowPathIcon className="w-4 h-4 text-gray-400" />
+                        <input type="color" value={backBgColor2} onChange={(e) => setBackBgColor2(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
+                        <span className="text-[10px] text-gray-400 ml-1">{backBgColor} → {backBgColor2}</span>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
               <div className="space-y-4">
                 <div className="bg-gradient-to-br from-indigo-50 to-indigo-50/30 rounded-xl border border-indigo-100 p-4">
@@ -362,9 +367,12 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
                   <div className="flex gap-2 mt-2">
                     {TEMPLATE_OPTIONS.map((tpl) => (
                       <div key={tpl.value} className={`flex-1 p-3 rounded-xl border-2 ${template === tpl.value ? 'border-indigo-500' : 'border-border'}`}>
-                        <div className="h-8 rounded-lg mb-1" style={{
-                          background: `linear-gradient(135deg, ${tpl.colors[0]}, ${tpl.colors[1]})`
-                        }} />
+                        <div className="h-8 rounded-lg mb-1 flex items-center justify-center" style={{
+                          background: tpl.value === 'luxury' ? '#121212' : `linear-gradient(135deg, ${tpl.colors[0]}, ${tpl.colors[1]})`,
+                          border: tpl.value === 'luxury' ? '1px solid #d4af37' : 'none',
+                        }}>
+                          {tpl.value === 'luxury' && <div className="w-4 h-1 rounded-full" style={{ background: '#d4af37' }} />}
+                        </div>
                         <p className="text-[9px] font-semibold text-center">{tpl.label}</p>
                       </div>
                     ))}
