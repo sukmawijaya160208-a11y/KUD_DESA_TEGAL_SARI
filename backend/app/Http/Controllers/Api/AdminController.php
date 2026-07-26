@@ -498,7 +498,7 @@ class AdminController extends Controller
                             'no_kk' => $item['no_kk'] ?? null,
                             'no_whatsapp' => $item['no_whatsapp'] ?? null,
                             'tempat_lahir' => isset($item['tempat_lahir']) ? strip_tags($item['tempat_lahir']) : null,
-                            'tanggal_lahir' => $item['tanggal_lahir'] ?? null,
+                        'tanggal_lahir' => !empty($item['tanggal_lahir']) ? $item['tanggal_lahir'] : '1970-01-01',
                             'alamat' => isset($item['alamat']) ? strip_tags($item['alamat']) : null,
                             'status' => 'pending',
                         ];
