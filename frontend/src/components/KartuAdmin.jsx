@@ -148,22 +148,19 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
 
   const handlePrint = () => {
     const html = buildPrintHtml();
-    const printWin = window.open('', '_blank');
-    if (!printWin) {
-      const iframe = document.createElement('iframe');
-      iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;opacity:0;pointer-events:none';
-      document.body.appendChild(iframe);
-      const doc = iframe.contentWindow.document;
-      doc.open(); doc.write(html); doc.close();
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;opacity:0;pointer-events:none';
+    document.body.appendChild(iframe);
+    const doc = iframe.contentWindow.document;
+    doc.open(); doc.write(html); doc.close();
+    iframe.onload = () => {
       setTimeout(() => {
-        try { iframe.contentWindow.focus(); iframe.contentWindow.print(); } catch { window.print(); }
-      }, 1500);
-      setTimeout(() => { if (iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 120000);
-      return;
-    }
-    printWin.document.open();
-    printWin.document.write(html);
-    printWin.document.close();
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+      }, 1000);
+    };
+    const cleanup = () => { if (iframe.parentNode) iframe.parentNode.removeChild(iframe); };
+    setTimeout(cleanup, 120000);
   };
 
   const handleDownloadPng = async () => {
@@ -248,7 +245,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
 
     return `
   <div style="display:flex;flex-direction:column;align-items:center;gap:12px;font-family:Inter,'Segoe UI',Roboto,system-ui,sans-serif;">
-    <div style="width:480px;overflow:hidden;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
+    <div style="width:480px;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
       <div style="display:flex;">
         <div style="width:${leftPanelPct}%;padding:12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:${leftBg};">
           ${f('logo_kud').show !== false ? logoHtml : ''}
@@ -269,7 +266,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
         </div>
       </div>
     </div>
-    <div style="width:480px;overflow:hidden;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
+    <div style="width:480px;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
       ${b('header_website').show !== false ? `<div style="font-size:${bc('header_website', 'fontSize') || 6}px;font-weight:${bc('header_website', 'fontWeight') || 'bold'};color:${bc('header_website', 'color') || '#ffffff'};text-align:center;padding:3px 12px;background:${backBg};">${b('header_website').text || website}</div>` : ''}
       <div style="background:#ffffff;padding:12px;display:flex;flex-direction:column;min-height:170px;">
         <div style="flex:1;">
@@ -375,7 +372,10 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
       </div>
     </div>
   </div>
-<script>window.onload=function(){setTimeout(function(){window.print();window.close();},800);};</script>
+<script>
+window.onafterprint = function() { window.close(); };
+window.onload = function() { setTimeout(function(){ window.print(); }, 1000); };
+</script>
 </body></html>`;
   };
 
