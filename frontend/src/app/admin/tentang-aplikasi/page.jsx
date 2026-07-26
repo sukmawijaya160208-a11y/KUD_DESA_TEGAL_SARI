@@ -16,7 +16,6 @@ export default function AdminTentangAplikasiPage() {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [uploadingVideo, setUploadingVideo] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [edit, setEdit] = useState({});
 
@@ -35,49 +34,15 @@ export default function AdminTentangAplikasiPage() {
     } catch (err) { toast.error('Upload gagal: ' + err.message); }
   }, [toast]);
 
-  const persistVideos = useCallback(async (videos) => {
+  const handleUpdateYoutubeUrl = useCallback(async (url) => {
     try {
-      await api.admin.tentangAplikasi.update({ videos });
-    } catch (err) {
-      toast.error('Gagal menyimpan video: ' + (err?.message || ''));
-    }
-  }, [toast]);
-
-  const handleUploadVideo = useCallback(async (file, folderUrl) => {
-    if (folderUrl) {
-      setEdit((prev) => {
-        const next = [...(Array.isArray(prev.videos) ? prev.videos : []), folderUrl];
-        setData((d) => ({ ...d, videos: next }));
-        persistVideos(next);
-        return { ...prev, videos: next };
-      });
-      toast.success('Video ditambahkan dari folder');
-      return;
-    }
-    if (!file) return;
-    setUploadingVideo(true);
-    try {
-      const res = await api.upload('/upload/video-tentang-aplikasi', file);
-      setEdit((prev) => {
-        const next = [...(Array.isArray(prev.videos) ? prev.videos : []), res.url];
-        setData((d) => ({ ...d, videos: next }));
-        persistVideos(next);
-        return { ...prev, videos: next };
-      });
-      toast.success('Video berhasil diupload');
-    } catch (err) { toast.error('Upload video gagal: ' + err.message); }
-    setUploadingVideo(false);
-  }, [toast, persistVideos]);
-
-  const handleRemoveVideo = useCallback((idx) => {
-    setEdit((prev) => {
-      const next = Array.isArray(prev.videos) ? [...prev.videos] : [];
-      if (typeof idx === 'number') next.splice(idx, 1);
-      setData((d) => ({ ...d, videos: next }));
-      persistVideos(next);
-      return { ...prev, videos: next };
-    });
-  }, [persistVideos]);
+      const next = { ...edit, youtube_url: url };
+      setEdit(next);
+      setData((d) => ({ ...d, youtube_url: url }));
+      await api.admin.tentangAplikasi.update({ youtube_url: url });
+      toast.success(url ? 'Link YouTube berhasil disimpan' : 'Video berhasil dihapus');
+    } catch (err) { toast.error(err.message); }
+  }, [toast, edit]);
 
   const handleSave = useCallback(async (editData) => {
     setSaving(true);
@@ -102,11 +67,9 @@ export default function AdminTentangAplikasiPage() {
     <div>
       <HeroDeveloper data={data} admin onEdit={() => setShowModal(true)} />
       <VideoGallery
-        videos={edit.videos || data.videos}
+        youtubeUrl={data.youtube_url || edit.youtube_url}
         isAdmin
-        onUpload={handleUploadVideo}
-        onRemoveVideo={handleRemoveVideo}
-        uploading={uploadingVideo}
+        onUpdateUrl={handleUpdateYoutubeUrl}
       />
       <AboutSection teks={data.teks} />
       <InfoCards data={data} />
@@ -129,11 +92,7 @@ export default function AdminTentangAplikasiPage() {
         data={edit}
         onSave={handleSave}
         onUploadFoto={handleEditFoto}
-        onUploadVideo={handleUploadVideo}
-        onRemoveVideo={handleRemoveVideo}
-        videos={edit.videos || data.videos}
         saving={saving}
-        uploadingVideo={uploadingVideo}
       />
     </div>
   );

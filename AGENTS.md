@@ -217,3 +217,15 @@ Real values disimpan di memory AI (opencode-mem). Kalo butuh deploy, tinggal bil
 3. SSH MCP cek log Laravel/Next.js di VPS
 4. AI analisa + bikin fix
 5. GitHub MCP commit fix + SSH deploy
+
+<!-- BEGIN:strict-code-rules -->
+## Strict Code Execution Rules
+
+1. **NO CODE TRUNCATION**: Never use placeholders like `// ... existing code` or `// ... rest of the file`. Write every file 100% from first import to last closing brace.
+
+2. **CHECK ALL IMPORTS**: Before writing/editing a file, verify all components, icons, hooks, and utilities are properly imported. Never introduce undefined references.
+
+3. **ZERO BUG GUARANTEE**: Always use optional chaining (`?.`) for nullable/optional objects, provide fallback defaults (`||`) for props and state, and ensure every variable used in JSX is defined in the component scope.
+
+4. **CLEAN FORMATTING**: Use Tailwind CSS consistently, keep JSX readable, and add brief inline comments only on non-obvious logic.
+<!-- END:strict-code-rules -->

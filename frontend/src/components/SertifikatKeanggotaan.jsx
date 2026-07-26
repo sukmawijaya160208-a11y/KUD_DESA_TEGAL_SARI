@@ -8,10 +8,10 @@ const DEFAULT_CONFIG = {
     border_deco: { show: true },
     watermark: { show: true, opacity: 0.04 },
     logo_kud: { show: true, width: 70 },
-    nama_kud: { show: true, fontSize: 16, color: '#064e3b', fontFamily: 'Inter', fontWeight: 'bold' },
+    nama_kud: { show: true, fontSize: 16, color: '#064e3b', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
     badan_hukum: { show: true, fontSize: 8, color: '#92400e' },
     garis_header: { show: true },
-    judul: { show: true, fontSize: 20, color: '#92400e', fontFamily: 'Playfair Display', fontWeight: 'bold' },
+    judul: { show: true, fontSize: 20, color: '#92400e', fontFamily: 'Playfair Display', fontWeight: 'bold', text: '' },
     no_registrasi: { show: true, fontSize: 8, color: '#64748b' },
     pembukaan: { show: true, fontSize: 10, color: '#475569', text: 'Pengurus Koperasi Unit Desa (KUD) Sari Subur dengan ini menerangkan dan mengesahkan bahwa:' },
     nama_pekebun: { show: true, fontSize: 20, color: '#0f172a', fontFamily: 'Playfair Display', fontWeight: 'bold' },
@@ -152,7 +152,7 @@ function SertifikatContent({ data, config, width }) {
                 textTransform: 'uppercase',
                 lineHeight: 1.2,
               }}>
-                {kud.nama_kud || 'KUD Sari Subur'}
+                {f.nama_kud.text || kud.nama_kud || 'KUD Sari Subur'}
               </div>
             )}
             {f.badan_hukum && f.badan_hukum.show !== false && (
@@ -190,7 +190,7 @@ function SertifikatContent({ data, config, width }) {
               textTransform: 'uppercase',
               lineHeight: 1.2,
             }}>
-              SERTIFIKAT KEANGGOTAAN
+              {f.judul.text || 'SERTIFIKAT KEANGGOTAAN'}
             </div>
           )}
           {f.no_registrasi && f.no_registrasi.show !== false && (

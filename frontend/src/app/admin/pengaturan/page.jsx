@@ -23,6 +23,7 @@ const TABS = [
   { id: 'keamanan', label: 'Keamanan & Akses', icon: ShieldCheckIcon, color: 'from-purple-500 to-purple-600' },
   { id: 'sistem', label: 'Konfigurasi Sistem', icon: ServerIcon, color: 'from-amber-500 to-amber-600' },
   { id: 'desain-kartu', label: 'Desain Kartu', icon: CreditCardIcon, color: 'from-emerald-600 to-emerald-700' },
+  { id: 'teks-login', label: 'Teks Login', icon: ArrowRightOnRectangleIcon, color: 'from-sky-500 to-sky-600' },
   { id: 'desain-sertifikat', label: 'Desain Sertifikat', icon: ShieldCheckIcon, color: 'from-amber-600 to-amber-700' },
 ];
 
@@ -94,6 +95,10 @@ export default function AdminPengaturanPage() {
   const [defaultKuota, setDefaultKuota] = useState('');
   const [savingKuota, setSavingKuota] = useState(false);
 
+  // Login Config
+  const [loginConfig, setLoginConfig] = useState({ left_panel: { title: 'KUD Sari Subur', tagline: 'Koperasi modern untuk pekebun sawit — digital, transparan, dan terpercaya.', features: ['Verifikasi cepat & real-time', 'Pantau lahan & hasil panen', 'Informasi harga TBS terkini'], stats: [{ label: 'Pekebun', value: '1,250+' }, { label: 'Hektar', value: '3,200+' }, { label: 'Desa', value: '5' }] }, right_panel: { heading: 'Selamat Datang', subheading: 'Masuk ke akun Anda untuk melanjutkan', button_text: 'Masuk ke Akun' } });
+  const [savingLogin, setSavingLogin] = useState(false);
+
   // Logout all
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -115,6 +120,7 @@ export default function AdminPengaturanPage() {
         wa_aktif: s?.wa_gateway_aktif === '1',
       });
       setDefaultKuota(s?.default_kuota || '');
+      try { const lc = JSON.parse(s?.login_page_config || 'null'); if (lc) setLoginConfig(lc); } catch {}
     })    .catch((e) => toast.error(e.message))
     .finally(() => setLoading(false));
   }, [toast]);
@@ -302,6 +308,26 @@ export default function AdminPengaturanPage() {
       toast.success('Kuota default berhasil disimpan');
     } catch (err) { toast.error(err.message); }
     setSavingKuota(false);
+  };
+
+  const handleSaveLogin = async () => {
+    setSavingLogin(true);
+    try {
+      await api.admin.pengaturan.update({ key: 'login_page_config', value: JSON.stringify(loginConfig) });
+      toast.success('Teks login berhasil disimpan');
+    } catch (err) { toast.error(err.message); }
+    setSavingLogin(false);
+  };
+
+  const updateLoginField = (path, value) => {
+    setLoginConfig(prev => {
+      const keys = path.split('.');
+      const newObj = JSON.parse(JSON.stringify(prev));
+      let cur = newObj;
+      for (let i = 0; i < keys.length - 1; i++) cur = cur[keys[i]];
+      cur[keys[keys.length - 1]] = value;
+      return newObj;
+    });
   };
 
   const handleLogoutAll = async () => {
@@ -702,7 +728,67 @@ export default function AdminPengaturanPage() {
         />
       )}
 
-      {/* ===== TAB 6: DESAIN SERTIFIKAT ===== */}
+      {/* ===== TAB 6: TEKS LOGIN ===== */}
+      {tab === 'teks-login' && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-5">
+            <FormSection title="Panel Kiri (Brand)" icon={ArrowRightOnRectangleIcon} description="Teks di panel branding halaman login">
+              <Input label="Judul" value={loginConfig.left_panel?.title || ''} onChange={(e) => updateLoginField('left_panel.title', e.target.value)} />
+              <Input label="Tagline" value={loginConfig.left_panel?.tagline || ''} onChange={(e) => updateLoginField('left_panel.tagline', e.target.value)} />
+              {[0, 1, 2].map(i => (
+                <Input key={`feat-${i}`} label={`Fitur ${i + 1}`} value={loginConfig.left_panel?.features?.[i] || ''} onChange={(e) => {
+                  const f = [...(loginConfig.left_panel?.features || ['', '', ''])]; f[i] = e.target.value; updateLoginField('left_panel.features', f);
+                }} />
+              ))}
+            </FormSection>
+            <FormSection title="Statistik Panel Kiri" icon={ArrowRightOnRectangleIcon} description="Angka statistik yang ditampilkan">
+              {[0, 1, 2].map(i => (
+                <div key={`stat-${i}`} className="grid grid-cols-2 gap-3">
+                  <Input label={`Label ${i + 1}`} value={loginConfig.left_panel?.stats?.[i]?.label || ''} onChange={(e) => {
+                    const s = [...(loginConfig.left_panel?.stats || [{ label: '', value: '' }, { label: '', value: '' }, { label: '', value: '' }])];
+                    s[i] = { ...s[i], label: e.target.value }; updateLoginField('left_panel.stats', s);
+                  }} />
+                  <Input label={`Nilai ${i + 1}`} value={loginConfig.left_panel?.stats?.[i]?.value || ''} onChange={(e) => {
+                    const s = [...(loginConfig.left_panel?.stats || [{ label: '', value: '' }, { label: '', value: '' }, { label: '', value: '' }])];
+                    s[i] = { ...s[i], value: e.target.value }; updateLoginField('left_panel.stats', s);
+                  }} />
+                </div>
+              ))}
+            </FormSection>
+            <FormSection title="Panel Kanan (Form)" icon={ArrowRightOnRectangleIcon} description="Teks di area form login/register">
+              <Input label="Heading" value={loginConfig.right_panel?.heading || ''} onChange={(e) => updateLoginField('right_panel.heading', e.target.value)} />
+              <Input label="Subheading" value={loginConfig.right_panel?.subheading || ''} onChange={(e) => updateLoginField('right_panel.subheading', e.target.value)} />
+              <Input label="Teks Tombol Masuk" value={loginConfig.right_panel?.button_text || ''} onChange={(e) => updateLoginField('right_panel.button_text', e.target.value)} />
+            </FormSection>
+            <div className="flex justify-end">
+              <Button onClick={handleSaveLogin} loading={savingLogin}>Simpan Teks Login</Button>
+            </div>
+          </div>
+          <div className="space-y-5">
+            <FormSection title="Pratinjau" icon={EyeIcon} description="Teks akan tampil seperti ini">
+              <div className="bg-gradient-to-br from-primary/30 via-primary/5 to-transparent rounded-xl p-4 text-white text-xs space-y-2">
+                <p className="font-bold text-sm">{loginConfig.left_panel?.title || 'KUD Sari Subur'}</p>
+                <p className="text-white/50 text-[10px]">{loginConfig.left_panel?.tagline || 'Koperasi modern...'}</p>
+                {loginConfig.left_panel?.features?.slice(0, 3).map((f, i) => (
+                  <p key={i} className="text-white/70 text-[10px] bg-white/5 rounded-lg p-2 border border-white/5">{f}</p>
+                ))}
+                <div className="flex gap-3 pt-2 border-t border-white/10">
+                  {loginConfig.left_panel?.stats?.slice(0, 3).map((s, i) => (
+                    <div key={i} className="text-center flex-1"><p className="font-bold text-xs">{s?.value || '—'}</p><p className="text-white/40 text-[8px] uppercase">{s?.label || '—'}</p></div>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-white rounded-xl border border-border p-4 text-sm space-y-2">
+                <p className="font-bold">{loginConfig.right_panel?.heading || 'Selamat Datang'}</p>
+                <p className="text-xs text-gray-400">{loginConfig.right_panel?.subheading || 'Masuk ke akun Anda...'}</p>
+                <div className="bg-primary text-white text-xs text-center py-2 rounded-lg">{loginConfig.right_panel?.button_text || 'Masuk ke Akun'}</div>
+              </div>
+            </FormSection>
+          </div>
+        </div>
+      )}
+
+      {/* ===== TAB 7: DESAIN SERTIFIKAT ===== */}
       {tab === 'desain-sertifikat' && (
         <SertifikatDesignEditor
           settingKud={kud}

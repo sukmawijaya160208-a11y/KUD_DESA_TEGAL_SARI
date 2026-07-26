@@ -75,6 +75,10 @@ async function request(endpoint, options = {}) {
 export const api = {
   pengaturan: {
     get: () => request('/pengaturan'),
+    getLoginConfig: async () => {
+      const res = await request('/pengaturan');
+      try { return JSON.parse(res?.login_page_config || 'null') || {}; } catch { return {}; }
+    },
   },
   tentangAplikasi: {
     get: () => request('/tentang-aplikasi'),

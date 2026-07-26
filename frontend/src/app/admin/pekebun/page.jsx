@@ -14,7 +14,7 @@ import { motion } from 'framer-motion';
 import {
   PencilSquareIcon, TrashIcon, PlusIcon, EyeIcon, XMarkIcon,
   MagnifyingGlassIcon, UsersIcon, CheckCircleIcon, ClockIcon,
-  PhotoIcon, IdentificationIcon, DevicePhoneMobileIcon,
+  PhotoIcon, IdentificationIcon, DevicePhoneMobileIcon, PrinterIcon,
 } from '@heroicons/react/24/outline';
 import { formatDate } from '@/lib/date';
 
@@ -41,7 +41,7 @@ function StatsCard({ label, value, icon: Icon, color }) {
   );
 }
 
-function PekebunRow({ pekebun, onEdit, onDelete, onDetail, onPreview }) {
+function PekebunRow({ pekebun, onEdit, onDelete, onDetail, onPreview, onPrint }) {
   return (
     <motion.tr variants={fadeUp} className="border-b border-border/50 hover:bg-muted/50 transition-colors">
       <td className="py-3.5 px-3">
@@ -92,6 +92,9 @@ function PekebunRow({ pekebun, onEdit, onDelete, onDetail, onPreview }) {
       <td className="py-3.5 px-3"><Badge status={pekebun.status} /></td>
       <td className="py-3.5 px-3">
         <div className="flex gap-1">
+          <button onClick={() => onPrint(pekebun)} className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer" title="Cetak">
+            <PrinterIcon className="w-4 h-4" />
+          </button>
           <button onClick={() => onDetail(pekebun)} className="p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer" title="Detail">
             <EyeIcon className="w-4 h-4" />
           </button>
@@ -220,6 +223,59 @@ export default function AdminPekebunPage() {
 
   const handlePreview = useCallback((url) => setPreviewImage(url), []);
 
+  const handlePrintPekebun = useCallback((p) => {
+    const win = window.open('', '_blank');
+    if (!win) return;
+    win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Cetak Pekebun - ${p.nama}</title>
+<style>
+  @page { size: A4; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1e293b; padding: 20px; font-size: 12px; }
+  .kop { text-align: center; border-bottom: 2px solid #1e293b; padding-bottom: 12px; margin-bottom: 20px; }
+  .kop h1 { font-size: 18px; text-transform: uppercase; margin-bottom: 2px; }
+  .kop p { font-size: 11px; color: #475569; }
+  .kop .title { font-size: 14px; font-weight: 700; margin-top: 6px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  td, th { padding: 6px 8px; border: 1px solid #e2e8f0; text-align: left; font-size: 11px; }
+  th { background: #f1f5f9; font-weight: 600; }
+  .label { font-weight: 600; color: #475569; width: 140px; background: #f8fafc; }
+  @media print { body { padding: 0; } }
+</style></head><body>
+  <div class="kop"><h1>KOPERASI UNIT DESA (KUD) SARI SUBUR</h1><p>Desa Tegal Sari, Kec. Megang Sakti, Kab. Musi Rawas, Sumatera Selatan</p><div class="title">DATA ANGGOTA PEKEBUN</div></div>
+  <table><tr><td class="label">Nama</td><td>${p.nama || '-'}</td></tr><tr><td class="label">NIK</td><td>${p.nik || '-'}</td></tr><tr><td class="label">No. KK</td><td>${p.no_kk || '-'}</td></tr><tr><td class="label">Tempat Lahir</td><td>${p.tempat_lahir || '-'}</td></tr><tr><td class="label">Tanggal Lahir</td><td>${p.tanggal_lahir ? formatDate(p.tanggal_lahir) : '-'}</td></tr><tr><td class="label">No. WhatsApp</td><td>${p.no_whatsapp || '-'}</td></tr><tr><td class="label">Alamat</td><td>${p.alamat || '-'}</td></tr><tr><td class="label">Status</td><td>${p.status || '-'}</td></tr><tr><td class="label">Jumlah Lahan</td><td>${p.lahan_count || p.lahan?.length || 0} lahan</td></tr></table>
+<script>window.onload=function(){setTimeout(function(){window.print();window.close();},500);};</script>
+</body></html>`);
+    win.document.close();
+  }, []);
+
+  const handlePrintAll = useCallback(() => {
+    const rows = data.map((p, i) => `<tr><td style="text-align:center">${i + 1}</td><td>${p.nama || '-'}</td><td>${p.nik || '-'}</td><td>${p.no_whatsapp || '-'}</td><td>${p.lahan_count || p.lahan?.length || 0}</td><td>${p.status || '-'}</td></tr>`).join('');
+    const win = window.open('', '_blank');
+    if (!win) return;
+    win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Laporan Data Pekebun</title>
+<style>
+  @page { size: A4 landscape; margin: 8mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1e293b; padding: 16px; font-size: 11px; }
+  .kop { text-align: center; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-bottom: 16px; }
+  .kop h1 { font-size: 16px; text-transform: uppercase; margin-bottom: 2px; }
+  .kop p { font-size: 10px; color: #475569; }
+  .kop .title { font-size: 13px; font-weight: 700; margin-top: 4px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 5px 6px; border: 1px solid #e2e8f0; text-align: left; font-size: 10px; }
+  th { background: #f1f5f9; font-weight: 600; text-transform: uppercase; font-size: 9px; }
+  tr:nth-child(even) { background: #f8fafc; }
+  .footer { margin-top: 16px; text-align: right; font-size: 10px; }
+  @media print { body { padding: 0; } }
+</style></head><body>
+  <div class="kop"><h1>KOPERASI UNIT DESA (KUD) SARI SUBUR</h1><p>Desa Tegal Sari, Kec. Megang Sakti, Kab. Musi Rawas, Sumatera Selatan</p><div class="title">LAPORAN DATA ANGGOTA PEKEBUN</div></div>
+  <table><thead><tr><th>No</th><th>Nama</th><th>NIK</th><th>No. WA</th><th>Lahan</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>
+  <div class="footer">Total: ${data.length} pekebun &nbsp;|&nbsp; Dicetak: ${new Date().toLocaleDateString('id-ID')}</div>
+<script>window.onload=function(){setTimeout(function(){window.print();window.close();},500);};</script>
+</body></html>`);
+    win.document.close();
+  }, [data]);
+
   if (loading) {
     return (
       <div className="space-y-4">
@@ -251,6 +307,7 @@ export default function AdminPekebunPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handlePrintAll} className="mr-2"><PrinterIcon className="w-4 h-4" /> Cetak Laporan</Button>
           <Button onClick={openCreate}><PlusIcon className="w-4 h-4" /> Tambah Pekebun</Button>
         </div>
       </motion.div>
@@ -307,6 +364,7 @@ export default function AdminPekebunPage() {
                     onDelete={setDeleteModal}
                     onDetail={setDetailModal}
                     onPreview={handlePreview}
+                    onPrint={handlePrintPekebun}
                   />
                 ))}
                 {data.length === 0 && (

@@ -105,7 +105,7 @@ function SectionBadge({ children }) {
 
 function SectionHeader({ badge, title, subtitle, light }) {
   return (
-    <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+    <div className="text-center max-w-3xl mx-auto mb-8 md:mb-10">
       <SectionBadge>{badge}</SectionBadge>
       <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1, duration: 0.6 }} className={`mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-heading ${light ? 'text-white' : 'text-foreground'}`}>
         {title}
@@ -516,7 +516,7 @@ export default function Home() {
 
 
 {/* ===== PROGRAM UNGGULAN ===== */}
-      <section id="program" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
+      <section id="program" className="py-10 md:py-12 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Program" title="Program KUD" subtitle="Berbagai program dirancang khusus untuk meningkatkan kesejahteraan dan produktivitas petani." />
           {loadingPrograms ? (
@@ -576,7 +576,7 @@ export default function Home() {
       
 
 {/* ===== ALUR 6 LANGKAH ===== */}
-      <section className="py-14 md:py-28 bg-white">
+      <section className="py-10 md:py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Panduan" title="6 Langkah Jadi Anggota" subtitle="Proses mudah dan cepat untuk bergabung menjadi anggota KUD Desa Sari Subur." />
           <div className="relative">
@@ -617,7 +617,7 @@ export default function Home() {
       
 
 {/* ===== SERTIFIKASI & PENGHARGAAN ===== */}
-      <section className="py-14 md:py-28 bg-white">
+      <section className="py-10 md:py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Pengakuan" title="Sertifikasi & Penghargaan" subtitle="Berbagai sertifikasi dan penghargaan yang telah diraih KUD Desa Sari Subur." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -684,7 +684,7 @@ export default function Home() {
       
 
 {/* ===== KEGIATAN GALLERY ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/20">
+      <section className="py-10 md:py-12 bg-gradient-to-b from-white to-emerald-50/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Dokumentasi" title="Kegiatan Kami" subtitle="Dokumentasi berbagai kegiatan dan program yang telah dilaksanakan KUD Desa Sari Subur." />
           {dokumentasiData.length === 0 ? (
@@ -707,7 +707,7 @@ export default function Home() {
       
 
 {/* ===== VIDEO KUD ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-white via-emerald-50/20 to-white">
+      <section className="py-10 md:py-12 bg-gradient-to-b from-white via-emerald-50/20 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Multimedia" title="Video KUD Sari Subur" subtitle="Tonton berbagai kegiatan, profil, dan informasi seputar KUD Desa Sari Subur." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -736,7 +736,7 @@ export default function Home() {
       
 
 {/* ===== KEUNTUNGAN ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
+      <section className="py-10 md:py-12 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(16,185,129,0.15),transparent_50%)]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Mengapa KUD" title="Keuntungan Bergabung" subtitle="Rasakan manfaat nyata menjadi bagian dari keluarga besar KUD Desa Sari Subur." light />
@@ -760,7 +760,7 @@ export default function Home() {
       
 
 {/* ===== KALKULATOR TBS ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
+      <section className="py-10 md:py-12 bg-gradient-to-b from-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kalkulator" title="Kalkulator TBS" subtitle="Simulasi pendapatan Anda dari hasil kebun kelapa sawit." />
           <div className="rounded-2xl bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg p-6 md:p-8">
@@ -772,7 +772,7 @@ export default function Home() {
       
 
 {/* ===== BLOG TERBARU ===== */}
-      <section id="blog" className="py-14 md:py-28 bg-gradient-to-b from-white to-emerald-50/30 scroll-mt-16 md:scroll-mt-20 relative overflow-hidden">
+      <section id="blog" className="py-10 md:py-12 bg-gradient-to-b from-white to-emerald-50/30 scroll-mt-16 md:scroll-mt-20 relative overflow-hidden">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-100/30 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-teal-100/20 rounded-full blur-3xl pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -819,7 +819,7 @@ export default function Home() {
       
 
 {/* ===== FITUR ===== */}
-      <section id="fitur" className="py-14 md:py-28 bg-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
+      <section id="fitur" className="py-10 md:py-12 bg-white overflow-hidden scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Layanan Digital" title="Fitur Aplikasi KUD" subtitle="Nikmati kemudahan akses informasi dan layanan KUD melalui aplikasi digital kami." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -849,7 +849,7 @@ export default function Home() {
       
 
 {/* ===== KUD DALAM ANGKA ===== */}
-      <section className="py-16 md:py-28 bg-gradient-to-b from-white to-emerald-50/30">
+      <section className="py-10 md:py-12 bg-gradient-to-b from-white to-emerald-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Statistik" title="KUD dalam Angka" subtitle="Capaian dan dampak nyata KUD Desa Sari Subur bagi petani kelapa sawit di wilayah Kecamatan Tegal Sari." />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
@@ -870,7 +870,7 @@ export default function Home() {
       
 
 {/* ===== MITRA & KOLABORASI ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white">
+      <section className="py-10 md:py-12 bg-gradient-to-b from-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kolaborasi" title="Mitra & Kolaborasi" subtitle="Kemitraan strategis dengan berbagai lembaga untuk mendukung kemajuan KUD." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -898,7 +898,7 @@ export default function Home() {
       
 
 {/* ===== TESTIMONI ===== */}
-      <section id="testimoni" className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden scroll-mt-16 md:scroll-mt-20">
+      <section id="testimoni" className="py-10 md:py-12 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden scroll-mt-16 md:scroll-mt-20">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.15),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(6,182,212,0.1),transparent_50%)]" />
           <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-emerald-400/5 rounded-full blur-3xl" />
@@ -953,7 +953,7 @@ export default function Home() {
       
 
 {/* ===== LAYANAN & DUKUNGAN ===== */}
-      <section id="layanan" className="py-14 md:py-28 bg-white scroll-mt-16 md:scroll-mt-20">
+      <section id="layanan" className="py-10 md:py-12 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Kontak" title="Layanan & Dukungan" subtitle="Hubungi kami melalui berbagai saluran yang tersedia." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -976,7 +976,7 @@ export default function Home() {
       
 
 {/* ===== FAQ ===== */}
-      <section id="faq" className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/30 to-white scroll-mt-16 md:scroll-mt-20">
+      <section id="faq" className="py-10 md:py-12 bg-gradient-to-b from-emerald-50/30 to-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Tanya Jawab" title="Pertanyaan Umum" subtitle="Temukan jawaban atas pertanyaan yang sering diajukan tentang KUD Desa Sari Subur." />
           <div className="space-y-3">
@@ -1002,7 +1002,7 @@ export default function Home() {
       
 
 {/* ===== MAP ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-b from-emerald-50/20 to-white">
+      <section className="py-10 md:py-12 bg-gradient-to-b from-emerald-50/20 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Lokasi" title="Temukan Kami" subtitle="Kunjungi kantor KUD Desa Sari Subur untuk informasi lebih lanjut." />
         </div>
@@ -1012,7 +1012,7 @@ export default function Home() {
       
 
 {/* ===== NEWSLETTER CTA ===== */}
-      <section className="py-14 md:py-28 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
+      <section className="py-10 md:py-12 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.2),transparent_60%)]" />
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
         <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />

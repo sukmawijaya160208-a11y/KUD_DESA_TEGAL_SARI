@@ -45,15 +45,15 @@ const DEFAULT_CONFIG = {
   fields: {
     border_deco: { show: true }, watermark: { show: true, opacity: 0.04 },
     logo_kud: { show: true, width: 70 },
-    nama_kud: { show: true, fontSize: 16, color: '#064e3b', fontFamily: 'Inter', fontWeight: 'bold' },
+    nama_kud: { show: true, fontSize: 16, color: '#064e3b', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
     badan_hukum: { show: true, fontSize: 8, color: '#92400e' },
     garis_header: { show: true },
-    judul: { show: true, fontSize: 20, color: '#92400e', fontFamily: 'Playfair Display', fontWeight: 'bold' },
+    judul: { show: true, fontSize: 20, color: '#92400e', fontFamily: 'Playfair Display', fontWeight: 'bold', text: '' },
     no_registrasi: { show: true, fontSize: 8, color: '#64748b' },
-    pembukaan: { show: true, fontSize: 10, color: '#475569' },
+    pembukaan: { show: true, fontSize: 10, color: '#475569', text: '' },
     nama_pekebun: { show: true, fontSize: 20, color: '#0f172a', fontFamily: 'Playfair Display', fontWeight: 'bold' },
     grid_data: { show: true, fontSize: 10, color: '#334155' },
-    legal_text: { show: true, fontSize: 9, color: '#475569' },
+    legal_text: { show: true, fontSize: 9, color: '#475569', text: '' },
     tanggal_terbit: { show: true, fontSize: 9, color: '#64748b' },
     ttd_ketua: { show: true, width: 130, height: 50 },
     stempel: { show: true, width: 80 },
@@ -70,15 +70,15 @@ const TEMPLATE_PRESETS = {
     fields: {
       border_deco: { show: true }, watermark: { show: false, opacity: 0.03 },
       logo_kud: { show: true, width: 60 },
-      nama_kud: { show: true, fontSize: 14, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'bold' },
+      nama_kud: { show: true, fontSize: 14, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
       badan_hukum: { show: true, fontSize: 8, color: '#94a3b8' },
       garis_header: { show: true },
-      judul: { show: true, fontSize: 18, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'bold' },
+      judul: { show: true, fontSize: 18, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
       no_registrasi: { show: true, fontSize: 8, color: '#94a3b8' },
-      pembukaan: { show: true, fontSize: 10, color: '#475569' },
+      pembukaan: { show: true, fontSize: 10, color: '#475569', text: '' },
       nama_pekebun: { show: true, fontSize: 18, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'bold' },
       grid_data: { show: true, fontSize: 10, color: '#475569' },
-      legal_text: { show: true, fontSize: 9, color: '#64748b' },
+      legal_text: { show: true, fontSize: 9, color: '#64748b', text: '' },
       tanggal_terbit: { show: true, fontSize: 9, color: '#94a3b8' },
       ttd_ketua: { show: true, width: 120, height: 45 },
       stempel: { show: true, width: 75 },
@@ -93,6 +93,7 @@ function FieldCard({ fieldKey, field, onChange }) {
   const [expanded, setExpanded] = useState(false);
   const label = FIELD_LABELS[fieldKey] || fieldKey;
   const isNameField = fieldKey === 'nama_pekebun' || fieldKey === 'judul' || fieldKey === 'nama_ketua' || fieldKey === 'nama_kud';
+  const hasText = fieldKey === 'nama_kud' || fieldKey === 'judul' || fieldKey === 'pembukaan' || fieldKey === 'legal_text';
 
   return (
     <div className="border border-border rounded-xl overflow-hidden bg-white">
@@ -109,6 +110,14 @@ function FieldCard({ fieldKey, field, onChange }) {
       </button>
       {expanded && (
         <div className="px-3 pb-3 pt-1 border-t border-border space-y-2 bg-slate-50/50">
+          {hasText && (
+            <div>
+              <label className="text-[10px] font-medium text-gray-500 block mb-1">Teks</label>
+              <input value={field.text || ''} onChange={(e) => onChange({ ...field, text: e.target.value })}
+                placeholder="Kosongkan untuk default"
+                className="w-full px-2 py-1.5 text-xs rounded-lg border border-border bg-white focus:outline-none focus:ring-2 focus:ring-primary/20" />
+            </div>
+          )}
           {field.fontSize !== undefined && (
             <div>
               <label className="text-[10px] font-medium text-gray-500 block mb-1">Ukuran Font: {field.fontSize}px</label>

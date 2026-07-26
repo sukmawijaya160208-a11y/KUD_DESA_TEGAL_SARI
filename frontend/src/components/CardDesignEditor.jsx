@@ -32,10 +32,10 @@ const TEMPLATE_PRESETS = {
     front: {
       fields: [
         { key: 'logo_kud', show: true, width: 52 },
-        { key: 'nama_kud', show: true, fontSize: 10, color: '#ffffff', fontFamily: 'Inter', fontWeight: 'bold' },
+        { key: 'nama_kud', show: true, fontSize: 10, color: '#ffffff', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
         { key: 'foto_pekebun', show: true, width: 50, height: 66 },
-        { key: 'judul', show: true, fontSize: 11, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black' },
-        { key: 'subjudul', show: true, fontSize: 7, color: '#059669', fontFamily: 'Inter', fontWeight: 'bold' },
+        { key: 'judul', show: true, fontSize: 11, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black', text: '' },
+        { key: 'subjudul', show: true, fontSize: 7, color: '#059669', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
         { key: 'nama_anggota', show: true, fontSize: 13, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black' },
         { key: 'nomor_anggota', show: true, fontSize: 9, color: '#059669', fontFamily: 'monospace', fontWeight: 'bold' },
         { key: 'nik', show: true, fontSize: 8, color: '#475569' },
@@ -52,10 +52,10 @@ const TEMPLATE_PRESETS = {
     },
     back: {
       fields: [
-        { key: 'header_website', show: true, fontSize: 6, color: '#ffffff', fontWeight: 'bold' },
-        { key: 'aturan_list', show: true, fontSize: 7, color: '#475569' },
-        { key: 'sekretariat', show: true, fontSize: 7, color: '#475569' },
-        { key: 'slogan', show: true, fontSize: 16, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black' },
+        { key: 'header_website', show: true, fontSize: 6, color: '#ffffff', fontWeight: 'bold', text: '' },
+        { key: 'aturan_list', show: true, fontSize: 7, color: '#475569', text: '' },
+        { key: 'sekretariat', show: true, fontSize: 7, color: '#475569', text: '' },
+        { key: 'slogan', show: true, fontSize: 16, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black', text: '' },
         { key: 'kota_tanggal', show: true, fontSize: 7, color: '#64748b' },
         { key: 'jabatan_ketua', show: true, fontSize: 8, color: '#475569', fontWeight: 'semibold' },
         { key: 'ttd_stempel', show: true },
@@ -68,10 +68,10 @@ const TEMPLATE_PRESETS = {
     front: {
       fields: [
         { key: 'logo_kud', show: true, width: 44 },
-        { key: 'nama_kud', show: true, fontSize: 9, color: '#ffffff', fontFamily: 'Inter', fontWeight: 'bold' },
+        { key: 'nama_kud', show: true, fontSize: 9, color: '#ffffff', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
         { key: 'foto_pekebun', show: true, width: 46, height: 60 },
-        { key: 'judul', show: true, fontSize: 10, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'bold' },
-        { key: 'subjudul', show: true, fontSize: 7, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'semibold' },
+        { key: 'judul', show: true, fontSize: 10, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
+        { key: 'subjudul', show: true, fontSize: 7, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'semibold', text: '' },
         { key: 'nama_anggota', show: true, fontSize: 12, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'bold' },
         { key: 'nomor_anggota', show: true, fontSize: 8, color: '#0f766e', fontFamily: 'monospace', fontWeight: 'bold' },
         { key: 'nik', show: true, fontSize: 7, color: '#64748b' },
@@ -88,10 +88,10 @@ const TEMPLATE_PRESETS = {
     },
     back: {
       fields: [
-        { key: 'header_website', show: true, fontSize: 6, color: '#ffffff', fontWeight: 'bold' },
-        { key: 'aturan_list', show: true, fontSize: 7, color: '#475569' },
-        { key: 'sekretariat', show: true, fontSize: 7, color: '#475569' },
-        { key: 'slogan', show: true, fontSize: 14, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'bold' },
+        { key: 'header_website', show: true, fontSize: 6, color: '#ffffff', fontWeight: 'bold', text: '' },
+        { key: 'aturan_list', show: true, fontSize: 7, color: '#475569', text: '' },
+        { key: 'sekretariat', show: true, fontSize: 7, color: '#475569', text: '' },
+        { key: 'slogan', show: true, fontSize: 14, color: '#0f766e', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
         { key: 'kota_tanggal', show: true, fontSize: 7, color: '#94a3b8' },
         { key: 'jabatan_ketua', show: true, fontSize: 7, color: '#64748b', fontWeight: 'semibold' },
         { key: 'ttd_stempel', show: true },
@@ -104,10 +104,10 @@ const TEMPLATE_PRESETS = {
     front: {
       fields: [
         { key: 'logo_kud', show: true, width: 40 },
-        { key: 'nama_kud', show: true, fontSize: 8, color: '#ffffff', fontFamily: 'Inter', fontWeight: 'bold' },
+        { key: 'nama_kud', show: true, fontSize: 8, color: '#ffffff', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
         { key: 'foto_pekebun', show: true, width: 40, height: 52 },
-        { key: 'judul', show: true, fontSize: 9, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'bold' },
-        { key: 'subjudul', show: true, fontSize: 6, color: '#0369a1', fontFamily: 'Inter', fontWeight: 'semibold' },
+        { key: 'judul', show: true, fontSize: 9, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
+        { key: 'subjudul', show: true, fontSize: 6, color: '#0369a1', fontFamily: 'Inter', fontWeight: 'semibold', text: '' },
         { key: 'nama_anggota', show: true, fontSize: 11, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'bold' },
         { key: 'nomor_anggota', show: true, fontSize: 7, color: '#0369a1', fontFamily: 'monospace', fontWeight: 'bold' },
         { key: 'nik', show: true, fontSize: 7, color: '#64748b' },
@@ -124,10 +124,10 @@ const TEMPLATE_PRESETS = {
     },
     back: {
       fields: [
-        { key: 'header_website', show: true, fontSize: 6, color: '#ffffff', fontWeight: 'bold' },
-        { key: 'aturan_list', show: true, fontSize: 6, color: '#475569' },
-        { key: 'sekretariat', show: true, fontSize: 6, color: '#475569' },
-        { key: 'slogan', show: true, fontSize: 13, color: '#0369a1', fontFamily: 'Inter', fontWeight: 'bold' },
+        { key: 'header_website', show: true, fontSize: 6, color: '#ffffff', fontWeight: 'bold', text: '' },
+        { key: 'aturan_list', show: true, fontSize: 6, color: '#475569', text: '' },
+        { key: 'sekretariat', show: true, fontSize: 6, color: '#475569', text: '' },
+        { key: 'slogan', show: true, fontSize: 13, color: '#0369a1', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
         { key: 'kota_tanggal', show: true, fontSize: 6, color: '#94a3b8' },
         { key: 'jabatan_ketua', show: true, fontSize: 7, color: '#64748b', fontWeight: 'semibold' },
         { key: 'ttd_stempel', show: true },
@@ -168,6 +168,7 @@ function DraggableField({ field, index, side, onToggle, onUpdate, onMoveField })
   const hasColor = !['logo_kud', 'foto_pekebun', 'qr_code', 'watermark', 'ttd_stempel'].includes(field.key);
   const hasFontFamily = ['nama_kud', 'judul', 'subjudul', 'nama_anggota', 'slogan', 'nama_ketua'].includes(field.key);
   const hasFontWeight = hasFontSize;
+  const hasText = ['nama_kud', 'judul', 'subjudul', 'header_website', 'aturan_list', 'sekretariat', 'slogan'].includes(field.key);
 
   return (
     <div ref={setRef} className={`border border-border rounded-xl overflow-hidden bg-white transition-opacity ${isDragging ? 'opacity-50' : 'opacity-100'}`}>
@@ -225,6 +226,15 @@ function DraggableField({ field, index, side, onToggle, onUpdate, onMoveField })
                   </button>
                 ))}
               </div>
+            </div>
+          )}
+          {hasText && (
+            <div className="flex items-center gap-2">
+              <label className="text-[10px] font-medium text-gray-500 w-20">Teks</label>
+              <input value={field.text || ''}
+                onChange={(e) => onUpdate(side, field.key, { ...field, text: e.target.value })}
+                placeholder="Kosongkan untuk default"
+                className="flex-1 px-2 py-1 text-[10px] rounded-lg border border-border bg-white" />
             </div>
           )}
           {['logo_kud', 'foto_pekebun'].includes(field.key) && (
@@ -336,6 +346,7 @@ function buildKartuConfig(editorConfig, settingKud) {
       if (f.width !== undefined) result.fields[f.key].width = f.width;
       if (f.height !== undefined) result.fields[f.key].height = f.height;
       if (f.opacity !== undefined) result.fields[f.key].opacity = f.opacity;
+      if (f.text !== undefined) result.fields[f.key].text = f.text;
     });
     return result;
   };
@@ -383,6 +394,7 @@ function CardDesignEditorInner({ settingKud, settings, onSave }) {
   const [activeSide, setActiveSide] = useState('front');
   const [saving, setSaving] = useState(false);
   const [stempelUploading, setStempelUploading] = useState(false);
+  const [previewStempel, setPreviewStempel] = useState('');
   const [confirmTemplate, setConfirmTemplate] = useState(null);
 
   const getSide = (side) => editorConfig[side];
@@ -451,7 +463,8 @@ function CardDesignEditorInner({ settingKud, settings, onSave }) {
     if (!file) return;
     setStempelUploading(true);
     try {
-      await api.upload('/upload/kartu-stempel', file);
+      const res = await api.upload('/upload/kartu-stempel', file);
+      if (res?.url) setPreviewStempel(res.url);
       if (onSave) onSave();
       toast.success('Stempel berhasil diupload');
     } catch (err) {
@@ -566,12 +579,15 @@ function CardDesignEditorInner({ settingKud, settings, onSave }) {
             </div>
             <div className="p-4 bg-white rounded-xl border border-border">
               <label className="block text-sm font-medium text-foreground/80 mb-2">Stempel KUD</label>
-              {settingKud?.kartu_stempel ? (
-                <img src={settingKud.kartu_stempel} alt="Stempel" className="h-16 object-contain mb-3 rounded-lg border border-border p-2 bg-white" />
+              {(previewStempel || settingKud?.kartu_stempel) ? (
+                <div className="relative mb-3">
+                  <img src={previewStempel || settingKud.kartu_stempel} alt="Stempel" className="h-16 object-contain rounded-lg border border-border p-2 bg-white" />
+                  <button onClick={() => setPreviewStempel('')} className="absolute -top-2 -right-2 w-5 h-5 bg-destructive text-white rounded-full flex items-center justify-center text-xs cursor-pointer hover:bg-destructive/90">&times;</button>
+                </div>
               ) : (
                 <div className="h-16 flex items-center justify-center bg-muted rounded-lg border border-dashed border-border mb-3 text-xs text-gray-400">Belum upload</div>
               )}
-              <label className={`px-4 py-2 ${stempelUploading ? 'bg-gray-400' : 'bg-primary'} text-white rounded-xl text-xs font-medium cursor-pointer hover:bg-primary/90 transition-colors inline-block`}>
+              <label className={`px-4 py-2 ${stempelUploading ? 'bg-gray-400' : 'bg-primary'} text-white rounded-xl text-xs font-medium cursor-pointer hover:bg-primary/90 transition-all inline-block`}>
                 {stempelUploading ? 'Uploading...' : 'Upload Stempel'}
                 <input type="file" className="hidden" accept="image/*" onChange={handleStempelUpload} disabled={stempelUploading} />
               </label>

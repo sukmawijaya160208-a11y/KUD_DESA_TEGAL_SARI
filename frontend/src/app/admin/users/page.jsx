@@ -45,6 +45,27 @@ function avatarColor(name) {
   return colors[Math.abs(hash) % colors.length];
 }
 
+function handleDownloadTemplate() {
+  const headers = IMPORT_TEMPLATE.map(t => t.label);
+  const example = {
+    'Nama': 'Budi Santoso',
+    'Email': 'budi@mail.com',
+    'Password': 'password123',
+    'Role (admin/verifikator/pekebun)': 'pekebun',
+    'NIK': '1234567890123456',
+    'No KK': '1234567890123456',
+    'No WhatsApp': '08123456789',
+    'Tempat Lahir': 'Jakarta',
+    'Tanggal Lahir': '1990-01-15',
+    'Alamat': 'Jl. Merdeka No.1',
+  };
+  const ws = XLSX.utils.json_to_sheet([example], { header: headers });
+  ws['!cols'] = headers.map(h => ({ wch: Math.max(h.length * 2, 18) }));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Template');
+  XLSX.writeFile(wb, 'Template_Import_User_KUD.xlsx');
+}
+
 function exportToExcel(users) {
   if (!users.length) return;
   const headers = ['Nama', 'Email', 'Role', 'Status Pekebun', 'NIK', 'No KK', 'No WhatsApp', 'Tempat Lahir', 'Tanggal Lahir', 'Alamat', 'Tanggal Daftar'];
@@ -1012,8 +1033,14 @@ export default function AdminUsersPage() {
               </ul>
             </div>
 
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs font-semibold text-gray-500">Template Kolom</p>
+              <button onClick={handleDownloadTemplate} className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold rounded-lg transition-all cursor-pointer">
+                <DocumentArrowDownIcon className="w-3.5 h-3.5" />
+                Download Template Excel
+              </button>
+            </div>
             <div className="border border-border rounded-xl overflow-hidden">
-              <div className="bg-muted/50 px-4 py-2 text-xs font-semibold text-gray-500 border-b border-border">Template Kolom</div>
               <div className="overflow-x-auto">
                 <table className="w-full text-xs">
                   <thead>

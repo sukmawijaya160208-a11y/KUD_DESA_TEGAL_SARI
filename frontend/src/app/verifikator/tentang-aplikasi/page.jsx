@@ -33,7 +33,7 @@ export default function VerifikatorTentangAplikasiPage() {
   return (
     <div>
       <HeroDeveloper data={data} />
-      <VideoGallery videos={data.videos} />
+      <VideoGallery youtubeUrl={data.youtube_url} />
       <AboutSection teks={data.teks} />
       <InfoCards data={data} />
       <DonasiCard data={data} />

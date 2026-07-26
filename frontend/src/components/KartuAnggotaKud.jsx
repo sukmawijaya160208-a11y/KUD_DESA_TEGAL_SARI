@@ -28,10 +28,10 @@ const DEFAULT_CONFIG = {
   front: {
     fields: {
       logo_kud: { show: true, width: 52 },
-      nama_kud: { show: true, fontSize: 10, color: '#ffffff', fontFamily: 'Inter', fontWeight: 'bold' },
+      nama_kud: { show: true, fontSize: 10, color: '#ffffff', fontFamily: 'Inter', fontWeight: 'bold', text: 'KUD Sari Subur' },
       foto_pekebun: { show: true, width: 50, height: 66 },
-      judul: { show: true, fontSize: 11, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black' },
-      subjudul: { show: true, fontSize: 7, color: '#059669', fontFamily: 'Inter', fontWeight: 'bold' },
+      judul: { show: true, fontSize: 11, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black', text: 'KARTU TANDA ANGGOTA' },
+      subjudul: { show: true, fontSize: 7, color: '#059669', fontFamily: 'Inter', fontWeight: 'bold', text: 'KOPERASI UNIT DESA SARI SUBUR' },
       nama_anggota: { show: true, fontSize: 13, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black' },
       nomor_anggota: { show: true, fontSize: 9, color: '#059669', fontFamily: 'monospace', fontWeight: 'bold' },
       nik: { show: true, fontSize: 8, color: '#475569' },
@@ -48,10 +48,10 @@ const DEFAULT_CONFIG = {
   },
   back: {
     fields: {
-      header_website: { show: true, fontSize: 6, color: '#ffffff', fontWeight: 'bold' },
-      aturan_list: { show: true, fontSize: 7, color: '#475569' },
+      header_website: { show: true, fontSize: 6, color: '#ffffff', fontWeight: 'bold', text: 'kud-sari-subur.my.id' },
+      aturan_list: { show: true, fontSize: 7, color: '#475569', text: 'Kartu Tanda Anggota:' },
       sekretariat: { show: true, fontSize: 7, color: '#475569' },
-      slogan: { show: true, fontSize: 16, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black' },
+      slogan: { show: true, fontSize: 16, color: '#0f172a', fontFamily: 'Inter', fontWeight: 'black', text: 'SAWIT ADALAH KITA' },
       kota_tanggal: { show: true, fontSize: 7, color: '#64748b' },
       jabatan_ketua: { show: true, fontSize: 8, color: '#475569', fontWeight: 'semibold' },
       ttd_stempel: { show: true },
@@ -136,7 +136,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
             'Dilarang menggunakan kartu ini untuk kegiatan yang melanggar hukum.',
             'Kartu ini milik KUD, jika ditemukan harap dikembalikan ke sekretariat.',
           ]);
-  const slogan = config.slogan || s?.kartu_slogan || 'SAWIT ADALAH KITA';
+  const slogan = b('slogan').text || config.slogan || s?.kartu_slogan || 'SAWIT ADALAH KITA';
   const website = config.website || s?.website || 'kud-sari-subur.my.id';
   const kotaTerbit = config.kota_terbit || s?.kartu_kota_terbit || 'Megang Sakti';
   const terbit = formatTgl(tanggal_terbit);
@@ -225,13 +225,13 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
   <div class="page front" style="background:white;">
     <div class="front-left" style="background:${leftBg};">
       ${f('logo_kud').show !== false ? logoHtml : ''}
-      ${f('nama_kud').show !== false ? `<div style="font-size:${fc('nama_kud', 'fontSize') || 10}pt;font-weight:${fc('nama_kud', 'fontWeight') || 'bold'};color:${fc('nama_kud', 'color') || '#ffffff'};text-align:center;text-transform:uppercase;font-family:'${fc('nama_kud', 'fontFamily') || 'Inter'},sans-serif';">${s?.nama_kud || 'KUD Sari Subur'}</div>` : ''}
+      ${f('nama_kud').show !== false ? `<div style="font-size:${fc('nama_kud', 'fontSize') || 10}pt;font-weight:${fc('nama_kud', 'fontWeight') || 'bold'};color:${fc('nama_kud', 'color') || '#ffffff'};text-align:center;text-transform:uppercase;font-family:'${fc('nama_kud', 'fontFamily') || 'Inter'},sans-serif';">${fc('nama_kud', 'text') || s?.nama_kud || 'KUD Sari Subur'}</div>` : ''}
       ${f('foto_pekebun').show !== false ? fotoHtml : ''}
     </div>
     <div class="front-right">
       ${f('watermark').show !== false && logo ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:${fc('watermark', 'opacity') || 0.04};pointer-events:none;"><img src="${logo}" style="width:40mm;height:40mm;object-fit:contain;" /></div>` : ''}
-      ${f('judul').show !== false ? `<div style="font-size:${fc('judul', 'fontSize') || 11}pt;font-weight:${fc('judul', 'fontWeight') || 'black'};color:${fc('judul', 'color') || '#0f172a'};text-transform:uppercase;letter-spacing:0.5px;border-bottom:0.5px solid #e2e8f0;padding-bottom:0.5mm;margin-bottom:0.3mm;font-family:'${fc('judul', 'fontFamily') || 'Inter'},sans-serif';">${s?.kartu_judul_depan || 'KARTU TANDA ANGGOTA'}</div>` : ''}
-      ${f('subjudul').show !== false ? `<div style="font-size:${fc('subjudul', 'fontSize') || 7}pt;font-weight:${fc('subjudul', 'fontWeight') || 'bold'};color:${fc('subjudul', 'color') || '#059669'};text-transform:uppercase;margin-bottom:1mm;font-family:'${fc('subjudul', 'fontFamily') || 'Inter'},sans-serif';">${s?.kartu_subjudul_depan || 'KOPERASI UNIT DESA SARI SUBUR'}</div>` : ''}
+      ${f('judul').show !== false ? `<div style="font-size:${fc('judul', 'fontSize') || 11}pt;font-weight:${fc('judul', 'fontWeight') || 'black'};color:${fc('judul', 'color') || '#0f172a'};text-transform:uppercase;letter-spacing:0.5px;border-bottom:0.5px solid #e2e8f0;padding-bottom:0.5mm;margin-bottom:0.3mm;font-family:'${fc('judul', 'fontFamily') || 'Inter'},sans-serif';">${fc('judul', 'text') || s?.kartu_judul_depan || 'KARTU TANDA ANGGOTA'}</div>` : ''}
+      ${f('subjudul').show !== false ? `<div style="font-size:${fc('subjudul', 'fontSize') || 7}pt;font-weight:${fc('subjudul', 'fontWeight') || 'bold'};color:${fc('subjudul', 'color') || '#059669'};text-transform:uppercase;margin-bottom:1mm;font-family:'${fc('subjudul', 'fontFamily') || 'Inter'},sans-serif';">${fc('subjudul', 'text') || s?.kartu_subjudul_depan || 'KOPERASI UNIT DESA SARI SUBUR'}</div>` : ''}
       ${f('nama_anggota').show !== false ? `<div style="font-size:${fc('nama_anggota', 'fontSize') || 13}pt;font-weight:${fc('nama_anggota', 'fontWeight') || 'black'};color:${fc('nama_anggota', 'color') || '#0f172a'};text-transform:uppercase;line-height:1.1;font-family:'${fc('nama_anggota', 'fontFamily') || 'Inter'},sans-serif';">${nama}</div>` : ''}
       ${f('nomor_anggota').show !== false ? `<div style="font-size:${fc('nomor_anggota', 'fontSize') || 9}pt;font-weight:${fc('nomor_anggota', 'fontWeight') || 'bold'};color:${fc('nomor_anggota', 'color') || '#059669'};font-family:monospace;background:#f0fdf4;padding:0.3mm 1mm;border-radius:0.5mm;display:inline-block;margin:0.5mm 0;">${nomor_anggota || 'KUD-00000'}</div>` : ''}
       ${f('nik').show !== false && nik !== '-' ? `<div style="font-size:${fc('nik', 'fontSize') || 8}pt;color:${fc('nik', 'color') || '#475569'};line-height:1.4;">NIK: ${nik}</div>` : ''}
@@ -242,16 +242,16 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
       ${f('alamat').show !== false && alamatJalan ? `<div style="font-size:${fc('alamat', 'fontSize') || 8}pt;color:${fc('alamat', 'color') || '#475569'};line-height:1.4;">${alamatJalan}</div>` : ''}
       <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:0.3mm;border-top:0.5px solid #f1f5f9;">
         ${f('berlaku').show !== false ? `<div style="font-size:${fc('berlaku', 'fontSize') || 7}pt;color:${fc('berlaku', 'color') || '#94a3b8'};"><span style="font-weight:700;font-size:9pt;color:#0f172a;">${terbit} - ${berlaku}</span></div>` : ''}
-        ${f('qr_code').show !== false ? `<div style="width:18mm;height:18mm;">[QR]</div>` : ''}
+        ${f('qr_code').show !== false ? `<div style="width:18mm;height:18mm;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(nomor_anggota || 'KUD')}" alt="QR" style="width:100%;height:100%;image-rendering:pixelated;" /></div>` : ''}
       </div>
     </div>
   </div>
   <div class="page back" style="background:white;">
-    ${b('header_website').show !== false ? `<div class="back-header" style="font-size:${bc('header_website', 'fontSize') || 6}pt;font-weight:${bc('header_website', 'fontWeight') || 'bold'};color:${bc('header_website', 'color') || '#ffffff'};background:${backBg};">${website}</div>` : ''}
+    ${b('header_website').show !== false ? `<div class="back-header" style="font-size:${bc('header_website', 'fontSize') || 6}pt;font-weight:${bc('header_website', 'fontWeight') || 'bold'};color:${bc('header_website', 'color') || '#ffffff'};background:${backBg};">${b('header_website').text || website}</div>` : ''}
     <div class="back-body">
       <div>
-        ${b('aturan_list').show !== false ? `<div style="font-size:${bc('aturan_list', 'fontSize') || 7}pt;color:${bc('aturan_list', 'color') || '#475569'};"><div style="font-size:8pt;font-weight:700;color:#0f172a;margin-bottom:0.5mm;">Kartu Tanda Anggota:</div><ul style="list-style:none;padding:0;margin:0;">${aturanHtml}</ul></div>` : ''}
-        ${b('sekretariat').show !== false ? `<div style="font-size:${bc('sekretariat', 'fontSize') || 7}pt;color:${bc('sekretariat', 'color') || '#475569'};margin-top:0.5mm;padding-top:0.5mm;border-top:0.5px solid #e2e8f0;"><span style="font-weight:700;color:#0f172a;">Sekretariat:</span> ${s?.alamat || '-'}</div>` : ''}
+        ${b('aturan_list').show !== false ? `<div style="font-size:${bc('aturan_list', 'fontSize') || 7}pt;color:${bc('aturan_list', 'color') || '#475569'};"><div style="font-size:8pt;font-weight:700;color:#0f172a;margin-bottom:0.5mm;">${b('aturan_list').text || 'Kartu Tanda Anggota:'}</div><ul style="list-style:none;padding:0;margin:0;">${aturanHtml}</ul></div>` : ''}
+        ${b('sekretariat').show !== false ? `<div style="font-size:${bc('sekretariat', 'fontSize') || 7}pt;color:${bc('sekretariat', 'color') || '#475569'};margin-top:0.5mm;padding-top:0.5mm;border-top:0.5px solid #e2e8f0;"><span style="font-weight:700;color:#0f172a;">${b('sekretariat').text || 'Sekretariat:'}</span> ${s?.alamat || '-'}</div>` : ''}
       </div>
       <div class="back-footer">
         ${b('slogan').show !== false ? `<div style="font-size:${bc('slogan', 'fontSize') || 16}pt;font-weight:${bc('slogan', 'fontWeight') || 'black'};font-style:italic;color:${bc('slogan', 'color') || '#0f172a'};text-transform:uppercase;font-family:'${bc('slogan', 'fontFamily') || 'Inter'},sans-serif';">${slogan}</div>` : ''}
@@ -264,6 +264,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
       </div>
     </div>
   </div>
+<script>window.onload=function(){setTimeout(function(){window.print();window.close();},800);};</script>
 </body></html>`;
   };
 
@@ -289,7 +290,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
               fontWeight: fc('nama_kud', 'fontWeight') || 'bold',
               color: fc('nama_kud', 'color') || '#ffffff',
               fontFamily: `'${fc('nama_kud', 'fontFamily') || 'Inter'}', sans-serif`,
-            }}>{s?.nama_kud || 'KUD Sari Subur'}</div>
+            }}>{fc('nama_kud', 'text') || s?.nama_kud || 'KUD Sari Subur'}</div>
           </div>
         )}
         {f('foto_pekebun').show !== false && (foto ? (
@@ -310,7 +311,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
             fontWeight: fc('judul', 'fontWeight') || 'black',
             color: fc('judul', 'color') || '#0f172a',
             fontFamily: `'${fc('judul', 'fontFamily') || 'Inter'}', sans-serif`,
-          }}>{s?.kartu_judul_depan || 'KARTU TANDA ANGGOTA'}</div>
+          }}>{fc('judul', 'text') || s?.kartu_judul_depan || 'KARTU TANDA ANGGOTA'}</div>
         )}
         {f('subjudul').show !== false && (
           <div className="uppercase mb-1.5" style={{
@@ -318,7 +319,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
             fontWeight: fc('subjudul', 'fontWeight') || 'bold',
             color: fc('subjudul', 'color') || '#059669',
             fontFamily: `'${fc('subjudul', 'fontFamily') || 'Inter'}', sans-serif`,
-          }}>{s?.kartu_subjudul_depan || 'KOPERASI UNIT DESA SARI SUBUR'}</div>
+          }}>{fc('subjudul', 'text') || s?.kartu_subjudul_depan || 'KOPERASI UNIT DESA SARI SUBUR'}</div>
         )}
         {f('nama_anggota').show !== false && (
           <div className="uppercase leading-tight" style={{
@@ -373,14 +374,14 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
           color: bc('header_website', 'color') || '#ffffff',
           background: templateStyle.backHeaderBg(bBg),
         }}>
-          {website}
+          {b('header_website').text || website}
         </div>
       )}
       <div className="bg-white p-3.5 flex flex-col min-h-[190px]">
         <div className="flex-1">
           {b('aturan_list').show !== false && (
             <>
-              <h4 className="text-[9px] font-bold text-slate-900 mb-1">Kartu Tanda Anggota:</h4>
+              <h4 className="text-[9px] font-bold text-slate-900 mb-1">{b('aturan_list').text || 'Kartu Tanda Anggota:'}</h4>
               <ul className="space-y-0.5">
                 {aturan.map((item, i) => (
                   <li key={i} className="flex items-start gap-1 leading-tight" style={{ fontSize: (bc('aturan_list', 'fontSize') || 7) + 'px', color: bc('aturan_list', 'color') || '#475569' }}>
@@ -393,7 +394,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
           )}
           {b('sekretariat').show !== false && (
             <div className="mt-1.5 pt-1 border-t border-slate-100" style={{ fontSize: (bc('sekretariat', 'fontSize') || 7) + 'px', color: bc('sekretariat', 'color') || '#475569' }}>
-              <span className="font-bold text-slate-800">Sekretariat KUD:</span> {s?.alamat || '-'}
+              <span className="font-bold text-slate-800">{b('sekretariat').text || 'Sekretariat KUD:'}</span> {s?.alamat || '-'}
             </div>
           )}
         </div>

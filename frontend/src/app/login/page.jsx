@@ -87,7 +87,7 @@ function isPhone(v) {
   return /^(\+62|62|0)\d{6,15}$/.test(v.replace(/[\s\-]/g, ''));
 }
 
-function BrandPanel({ logoUrl, showBenefits, onToggleBenefits }) {
+function BrandPanel({ logoUrl, showBenefits, onToggleBenefits, loginConfig }) {
   return (
     <div className="relative md:w-[38%] bg-gradient-to-br from-primary/30 via-primary/5 to-transparent overflow-hidden">
       <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary-light/10 rounded-full blur-3xl" />
@@ -104,10 +104,12 @@ function BrandPanel({ logoUrl, showBenefits, onToggleBenefits }) {
               )}
             </div>
             <h1 className="text-white font-heading font-bold text-lg md:text-3xl md:mt-3 md:leading-tight">
-              KUD<br className="hidden md:block" />
-              <span className="bg-gradient-to-r from-primary-light via-blue-200 to-accent bg-clip-text text-transparent">
-                Sari Subur
-              </span>
+              {(() => {
+                const t = loginConfig?.left_panel?.title || 'KUD Sari Subur';
+                const words = t.split(' ');
+                if (words.length <= 1) return t;
+                return <>{words.slice(0, -1).join(' ')}<br className="hidden md:block" /><span className="bg-gradient-to-r from-primary-light via-blue-200 to-accent bg-clip-text text-transparent">{words.slice(-1)}</span></>;
+              })()}
             </h1>
           </div>
           <button onClick={onToggleBenefits} className="md:hidden text-white/50 hover:text-white p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 rounded-lg" aria-label="Toggle info">
@@ -128,32 +130,35 @@ function BrandPanel({ logoUrl, showBenefits, onToggleBenefits }) {
             >
               <div className="pt-3 md:pt-0">
                 <p className="text-white/50 text-xs md:text-sm mt-0 md:mt-4 max-w-xs leading-relaxed hidden md:block">
-                  Koperasi modern untuk pekebun sawit — digital, transparan, dan terpercaya.
+                  {loginConfig?.left_panel?.tagline || 'Koperasi modern untuk pekebun sawit — digital, transparan, dan terpercaya.'}
                 </p>
                 <div className="space-y-2 mt-3 md:mt-6">
-                  {BENEFITS.slice(0, 3).map((b, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: i * 0.08 }}
-                      className="flex items-start gap-2.5 bg-white/5 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-white/5"
-                    >
-                      <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
-                        <svg className="w-3 h-3 md:w-4 md:h-4 text-primary-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d={b.icon} />
-                        </svg>
-                      </div>
-                      <p className="text-white/70 text-[11px] lg:text-xs leading-relaxed">{b.text}</p>
-                    </motion.div>
-                  ))}
+                  {(loginConfig?.left_panel?.features || BENEFITS.slice(0, 3).map(b => b.text)).map((text, i) => {
+                    const b = BENEFITS[i] || BENEFITS[0];
+                    return (
+                      <motion.div
+                        key={i}
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: i * 0.08 }}
+                        className="flex items-start gap-2.5 bg-white/5 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-white/5"
+                      >
+                        <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                          <svg className="w-3 h-3 md:w-4 md:h-4 text-primary-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d={b.icon} />
+                          </svg>
+                        </div>
+                        <p className="text-white/70 text-[11px] lg:text-xs leading-relaxed">{text}</p>
+                      </motion.div>
+                    );
+                  })}
                 </div>
                 <div className="flex items-center gap-4 md:gap-6 mt-4 md:mt-6 pt-4 md:pt-6 border-t border-white/10">
-                  {[
+                  {(loginConfig?.left_panel?.stats || [
                     { label: 'Pekebun', value: '1,250+' },
                     { label: 'Hektar', value: '3,200+' },
                     { label: 'Desa', value: '5' },
-                  ].map((s, i) => (
+                  ]).map((s, i) => (
                     <div key={i} className="text-center flex-1">
                       <p className="text-white font-heading font-bold text-sm md:text-lg">{s.value}</p>
                       <p className="text-white/40 text-[9px] md:text-[10px] uppercase tracking-wider mt-0.5">{s.label}</p>
@@ -205,12 +210,12 @@ function ErrorBanner({ message }) {
   );
 }
 
-function LoginForm({ login, setLogin, loginErrors, loading, onSubmit, onForgotPassword, onBack, showPassword, setShowPassword, rememberMe, setRememberMe }) {
+function LoginForm({ login, setLogin, loginErrors, loading, onSubmit, onForgotPassword, onBack, showPassword, setShowPassword, rememberMe, setRememberMe, loginConfig }) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-0 h-full">
       <div className="mb-3 md:mb-5">
-        <h2 className="font-heading font-bold text-xl md:text-2xl text-foreground">Selamat Datang</h2>
-        <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">Masuk ke akun Anda untuk melanjutkan</p>
+        <h2 className="font-heading font-bold text-xl md:text-2xl text-foreground">{loginConfig?.right_panel?.heading || 'Selamat Datang'}</h2>
+        <p className="text-gray-400 text-xs md:text-sm mt-0.5 md:mt-1">{loginConfig?.right_panel?.subheading || 'Masuk ke akun Anda untuk melanjutkan'}</p>
       </div>
 
       <div className="space-y-3 md:space-y-4">
@@ -287,7 +292,7 @@ function LoginForm({ login, setLogin, loginErrors, loading, onSubmit, onForgotPa
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
           ) : null}
-          {loading ? 'Memproses...' : 'Masuk ke Akun'}
+          {loading ? 'Memproses...' : (loginConfig?.right_panel?.button_text || 'Masuk ke Akun')}
         </button>
         <button type="button" onClick={onBack}
           className="w-full text-center text-xs text-gray-400 hover:text-gray-600 transition-colors cursor-pointer py-1">
@@ -500,9 +505,18 @@ function RegisterForm({ reg, setReg, updateReg, regErrors, regStep, setRegStep, 
   );
 }
 
+const DEFAULT_LOGIN_CONFIG = {
+  left_panel: { title: 'KUD Sari Subur', tagline: 'Koperasi modern untuk pekebun sawit — digital, transparan, dan terpercaya.', features: ['Verifikasi cepat & real-time — dokumen terverifikasi dalam 1-2 hari kerja', 'Pantau lahan & hasil panen — data tersimpan aman, akses kapan saja via HP', 'Informasi harga TBS terkini — update harga per kelas mutu secara real-time'], stats: [{ label: 'Pekebun', value: '1,250+' }, { label: 'Hektar', value: '3,200+' }, { label: 'Desa', value: '5' }] },
+  right_panel: { heading: 'Selamat Datang', subheading: 'Masuk ke akun Anda untuk melanjutkan', button_text: 'Masuk ke Akun' },
+};
+
 export default function AuthPage() {
   const router = useRouter();
   const logoUrl = useLogo();
+  const [loginConfig, setLoginConfig] = useState(null);
+  useEffect(() => {
+    api.pengaturan.getLoginConfig().then(setLoginConfig).catch(() => {});
+  }, []);
   const [tab, setTab] = useState('login');
   const [regStep, setRegStep] = useState(1);
   const [error, setError] = useState('');
@@ -633,7 +647,7 @@ export default function AuthPage() {
         className="relative z-10 w-full max-w-5xl flex flex-col md:flex-row rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-white/10 backdrop-blur-sm"
         style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}
       >
-        <BrandPanel logoUrl={logoUrl} showBenefits={showBenefits} onToggleBenefits={toggleBenefits} />
+        <BrandPanel logoUrl={logoUrl} showBenefits={showBenefits} onToggleBenefits={toggleBenefits} loginConfig={loginConfig} />
 
         <motion.div layout className="md:w-[62%] bg-white/95 backdrop-blur-xl p-4 sm:p-5 md:p-6 lg:p-8 flex flex-col min-h-0">
           <TabNav tab={tab} onSwitch={switchTab} />
@@ -654,6 +668,7 @@ export default function AuthPage() {
                     onBack={() => router.push('/')}
                     showPassword={showPassword} setShowPassword={setShowPassword}
                     rememberMe={rememberMe} setRememberMe={setRememberMe}
+                    loginConfig={loginConfig}
                   />
                 </motion.div>
               ) : (
