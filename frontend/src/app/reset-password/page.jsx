@@ -1,14 +1,19 @@
 'use client';
 
 import { useState, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { api } from '@/lib/api';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 
 function ResetForm() {
   const router = useRouter();
-  const [form, setForm] = useState({ email: '', otp: '', password: '', password_confirmation: '' });
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token') || '';
+  const email = searchParams.get('email') || '';
+
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -19,7 +24,12 @@ function ResetForm() {
     setMessage('');
     setLoading(true);
     try {
-      const res = await api.auth.resetPassword(form);
+      const res = await api.auth.resetPassword({
+        token,
+        email,
+        password,
+        password_confirmation: passwordConfirmation,
+      });
       setMessage(res.message);
       setTimeout(() => router.push('/login'), 2000);
     } catch (err) {
@@ -29,23 +39,36 @@ function ResetForm() {
     }
   };
 
+  if (!token || !email) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-primary/95 to-slate-800 flex items-center justify-center p-6">
+        <div className="w-full max-w-md animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
+            <h1 className="text-2xl font-bold text-foreground mb-4">Link Tidak Valid</h1>
+            <p className="text-gray-500 text-sm mb-6">Link reset password tidak valid atau telah digunakan.</p>
+            <Button onClick={() => router.push('/lupa-password')} className="w-full">Minta Link Baru</Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-primary/95 to-slate-800 flex items-center justify-center p-6">
       <div className="w-full max-w-md animate-fade-in">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-foreground">Reset Password</h1>
-            <p className="text-gray-500 text-sm mt-1">Masukkan kode OTP dan password baru</p>
+            <p className="text-gray-500 text-sm mt-1">Masukkan password baru Anda.</p>
+            <p className="text-gray-400 text-xs mt-1">{email}</p>
           </div>
 
           {error && <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm mb-4">{error}</div>}
           {message && <div className="bg-green-50 text-green-600 p-3 rounded-xl text-sm mb-4">{message}</div>}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} required placeholder="email@domain.com" />
-            <Input label="Kode OTP" value={form.otp} onChange={(e) => setForm({...form, otp: e.target.value.replace(/\D/g, '').slice(0, 6)})} required placeholder="6 digit kode OTP" maxLength={6} inputMode="numeric" />
-            <Input label="Password Baru" type="password" value={form.password} onChange={(e) => setForm({...form, password: e.target.value})} required minLength={8} />
-            <Input label="Konfirmasi Password" type="password" value={form.password_confirmation} onChange={(e) => setForm({...form, password_confirmation: e.target.value})} required />
+            <Input label="Password Baru" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} placeholder="Minimal 8 karakter" />
+            <Input label="Konfirmasi Password" type="password" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} required placeholder="Ulangi password" />
             <Button type="submit" loading={loading} className="w-full">Reset Password</Button>
           </form>
 

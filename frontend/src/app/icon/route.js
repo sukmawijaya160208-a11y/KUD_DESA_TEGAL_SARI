@@ -26,7 +26,7 @@ export async function GET() {
         return new Response(buffer, {
           headers: {
             'Content-Type': contentType,
-            'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+            'Cache-Control': 'public, max-age=300, s-maxage=300',
           },
         });
       }
@@ -37,7 +37,7 @@ export async function GET() {
   return new Response(FALLBACK_SVG, {
     headers: {
       'Content-Type': 'image/svg+xml',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+      'Cache-Control': 'public, max-age=300, s-maxage=300',
     },
   });
 }
