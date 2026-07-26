@@ -18,7 +18,7 @@ export default function AdminKartuPage() {
 
     Promise.all([
       api.admin.settingKud.get().catch(() => null),
-      api.admin.pengaturan.getAll().catch(() => ({})),
+      api.admin.pengaturan.get().catch(() => ({})),
     ]).then(([settingKud, pengaturan]) => {
       setData({
         admin: {
