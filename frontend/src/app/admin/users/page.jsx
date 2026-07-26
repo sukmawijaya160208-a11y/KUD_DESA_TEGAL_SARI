@@ -68,6 +68,47 @@ function exportToExcel(users) {
   XLSX.writeFile(wb, `users_${new Date().toISOString().slice(0, 10)}.xlsx`);
 }
 
+function sanitizeImportData(rawRows) {
+  if (!Array.isArray(rawRows) || rawRows.length === 0) {
+    return { isValid: false, cleanedData: [], errors: ['File Excel kosong atau tidak memiliki baris data.'] };
+  }
+  const cleanedData = [];
+  const errors = [];
+  rawRows.forEach((row, index) => {
+    const rowNum = index + 2;
+    const norm = {};
+    for (const [col, val] of Object.entries(row)) {
+      const key = col.toLowerCase().trim().replace(/[*()]/g, '').replace(/\s+/g, ' ').trim();
+      const raw = String(val ?? '').trim();
+      if (key.includes('nama')) norm.name = raw;
+      else if (key.includes('email')) norm.email = raw.toLowerCase();
+      else if (key.includes('password') || key === 'pass') norm.password = raw;
+      else if (key.includes('role')) norm.role = raw.toLowerCase();
+      else if (key.includes('nik') && !key.includes('kk')) norm.nik = raw;
+      else if (key.includes('kk')) norm.no_kk = raw;
+      else if (key.includes('wa') || key.includes('whatsapp') || key.includes('telepon') || key === 'hp' || key.includes('phone')) norm.no_whatsapp = raw;
+      else if (key.includes('tempat')) norm.tempat_lahir = raw;
+      else if ((key.includes('tanggal') || key.includes('tgl') || key === 'lahir' || key === 'birth') && !key.includes('tempat')) norm.tanggal_lahir = raw;
+      else if (key.includes('alamat') || key.includes('address')) norm.alamat = raw;
+    }
+    const missingFields = [];
+    if (!norm.name) missingFields.push('Nama');
+    if (!norm.email) missingFields.push('Email');
+    if (!norm.password) missingFields.push('Password');
+    if (!norm.role) missingFields.push('Role');
+    if (missingFields.length > 0) {
+      errors.push(`Baris ${rowNum}: Field wajib (${missingFields.join(', ')}) tidak boleh kosong.`);
+    } else {
+      cleanedData.push({
+        name: norm.name, email: norm.email, password: norm.password, role: norm.role,
+        nik: norm.nik || '', no_kk: norm.no_kk || '', no_whatsapp: norm.no_whatsapp || '',
+        tempat_lahir: norm.tempat_lahir || '', tanggal_lahir: norm.tanggal_lahir || '', alamat: norm.alamat || '',
+      });
+    }
+  });
+  return { isValid: errors.length === 0, cleanedData, errors };
+}
+
 export default function AdminUsersPage() {
   const toast = useToast();
   const searchRef = useRef(null);
@@ -359,7 +400,14 @@ export default function AdminUsersPage() {
     setImportSubmitting(true);
     setImportResult(null);
     try {
-      const res = await api.admin.users.importUsers(importData);
+      const { isValid, cleanedData, errors: validationErrors } = sanitizeImportData(importData);
+      if (!isValid) {
+        setImportResult({ created: 0, errors: validationErrors });
+        validationErrors.forEach(e => toast.error(e));
+        setImportSubmitting(false);
+        return;
+      }
+      const res = await api.admin.users.importUsers(cleanedData);
       setImportResult(res);
       if (res.created > 0) {
         toast.success(res.message);
@@ -369,8 +417,14 @@ export default function AdminUsersPage() {
         res.errors.forEach(e => toast.error(e));
       }
     } catch (err) {
-      toast.error(err.message);
-      setImportResult({ created: 0, errors: [err.message] });
+      if (err.status === 422 && err.data?.errors) {
+        const fieldErrors = Object.entries(err.data.errors).map(([, msgs]) => msgs.join(', '));
+        fieldErrors.forEach(msg => toast.error(msg));
+        setImportResult({ created: 0, errors: fieldErrors });
+      } else {
+        toast.error(err.message);
+        setImportResult({ created: 0, errors: [err.message] });
+      }
     }
     setImportSubmitting(false);
   };
@@ -389,19 +443,21 @@ export default function AdminUsersPage() {
   ];
 
   const handleDownloadTemplate = () => {
-    const headers = IMPORT_TEMPLATE.map(t => t.label);
-    const example = {
-      'Nama': 'Budi Santoso',
-      'Email': 'budi@mail.com',
-      'Password': 'password123',
-      'Role (admin/verifikator/pekebun)': 'pekebun',
-      'NIK': '1234567890123456',
-      'No KK': '1234567890123456',
-      'No WhatsApp': '08123456789',
-      'Tempat Lahir': 'Jakarta',
-      'Tanggal Lahir': '1990-01-15',
-      'Alamat': 'Jl. Merdeka No.1',
-    };
+    const headers = IMPORT_TEMPLATE.map(t => t.required ? `${t.label} *` : t.label);
+    const example = {};
+    IMPORT_TEMPLATE.forEach(t => {
+      const label = t.required ? `${t.label} *` : t.label;
+      if (t.key === 'name') example[label] = 'Budi Santoso';
+      else if (t.key === 'email') example[label] = 'budi@mail.com';
+      else if (t.key === 'password') example[label] = 'password123';
+      else if (t.key === 'role') example[label] = 'pekebun';
+      else if (t.key === 'nik') example[label] = '1234567890123456';
+      else if (t.key === 'no_kk') example[label] = '1234567890123456';
+      else if (t.key === 'no_whatsapp') example[label] = '08123456789';
+      else if (t.key === 'tempat_lahir') example[label] = 'Jakarta';
+      else if (t.key === 'tanggal_lahir') example[label] = '1990-01-15';
+      else if (t.key === 'alamat') example[label] = 'Jl. Merdeka No.1';
+    });
     const ws = XLSX.utils.json_to_sheet([example], { header: headers });
     ws['!cols'] = headers.map(h => ({ wch: Math.max(h.length * 2, 18) }));
     const wb = XLSX.utils.book_new();
@@ -425,8 +481,18 @@ export default function AdminUsersPage() {
   function normalizeImportRow(row) {
     const norm = {};
     for (const [col, val] of Object.entries(row)) {
-      const key = columnMapping[col.toLowerCase().trim()];
-      if (key) norm[key] = String(val ?? '').trim();
+      const key = col.toLowerCase().trim().replace(/[*()]/g, '').replace(/\s+/g, ' ').trim();
+      const raw = String(val ?? '').trim();
+      if (key.includes('nama')) norm.name = raw;
+      else if (key.includes('email')) norm.email = raw.toLowerCase();
+      else if (key.includes('password') || key === 'pass') norm.password = raw;
+      else if (key.includes('role')) norm.role = raw.toLowerCase();
+      else if (key.includes('nik') && !key.includes('kk')) norm.nik = raw;
+      else if (key.includes('kk')) norm.no_kk = raw;
+      else if (key.includes('wa') || key.includes('whatsapp') || key.includes('telepon') || key === 'hp' || key.includes('phone')) norm.no_whatsapp = raw;
+      else if (key.includes('tempat')) norm.tempat_lahir = raw;
+      else if ((key.includes('tanggal') || key.includes('tgl') || key === 'lahir' || key === 'birth') && !key.includes('tempat')) norm.tanggal_lahir = raw;
+      else if (key.includes('alamat') || key.includes('address')) norm.alamat = raw;
     }
     return norm;
   }

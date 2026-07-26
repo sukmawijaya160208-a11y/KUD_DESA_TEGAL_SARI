@@ -25,7 +25,7 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 Route::post('/auth/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
 Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 Route::post('/auth/forgot-password', [PasswordResetController::class, 'forgot'])->middleware('throttle:3,1');
-Route::post('/auth/reset-password', [PasswordResetController::class, 'reset'])->middleware('throttle:3,1');
+Route::post('/auth/reset-password', [PasswordResetController::class, 'reset'])->middleware('throttle:5,1');
 
 // Public (no auth needed)
 Route::get('/pengaturan', [AdminController::class, 'pengaturanIndex']);

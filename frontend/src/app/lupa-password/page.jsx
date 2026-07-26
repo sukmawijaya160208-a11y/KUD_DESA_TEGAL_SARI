@@ -9,18 +9,54 @@ import Button from '@/components/ui/Button';
 export default function LupaPasswordPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
     setError('');
-    setToken('');
     setLoading(true);
     try {
-      const res = await api.auth.forgotPassword({ email });
-      setToken(res.token);
+      await api.auth.forgotPassword({ email });
+      setStep(2);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReset = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    setLoading(true);
+    try {
+      const res = await api.auth.resetPassword({
+        email,
+        otp,
+        password,
+        password_confirmation: passwordConfirmation,
+      });
+      setSuccess(res.message);
+      setTimeout(() => router.push('/login'), 2000);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      await api.auth.forgotPassword({ email });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -34,32 +70,29 @@ export default function LupaPasswordPage() {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-foreground">Lupa Password</h1>
-            <p className="text-gray-500 text-sm mt-1">Masukkan email untuk mendapatkan token reset</p>
+            <p className="text-gray-500 text-sm mt-1">
+              {step === 1 ? 'Masukkan email untuk mendapatkan kode OTP' : 'Masukkan kode OTP dan password baru'}
+            </p>
           </div>
 
           {error && <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm mb-4">{error}</div>}
+          {success && <div className="bg-green-50 text-green-600 p-3 rounded-xl text-sm mb-4">{success}</div>}
 
-          {token ? (
-            <div className="space-y-4">
-              <div className="bg-success/10 text-success p-4 rounded-xl text-sm">
-                <p className="font-semibold mb-1">Token berhasil dibuat!</p>
-                <p>Salin token di bawah, lalu reset password Anda.</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground/80 mb-1">Token Reset</label>
-                <div className="flex gap-2">
-                  <input readOnly value={token}
-                    className="flex-1 px-4 py-2.5 rounded-xl border border-border text-sm bg-muted font-mono focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all" />
-                  <button onClick={() => navigator.clipboard.writeText(token)}
-                    className="px-3 py-2 bg-gray-100 rounded-xl text-sm hover:bg-gray-200 transition-all cursor-pointer">Salin</button>
-                </div>
-              </div>
-              <Button className="w-full" onClick={() => router.push(`/reset-password?token=${token}`)}>Lanjut ke Reset Password</Button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+          {step === 1 ? (
+            <form onSubmit={handleSendOtp} className="space-y-4">
               <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="admin@kud.com" />
-              <Button type="submit" loading={loading} className="w-full">Kirim Token Reset</Button>
+              <Button type="submit" loading={loading} className="w-full">Kirim Kode OTP</Button>
+            </form>
+          ) : (
+            <form onSubmit={handleReset} className="space-y-4">
+              <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="email@domain.com" />
+              <Input label="Kode OTP" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} required placeholder="6 digit kode OTP" maxLength={6} inputMode="numeric" />
+              <Input label="Password Baru" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} />
+              <Input label="Konfirmasi Password" type="password" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} required />
+              <Button type="submit" loading={loading} className="w-full">Reset Password</Button>
+              <button type="button" onClick={handleResendOtp} disabled={loading} className="w-full text-center text-sm text-primary font-semibold hover:underline cursor-pointer disabled:opacity-50">
+                Kirim ulang kode OTP
+              </button>
             </form>
           )}
 
