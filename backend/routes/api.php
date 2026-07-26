@@ -100,6 +100,7 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         // Pekebun
         Route::get('/pekebun', [AdminController::class, 'pekebunIndex']);
         Route::post('/pekebun', [AdminController::class, 'pekebunStore']);
+        Route::post('/pekebun/import', [AdminController::class, 'pekebunImport']);
         Route::put('/pekebun/{pekebun}', [AdminController::class, 'pekebunUpdate']);
         Route::delete('/pekebun/{pekebun}', [AdminController::class, 'pekebunDestroy']);
         // Program

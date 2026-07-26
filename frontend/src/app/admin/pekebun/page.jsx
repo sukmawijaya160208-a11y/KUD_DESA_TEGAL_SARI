@@ -15,7 +15,9 @@ import {
   PencilSquareIcon, TrashIcon, PlusIcon, EyeIcon, XMarkIcon,
   MagnifyingGlassIcon, UsersIcon, CheckCircleIcon, ClockIcon,
   PhotoIcon, IdentificationIcon, DevicePhoneMobileIcon, PrinterIcon,
+  DocumentArrowDownIcon,
 } from '@heroicons/react/24/outline';
+import * as XLSX from 'xlsx';
 import { formatDate } from '@/lib/date';
 
 const fadeUp = {
@@ -129,6 +131,12 @@ export default function AdminPekebunPage() {
   const [form, setForm] = useState({ ...FORM_INIT });
   const [submitting, setSubmitting] = useState(false);
   const searchTimer = useRef(null);
+  const [importModal, setImportModal] = useState(false);
+  const [importData, setImportData] = useState(null);
+  const [importFile, setImportFile] = useState(null);
+  const [importSubmitting, setImportSubmitting] = useState(false);
+  const [importResult, setImportResult] = useState(null);
+  const importRef = useRef(null);
 
   const fetchData = useCallback((params = {}) => {
     const p = {};
@@ -276,6 +284,141 @@ export default function AdminPekebunPage() {
     win.document.close();
   }, [data]);
 
+  const IMPORT_TEMPLATE = [
+    { key: 'nama', label: 'Nama', required: true },
+    { key: 'email', label: 'Email', required: true },
+    { key: 'password', label: 'Password', required: true },
+    { key: 'nik', label: 'NIK', required: true },
+    { key: 'no_kk', label: 'No KK', required: false },
+    { key: 'tempat_lahir', label: 'Tempat Lahir', required: false },
+    { key: 'tanggal_lahir', label: 'Tanggal Lahir', required: false },
+    { key: 'no_whatsapp', label: 'No WhatsApp', required: false },
+    { key: 'alamat', label: 'Alamat', required: false },
+    { key: 'status', label: 'Status', required: false },
+  ];
+
+  function sanitizeImportDataPekebun(rawRows) {
+    if (!Array.isArray(rawRows) || rawRows.length === 0) {
+      return { isValid: false, cleanedData: [], errors: ['File Excel kosong atau tidak memiliki baris data.'] };
+    }
+    const cleanedData = [];
+    const errors = [];
+    rawRows.forEach((row, index) => {
+      const rowNum = index + 2;
+      const norm = {};
+      for (const [col, val] of Object.entries(row)) {
+        const key = col.toLowerCase().trim().replace(/[*()]/g, '').replace(/\s+/g, ' ').trim();
+        const raw = String(val ?? '').trim();
+        if (key.includes('nama')) norm.nama = raw;
+        else if (key.includes('email')) norm.email = raw.toLowerCase();
+        else if (key.includes('password') || key === 'pass') norm.password = raw;
+        else if (key.includes('nik') && !key.includes('kk')) norm.nik = raw;
+        else if (key.includes('kk')) norm.no_kk = raw;
+        else if (key.includes('wa') || key.includes('whatsapp') || key.includes('telepon') || key === 'hp' || key.includes('phone')) norm.no_whatsapp = raw;
+        else if (key.includes('tempat')) norm.tempat_lahir = raw;
+        else if ((key.includes('tanggal') || key.includes('tgl') || key === 'lahir' || key === 'birth') && !key.includes('tempat')) norm.tanggal_lahir = raw;
+        else if (key.includes('alamat') || key.includes('address')) norm.alamat = raw;
+        else if (key.includes('status')) norm.status = raw.toLowerCase();
+      }
+      const missingFields = [];
+      if (!norm.nama) missingFields.push('Nama');
+      if (!norm.email) missingFields.push('Email');
+      if (!norm.password) missingFields.push('Password');
+      if (!norm.nik) missingFields.push('NIK');
+      if (norm.nik && norm.nik.length !== 16) errors.push(`Baris ${rowNum}: NIK harus 16 digit.`);
+      if (missingFields.length > 0) {
+        errors.push(`Baris ${rowNum}: Field wajib (${missingFields.join(', ')}) tidak boleh kosong.`);
+      } else if (!norm.nik || norm.nik.length === 16) {
+        cleanedData.push({
+          nama: norm.nama, email: norm.email, password: norm.password, nik: norm.nik,
+          no_kk: norm.no_kk || '', tempat_lahir: norm.tempat_lahir || '',
+          tanggal_lahir: norm.tanggal_lahir || '', no_whatsapp: norm.no_whatsapp || '',
+          alamat: norm.alamat || '', status: norm.status || '',
+        });
+      }
+    });
+    return { isValid: errors.length === 0, cleanedData, errors };
+  }
+
+  const handleImportFile = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setImportFile(file);
+    setImportResult(null);
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const wb = XLSX.read(ev.target.result, { type: 'array' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws);
+        if (!rows.length) { toast.error('File Excel kosong'); return; }
+        setImportData(rows);
+      } catch (err) {
+        toast.error('Gagal membaca file: ' + err.message);
+        setImportData(null);
+      }
+    };
+    reader.onerror = () => { toast.error('Gagal membaca file'); };
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handleImportSubmit = async () => {
+    if (!importData || !importData.length) return;
+    setImportSubmitting(true);
+    setImportResult(null);
+    try {
+      const { isValid, cleanedData, errors: validationErrors } = sanitizeImportDataPekebun(importData);
+      if (!isValid) {
+        setImportResult({ created: 0, errors: validationErrors });
+        validationErrors.forEach(e => toast.error(e));
+        setImportSubmitting(false);
+        return;
+      }
+      const res = await api.admin.pekebun.import(cleanedData);
+      setImportResult(res);
+      if (res.created > 0) {
+        toast.success(res.message);
+        fetchData();
+      }
+      if (res.errors && res.errors.length) {
+        res.errors.forEach(e => toast.error(e));
+      }
+    } catch (err) {
+      if (err.status === 422 && err.data?.errors) {
+        const fieldErrors = Object.entries(err.data.errors).map(([, msgs]) => msgs.join(', '));
+        fieldErrors.forEach(msg => toast.error(msg));
+        setImportResult({ created: 0, errors: fieldErrors });
+      } else {
+        toast.error(err.message);
+        setImportResult({ created: 0, errors: [err.message] });
+      }
+    }
+    setImportSubmitting(false);
+  };
+
+  const handleDownloadTemplate = () => {
+    const headers = IMPORT_TEMPLATE.map(t => t.required ? `${t.label} *` : t.label);
+    const example = {};
+    IMPORT_TEMPLATE.forEach(t => {
+      const label = t.required ? `${t.label} *` : t.label;
+      if (t.key === 'nama') example[label] = 'Budi Santoso';
+      else if (t.key === 'email') example[label] = 'budi@mail.com';
+      else if (t.key === 'password') example[label] = 'password123';
+      else if (t.key === 'nik') example[label] = '1234567890123456';
+      else if (t.key === 'no_kk') example[label] = '1234567890123456';
+      else if (t.key === 'tempat_lahir') example[label] = 'Jakarta';
+      else if (t.key === 'tanggal_lahir') example[label] = '1990-01-15';
+      else if (t.key === 'no_whatsapp') example[label] = '08123456789';
+      else if (t.key === 'alamat') example[label] = 'Jl. Merdeka No.1';
+      else if (t.key === 'status') example[label] = 'pending';
+    });
+    const ws = XLSX.utils.json_to_sheet([example], { header: headers });
+    ws['!cols'] = headers.map(h => ({ wch: Math.max(h.length * 2, 18) }));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Template');
+    XLSX.writeFile(wb, 'Template_Import_Pekebun_KUD.xlsx');
+  };
+
   if (loading) {
     return (
       <div className="space-y-4">
@@ -308,6 +451,7 @@ export default function AdminPekebunPage() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={handlePrintAll} className="mr-2"><PrinterIcon className="w-4 h-4" /> Cetak Laporan</Button>
+          <Button variant="outline" onClick={() => setImportModal(true)}><DocumentArrowDownIcon className="w-4 h-4" /> Import Excel</Button>
           <Button onClick={openCreate}><PlusIcon className="w-4 h-4" /> Tambah Pekebun</Button>
         </div>
       </motion.div>
@@ -531,6 +675,145 @@ export default function AdminPekebunPage() {
           <Button variant="secondary" onClick={() => setDeleteModal(null)}>Batal</Button>
           <Button variant="danger" onClick={handleDelete}>Hapus</Button>
         </div>
+      </Modal>
+
+      {/* Import Excel Modal */}
+      <Modal open={importModal} onClose={() => { if (!importSubmitting) setImportModal(false); }} title="Import Excel Pekebun" maxWidth="max-w-3xl">
+        {!importData ? (
+          <div className="space-y-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-700">
+              <p className="font-medium mb-1">Petunjuk:</p>
+              <ul className="list-disc list-inside space-y-0.5 text-blue-600">
+                <li>Siapkan file Excel (.xlsx) dengan kolom sesuai template di bawah</li>
+                <li>Kolom <strong>Nama, Email, Password, NIK</strong> wajib diisi</li>
+                <li>NIK harus 16 digit, Email akan digunakan sebagai akun login</li>
+                <li>Data pekebun akan otomatis dibuat dengan status <strong>Pending</strong></li>
+              </ul>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs font-semibold text-gray-500">Template Kolom</p>
+              <button onClick={handleDownloadTemplate} className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold rounded-lg transition-all cursor-pointer">
+                <DocumentArrowDownIcon className="w-3.5 h-3.5" />
+                Download Template Excel
+              </button>
+            </div>
+            <div className="border border-border rounded-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/30">
+                      {IMPORT_TEMPLATE.map(t => (
+                        <th key={t.key} className="text-left py-2 px-3 font-semibold text-gray-500">
+                          {t.label} {t.required && <span className="text-red-500">*</span>}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-border/50">
+                      {IMPORT_TEMPLATE.map(t => (
+                        <td key={t.key} className="py-2 px-3 text-gray-400 italic">
+                          {t.key === 'nama' ? 'Budi Santoso' : t.key === 'email' ? 'budi@mail.com' : t.key === 'password' ? 'min8karakter' : t.key === 'nik' ? '1234567890123456' : t.key === 'no_kk' ? '1234567890123456' : t.key === 'tempat_lahir' ? 'Jakarta' : t.key === 'tanggal_lahir' ? '1990-01-15' : t.key === 'no_whatsapp' ? '08123456789' : t.key === 'alamat' ? 'Jl. Merdeka No.1' : t.key === 'status' ? 'pending' : ''}
+                        </td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-4 border-2 border-dashed border-border rounded-xl hover:border-primary/50 transition-colors cursor-pointer" onClick={() => importRef.current?.click()}>
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                <DocumentArrowDownIcon className="w-5 h-5 text-primary rotate-180" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">Klik untuk pilih file Excel</p>
+                <p className="text-xs text-gray-400">Format .xlsx, maksimal 5MB</p>
+              </div>
+              {importFile && (
+                <span className="text-xs text-primary font-medium truncate max-w-[200px]">{importFile.name}</span>
+              )}
+            </div>
+            <input ref={importRef} type="file" accept=".xlsx,.xls" onChange={handleImportFile} className="hidden" />
+            <div className="flex gap-2 justify-end pt-2">
+              <Button variant="ghost" onClick={() => setImportModal(false)}>Batal</Button>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-600">
+                Ditemukan <strong>{importData.length}</strong> baris data
+                {importFile && <span className="text-gray-400 ml-1">({importFile.name})</span>}
+              </p>
+              <button onClick={() => { setImportData(null); setImportFile(null); }} className="text-xs text-primary hover:underline cursor-pointer">Pilih file lain</button>
+            </div>
+
+            {importResult && (
+              <div className={`rounded-xl p-4 text-sm ${importResult.created > 0 ? 'bg-emerald-50 border border-emerald-200 text-emerald-700' : 'bg-red-50 border border-red-200 text-red-700'}`}>
+                <p className="font-medium">{importResult.message}</p>
+                {importResult.errors?.length > 0 && (
+                  <ul className="mt-2 space-y-0.5 text-xs max-h-32 overflow-y-auto">
+                    {importResult.errors.map((e, i) => <li key={i} className="text-red-600">{e}</li>)}
+                  </ul>
+                )}
+              </div>
+            )}
+
+            <div className="border border-border rounded-xl overflow-hidden max-h-80 overflow-y-auto">
+              <table className="w-full text-xs">
+                <thead className="sticky top-0 bg-surface z-10">
+                  <tr className="border-b border-border">
+                    <th className="text-left py-2 px-3 font-semibold text-gray-500 w-8">#</th>
+                    {IMPORT_TEMPLATE.map(t => (
+                      <th key={t.key} className="text-left py-2 px-3 font-semibold text-gray-500 whitespace-nowrap">
+                        {t.label} {t.required && <span className="text-red-500">*</span>}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {importData.map((row, i) => {
+                    const nr = {};
+                    for (const [col, val] of Object.entries(row)) {
+                      const key = col.toLowerCase().trim().replace(/[*()]/g, '').replace(/\s+/g, ' ').trim();
+                      const raw = String(val ?? '').trim();
+                      if (key.includes('nama')) nr.nama = raw;
+                      else if (key.includes('email')) nr.email = raw.toLowerCase();
+                      else if (key.includes('password') || key === 'pass') nr.password = raw;
+                      else if (key.includes('nik') && !key.includes('kk')) nr.nik = raw;
+                      else if (key.includes('kk')) nr.no_kk = raw;
+                      else if (key.includes('wa') || key.includes('whatsapp') || key.includes('telepon') || key === 'hp' || key.includes('phone')) nr.no_whatsapp = raw;
+                      else if (key.includes('tempat')) nr.tempat_lahir = raw;
+                      else if ((key.includes('tanggal') || key.includes('tgl') || key === 'lahir' || key === 'birth') && !key.includes('tempat')) nr.tanggal_lahir = raw;
+                      else if (key.includes('alamat') || key.includes('address')) nr.alamat = raw;
+                      else if (key.includes('status')) nr.status = raw.toLowerCase();
+                    }
+                    const missing = IMPORT_TEMPLATE.filter(t => t.required && !nr[t.key]);
+                    return (
+                      <tr key={i} className={`border-b border-border/50 ${missing.length ? 'bg-red-50' : 'hover:bg-muted/50'}`}>
+                        <td className="py-2 px-3 text-gray-400">{i + 1}</td>
+                        {IMPORT_TEMPLATE.map(t => (
+                          <td key={t.key} className="py-2 px-3 text-gray-600 max-w-[150px] truncate" title={nr[t.key] || ''}>
+                            {nr[t.key] || <span className="text-red-300 italic">kosong</span>}
+                          </td>
+                        ))}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="flex gap-2 justify-end pt-2">
+              <Button variant="ghost" onClick={() => setImportModal(false)} disabled={importSubmitting}>Tutup</Button>
+              {!importResult && (
+                <Button onClick={handleImportSubmit} loading={importSubmitting}>
+                  Import {importData.length} Pekebun
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
       </Modal>
 
       {/* Fullscreen Image Preview */}

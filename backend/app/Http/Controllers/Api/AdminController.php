@@ -530,6 +530,78 @@ class AdminController extends Controller
         ]);
     }
 
+    public function pekebunImport(Request $request)
+    {
+        $request->validate([
+            'pekebuns' => 'required|array|min:1',
+            'pekebuns.*.nama' => 'required|string|max:255',
+            'pekebuns.*.email' => 'required|string|email|max:255',
+            'pekebuns.*.password' => 'required|string|min:8',
+            'pekebuns.*.nik' => 'required|string|size:16',
+        ]);
+
+        $created = 0;
+        $errors = [];
+
+        DB::beginTransaction();
+        try {
+            foreach ($request->pekebuns as $i => $item) {
+                $row = $i + 2;
+                try {
+                    if (User::where('email', $item['email'])->exists()) {
+                        $errors[] = "Baris {$row}: Email '{$item['email']}' sudah terdaftar";
+                        continue;
+                    }
+
+                    if (Pekebun::where('nik', $item['nik'])->exists()) {
+                        $errors[] = "Baris {$row}: NIK '{$item['nik']}' sudah terdaftar";
+                        continue;
+                    }
+
+                    $user = User::create([
+                        'name' => strip_tags($item['nama']),
+                        'email' => $item['email'],
+                        'password' => Hash::make($item['password']),
+                        'role' => 'pekebun',
+                    ]);
+
+                    $pekebunData = [
+                        'nama' => strip_tags($item['nama']),
+                        'nik' => $item['nik'],
+                        'no_kk' => $item['no_kk'] ?? '',
+                        'no_whatsapp' => $item['no_whatsapp'] ?? '',
+                        'tempat_lahir' => $item['tempat_lahir'] ?? '',
+                        'tanggal_lahir' => $item['tanggal_lahir'] ?? null,
+                        'alamat' => $item['alamat'] ?? '',
+                        'status' => in_array($item['status'] ?? '', ['verified', 'rejected']) ? $item['status'] : 'pending',
+                    ];
+                    $user->pekebun()->create($pekebunData);
+
+                    $created++;
+                } catch (\Exception $e) {
+                    $errors[] = "Baris {$row}: ".$e->getMessage();
+                }
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => 'Gagal mengimpor: '.$e->getMessage()], 500);
+        }
+
+        $msg = "Berhasil mengimpor {$created} pekebun";
+        if (count($errors) > 0) {
+            $msg .= ' dengan '.count($errors).' kesalahan';
+        }
+
+        return response()->json([
+            'message' => $msg,
+            'created' => $created,
+            'errors' => $errors,
+        ]);
+    }
+
     // === PENDAFTARAN PROGRAM ===
     public function pendaftaranIndex(Request $request)
     {

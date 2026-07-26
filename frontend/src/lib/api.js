@@ -147,6 +147,7 @@ export const api = {
       create: (data) => request('/admin/pekebun', { method: 'POST', body: JSON.stringify(data) }),
       update: (id, data) => request(`/admin/pekebun/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
       delete: (id) => request(`/admin/pekebun/${id}`, { method: 'DELETE' }),
+      import: (data) => request('/admin/pekebun/import', { method: 'POST', body: JSON.stringify({ pekebuns: data }) }),
     },
     program: {
       list: (params) => {
