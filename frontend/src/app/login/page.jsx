@@ -590,9 +590,39 @@ export default function AuthPage() {
     } catch (err) { setError(err.response?.data?.message || err.message || 'Login gagal'); setLoading(false); }
   };
 
+  const translateFieldError = (field, rawMsg) => {
+    if (rawMsg.includes('unique') || rawMsg.includes('already taken')) {
+      if (field === 'nik') return 'NIK ini sudah terdaftar di sistem.';
+      if (field === 'email') return 'Email ini sudah terdaftar.';
+      if (field === 'phone') return 'Nomor HP ini sudah terdaftar.';
+      if (field === 'no_whatsapp') return 'No. WhatsApp ini sudah terdaftar.';
+    }
+    if (rawMsg.includes('required')) {
+      if (field === 'nik') return 'NIK wajib diisi.';
+      if (field === 'nama') return 'Nama pekebun wajib diisi.';
+      if (field === 'no_kk') return 'No. KK wajib diisi.';
+      if (field === 'tempat_lahir') return 'Tempat lahir wajib diisi.';
+      if (field === 'tanggal_lahir') return 'Tanggal lahir wajib diisi.';
+      if (field === 'no_whatsapp') return 'No. WhatsApp wajib diisi.';
+      if (field === 'alamat') return 'Alamat wajib diisi.';
+      if (field === 'name') return 'Nama lengkap wajib diisi.';
+      if (field === 'email') return 'Email wajib diisi.';
+      if (field === 'phone') return 'Nomor HP wajib diisi.';
+    }
+    if (rawMsg.includes('size') || rawMsg.includes('16')) {
+      if (field === 'nik') return 'NIK harus 16 digit angka.';
+    }
+    if (rawMsg.includes('confirmed')) return 'Konfirmasi password tidak cocok.';
+    if (rawMsg.includes('min')) return 'Password minimal 8 karakter.';
+    if (rawMsg.includes('date')) return 'Tanggal lahir tidak valid.';
+    if (rawMsg.includes('email')) return 'Format email tidak valid.';
+    return rawMsg;
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
+    setRegErrors({});
     const errs = {};
     if (!reg.name.trim()) errs.name = 'Nama harus diisi';
     if (regMethod === 'email') { if (!validateEmail(reg.email)) errs.email = 'Email tidak valid'; }
@@ -617,7 +647,27 @@ export default function AuthPage() {
       fireConfetti();
       await new Promise((r) => setTimeout(r, 600));
       router.push('/pekebun');
-    } catch (err) { setError(err.response?.data?.message || err.message || 'Registrasi gagal'); setLoading(false); }
+    } catch (err) {
+      if (err.status === 422 && err.data?.errors) {
+        const fieldErrors = { ...errs };
+        let hasServerField = false;
+        Object.entries(err.data.errors).forEach(([field, messages]) => {
+          const raw = messages[0] || '';
+          const translated = translateFieldError(field, raw);
+          fieldErrors[field] = translated;
+          if (raw.includes('unique') || raw.includes('already taken')) hasServerField = true;
+        });
+        setRegErrors(fieldErrors);
+        if (hasServerField) {
+          setError('Data sudah terdaftar. Silakan gunakan data lain.');
+        } else {
+          setError('Data tidak valid. Silakan periksa kembali.');
+        }
+      } else {
+        setError(err.message || 'Registrasi gagal');
+      }
+      setLoading(false);
+    }
   };
 
   const updateReg = useCallback((key) => (e) => setReg((prev) => ({ ...prev, [key]: e.target.value })), []);
