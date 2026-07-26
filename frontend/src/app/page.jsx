@@ -1237,7 +1237,10 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
-            <p>&copy; {new Date().getFullYear()} KUD Desa Sari Subur. Hak Cipta Dilindungi.</p>
+            <div className="flex items-center gap-3">
+              <img src="/images/qr-link-kud.jpg" alt="Scan QR" className="w-10 h-10 rounded-lg border border-white/10" />
+              <p>&copy; {new Date().getFullYear()} KUD Desa Sari Subur. Hak Cipta Dilindungi.</p>
+            </div>
             <div className="flex items-center gap-4">
               <a href="/syarat-ketentuan" className="hover:text-white transition-colors">Syarat & Ketentuan</a>
               <a href="/kebijakan-privasi" className="hover:text-white transition-colors">Kebijakan Privasi</a>
