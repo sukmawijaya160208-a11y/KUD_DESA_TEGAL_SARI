@@ -25,19 +25,22 @@ import {
   SparklesIcon, ClipboardDocumentListIcon, BuildingOffice2Icon
 } from '@heroicons/react/24/outline';
 
+const easeSmooth = [0.16, 1, 0.3, 1];
+const easeSpring = { type: 'spring', stiffness: 260, damping: 28 };
+
 const containerVariants = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.06 } },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeSmooth } },
 };
 
 const scaleIn = {
   hidden: { opacity: 0, scale: 0.9 },
-  show: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
+  show: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: easeSmooth } },
 };
 
 const PalmSvg = () => (
@@ -143,7 +146,7 @@ function Counter({ end, suffix, label, duration = 2000, prefix }) {
     return () => observer.disconnect();
   }, [end, duration]);
   return (
-    <div ref={ref} className="text-center">
+    <div ref={ref} className="text-center transform-gpu">
       <div className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading text-primary">{prefix}{count.toLocaleString()}{suffix}</div>
       <div className="mt-2 text-sm text-muted-foreground">{label}</div>
     </div>
@@ -454,12 +457,12 @@ export default function Home() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.4),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(6,182,212,0.3),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(5,150,105,0.15),transparent_70%)]" />
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl animate-pulse animate-delay-700" />
-          <div className="absolute top-1/3 right-1/3 w-48 h-48 bg-green-400/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
-          <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-cyan-400/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl animate-pulse transform-gpu" />
+          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl animate-pulse animate-delay-700 transform-gpu" />
+          <div className="absolute top-1/3 right-1/3 w-48 h-48 bg-green-400/5 rounded-full blur-3xl animate-pulse transform-gpu" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-cyan-400/5 rounded-full blur-3xl transform-gpu animate-pulse" style={{ animationDelay: '2s' }} />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-14 pb-6 md:pt-24 md:pb-16">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16 pb-8 md:pt-28 md:pb-20">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <motion.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="inline-block px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-3 sm:mb-6">
               {heroData?.meta_data?.sub_judul || 'Koperasi Unit Desa Tegal Sari'}
@@ -516,7 +519,7 @@ export default function Home() {
 
 
 {/* ===== PROGRAM UNGGULAN ===== */}
-      <section id="program" className="py-10 md:py-12 bg-white scroll-mt-16 md:scroll-mt-20">
+      <section id="program" className="py-12 md:py-20 bg-white scroll-mt-16 md:scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Program" title="Program KUD" subtitle="Berbagai program dirancang khusus untuk meningkatkan kesejahteraan dan produktivitas petani." />
           {loadingPrograms ? (
@@ -901,8 +904,8 @@ export default function Home() {
       <section id="testimoni" className="py-10 md:py-12 bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 relative overflow-hidden scroll-mt-16 md:scroll-mt-20">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.15),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(6,182,212,0.1),transparent_50%)]" />
-          <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-emerald-400/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 left-1/4 w-48 h-48 bg-teal-400/5 rounded-full blur-3xl" />
+          <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-emerald-400/5 rounded-full blur-3xl transform-gpu" />
+          <div className="absolute bottom-1/4 left-1/4 w-48 h-48 bg-teal-400/5 rounded-full blur-3xl transform-gpu" />
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader badge="Testimoni" title="Apa Kata Anggota?" subtitle="Pengalaman nyata dari para anggota yang telah merasakan manfaat bergabung dengan KUD." light />
           <div className="relative max-w-4xl mx-auto">
@@ -1192,7 +1195,7 @@ export default function Home() {
 
       {/* ===== FOOTER ===== */}
       <footer className="bg-foreground text-white/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
             <div>
               <div className="flex items-center gap-2 mb-4">
@@ -1242,6 +1245,20 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* ===== FLOATING REFRESH ===== */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.5 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9, rotate: 180 }}
+        onClick={() => router.refresh()}
+        className="fixed bottom-6 left-4 md:left-6 z-40 w-11 h-11 rounded-full bg-white/90 backdrop-blur-md text-emerald-700 shadow-lg shadow-black/10 hover:shadow-xl hover:bg-white transition-all flex items-center justify-center border border-emerald-200/50"
+        title="Muat ulang halaman"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      </motion.button>
 
       {/* ===== BACK TO TOP ===== */}
       <AnimatePresence>
