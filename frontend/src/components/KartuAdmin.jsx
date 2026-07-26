@@ -243,7 +243,6 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
       : '<div style="width:48px;height:48px;border-radius:4px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:10pt;font-weight:800;color:rgba(255,255,255,0.5);">KUD</div>';
     const fotoHtml = foto ? `<img src="${foto}" alt="" style="width:${fc('foto_admin', 'width') || 46}px;height:${fc('foto_admin', 'height') || 60}px;object-fit:cover;border-radius:3px;border:2px solid rgba(255,255,255,0.5);" />`
       : `<div style="width:46px;height:60px;border-radius:3px;border:2px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:8pt;font-weight:700;color:rgba(255,255,255,0.4);">${initial}</div>`;
-    const ttdHtml = ttdUrl ? `<img src="${ttdUrl}" alt="TTD" style="height:26px;width:auto;object-fit:contain;" />` : '';
     const stempelHtml = stempelUrl ? `<img src="${stempelUrl}" alt="Stempel" style="height:44px;width:auto;object-fit:contain;margin-right:4px;mix-blend-mode:multiply;" />` : '';
     const aturanHtml = aturan.map((a) => `<li>${a}</li>`).join('');
 
@@ -282,7 +281,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
           <div style="text-align:right;font-size:${bc('kota_tanggal', 'fontSize') || 7}px;color:${bc('kota_tanggal', 'color') || '#64748b'};">
             ${b('kota_tanggal').show !== false ? `<div>${kotaTerbit}, ${terbit}</div>` : ''}
             ${b('jabatan_ketua').show !== false ? `<div style="font-weight:600;font-size:${bc('jabatan_ketua', 'fontSize') || 8}px;color:${bc('jabatan_ketua', 'color') || '#475569'};">${ketuaJabatan}</div>` : ''}
-            ${b('ttd_stempel').show !== false ? `<div style="display:flex;align-items:center;justify-content:flex-end;gap:2px;min-height:48px;">${stempelHtml}${ttdHtml}<img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" style="width:28px;height:28px;border-radius:2px;border:1px solid #e2e8f0;" /></div>` : ''}
+            ${b('ttd_stempel').show !== false ? `<div style="display:flex;align-items:center;justify-content:flex-end;gap:2px;min-height:48px;">${stempelHtml}<img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" style="width:36px;height:36px;border-radius:2px;border:1px solid #e2e8f0;" /></div>` : ''}
             ${b('nama_ketua').show !== false ? `<div style="font-weight:900;color:#0f172a;font-size:${bc('nama_ketua', 'fontSize') || 8}px;text-transform:uppercase;">${ketuaNama}</div>` : ''}
           </div>
         </div>
@@ -299,7 +298,6 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
       : '<div style="width:48px;height:48px;border-radius:2mm;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:10pt;font-weight:800;color:rgba(255,255,255,0.5);">KUD</div>';
     const fotoHtml = foto ? `<img src="${foto}" alt="" style="width:${fc('foto_admin', 'width') || 46}px;height:${fc('foto_admin', 'height') || 60}px;object-fit:cover;border-radius:1.5mm;border:2px solid rgba(255,255,255,0.5);" />`
       : `<div style="width:46px;height:60px;border-radius:1.5mm;border:2px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:8pt;font-weight:700;color:rgba(255,255,255,0.4);">${initial}</div>`;
-    const ttdHtml = ttdUrl ? `<img src="${ttdUrl}" alt="TTD" style="height:26px;width:auto;object-fit:contain;" />` : '';
     const stempelHtml = stempelUrl ? `<img src="${stempelUrl}" alt="Stempel" style="height:44px;width:auto;object-fit:contain;margin-right:4px;mix-blend-mode:multiply;" />` : '';
     const aturanHtml = aturan.map((a) => `<li>${a}</li>`).join('');
     const fontLinks = usedFonts.map((f) => `https://fonts.googleapis.com/css2?family=${f.replace(/ /g, '+')}:wght@300;400;500;600;700;800;900&display=swap`).join('\n');
@@ -317,13 +315,13 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
     padding: 8mm 0; gap: 4mm;
   }
   .page {
-    width: 90mm; height: 55mm;
-    position: relative; overflow: hidden;
+    width: 88mm; min-height: 56mm; height: auto;
+    position: relative;
     flex-shrink: 0;
   }
   .front { display: flex; }
   .front-left { width: ${leftPanelPct}%; padding: 2.5mm 2mm; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
-  .front-right { width: ${100 - leftPanelPct}%; background: white; padding: 2mm 2.5mm; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+  .front-right { width: ${100 - leftPanelPct}%; background: white; padding: 2mm 2.5mm; display: flex; flex-direction: column; position: relative; }
   .back { display: flex; flex-direction: column; height: 100%; }
   .back-header { padding: 1.2mm 3mm; text-align: center; }
   .back-body { flex: 1; padding: 1.5mm 2.5mm; display: flex; flex-direction: column; justify-content: space-between; }
@@ -371,7 +369,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
         <div style="text-align:right;font-size:${bc('kota_tanggal', 'fontSize') || 7}pt;color:${bc('kota_tanggal', 'color') || '#64748b'};">
           ${b('kota_tanggal').show !== false ? `<div>${kotaTerbit}, ${terbit}</div>` : ''}
           ${b('jabatan_ketua').show !== false ? `<div style="font-weight:${bc('jabatan_ketua', 'fontWeight') || 'semibold'};color:${bc('jabatan_ketua', 'color') || '#475569'};font-size:${bc('jabatan_ketua', 'fontSize') || 8}pt;">${ketuaJabatan}</div>` : ''}
-          ${b('ttd_stempel').show !== false ? `<div class="ttd-stempel-wrap">${stempelHtml}${ttdHtml}<img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" style="width:28px;height:28px;border-radius:2px;border:1px solid #e2e8f0;" /></div>` : ''}
+          ${b('ttd_stempel').show !== false ? `<div class="ttd-stempel-wrap">${stempelHtml}<img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" style="width:36px;height:36px;border-radius:2px;border:1px solid #e2e8f0;" /></div>` : ''}
           ${b('nama_ketua').show !== false ? `<div style="font-weight:${bc('nama_ketua', 'fontWeight') || 'black'};color:${bc('nama_ketua', 'color') || '#0f172a'};font-size:${bc('nama_ketua', 'fontSize') || 8}pt;text-transform:uppercase;">${ketuaNama}</div>` : ''}
         </div>
       </div>
@@ -659,8 +657,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
               {b('ttd_stempel').show !== false && (
                 <div className="flex items-center justify-end gap-0.5 my-0.5 min-h-[48px]">
                   {stempelUrl && <img src={stempelUrl} alt="" className="object-contain mix-blend-multiply" style={{ height: 44, width: 'auto' }} />}
-                  {ttdUrl && <img src={ttdUrl} alt="" className="object-contain" style={{ height: 26, width: 'auto' }} />}
-                  <img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" className="rounded border border-slate-200" style={{ width: 28, height: 28 }} />
+                  <img src="/images/qr-ttd-ketua.jpg" alt="Verifikasi" className="rounded border border-slate-200" style={{ width: 36, height: 36 }} />
                 </div>
               )}
               {b('nama_ketua').show !== false && (
@@ -715,7 +712,7 @@ export default function KartuAdmin({ data, width = 360, showActions = true, onCl
           </div>
         </div>
         <div className="text-center mt-3">
-          <p className="text-[10px] text-gray-400">Ukuran: 90mm × 55mm &bull; Cetak: sisi depan &bull; sisi belakang (2 halaman)</p>
+          <p className="text-[10px] text-gray-400">Ukuran: 88mm × 56mm &bull; Cetak: sisi depan &bull; sisi belakang (2 halaman)</p>
         </div>
       </div>
     </div>

@@ -19,6 +19,7 @@ const FIELD_LABELS = {
   pembukaan: 'Teks Pembukaan',
   nama_pekebun: 'Nama Pekebun',
   grid_data: 'Grid Data (NIK, No, TTL, Status)',
+  hak_fasilitas: 'Hak & Fasilitas Anggota',
   legal_text: 'Teks Legalitas Hak',
   tanggal_terbit: 'Tanggal Terbit',
   ttd_ketua: 'TTD Ketua',

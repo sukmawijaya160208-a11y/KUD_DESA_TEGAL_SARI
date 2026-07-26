@@ -138,12 +138,12 @@ function SertifikatContent({ data, config, width }) {
         boxSizing: 'border-box',
       }}>
         {/* ===== HEADER ===== */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: s(10), flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: s(10), flexShrink: 0 }}>
           {f.logo_kud && f.logo_kud.show !== false && logoUrl && (
             <img src={logoUrl} alt="Logo KUD"
               style={{ width: s(f.logo_kud.width || 70), height: s(f.logo_kud.width || 70), objectFit: 'contain', flexShrink: 0, borderRadius: '4px' }} />
           )}
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', flex: 1 }}>
             {f.nama_kud && f.nama_kud.show !== false && (
               <div style={{
                 fontFamily: f.nama_kud?.fontFamily || 'Inter',
@@ -168,6 +168,8 @@ function SertifikatContent({ data, config, width }) {
               </div>
             )}
           </div>
+          <img src="/images/qr-link-kud.jpg" alt="QR KUD"
+            style={{ width: s(48), height: s(48), borderRadius: s(2), border: `1px solid ${isClassic ? '#d4a853' : '#e2e8f0'}`, flexShrink: 0 }} />
         </div>
 
         {/* Divider */}
@@ -322,23 +324,19 @@ function SertifikatContent({ data, config, width }) {
           borderTop: `1px solid ${isClassic ? '#d4a853' : '#e2e8f0'}`,
           paddingTop: s(4),
         }}>
-          {/* Left: Date + QR LINK */}
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: s(6) }}>
-            <div>
-              {f.tanggal_terbit && f.tanggal_terbit.show !== false && (
-                <div style={{
-                  fontSize: s(f.tanggal_terbit.fontSize || 9),
-                  color: f.tanggal_terbit.color || '#64748b',
-                  fontStyle: 'italic',
-                  lineHeight: 1.6,
-                }}>
-                  <div>Diterbitkan di: <span style={{ fontWeight: 600, color: '#334155' }}>{kud.kartu_kota_terbit || 'Kota'}</span></div>
-                  <div>Pada Tanggal: <span style={{ fontWeight: 600, color: '#334155' }}>{tanggalTerbit}</span></div>
-                </div>
-              )}
-            </div>
-            <img src="/images/qr-link-kud.jpg" alt="QR KUD"
-              style={{ width: s(36), height: s(36), borderRadius: s(2), border: `1px solid ${isClassic ? '#d4a853' : '#e2e8f0'}` }} />
+          {/* Left: Date */}
+          <div>
+            {f.tanggal_terbit && f.tanggal_terbit.show !== false && (
+              <div style={{
+                fontSize: s(f.tanggal_terbit.fontSize || 9),
+                color: f.tanggal_terbit.color || '#64748b',
+                fontStyle: 'italic',
+                lineHeight: 1.6,
+              }}>
+                <div>Diterbitkan di: <span style={{ fontWeight: 600, color: '#334155' }}>{kud.kartu_kota_terbit || 'Kota'}</span></div>
+                <div>Pada Tanggal: <span style={{ fontWeight: 600, color: '#334155' }}>{tanggalTerbit}</span></div>
+              </div>
+            )}
           </div>
 
           {/* Right: Signature + Stamp */}

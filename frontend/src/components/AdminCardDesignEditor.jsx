@@ -109,6 +109,23 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
   const [backBgColor, setBackBgColor] = useState(existingConfig.back?.background?.color1 || DEFAULT_BACK_BG);
   const [backBgColor2, setBackBgColor2] = useState(existingConfig.back?.background?.color2 || DEFAULT_BACK_BG2);
 
+  const [frontFieldOrder, setFrontFieldOrder] = useState(() => {
+    if (existingConfig.frontFieldOrder?.length) return existingConfig.frontFieldOrder;
+    return Object.keys(FRONT_FIELD_META);
+  });
+  const [backFieldOrder, setBackFieldOrder] = useState(() => {
+    if (existingConfig.backFieldOrder?.length) return existingConfig.backFieldOrder;
+    return Object.keys(BACK_FIELD_META);
+  });
+
+  const moveField = (side, index, direction) => {
+    const order = side === 'front' ? [...frontFieldOrder] : [...backFieldOrder];
+    const target = index + direction;
+    if (target < 0 || target >= order.length) return;
+    [order[index], order[target]] = [order[target], order[index]];
+    if (side === 'front') setFrontFieldOrder(order); else setBackFieldOrder(order);
+  };
+
   const updateFrontField = (key, prop, value) => {
     setFrontFields((prev) => ({ ...prev, [key]: { ...prev[key], [prop]: value } }));
   };
@@ -127,6 +144,8 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
     ketua_jabatan: ketuaJabatan,
     ttd: ttdUrl,
     stempel: stempelUrl,
+    frontFieldOrder,
+    backFieldOrder,
     front: {
       fields: frontFields,
       background: { type: 'gradient', color1: frontBgColor, color2: frontBgColor2, angle: 135 },
@@ -135,7 +154,7 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
       fields: backFields,
       background: { type: 'gradient', color1: backBgColor, color2: backBgColor2, angle: 135 },
     },
-  }), [template, aturan, slogan, website, kotaTerbit, ketuaNama, ketuaJabatan, ttdUrl, stempelUrl, frontFields, frontBgColor, frontBgColor2, backFields, backBgColor, backBgColor2]);
+  }), [template, aturan, slogan, website, kotaTerbit, ketuaNama, ketuaJabatan, ttdUrl, stempelUrl, frontFieldOrder, backFieldOrder, frontFields, frontBgColor, frontBgColor2, backFields, backBgColor, backBgColor2]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -192,12 +211,22 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
     masa_berlaku: new Date(Date.now() + 3 * 365 * 86400000).toISOString().split('T')[0],
   }), [settings, settingKud, buildConfig, ttdUrl, stempelUrl]);
 
-  const FieldEditor = ({ side, fieldKey, meta, field }) => {
+  const FieldEditor = ({ side, fieldKey, meta, field, index, total }) => {
     if (!field) return null;
     return (
       <div className="p-3 bg-white rounded-xl border border-border hover:border-primary/30 transition-all">
         <div className="flex items-center justify-between mb-2">
-          <label className="text-xs font-semibold text-foreground">{meta.label}</label>
+          <div className="flex items-center gap-1">
+            <button type="button" onClick={() => moveField(side, index, -1)} disabled={index === 0}
+              className="p-0.5 text-gray-400 hover:text-gray-700 disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" /></svg>
+            </button>
+            <button type="button" onClick={() => moveField(side, index, 1)} disabled={index === total - 1}
+              className="p-0.5 text-gray-400 hover:text-gray-700 disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer">
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            <label className="text-xs font-semibold text-foreground">{meta.label}</label>
+          </div>
           <button
             onClick={() => side === 'front' ? updateFrontField(fieldKey, 'show', !field.show) : updateBackField(fieldKey, 'show', !field.show)}
             className={`px-2 py-0.5 rounded-full text-[10px] font-semibold transition-all cursor-pointer ${field.show !== false ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-400'}`}>
@@ -290,7 +319,7 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
           </div>
           <div>
             <h3 className="font-semibold text-foreground text-sm">Desain Kartu Admin</h3>
-            <p className="text-xs text-gray-400 mt-0.5">Sesuaikan tampilan kartu identitas admin — ukuran 90mm × 55mm</p>
+            <p className="text-xs text-gray-400 mt-0.5">Sesuaikan tampilan kartu identitas admin — ukuran 88mm × 56mm</p>
           </div>
         </div>
         <div className="p-5">
@@ -386,18 +415,22 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
           {/* Tab: Sisi Depan */}
           {tab === 'depan' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {Object.entries(FRONT_FIELD_META).map(([key, meta]) => (
-                <FieldEditor key={key} side="front" fieldKey={key} meta={meta} field={frontFields[key]} />
-              ))}
+              {frontFieldOrder.map((key, i) => {
+                const meta = FRONT_FIELD_META[key];
+                if (!meta) return null;
+                return <FieldEditor key={key} side="front" fieldKey={key} meta={meta} field={frontFields[key]} index={i} total={frontFieldOrder.length} />;
+              })}
             </div>
           )}
 
           {/* Tab: Sisi Belakang */}
           {tab === 'belakang' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {Object.entries(BACK_FIELD_META).map(([key, meta]) => (
-                <FieldEditor key={key} side="back" fieldKey={key} meta={meta} field={backFields[key]} />
-              ))}
+              {backFieldOrder.map((key, i) => {
+                const meta = BACK_FIELD_META[key];
+                if (!meta) return null;
+                return <FieldEditor key={key} side="back" fieldKey={key} meta={meta} field={backFields[key]} index={i} total={backFieldOrder.length} />;
+              })}
             </div>
           )}
 
@@ -406,13 +439,25 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs font-semibold text-foreground mb-2 block">4 Poin Aturan Kartu</label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-semibold text-foreground">Poin Aturan Kartu</label>
+                    <button type="button" onClick={() => setAturan([...aturan, ''])}
+                      className="px-2 py-1 bg-indigo-600 text-white rounded-lg text-[10px] font-semibold hover:bg-indigo-700 transition-all cursor-pointer">
+                      + Tambah
+                    </button>
+                  </div>
                   {aturan.map((item, i) => (
-                    <div key={i} className="mb-2">
+                    <div key={i} className="flex items-center gap-1.5 mb-1.5">
                       <input value={item}
                         onChange={(e) => { const a = [...aturan]; a[i] = e.target.value; setAturan(a); }}
-                        className="w-full px-3 py-2 rounded-xl border border-border text-xs bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        className="flex-1 px-3 py-2 rounded-xl border border-border text-xs bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
                         placeholder={`Aturan ${i + 1}`} />
+                      {aturan.length > 1 && (
+                        <button type="button" onClick={() => { const a = aturan.filter((_, idx) => idx !== i); setAturan(a); }}
+                          className="px-2 py-2 bg-red-100 text-red-600 rounded-xl text-xs font-semibold hover:bg-red-200 transition-all cursor-pointer">
+                          &times;
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>
