@@ -5,6 +5,32 @@ import { useRouter, usePathname } from 'next/navigation';
 import { api } from '@/lib/api';
 import Sidebar from '@/components/layout/Sidebar';
 
+const EXEMPT_PATHS = ['/pekebun/profil'];
+
+function BlokScreen({ title, message, icon, action }) {
+  return (
+    <Sidebar role="pekebun">
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center max-w-md">
+          <div className={`w-20 h-20 ${icon.bg} rounded-3xl flex items-center justify-center mx-auto mb-6`}>
+            <svg className={`w-10 h-10 ${icon.color}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {icon.path}
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-foreground mb-2">{title}</h2>
+          <p className="text-gray-500 mb-4">{message}</p>
+          {action && (
+            <button onClick={action.onClick}
+              className="px-6 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-dark transition-all cursor-pointer">
+              {action.label}
+            </button>
+          )}
+        </div>
+      </div>
+    </Sidebar>
+  );
+}
+
 export default function PekebunLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -23,49 +49,47 @@ export default function PekebunLayout({ children }) {
         const profil = await api.pekebun.profil();
         if (profil?.status) {
           setStatus(profil.status);
-          u.pekebun = profil;
-          localStorage.setItem('user', JSON.stringify(u));
+          const updated = { ...u, pekebun: profil };
+          localStorage.setItem('user', JSON.stringify(updated));
         }
       } catch {}
     };
     fetchStatus();
   }, []);
 
-  const isProgramPage = pathname?.includes('/pekebun/program');
+  const isExempt = EXEMPT_PATHS.some((p) => pathname?.startsWith(p));
 
-  if (isProgramPage && status === 'pending') {
+  if (!status || status === 'verified') {
+    return <Sidebar role="pekebun">{children}</Sidebar>;
+  }
+
+  if (status === 'pending') {
     return (
-      <Sidebar role="pekebun">
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center max-w-md">
-            <div className="w-20 h-20 bg-amber-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H10m9.364-7.364A9 9 0 1112 3a9 9 0 017.364 4.636z" /></svg>
-            </div>
-            <h2 className="text-2xl font-bold text-foreground mb-2">Menunggu Verifikasi</h2>
-            <p className="text-gray-500 mb-2">Profil Anda masih dalam proses verifikasi oleh petugas KUD.</p>
-            <p className="text-sm text-gray-400">Setelah diverifikasi, Anda dapat mengakses dan mendaftar program KUD. Silakan lengkapi profil Anda dan pastikan dokumen sudah diupload.</p>
-          </div>
-        </div>
-      </Sidebar>
+      <BlokScreen
+        title="Menunggu Verifikasi"
+        message="Akun Anda masih dalam proses verifikasi oleh petugas KUD. Setelah diverifikasi, Anda dapat mengakses semua fitur. Silakan lengkapi profil Anda dan upload dokumen yang diperlukan."
+        icon={{
+          bg: 'bg-amber-100',
+          color: 'text-amber-600',
+          path: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H10m9.364-7.364A9 9 0 1112 3a9 9 0 017.364 4.636z" />,
+        }}
+        action={isExempt ? null : { label: 'Ke Profil', onClick: () => router.push('/pekebun/profil') }}
+      />
     );
   }
 
-  if (isProgramPage && status === 'rejected') {
+  if (status === 'rejected') {
     return (
-      <Sidebar role="pekebun">
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center max-w-md">
-            <div className="w-20 h-20 bg-red-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
-            </div>
-            <h2 className="text-2xl font-bold text-foreground mb-2">Verifikasi Ditolak</h2>
-            <p className="text-gray-500 mb-4">Profil Anda ditolak oleh verifikator. Silakan perbaiki data diri atau upload ulang dokumen yang sesuai.</p>
-            <button onClick={() => router.push('/pekebun/profil')} className="px-6 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-dark transition-all cursor-pointer">
-              Perbaiki Profil
-            </button>
-          </div>
-        </div>
-      </Sidebar>
+      <BlokScreen
+        title="Verifikasi Ditolak"
+        message="Profil Anda ditolak oleh verifikator. Silakan perbaiki data diri atau upload ulang dokumen yang sesuai, lalu ajukan verifikasi ulang."
+        icon={{
+          bg: 'bg-red-100',
+          color: 'text-red-600',
+          path: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />,
+        }}
+        action={{ label: 'Perbaiki Profil', onClick: () => router.push('/pekebun/profil') }}
+      />
     );
   }
 

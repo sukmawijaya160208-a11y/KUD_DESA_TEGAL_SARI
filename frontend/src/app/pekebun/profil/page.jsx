@@ -330,7 +330,11 @@ export default function PekebunProfilPage() {
               <p className="text-sm text-muted-foreground mt-0.5">Kartu identitas anggota KUD</p>
             </div>
           </div>
-          <KartuAnggotaKud data={kartuData} width={360} />
+          <div className="w-full overflow-x-auto pb-2 flex justify-center">
+            <div className="w-full max-w-xl min-w-0">
+              <KartuAnggotaKud data={kartuData} width={9999} />
+            </div>
+          </div>
           <div className="flex justify-center mt-4">
             <button onClick={() => setPreviewCard(true)}
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-foreground rounded-xl text-sm font-semibold border-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5 transition-all shadow-sm cursor-pointer">
@@ -346,8 +350,10 @@ export default function PekebunProfilPage() {
 
       <Modal open={previewCard} onClose={() => setPreviewCard(false)} maxWidth="max-w-2xl">
         {kartuData && (
-          <div className="py-4">
-            <KartuAnggotaKud data={kartuData} width={500} />
+          <div className="py-4 flex justify-center">
+            <div className="w-full max-w-lg">
+              <KartuAnggotaKud data={kartuData} width={9999} />
+            </div>
           </div>
         )}
       </Modal>
@@ -365,11 +371,11 @@ export default function PekebunProfilPage() {
           </div>
           <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
             <div className="p-4 flex flex-col items-center gap-4">
-              <div className="w-full max-w-lg cursor-pointer hover:opacity-90 transition-opacity"
+              <div className="w-full max-w-3xl cursor-pointer hover:opacity-90 transition-opacity"
                 onClick={() => setPreviewSertifikat(true)}>
                 <SertifikatKeanggotaan
                   data={sertifikatData}
-                  width={450}
+                  width={9999}
                   showActions={false}
                 />
               </div>
@@ -388,13 +394,15 @@ export default function PekebunProfilPage() {
         </div>
       )}
 
-      <Modal open={previewSertifikat} onClose={() => setPreviewSertifikat(false)} maxWidth="max-w-4xl">
+      <Modal open={previewSertifikat} onClose={() => setPreviewSertifikat(false)} maxWidth="max-w-5xl">
         {sertifikatData && (
           <div className="py-4 flex justify-center">
-            <SertifikatKeanggotaan
-              data={sertifikatData}
-              width={700}
-            />
+            <div className="w-full max-w-4xl">
+              <SertifikatKeanggotaan
+                data={sertifikatData}
+                width={9999}
+              />
+            </div>
           </div>
         )}
       </Modal>

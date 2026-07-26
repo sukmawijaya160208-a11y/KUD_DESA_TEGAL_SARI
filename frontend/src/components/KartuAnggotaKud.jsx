@@ -141,7 +141,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
   const kotaTerbit = config.kota_terbit || s?.kartu_kota_terbit || 'Megang Sakti';
   const terbit = formatTgl(tanggal_terbit);
   const berlaku = formatTgl(masa_berlaku);
-  const cardW = Math.min(width, 500);
+  const cardW = Math.min(width, 540);
   const leftPanelPct = templateStyle.leftPanelPct;
   const leftPanelW = Math.round(cardW * leftPanelPct / 100);
   const rightPanelW = cardW - leftPanelW;
@@ -217,7 +217,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
     padding: 8mm 0; gap: 4mm;
   }
   .page {
-    width: 85.6mm; height: 53.98mm;
+    width: 88mm; height: 56mm;
     position: relative; overflow: hidden;
     box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     flex-shrink: 0;

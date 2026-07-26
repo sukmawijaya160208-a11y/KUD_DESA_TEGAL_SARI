@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useMemo, useCallback } from 'react';
+import { useRef, useState, useMemo, useCallback, useEffect } from 'react';
 
 const DEFAULT_CONFIG = {
   template: 'classic-gold',
@@ -418,6 +418,20 @@ function SertifikatContent({ data, config, width }) {
 export default function SertifikatKeanggotaan({ data, config: configProp, width = 600, showActions = true }) {
   const containerRef = useRef(null);
   const [downloading, setDownloading] = useState(false);
+  const [actualWidth, setActualWidth] = useState(width);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const w = entry.contentBoxSize?.[0]?.inlineSize || entry.contentRect?.width;
+        if (w) setActualWidth(Math.round(w));
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const config = useMemo(() => {
     if (configProp) return configProp;
     if (data?.setting_kud?.sertifikat_config) return data.setting_kud.sertifikat_config;
@@ -471,7 +485,7 @@ export default function SertifikatKeanggotaan({ data, config: configProp, width 
   return (
     <div className="flex flex-col items-center gap-3">
       <div ref={containerRef} style={{ width: `${width}px`, maxWidth: '100%' }}>
-        <SertifikatContent data={data} config={config} width={width} />
+        <SertifikatContent data={data} config={config} width={actualWidth} />
       </div>
       {showActions && (
         <div className="flex gap-2 flex-wrap justify-center">

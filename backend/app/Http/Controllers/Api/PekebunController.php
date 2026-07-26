@@ -51,13 +51,23 @@ class PekebunController extends Controller
         return response()->json($pekebun->load('lahan'));
     }
 
+    private function requireVerified($pekebun)
+    {
+        if (! $pekebun) {
+            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
+        }
+        if ($pekebun->status !== 'verified') {
+            return response()->json(['message' => 'Akun Anda belum diverifikasi. Silakan tunggu verifikasi dari verifikator.'], 403);
+        }
+        return null;
+    }
+
     // === LAHAN ===
     public function lahanIndex()
     {
         $pekebun = request()->user()->pekebun;
-        if (! $pekebun) {
-            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
-        }
+        $blocked = $this->requireVerified($pekebun);
+        if ($blocked) return $blocked;
 
         return response()->json(Lahan::where('pekebun_id', $pekebun->id)->get());
     }
@@ -65,9 +75,8 @@ class PekebunController extends Controller
     public function lahanStore(Request $request)
     {
         $pekebun = $request->user()->pekebun;
-        if (! $pekebun) {
-            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
-        }
+        $blocked = $this->requireVerified($pekebun);
+        if ($blocked) return $blocked;
         $validated = $request->validate([
             'alamat_lahan' => 'required|string',
             'jenis_surat' => 'required|in:SHM,SPPH,SKT',
@@ -97,6 +106,9 @@ class PekebunController extends Controller
 
     public function lahanUpdate(Request $request, Lahan $lahan)
     {
+        $pekebun = $request->user()->pekebun;
+        $blocked = $this->requireVerified($pekebun);
+        if ($blocked) return $blocked;
         $validated = $request->validate([
             'alamat_lahan' => 'sometimes|string',
             'jenis_surat' => 'sometimes|in:SHM,SPPH,SKT',
@@ -123,8 +135,11 @@ class PekebunController extends Controller
         }
     }
 
-    public function lahanDestroy(Lahan $lahan)
+    public function lahanDestroy(Request $request, Lahan $lahan)
     {
+        $pekebun = $request->user()->pekebun;
+        $blocked = $this->requireVerified($pekebun);
+        if ($blocked) return $blocked;
         $lahan->delete();
 
         return response()->json(['message' => 'Lahan berhasil dihapus']);
@@ -240,9 +255,8 @@ class PekebunController extends Controller
     public function tbsIndex(Request $request)
     {
         $pekebun = $request->user()->pekebun;
-        if (! $pekebun) {
-            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
-        }
+        $blocked = $this->requireVerified($pekebun);
+        if ($blocked) return $blocked;
         $perPage = min((int) ($request->per_page ?? 20), 50);
 
         return response()->json(TbsSync::where('pekebun_id', $pekebun->id)->latest()->paginate($perPage));
@@ -251,9 +265,8 @@ class PekebunController extends Controller
     public function tbsStore(Request $request)
     {
         $pekebun = $request->user()->pekebun;
-        if (! $pekebun) {
-            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
-        }
+        $blocked = $this->requireVerified($pekebun);
+        if ($blocked) return $blocked;
         $validated = $request->validate([
             'tanggal' => 'required|date',
             'jumlah_tbs' => 'required|numeric|min:0',
@@ -280,9 +293,8 @@ class PekebunController extends Controller
     public function tbsUpdate(Request $request, TbsSync $tbsSync)
     {
         $pekebun = $request->user()->pekebun;
-        if (! $pekebun) {
-            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
-        }
+        $blocked = $this->requireVerified($pekebun);
+        if ($blocked) return $blocked;
         if ($tbsSync->pekebun_id !== $pekebun->id) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
@@ -302,9 +314,8 @@ class PekebunController extends Controller
     public function tbsDestroy(Request $request, TbsSync $tbsSync)
     {
         $pekebun = $request->user()->pekebun;
-        if (! $pekebun) {
-            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
-        }
+        $blocked = $this->requireVerified($pekebun);
+        if ($blocked) return $blocked;
         if ($tbsSync->pekebun_id !== $pekebun->id) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
@@ -316,9 +327,8 @@ class PekebunController extends Controller
     public function kartuAnggota()
     {
         $pekebun = request()->user()->pekebun;
-        if (! $pekebun) {
-            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
-        }
+        $blocked = $this->requireVerified($pekebun);
+        if ($blocked) return $blocked;
 
         $settingKud = SettingKud::first();
         $pengaturan = \App\Models\Pengaturan::pluck('value', 'key');
@@ -338,9 +348,8 @@ class PekebunController extends Controller
     public function sertifikat()
     {
         $pekebun = request()->user()->pekebun;
-        if (! $pekebun) {
-            return response()->json(['message' => 'Lengkapi profil pekebun terlebih dahulu'], 400);
-        }
+        $blocked = $this->requireVerified($pekebun);
+        if ($blocked) return $blocked;
 
         $settingKud = SettingKud::first();
         $pengaturan = \App\Models\Pengaturan::pluck('value', 'key');
