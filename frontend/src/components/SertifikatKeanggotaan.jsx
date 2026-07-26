@@ -6,7 +6,7 @@ const DEFAULT_CONFIG = {
   template: 'classic-gold',
   fields: {
     border_deco: { show: true },
-    watermark: { show: true, opacity: 0.04 },
+    watermark: { show: true, opacity: 0.07 },
     logo_kud: { show: true, width: 70 },
     nama_kud: { show: true, fontSize: 16, color: '#064e3b', fontFamily: 'Inter', fontWeight: 'bold', text: '' },
     badan_hukum: { show: true, fontSize: 8, color: '#92400e' },
@@ -16,6 +16,7 @@ const DEFAULT_CONFIG = {
     pembukaan: { show: true, fontSize: 10, color: '#475569', text: 'Pengurus Koperasi Unit Desa (KUD) Sari Subur dengan ini menerangkan dan mengesahkan bahwa:' },
     nama_pekebun: { show: true, fontSize: 20, color: '#0f172a', fontFamily: 'Playfair Display', fontWeight: 'bold' },
     grid_data: { show: true, fontSize: 10, color: '#334155' },
+    hak_fasilitas: { show: true, fontSize: 8, color: '#334155' },
     legal_text: { show: true, fontSize: 9, color: '#475569', text: 'Dinyatakan secara sah terdaftar sebagai Anggota Aktif KUD Sari Subur. Pemegang sertifikat ini berhak atas seluruh fasilitas kemitraan kelapa sawit, pelayanan unit usaha koperasi, serta pembagian Sisa Hasil Usaha (SHU) sesuai AD/ART yang berlaku.' },
     tanggal_terbit: { show: true, fontSize: 9, color: '#64748b' },
     ttd_ketua: { show: true, width: 130, height: 50 },
@@ -64,6 +65,7 @@ function SertifikatContent({ data, config, width }) {
   const nomorAnggota = data?.nomor_anggota || '-';
   const tanggalTerbit = data?.tanggal_terbit ? formatDateLocal(data.tanggal_terbit) : '-';
   const tglLahir = pekebun.tanggal_lahir ? formatDateLocal(pekebun.tanggal_lahir) : '-';
+  const logoUrl = kud?.logo || pengaturan?.logo_kud || '/logo/logo.jpg';
 
   let bgStyle = {};
   if (bg.type === 'color') {
@@ -116,14 +118,14 @@ function SertifikatContent({ data, config, width }) {
       )}
 
       {/* Watermark */}
-      {f.watermark && f.watermark.show !== false && kud?.logo && (
+      {f.watermark && f.watermark.show !== false && logoUrl && (
         <div style={{
           position: 'absolute', inset: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          opacity: f.watermark.opacity ?? 0.04,
+          opacity: f.watermark.opacity ?? 0.07,
           pointerEvents: 'none', zIndex: 1,
         }}>
-          <img src={kud.logo} alt="" style={{ width: '50%', height: '50%', objectFit: 'contain' }} />
+          <img src={logoUrl} alt="" style={{ width: '55%', height: '55%', objectFit: 'contain' }} />
         </div>
       )}
 
@@ -137,9 +139,9 @@ function SertifikatContent({ data, config, width }) {
       }}>
         {/* ===== HEADER ===== */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: s(10), flexShrink: 0 }}>
-          {f.logo_kud && f.logo_kud.show !== false && kud?.logo && (
-            <img src={kud.logo} alt="Logo"
-              style={{ width: s(f.logo_kud.width || 70), height: s(f.logo_kud.width || 70), objectFit: 'contain', flexShrink: 0 }} />
+          {f.logo_kud && f.logo_kud.show !== false && logoUrl && (
+            <img src={logoUrl} alt="Logo KUD"
+              style={{ width: s(f.logo_kud.width || 70), height: s(f.logo_kud.width || 70), objectFit: 'contain', flexShrink: 0, borderRadius: '4px' }} />
           )}
           <div style={{ textAlign: 'center' }}>
             {f.nama_kud && f.nama_kud.show !== false && (
@@ -257,6 +259,41 @@ function SertifikatContent({ data, config, width }) {
               <div><span style={{ opacity: 0.6, fontWeight: 500 }}>No. Anggota</span><br/><span style={{ fontWeight: 700 }}>{nomorAnggota}</span></div>
               <div><span style={{ opacity: 0.6, fontWeight: 500 }}>Tempat/Tgl Lahir</span><br/><span style={{ fontWeight: 700 }}>{pekebun.tempat_lahir || '-'}, {tglLahir}</span></div>
               <div><span style={{ opacity: 0.6, fontWeight: 500 }}>Status Keanggotaan</span><br/><span style={{ fontWeight: 700, color: isClassic ? '#15803d' : '#059669' }}>Pekebun Kelapa Sawit Aktif</span></div>
+            </div>
+          )}
+
+          {/* Hak & Fasilitas Anggota */}
+          {f.hak_fasilitas && f.hak_fasilitas.show !== false && (
+            <div style={{
+              fontSize: s(f.hak_fasilitas.fontSize || 8),
+              color: f.hak_fasilitas.color || '#334155',
+              lineHeight: 1.5,
+              marginTop: s(2),
+              padding: `${s(3)}px ${s(8)}px`,
+              background: isClassic ? 'rgba(184, 134, 11, 0.06)' : 'rgba(20, 184, 166, 0.04)',
+              borderRadius: s(3),
+              border: `1px solid ${isClassic ? 'rgba(184, 134, 11, 0.2)' : 'rgba(20, 184, 166, 0.15)'}`,
+            }}>
+              <div style={{ fontWeight: 700, fontSize: s(9), color: isClassic ? '#92400e' : '#0f766e', marginBottom: s(2), textAlign: 'center', letterSpacing: s(1), textTransform: 'uppercase' }}>
+                Hak &amp; Fasilitas Anggota
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: s(3) }}>
+                <div style={{ textAlign: 'center', padding: `${s(2)}px ${s(2)}px`, background: 'rgba(255,255,255,0.6)', borderRadius: s(2) }}>
+                  <div style={{ fontSize: s(14), marginBottom: s(1) }}>🌿</div>
+                  <div style={{ fontWeight: 600, fontSize: s(8) }}>Akses Penjualan TBS</div>
+                  <div style={{ fontSize: s(7), opacity: 0.7 }}>Jual hasil panen sawit ke KUD</div>
+                </div>
+                <div style={{ textAlign: 'center', padding: `${s(2)}px ${s(2)}px`, background: 'rgba(255,255,255,0.6)', borderRadius: s(2) }}>
+                  <div style={{ fontSize: s(14), marginBottom: s(1) }}>💰</div>
+                  <div style={{ fontWeight: 600, fontSize: s(8) }}>SHU Koperasi</div>
+                  <div style={{ fontSize: s(7), opacity: 0.7 }}>Dapatkan Sisa Hasil Usaha</div>
+                </div>
+                <div style={{ textAlign: 'center', padding: `${s(2)}px ${s(2)}px`, background: 'rgba(255,255,255,0.6)', borderRadius: s(2) }}>
+                  <div style={{ fontSize: s(14), marginBottom: s(1) }}>📋</div>
+                  <div style={{ fontWeight: 600, fontSize: s(8) }}>Pendampingan Lahan</div>
+                  <div style={{ fontSize: s(7), opacity: 0.7 }}>Bimbingan teknis perkebunan</div>
+                </div>
+              </div>
             </div>
           )}
 

@@ -719,13 +719,48 @@ export default function AdminPengaturanPage() {
 
       {/* ===== TAB 5: DESAIN KARTU ===== */}
       {tab === 'desain-kartu' && (
-        <CardDesignEditor
-          settingKud={kud}
-          settings={settings}
-          onSave={() => {
-            api.admin.settingKud.get().then(setSettingKud).catch(() => {});
-          }}
-        />
+        <div className="space-y-5">
+          <FormSection title="Teks Kartu Anggota" icon={CreditCardIcon} description="Aturan, slogan, dan teks di sisi belakang kartu anggota. Simpan dulu sebelum preview.">
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-foreground/70">4 Poin Aturan Kartu:</p>
+              {[0, 1, 2, 3].map((i) => (
+                <Input key={`aturan-${i}`}
+                  label={`Aturan ${i + 1}`}
+                  value={(kud.kartu_aturan && kud.kartu_aturan[i]) || ''}
+                  onChange={(e) => {
+                    const arr = [...(kud.kartu_aturan || ['', '', '', ''])];
+                    arr[i] = e.target.value;
+                    handleKudChange('kartu_aturan', arr);
+                  }}
+                  placeholder={[
+                    'Pemegang kartu ini adalah Anggota Resmi KUD Sari Subur.',
+                    'Pemegang kartu tunduk dan taat kepada AD/ART KUD Sari Subur.',
+                    'Dilarang menggunakan kartu ini untuk kegiatan yang melanggar hukum.',
+                    'Kartu ini milik KUD, jika ditemukan harap dikembalikan ke sekretariat.',
+                  ][i]}
+                />
+              ))}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <Input label="Slogan Kartu" value={kud.kartu_slogan || ''}
+                  onChange={(e) => handleKudChange('kartu_slogan', e.target.value)}
+                  placeholder="SAWIT ADALAH KITA" />
+                <Input label="Kota Terbit" value={kud.kartu_kota_terbit || ''}
+                  onChange={(e) => handleKudChange('kartu_kota_terbit', e.target.value)}
+                  placeholder="Megang Sakti" />
+              </div>
+              <div className="flex justify-end pt-2">
+                <Button size="sm" loading={savingKud} onClick={handleSaveKud}>Simpan Teks Kartu</Button>
+              </div>
+            </div>
+          </FormSection>
+          <CardDesignEditor
+            settingKud={kud}
+            settings={settings}
+            onSave={() => {
+              api.admin.settingKud.get().then(setSettingKud).catch(() => {});
+            }}
+          />
+        </div>
       )}
 
       {/* ===== TAB 6: TEKS LOGIN ===== */}

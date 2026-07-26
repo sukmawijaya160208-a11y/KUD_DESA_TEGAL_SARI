@@ -208,31 +208,50 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
 <html><head><meta charset="utf-8"><title>Kartu Anggota - ${nama}</title>
 <link href="${fontLinks}" rel="stylesheet">
 <style>
-  @page { size: 85.6mm 53.98mm; margin: 0; }
+  @page { size: A4 portrait; margin: 5mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .page { width: 85.6mm; height: 53.98mm; position: relative; overflow: hidden; page-break-after: always; }
+  body {
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    font-family: Inter, 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 8mm 0; gap: 4mm;
+  }
+  .page {
+    width: 85.6mm; height: 53.98mm;
+    position: relative; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+  }
   .front { display: flex; }
   .front-left { width: ${leftPanelPct}%; padding: 3mm 2mm; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
   .front-right { width: ${100 - leftPanelPct}%; background: white; padding: 2.5mm 3mm; display: flex; flex-direction: column; position: relative; overflow: hidden; }
-  .back { display: flex; flex-direction: column; }
+  .back { display: flex; flex-direction: column; height: 100%; }
   .back-header { padding: 1.5mm 3mm; text-align: center; }
   .back-body { flex: 1; padding: 2mm 3mm; display: flex; flex-direction: column; justify-content: space-between; }
   .back-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 0.5mm; }
   .ttd-stempel-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 2px; min-height: 55px; }
-  @media screen { body { padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 4mm; background: #f8fafc; } .page { border-radius: 3mm; box-shadow: 0 4px 24px rgba(0,0,0,0.15); } }
+  @media screen {
+    body { background: #f8fafc; }
+    .page { border-radius: 3mm; box-shadow: 0 4px 24px rgba(0,0,0,0.15); }
+  }
+  @media print {
+    body { padding: 0; background: white; gap: 3mm; justify-content: center; min-height: 100vh; }
+    .page { page-break-inside: avoid; box-shadow: none; border-radius: 0; border: 1px solid #ddd; }
+    * { font-family: Inter, 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif !important; }
+    img { print-color-adjust: exact; }
+  }
 </style></head><body>
-  <div class="page front" style="background:white;">
+  <div class="page front">
     <div class="front-left" style="background:${leftBg};">
       ${f('logo_kud').show !== false ? logoHtml : ''}
-      ${f('nama_kud').show !== false ? `<div style="font-size:${fc('nama_kud', 'fontSize') || 10}pt;font-weight:${fc('nama_kud', 'fontWeight') || 'bold'};color:${fc('nama_kud', 'color') || '#ffffff'};text-align:center;text-transform:uppercase;font-family:'${fc('nama_kud', 'fontFamily') || 'Inter'},sans-serif';">${fc('nama_kud', 'text') || s?.nama_kud || 'KUD Sari Subur'}</div>` : ''}
+      ${f('nama_kud').show !== false ? `<div style="font-size:${fc('nama_kud', 'fontSize') || 10}pt;font-weight:${fc('nama_kud', 'fontWeight') || 'bold'};color:${fc('nama_kud', 'color') || '#ffffff'};text-align:center;text-transform:uppercase;font-family:Inter, sans-serif;">${fc('nama_kud', 'text') || s?.nama_kud || 'KUD Sari Subur'}</div>` : ''}
       ${f('foto_pekebun').show !== false ? fotoHtml : ''}
     </div>
     <div class="front-right">
       ${f('watermark').show !== false && logo ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:${fc('watermark', 'opacity') || 0.04};pointer-events:none;"><img src="${logo}" style="width:40mm;height:40mm;object-fit:contain;" /></div>` : ''}
-      ${f('judul').show !== false ? `<div style="font-size:${fc('judul', 'fontSize') || 11}pt;font-weight:${fc('judul', 'fontWeight') || 'black'};color:${fc('judul', 'color') || '#0f172a'};text-transform:uppercase;letter-spacing:0.5px;border-bottom:0.5px solid #e2e8f0;padding-bottom:0.5mm;margin-bottom:0.3mm;font-family:'${fc('judul', 'fontFamily') || 'Inter'},sans-serif';">${fc('judul', 'text') || s?.kartu_judul_depan || 'KARTU TANDA ANGGOTA'}</div>` : ''}
-      ${f('subjudul').show !== false ? `<div style="font-size:${fc('subjudul', 'fontSize') || 7}pt;font-weight:${fc('subjudul', 'fontWeight') || 'bold'};color:${fc('subjudul', 'color') || '#059669'};text-transform:uppercase;margin-bottom:1mm;font-family:'${fc('subjudul', 'fontFamily') || 'Inter'},sans-serif';">${fc('subjudul', 'text') || s?.kartu_subjudul_depan || 'KOPERASI UNIT DESA SARI SUBUR'}</div>` : ''}
-      ${f('nama_anggota').show !== false ? `<div style="font-size:${fc('nama_anggota', 'fontSize') || 13}pt;font-weight:${fc('nama_anggota', 'fontWeight') || 'black'};color:${fc('nama_anggota', 'color') || '#0f172a'};text-transform:uppercase;line-height:1.1;font-family:'${fc('nama_anggota', 'fontFamily') || 'Inter'},sans-serif';">${nama}</div>` : ''}
+      ${f('judul').show !== false ? `<div style="font-size:${fc('judul', 'fontSize') || 11}pt;font-weight:${fc('judul', 'fontWeight') || 'black'};color:${fc('judul', 'color') || '#0f172a'};text-transform:uppercase;letter-spacing:0.5px;border-bottom:0.5px solid #e2e8f0;padding-bottom:0.5mm;margin-bottom:0.3mm;font-family:Inter, sans-serif;">${fc('judul', 'text') || s?.kartu_judul_depan || 'KARTU TANDA ANGGOTA'}</div>` : ''}
+      ${f('subjudul').show !== false ? `<div style="font-size:${fc('subjudul', 'fontSize') || 7}pt;font-weight:${fc('subjudul', 'fontWeight') || 'bold'};color:${fc('subjudul', 'color') || '#059669'};text-transform:uppercase;margin-bottom:1mm;font-family:Inter, sans-serif;">${fc('subjudul', 'text') || s?.kartu_subjudul_depan || 'KOPERASI UNIT DESA SARI SUBUR'}</div>` : ''}
+      ${f('nama_anggota').show !== false ? `<div style="font-size:${fc('nama_anggota', 'fontSize') || 13}pt;font-weight:${fc('nama_anggota', 'fontWeight') || 'black'};color:${fc('nama_anggota', 'color') || '#0f172a'};text-transform:uppercase;line-height:1.1;font-family:Inter, sans-serif;">${nama}</div>` : ''}
       ${f('nomor_anggota').show !== false ? `<div style="font-size:${fc('nomor_anggota', 'fontSize') || 9}pt;font-weight:${fc('nomor_anggota', 'fontWeight') || 'bold'};color:${fc('nomor_anggota', 'color') || '#059669'};font-family:monospace;background:#f0fdf4;padding:0.3mm 1mm;border-radius:0.5mm;display:inline-block;margin:0.5mm 0;">${nomor_anggota || 'KUD-00000'}</div>` : ''}
       ${f('nik').show !== false && nik !== '-' ? `<div style="font-size:${fc('nik', 'fontSize') || 8}pt;color:${fc('nik', 'color') || '#475569'};line-height:1.4;">NIK: ${nik}</div>` : ''}
       ${f('ttl').show !== false ? `<div style="font-size:${fc('ttl', 'fontSize') || 8}pt;color:${fc('ttl', 'color') || '#475569'};line-height:1.4;">TTL: ${ttlText}</div>` : ''}
@@ -246,7 +265,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
       </div>
     </div>
   </div>
-  <div class="page back" style="background:white;">
+  <div class="page back">
     ${b('header_website').show !== false ? `<div class="back-header" style="font-size:${bc('header_website', 'fontSize') || 6}pt;font-weight:${bc('header_website', 'fontWeight') || 'bold'};color:${bc('header_website', 'color') || '#ffffff'};background:${backBg};">${b('header_website').text || website}</div>` : ''}
     <div class="back-body">
       <div>
@@ -254,7 +273,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
         ${b('sekretariat').show !== false ? `<div style="font-size:${bc('sekretariat', 'fontSize') || 7}pt;color:${bc('sekretariat', 'color') || '#475569'};margin-top:0.5mm;padding-top:0.5mm;border-top:0.5px solid #e2e8f0;"><span style="font-weight:700;color:#0f172a;">${b('sekretariat').text || 'Sekretariat:'}</span> ${s?.alamat || '-'}</div>` : ''}
       </div>
       <div class="back-footer">
-        ${b('slogan').show !== false ? `<div style="font-size:${bc('slogan', 'fontSize') || 16}pt;font-weight:${bc('slogan', 'fontWeight') || 'black'};font-style:italic;color:${bc('slogan', 'color') || '#0f172a'};text-transform:uppercase;font-family:'${bc('slogan', 'fontFamily') || 'Inter'},sans-serif';">${slogan}</div>` : ''}
+        ${b('slogan').show !== false ? `<div style="font-size:${bc('slogan', 'fontSize') || 16}pt;font-weight:${bc('slogan', 'fontWeight') || 'black'};font-style:italic;color:${bc('slogan', 'color') || '#0f172a'};text-transform:uppercase;font-family:Inter, sans-serif;">${slogan}</div>` : ''}
         <div style="text-align:right;font-size:${bc('kota_tanggal', 'fontSize') || 7}pt;color:${bc('kota_tanggal', 'color') || '#64748b'};">
           ${b('kota_tanggal').show !== false ? `<div>${kotaTerbit}, ${terbit}</div>` : ''}
           ${b('jabatan_ketua').show !== false ? `<div style="font-weight:${bc('jabatan_ketua', 'fontWeight') || 'semibold'};color:${bc('jabatan_ketua', 'color') || '#475569'};font-size:${bc('jabatan_ketua', 'fontSize') || 8}pt;">${ketuaJabatan}</div>` : ''}
