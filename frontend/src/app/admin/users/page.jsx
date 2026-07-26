@@ -45,27 +45,6 @@ function avatarColor(name) {
   return colors[Math.abs(hash) % colors.length];
 }
 
-function handleDownloadTemplate() {
-  const headers = IMPORT_TEMPLATE.map(t => t.label);
-  const example = {
-    'Nama': 'Budi Santoso',
-    'Email': 'budi@mail.com',
-    'Password': 'password123',
-    'Role (admin/verifikator/pekebun)': 'pekebun',
-    'NIK': '1234567890123456',
-    'No KK': '1234567890123456',
-    'No WhatsApp': '08123456789',
-    'Tempat Lahir': 'Jakarta',
-    'Tanggal Lahir': '1990-01-15',
-    'Alamat': 'Jl. Merdeka No.1',
-  };
-  const ws = XLSX.utils.json_to_sheet([example], { header: headers });
-  ws['!cols'] = headers.map(h => ({ wch: Math.max(h.length * 2, 18) }));
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Template');
-  XLSX.writeFile(wb, 'Template_Import_User_KUD.xlsx');
-}
-
 function exportToExcel(users) {
   if (!users.length) return;
   const headers = ['Nama', 'Email', 'Role', 'Status Pekebun', 'NIK', 'No KK', 'No WhatsApp', 'Tempat Lahir', 'Tanggal Lahir', 'Alamat', 'Tanggal Daftar'];
@@ -409,6 +388,27 @@ export default function AdminUsersPage() {
     { key: 'alamat', label: 'Alamat', required: false },
   ];
 
+  const handleDownloadTemplate = () => {
+    const headers = IMPORT_TEMPLATE.map(t => t.label);
+    const example = {
+      'Nama': 'Budi Santoso',
+      'Email': 'budi@mail.com',
+      'Password': 'password123',
+      'Role (admin/verifikator/pekebun)': 'pekebun',
+      'NIK': '1234567890123456',
+      'No KK': '1234567890123456',
+      'No WhatsApp': '08123456789',
+      'Tempat Lahir': 'Jakarta',
+      'Tanggal Lahir': '1990-01-15',
+      'Alamat': 'Jl. Merdeka No.1',
+    };
+    const ws = XLSX.utils.json_to_sheet([example], { header: headers });
+    ws['!cols'] = headers.map(h => ({ wch: Math.max(h.length * 2, 18) }));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Template');
+    XLSX.writeFile(wb, 'Template_Import_User_KUD.xlsx');
+  };
+
   const columnMapping = {
     nama: 'name',
     email: 'email', surel: 'email',
@@ -430,6 +430,50 @@ export default function AdminUsersPage() {
     }
     return norm;
   }
+
+  // === PRINT REPORT ===
+  const handlePrint = (usersToPrint) => {
+    const printData = usersToPrint && usersToPrint.length > 0 ? usersToPrint : sorted;
+    if (!printData.length) return;
+    const headers = ['Nama', 'Email', 'Role', 'Status', 'NIK', 'No WhatsApp', 'Tgl Daftar'];
+    const rows = printData.map(u => [
+      u.name || '',
+      u.email || '',
+      u.role || '',
+      STATUS_LABEL[u.pekebun?.status] || '-',
+      u.pekebun?.nik || '-',
+      u.pekebun?.no_whatsapp || '-',
+      u.created_at ? new Date(u.created_at).toISOString().slice(0, 10) : '-',
+    ]);
+    const logoImg = logoUrl ? `<img src="${logoUrl}" style="height:50px;width:auto;object-fit:contain;" />` : '';
+    const printWin = window.open('', '_blank');
+    if (!printWin) return;
+    printWin.document.write(`
+      <html><head><title>Laporan User KUD</title>
+      <style>
+        @page { size: A4 landscape; margin: 15mm; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', Arial, sans-serif; padding: 20px; color: #1e293b; }
+        .kop { display: flex; align-items: center; gap: 16px; border-bottom: 2px solid #059669; padding-bottom: 12px; margin-bottom: 16px; }
+        .kop-title { font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #064e3b; }
+        .kop-sub { font-size: 11px; color: #64748b; margin-top: 2px; }
+        h2 { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #0f172a; }
+        table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        th { background: #059669; color: white; padding: 8px 6px; text-align: left; font-weight: 600; }
+        td { padding: 6px; border-bottom: 1px solid #e2e8f0; }
+        tr:nth-child(even) { background: #f8fafc; }
+        .footer { margin-top: 20px; font-size: 10px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 8px; }
+      </style></head><body>
+        <div class="kop">${logoImg}<div><div class="kop-title">KUD Sari Subur</div><div class="kop-sub">Laporan Data User</div></div></div>
+        <h2>Daftar User (${printData.length} user)</h2>
+        <table><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+        <tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>
+        <div class="footer">Dicetak pada ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+        <script>window.onload=function(){setTimeout(function(){window.print();window.close();},500);};<\/script>
+      </body></html>
+    `);
+    printWin.document.close();
+  };
 
   // === KEYBOARD SHORTCUTS ===
   useEffect(() => {
@@ -550,7 +594,7 @@ export default function AdminUsersPage() {
           <Button variant="outline" size="sm" onClick={() => { setImportData(null); setImportFile(null); setImportResult(null); setImportModal(true); }} className="whitespace-nowrap">
             <DocumentArrowDownIcon className="w-4 h-4 rotate-180" /> Import
           </Button>
-          <Button variant="outline" size="sm" onClick={() => window.print()} className="whitespace-nowrap">
+          <Button variant="outline" size="sm" onClick={() => handlePrint()} className="whitespace-nowrap">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg> Cetak
           </Button>
         </div>
@@ -607,7 +651,7 @@ export default function AdminUsersPage() {
           <Button size="sm" variant="outline" onClick={() => exportToExcel(data.filter(u => selected.has(u.id)))}>
             <DocumentArrowDownIcon className="w-3.5 h-3.5" /> Export
           </Button>
-          <Button size="sm" variant="outline" onClick={() => window.print()}>
+          <Button size="sm" variant="outline" onClick={() => handlePrint(data.filter(u => selected.has(u.id)))}>
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg> Cetak
           </Button>
         </div>

@@ -5,6 +5,7 @@ import LenisProvider from "@/components/LenisProvider";
 export const metadata = {
   title: "KUD Desa Sari Subur",
   description: "Sistem Informasi Koperasi Unit Desa Sari Subur",
+  icons: { icon: "/icon.svg", apple: "/icon.svg" },
 };
 
 export default function RootLayout({ children }) {
