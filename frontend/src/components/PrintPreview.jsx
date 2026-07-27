@@ -1,14 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { EyeIcon, PrinterIcon, XMarkIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 
-const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
 export default function PrintPreview({ title, fetchAll, renderContent, onLoad, pdfUrl, pdfFileName = 'dokumen.pdf' }) {
+  const [isMobile, setIsMobile] = useState(false);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
+  }, []);
 
   const handlePreview = async () => {
     setLoading(true);

@@ -1,9 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { PrinterIcon } from '@heroicons/react/24/outline';
-
-const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 const PRINT_STYLES = `
   @page { size: landscape; margin: 15mm 20mm; }
@@ -51,7 +49,12 @@ const PRINT_STYLES = `
 
 export default function PrintButton({ title, fetchAll, renderContent, onLoad, pdfUrl }) {
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const iframeRef = useRef(null);
+
+  useEffect(() => {
+    setIsMobile(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
+  }, []);
 
   const buildHtml = (content) => `
     <!DOCTYPE html>
