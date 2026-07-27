@@ -3,6 +3,8 @@
 import { useState, useRef } from 'react';
 import { PrinterIcon } from '@heroicons/react/24/outline';
 
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
 const PRINT_STYLES = `
   @page { size: landscape; margin: 15mm 20mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -47,7 +49,7 @@ const PRINT_STYLES = `
   @media print { body { padding: 0; } }
 `;
 
-export default function PrintButton({ title, fetchAll, renderContent, onLoad }) {
+export default function PrintButton({ title, fetchAll, renderContent, onLoad, pdfUrl }) {
   const [loading, setLoading] = useState(false);
   const iframeRef = useRef(null);
 
@@ -73,45 +75,77 @@ export default function PrintButton({ title, fetchAll, renderContent, onLoad }) 
         Dokumen ini dicetak dari Sistem Informasi KUD Desa Sari Subur<br>
         <span style="font-size:8px;color:#cbd5e1">&copy; ${new Date().getFullYear()} - KUD Desa Sari Subur</span>
       </div>
-      <script>window.onload=function(){setTimeout(function(){window.print()},500)};window.onafterprint=function(){setTimeout(function(){window.close()},300)};<\/script>
     </body>
     </html>
   `;
 
+  const downloadPdf = async () => {
+    const response = await fetch(pdfUrl, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    });
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${title.replace(/\s+/g, '_')}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const printDesktop = async (content) => {
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;opacity:0;pointer-events:none';
+    document.body.appendChild(iframe);
+    iframeRef.current = iframe;
+
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(buildHtml(content));
+    doc.close();
+
+    iframe.contentWindow.onafterprint = () => {
+      if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+      iframeRef.current = null;
+    };
+
+    iframe.onload = () => {
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+        });
+      } else {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+      }
+    };
+  };
+
   const handlePrint = async () => {
     setLoading(true);
     try {
+      if (pdfUrl && isMobile) {
+        await downloadPdf();
+        if (onLoad) onLoad();
+        return;
+      }
+
       const allData = await fetchAll();
       const content = typeof renderContent === 'function' ? renderContent(allData) : renderContent;
 
-      const iframe = document.createElement('iframe');
-      iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;opacity:0;pointer-events:none';
-      document.body.appendChild(iframe);
-      iframeRef.current = iframe;
-
-      const doc = iframe.contentWindow.document;
-      doc.open();
-      doc.write(buildHtml(content));
-      doc.close();
-
-      setTimeout(() => {
-        try {
-          iframe.contentWindow.focus();
-          iframe.contentWindow.print();
-        } catch (e) {
-          const win = window.open('', '_blank');
-          if (win) {
-            win.document.write(buildHtml(content));
-            win.document.close();
-          } else {
-            alert('Izinkan popup untuk mencetak dokumen, atau gunakan Ctrl+P');
-          }
+      if (isMobile) {
+        const win = window.open('', '_blank');
+        if (win) {
+          win.document.write(buildHtml(content));
+          win.document.close();
+        } else {
+          alert('Izinkan popup untuk mencetak dokumen, atau gunakan Ctrl+P');
         }
-      }, 800);
-
-      setTimeout(() => {
-        if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
-      }, 120000);
+      } else {
+        await printDesktop(content);
+      }
 
       if (onLoad) onLoad();
     } catch (err) {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { PrinterIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { PrinterIcon, ArrowDownTrayIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
 
 function formatTgl(d) {
   if (!d) return '-';
@@ -73,6 +73,7 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
   const containerRef = useRef(null);
   const [downloading, setDownloading] = useState(false);
   const [actualWidth, setActualWidth] = useState(width);
+  const [isMobile] = useState(() => typeof navigator !== 'undefined' && /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent));
 
   useEffect(() => {
     const el = containerRef.current;
@@ -191,6 +192,40 @@ export default function KartuAnggotaKud({ data, width = 360, showActions = true,
       link.click();
     } catch (e) {
       console.error('Download failed:', e);
+    }
+    setDownloading(false);
+  };
+
+  const handleDownloadPdf = async () => {
+    setDownloading(true);
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const role = user?.role;
+      let url;
+      if (role === 'pekebun') {
+        url = '/api/print/kartu-anggota/saya';
+      } else {
+        const pekebunId = data?.pekebun?.id || data?.id;
+        if (!pekebunId) throw new Error('ID pekebun tidak ditemukan');
+        url = `/api/print/kartu-anggota/${pekebunId}`;
+      }
+      const token = localStorage.getItem('token');
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error('Gagal mengunduh PDF');
+      const blob = await res.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `KARTU_ANGGOTA_${nama.replace(/\s+/g, '_')}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (e) {
+      console.error('PDF download failed:', e);
+      alert('Gagal mengunduh PDF: ' + e.message);
     }
     setDownloading(false);
   };
@@ -530,6 +565,11 @@ window.onload = function() { setTimeout(function(){ window.print(); }, 1000); };
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-foreground">Kartu Anggota KUD</h3>
             <div className="flex items-center gap-2">
+              <button onClick={handleDownloadPdf} disabled={downloading}
+                className="inline-flex items-center gap-1.5 px-3 py-2 bg-white text-foreground rounded-xl text-sm font-semibold border border-border hover:bg-muted transition-all cursor-pointer disabled:opacity-50">
+                <DocumentTextIcon className="w-4 h-4" />
+                {downloading ? '...' : 'PDF'}
+              </button>
               <button onClick={handleDownloadPng} disabled={downloading}
                 className="inline-flex items-center gap-1.5 px-3 py-2 bg-white text-foreground rounded-xl text-sm font-semibold border border-border hover:bg-muted transition-all cursor-pointer disabled:opacity-50">
                 <ArrowDownTrayIcon className="w-4 h-4" />

@@ -20,6 +20,24 @@ import {
 import * as XLSX from 'xlsx';
 import { formatDate } from '@/lib/date';
 
+const isMobile = typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+const downloadPdf = async (url, filename) => {
+  const token = localStorage.getItem('token');
+  const res = await fetch(`/api${url}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  const blob = await res.blob();
+  const blobUrl = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = blobUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(blobUrl);
+};
+
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
   show: { opacity: 1, y: 0, transition: { duration: 0.25 } },
@@ -232,6 +250,10 @@ export default function AdminPekebunPage() {
   const handlePreview = useCallback((url) => setPreviewImage(url), []);
 
   const handlePrintPekebun = useCallback((p) => {
+    if (isMobile) {
+      downloadPdf(api.admin.export.pekebunPdf({ id: p.id }), `Pekebun_${p.nama}.pdf`);
+      return;
+    }
     const win = window.open('', '_blank');
     if (!win) return;
     win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Cetak Pekebun - ${p.nama}</title>
@@ -251,12 +273,16 @@ export default function AdminPekebunPage() {
 </style></head><body>
   <div class="kop"><h1>KOPERASI UNIT DESA (KUD) SARI SUBUR</h1><p>Desa Tegal Sari, Kec. Megang Sakti, Kab. Musi Rawas, Sumatera Selatan</p><div class="title">DATA ANGGOTA PEKEBUN</div></div>
   <table><tr><td class="label">Nama</td><td>${p.nama || '-'}</td></tr><tr><td class="label">NIK</td><td>${p.nik || '-'}</td></tr><tr><td class="label">No. KK</td><td>${p.no_kk || '-'}</td></tr><tr><td class="label">Tempat Lahir</td><td>${p.tempat_lahir || '-'}</td></tr><tr><td class="label">Tanggal Lahir</td><td>${p.tanggal_lahir ? formatDate(p.tanggal_lahir) : '-'}</td></tr><tr><td class="label">No. WhatsApp</td><td>${p.no_whatsapp || '-'}</td></tr><tr><td class="label">Alamat</td><td>${p.alamat || '-'}</td></tr><tr><td class="label">Status</td><td>${p.status || '-'}</td></tr><tr><td class="label">Jumlah Lahan</td><td>${p.lahan_count || p.lahan?.length || 0} lahan</td></tr></table>
-<script>window.onload=function(){setTimeout(function(){window.print();window.close();},500);};</script>
+<script>window.onload=function(){setTimeout(function(){window.print();window.close();},100);};</script>
 </body></html>`);
     win.document.close();
   }, []);
 
   const handlePrintAll = useCallback(() => {
+    if (isMobile) {
+      downloadPdf(api.admin.export.pekebunPdf(), 'Laporan_Data_Pekebun.pdf');
+      return;
+    }
     const rows = data.map((p, i) => `<tr><td style="text-align:center">${i + 1}</td><td>${p.nama || '-'}</td><td>${p.nik || '-'}</td><td>${p.no_whatsapp || '-'}</td><td>${p.lahan_count || p.lahan?.length || 0}</td><td>${p.status || '-'}</td></tr>`).join('');
     const win = window.open('', '_blank');
     if (!win) return;
@@ -279,7 +305,7 @@ export default function AdminPekebunPage() {
   <div class="kop"><h1>KOPERASI UNIT DESA (KUD) SARI SUBUR</h1><p>Desa Tegal Sari, Kec. Megang Sakti, Kab. Musi Rawas, Sumatera Selatan</p><div class="title">LAPORAN DATA ANGGOTA PEKEBUN</div></div>
   <table><thead><tr><th>No</th><th>Nama</th><th>NIK</th><th>No. WA</th><th>Lahan</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>
   <div class="footer">Total: ${data.length} pekebun &nbsp;|&nbsp; Dicetak: ${new Date().toLocaleDateString('id-ID')}</div>
-<script>window.onload=function(){setTimeout(function(){window.print();window.close();},500);};</script>
+<script>window.onload=function(){setTimeout(function(){window.print();window.close();},100);};</script>
 </body></html>`);
     win.document.close();
   }, [data]);

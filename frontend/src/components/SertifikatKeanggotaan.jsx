@@ -498,6 +498,40 @@ export default function SertifikatKeanggotaan({ data, config: configProp, width 
     printWin.document.close();
   }, []);
 
+  const handleDownloadPdf = useCallback(async () => {
+    setDownloading(true);
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const role = user?.role;
+      let url;
+      if (role === 'pekebun') {
+        url = '/api/print/sertifikat/saya';
+      } else {
+        const pekebunId = data?.pekebun?.id;
+        if (!pekebunId) throw new Error('ID pekebun tidak ditemukan');
+        url = `/api/print/sertifikat/${pekebunId}`;
+      }
+      const token = localStorage.getItem('token');
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error('Gagal mengunduh PDF');
+      const blob = await res.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `sertifikat-${data?.pekebun?.nama?.toLowerCase().replace(/\s+/g, '-') || 'anggota'}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (e) {
+      console.error('PDF download failed:', e);
+      alert('Gagal mengunduh PDF: ' + e.message);
+    }
+    setDownloading(false);
+  }, [data]);
+
   if (!config || !data) return null;
 
   return (
@@ -517,6 +551,17 @@ export default function SertifikatKeanggotaan({ data, config: configProp, width 
               </svg>
             )}
             Download PNG
+          </button>
+          <button onClick={handleDownloadPdf} disabled={downloading}
+            className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-white rounded-xl text-xs font-semibold hover:bg-primary/90 transition-all shadow-sm disabled:opacity-50 cursor-pointer">
+            {downloading ? (
+              <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            )}
+            PDF
           </button>
           <button onClick={handlePrint}
             className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-foreground rounded-xl text-xs font-semibold border border-border hover:bg-slate-50 transition-all shadow-sm cursor-pointer">

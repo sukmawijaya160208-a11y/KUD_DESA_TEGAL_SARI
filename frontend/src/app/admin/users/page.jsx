@@ -167,6 +167,7 @@ export default function AdminUsersPage() {
 
   // --- Image Preview ---
   const [previewImage, setPreviewImage] = useState(null);
+  const isMobile = typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     // === LOAD DATA ===
   const [refreshKey, setRefreshKey] = useState(0);
@@ -498,9 +499,32 @@ export default function AdminUsersPage() {
   }
 
   // === PRINT REPORT ===
-  const handlePrint = (usersToPrint) => {
+  const handlePrint = async (usersToPrint) => {
     const printData = usersToPrint && usersToPrint.length > 0 ? usersToPrint : sorted;
     if (!printData.length) return;
+    if (isMobile) {
+      setLoading(true);
+      try {
+        const url = api.admin.export.usersPdf();
+        const token = localStorage.getItem('token');
+        const res = await fetch(`/api${url}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const blob = await res.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'Data_Users.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(blobUrl);
+      } catch (e) {
+        alert('Gagal mengunduh PDF: ' + e.message);
+      }
+      setLoading(false);
+      return;
+    }
     const headers = ['Nama', 'Email', 'Role', 'Status', 'NIK', 'No WhatsApp', 'Tgl Daftar'];
     const rows = printData.map(u => [
       u.name || '',
@@ -535,7 +559,7 @@ export default function AdminUsersPage() {
         <table><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
         <tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>
         <div class="footer">Dicetak pada ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
-        <script>window.onload=function(){setTimeout(function(){window.print();window.close();},500);};<\/script>
+        <script>window.onload=function(){window.print();window.close();};<\/script>
       </body></html>
     `);
     printWin.document.close();

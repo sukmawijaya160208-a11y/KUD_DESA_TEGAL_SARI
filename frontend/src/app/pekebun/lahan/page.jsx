@@ -356,6 +356,7 @@ export default function PekebunLahanPage() {
             title="Data Lahan Pekebun"
             fetchAll={fetchForPrint}
             renderContent={renderPrintContent}
+            pdfUrl="/api/admin/export/lahan/pdf"
           />
           <Button onClick={() => { resetForm(); setShowForm(!showForm); }}>
             <PlusIcon className="w-4 h-4" /> {showForm ? 'Batal' : 'Tambah Lahan'}

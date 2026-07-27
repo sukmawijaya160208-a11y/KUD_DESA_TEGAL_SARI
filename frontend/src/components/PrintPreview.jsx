@@ -1,11 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { EyeIcon, PrinterIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, PrinterIcon, XMarkIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 
-export default function PrintPreview({ title, fetchAll, renderContent, onLoad }) {
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+export default function PrintPreview({ title, fetchAll, renderContent, onLoad, pdfUrl, pdfFileName = 'dokumen.pdf' }) {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   const handlePreview = async () => {
     setLoading(true);
@@ -20,7 +23,7 @@ export default function PrintPreview({ title, fetchAll, renderContent, onLoad })
     }
   };
 
-  const handlePrint = async () => {
+  const handlePrint = () => {
     if (!preview) return;
     const win = window.open('', '_blank');
     if (!win) { alert('Izinkan popup untuk mencetak'); return; }
@@ -75,11 +78,41 @@ export default function PrintPreview({ title, fetchAll, renderContent, onLoad })
         <div class="doc-title">${title}</div>
         ${preview || '<div class="empty-state">Tidak ada data</div>'}
         <div class="print-footer">&copy; ${new Date().getFullYear()} - KUD Desa Sari Subur</div>
-        <script>window.onload = function() { setTimeout(function() { window.print(); }, 500); }; window.onafterprint = function() { setTimeout(function() { window.close(); }, 300); }; <\/script>
+        <script>window.onload = function() { window.print(); }; window.onafterprint = function() { window.close(); }; <\/script>
       </body>
       </html>
     `);
     win.document.close();
+  };
+
+  const handleDownloadPdf = async () => {
+    if (!pdfUrl) return;
+    setPdfLoading(true);
+    try {
+      const res = await fetch(pdfUrl, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = pdfFileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      alert('Gagal mengunduh PDF: ' + e.message);
+    }
+    setPdfLoading(false);
+  };
+
+  const handleCetak = () => {
+    if (isMobile && pdfUrl) {
+      handleDownloadPdf();
+    } else {
+      handlePrint();
+    }
   };
 
   return (
@@ -96,10 +129,22 @@ export default function PrintPreview({ title, fetchAll, renderContent, onLoad })
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h3 className="text-lg font-bold text-gray-900">Preview {title}</h3>
               <div className="flex items-center gap-2">
-                <button onClick={handlePrint}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition-all cursor-pointer">
-                  <PrinterIcon className="w-4 h-4" />
-                  Cetak
+                <button onClick={handleCetak} disabled={pdfLoading}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition-all cursor-pointer disabled:opacity-60">
+                  {pdfLoading ? (
+                    <>
+                      <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                      </svg>
+                      Mengunduh...
+                    </>
+                  ) : (
+                    <>
+                      {isMobile && pdfUrl ? <ArrowDownTrayIcon className="w-4 h-4" /> : <PrinterIcon className="w-4 h-4" />}
+                      {isMobile && pdfUrl ? 'Download PDF' : 'Cetak'}
+                    </>
+                  )}
                 </button>
                 <button onClick={() => setPreview(null)}
                   className="p-2 text-gray-400 hover:text-gray-600 rounded-xl hover:bg-gray-100 transition-all cursor-pointer">

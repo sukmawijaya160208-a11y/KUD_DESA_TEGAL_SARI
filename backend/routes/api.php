@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\ExportController;
 use App\Http\Controllers\Api\HargaTbsController;
 use App\Http\Controllers\Api\NotifikasiController;
 use App\Http\Controllers\Api\NewsletterController;
+use App\Http\Controllers\Api\PrintController;
 use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\PekebunController;
 use App\Http\Controllers\Api\UploadController;
@@ -243,5 +244,21 @@ Route::get('/newsletter/stats', [NewsletterController::class, 'stats']);
         Route::delete('/tbs/{tbsSync}', [PekebunController::class, 'tbsDestroy']);
         Route::get('/kartu-anggota', [PekebunController::class, 'kartuAnggota']);
         Route::get('/sertifikat', [PekebunController::class, 'sertifikat']);
+    });
+
+    // === PRINT (PDF) ===
+    Route::prefix('print')->group(function () {
+        // Admin/Verifikator: can print anyone's card
+        Route::middleware('role:admin,verifikator')->group(function () {
+            Route::get('/kartu-anggota/{pekebun}', [PrintController::class, 'kartuAnggota']);
+            Route::get('/kartu-admin/{user}', [PrintController::class, 'kartuAdmin']);
+            Route::get('/sertifikat/{pekebun}', [PrintController::class, 'sertifikat']);
+        });
+
+        // Pekebun: can only print their own
+        Route::middleware('role:pekebun')->group(function () {
+            Route::get('/kartu-anggota/saya', [PrintController::class, 'kartuAnggotaSaya']);
+            Route::get('/sertifikat/saya', [PrintController::class, 'sertifikatSaya']);
+        });
     });
 });
