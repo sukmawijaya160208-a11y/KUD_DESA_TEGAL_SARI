@@ -40,6 +40,8 @@ Route::get('/blog/{slug}/related', [BlogController::class, 'related']);
 Route::get('/blog/{slug}', [BlogController::class, 'show']);
 Route::get('/program', [AdminController::class, 'programPublic']);
 Route::get('/landing-page/{section?}', [LandingPageController::class, 'publicIndex']);
+Route::get('/harga-tbs', [HargaTbsController::class, 'index']);
+Route::get('/harga-tbs/latest', [HargaTbsController::class, 'latest']);
 
 // === AUTHENTICATED ===
 Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
@@ -72,10 +74,6 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::get('/notifikasi/count', [NotifikasiController::class, 'countUnread']);
     Route::put('/notifikasi/{notifikasi}/read', [NotifikasiController::class, 'markAsRead']);
     Route::put('/notifikasi/read-all', [NotifikasiController::class, 'markAllAsRead']);
-
-    // Public Harga TBS (all authenticated roles, read-only)
-    Route::get('/harga-tbs', [HargaTbsController::class, 'index']);
-    Route::get('/harga-tbs/latest', [HargaTbsController::class, 'latest']);
 
     // Chat (all authenticated roles)
     Route::get('/chat/users', [ChatController::class, 'users']);
