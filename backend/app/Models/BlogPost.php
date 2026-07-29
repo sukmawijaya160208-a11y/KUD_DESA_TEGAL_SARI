@@ -38,11 +38,6 @@ class BlogPost extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
-
     protected static function booted(): void
     {
         static::creating(function (self $post) {

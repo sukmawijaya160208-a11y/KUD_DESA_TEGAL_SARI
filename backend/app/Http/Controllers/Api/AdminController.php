@@ -803,7 +803,7 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:blog_posts,slug',
+            'slug' => 'nullable|string|max:255',
             'excerpt' => 'nullable|string',
             'content' => 'required|string',
             'category' => 'required|string|max:255',
@@ -813,6 +813,13 @@ class AdminController extends Controller
 
         if (empty($validated['slug'])) {
             $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']);
+        }
+
+        // Ensure slug is unique — append -1, -2, etc. if it already exists
+        $baseSlug = $validated['slug'];
+        $counter = 1;
+        while (BlogPost::where('slug', $validated['slug'])->exists()) {
+            $validated['slug'] = $baseSlug . '-' . $counter++;
         }
         $validated['content'] = strip_tags($validated['content']);
         $validated['created_by'] = $request->user()->id;
@@ -855,7 +862,7 @@ class AdminController extends Controller
         ]);
 
         if (isset($validated['content'])) {
-            $validated['content'] = $validated['content'];
+            $validated['content'] = strip_tags($validated['content']);
         }
         $validated['updated_by'] = $request->user()->id;
 
