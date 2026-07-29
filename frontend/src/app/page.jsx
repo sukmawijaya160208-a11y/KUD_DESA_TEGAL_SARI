@@ -9,6 +9,7 @@ import { api } from '@/lib/api';
 import MapSection from '@/components/MapSection';
 import TbsCalculator from '@/components/TbsCalculator';
 import Modal from '@/components/ui/Modal';
+import Hero3DScene from '@/components/Hero3DScene';
 
 import {
   Squares2X2Icon, ChatBubbleLeftRightIcon,
@@ -43,6 +44,19 @@ const scaleIn = {
   hidden: { opacity: 0, scale: 0.9 },
   show: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: easeSmooth } },
 };
+
+const HERO_STYLES_BLOCK = `
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .bg-gradient-hero {
+    background: linear-gradient(-45deg, #064E3B, #065F46, #0F766E, #115E59);
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+  }
+`;
 
 const PalmSvg = () => (
   <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full p-1">
@@ -254,6 +268,42 @@ function VideoModal({ videoId, onClose }) {
   );
 }
 
+function HeroDecorativeVisual() {
+  return (
+    <div className="relative w-full max-w-md mx-auto">
+      <div className="relative z-10 flex items-center justify-center">
+        <div className="w-64 h-64 lg:w-72 lg:h-72 rounded-full bg-gradient-to-br from-emerald-400/20 via-emerald-300/10 to-teal-400/20 backdrop-blur-sm border border-white/10 flex items-center justify-center">
+          <div className="w-48 h-48 lg:w-56 lg:h-56 rounded-full bg-gradient-to-br from-emerald-500/30 via-emerald-400/20 to-teal-500/30 border border-white/20 flex items-center justify-center shadow-2xl shadow-emerald-500/20">
+            <div className="text-center">
+              <div className="text-6xl lg:text-7xl font-extrabold font-heading bg-gradient-to-br from-emerald-300 via-green-200 to-teal-300 bg-clip-text text-transparent leading-none">KUD</div>
+              <div className="text-xs font-medium text-white/50 mt-2 uppercase tracking-[0.2em]">Sari Subur</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <motion.div className="absolute -top-4 -right-4 w-20 h-20 rounded-xl bg-gradient-to-br from-emerald-400/20 to-transparent border border-white/10 backdrop-blur-sm flex items-center justify-center"
+        animate={{ y: [0, -8, 0], rotate: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}>
+        <LeafIcon className="w-8 h-8 text-emerald-300/60" />
+      </motion.div>
+      <motion.div className="absolute -bottom-2 -left-6 w-16 h-16 rounded-xl bg-gradient-to-br from-teal-400/20 to-transparent border border-white/10 backdrop-blur-sm flex items-center justify-center"
+        animate={{ y: [0, 6, 0], rotate: [0, -5, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}>
+        <LeafIcon className="w-6 h-6 text-teal-300/60" />
+      </motion.div>
+    </div>
+  );
+}
+
+function LeafIcon({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className}>
+      <path d="M12 2C12 2 12 12 12 22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M12 4C16 6 18 10 18 14C18 16 16 18 14 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      <path d="M12 4C8 6 6 10 6 14C6 16 8 18 10 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      <path d="M8 23L16 23" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default function Home() {
   const router = useRouter();
   const logoUrl = useLogo();
@@ -454,60 +504,113 @@ export default function Home() {
         </AnimatePresence>
       </motion.nav>
 
+      <style>{HERO_STYLES_BLOCK}</style>
+
       {/* ===== HERO SECTION ===== */}
-      <section ref={heroRef} className="relative min-h-[50vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.4),transparent_50%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(6,182,212,0.3),transparent_50%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(5,150,105,0.15),transparent_70%)]" />
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl animate-pulse transform-gpu" />
-          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl animate-pulse animate-delay-700 transform-gpu" />
-          <div className="absolute top-1/3 right-1/3 w-48 h-48 bg-green-400/5 rounded-full blur-3xl animate-pulse transform-gpu" style={{ animationDelay: '1.5s' }} />
-          <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-cyan-400/5 rounded-full blur-3xl transform-gpu animate-pulse" style={{ animationDelay: '2s' }} />
+      <section ref={heroRef} className="relative min-h-[60vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero">
+        <div className="absolute inset-0 z-[1]">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.35),transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(13,148,136,0.25),transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(5,150,105,0.12),transparent_70%)]" />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16 pb-8 md:pt-28 md:pb-20">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <motion.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="inline-block px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-3 sm:mb-6">
-              {heroData?.meta_data?.sub_judul || 'Koperasi Unit Desa Tegal Sari'}
-            </motion.span>
-          </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold font-heading text-white leading-tight max-w-5xl mx-auto px-1">
-            {heroData?.title ? (
-              heroData.title.includes('KUD') ? (
-                <>{heroData.title.split('KUD')[0]}<span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD{heroData.title.split('KUD')[1] || ''}</span></>
-              ) : heroData.title
-            ) : (
-              <>Maju Bersama{' '}<span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD Sari Subur</span></>
-            )}
-          </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-2 sm:mt-6 text-[11px] sm:text-lg md:text-xl text-white/70 max-w-3xl mx-auto leading-snug sm:leading-relaxed px-2">
-            {heroData?.meta_data?.deskripsi || heroData?.description || 'Koperasi petani kelapa sawit yang berkomitmen meningkatkan kesejahteraan anggota melalui kemitraan berkelanjutan, inovasi, dan gotong royong.'}
-          </motion.p>
-          {(heroData?.meta_data?.catatan_hukum) && (
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.8 }} className="mt-1.5 sm:mt-3 text-[10px] sm:text-sm md:text-base text-white/50 max-w-2xl mx-auto leading-snug sm:leading-relaxed px-2 italic">
-              {heroData.meta_data.catatan_hukum}
-            </motion.p>
+
+        <div className="hidden lg:block absolute inset-0 z-[2] pointer-events-none">
+          <Hero3DScene />
+        </div>
+
+        <div className="block lg:hidden absolute inset-0 z-[2] overflow-hidden pointer-events-none">
+          <motion.div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-400/15 rounded-full blur-3xl"
+            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }} />
+          <motion.div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-teal-400/10 rounded-full blur-3xl"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }}
+            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }} />
+          <motion.div className="absolute top-1/3 right-1/3 w-48 h-48 bg-green-400/10 rounded-full blur-3xl"
+            animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.4, 0.15] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 2 }} />
+        </div>
+
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10 md:pt-32 md:pb-24">
+          <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-center">
+            {/* LEFT: Text */}
+            <div className="lg:col-span-3 text-center lg:text-left">
+              {mounted && !heroData ? (
+                <div className="space-y-4 sm:space-y-6 animate-pulse">
+                  <div className="h-5 w-48 bg-white/10 rounded-full mx-auto lg:mx-0" />
+                  <div className="h-10 sm:h-16 w-full max-w-lg bg-white/10 rounded-xl mx-auto lg:mx-0" />
+                  <div className="h-4 w-full max-w-md bg-white/10 rounded mx-auto lg:mx-0" />
+                  <div className="h-4 w-3/4 max-w-sm bg-white/10 rounded mx-auto lg:mx-0" />
+                  <div className="flex gap-3 justify-center lg:justify-start">
+                    <div className="h-12 w-36 bg-white/10 rounded-xl" />
+                    <div className="h-12 w-44 bg-white/10 rounded-xl" />
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+                    <motion.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-4 sm:mb-6">
+                      {heroData?.meta_data?.sub_judul || 'Koperasi Unit Desa Tegal Sari'}
+                    </motion.span>
+                  </motion.div>
+                  <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-heading text-white leading-tight max-w-4xl mx-auto lg:mx-0">
+                    {heroData?.title ? (
+                      heroData.title.includes('KUD') ? (
+                        <>{heroData.title.split('KUD')[0]}<span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD{heroData.title.split('KUD')[1] || ''}</span></>
+                      ) : heroData.title
+                    ) : (
+                      <>Maju Bersama{' '}<span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD Sari Subur</span></>
+                    )}
+                  </motion.h1>
+                  <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-3 sm:mt-6 text-sm sm:text-lg md:text-xl text-white/70 max-w-3xl leading-snug sm:leading-relaxed mx-auto lg:mx-0">
+                    {heroData?.meta_data?.deskripsi || heroData?.description || 'Koperasi petani kelapa sawit yang berkomitmen meningkatkan kesejahteraan anggota melalui kemitraan berkelanjutan, inovasi, dan gotong royong.'}
+                  </motion.p>
+                  {(heroData?.meta_data?.catatan_hukum) && (
+                    <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.8 }} className="mt-2 sm:mt-4 text-[11px] sm:text-sm md:text-base text-white/50 max-w-2xl leading-snug sm:leading-relaxed italic mx-auto lg:mx-0">
+                      {heroData.meta_data.catatan_hukum}
+                    </motion.p>
+                  )}
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-5 sm:mt-10 flex flex-col sm:flex-row items-center lg:items-start gap-3 sm:gap-4">
+                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => router.push('/login?tab=register')} className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center justify-center gap-2 text-sm sm:text-base overflow-hidden">
+                      <span className="absolute inset-0 bg-gradient-to-r from-emerald-100 via-white to-emerald-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <span className="relative z-10">Jadi Anggota</span>
+                      <ArrowRightIcon className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                    </motion.button>
+                    <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} href="#tentang" onClick={(e) => { e.preventDefault(); document.getElementById('tentang')?.scrollIntoView({ behavior: 'smooth' }); }}
+                      className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-sm sm:text-base backdrop-blur-sm overflow-hidden">
+                      <span className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <span className="relative z-10">Pelajari Lebih Lanjut</span>
+                      <ChevronDownIcon className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-y-0.5 transition-transform duration-300" />
+                    </motion.a>
+                  </motion.div>
+                </>
+              )}
+            </div>
+
+            {/* RIGHT: Visual (desktop only) */}
+            <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="hidden lg:flex lg:col-span-2 items-center justify-center">
+              <HeroDecorativeVisual />
+            </motion.div>
+          </div>
+
+          {mounted && heroData && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-8 sm:mt-14 flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-2 md:gap-x-10 text-white/60 text-xs sm:text-sm">
+              <div className="flex items-center gap-1.5"><ShieldCheckIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />Terpercaya</div>
+              <div className="flex items-center gap-1.5"><UserGroupIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />371+ Anggota</div>
+              <div className="flex items-center gap-1.5"><HeartIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />Ramah Lingkungan</div>
+              <div className="flex items-center gap-1.5"><CheckBadgeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />Berbadan Hukum</div>
+            </motion.div>
           )}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-4 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-4">
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => router.push('/login?tab=register')} className="group relative w-full sm:w-auto px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center justify-center gap-2 text-xs sm:text-base overflow-hidden">
-              <span className="absolute inset-0 bg-gradient-to-r from-emerald-100 via-white to-emerald-100 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="relative z-10">Jadi Anggota</span> <ArrowRightIcon className="relative z-10 w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:translate-x-0.5 transition-transform" />
-            </motion.button>
-            <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} href="#tentang" className="group relative w-full sm:w-auto px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-xl border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-xs sm:text-base backdrop-blur-sm overflow-hidden">
-              <span className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <span className="relative z-10">Pelajari Lebih Lanjut</span> <ChevronDownIcon className="relative z-10 w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:translate-y-0.5 transition-transform" />
-            </motion.a>
-          </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-3 sm:mt-12 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 md:gap-10 text-white/60 text-xs sm:text-sm">
-            <div className="flex items-center gap-1.5"><ShieldCheckIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400" />Terpercaya</div>
-            <div className="flex items-center gap-1.5"><UserGroupIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400" />371+ Anggota</div>
-            <div className="flex items-center gap-1.5"><HeartIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400" />Ramah Lingkungan</div>
-          </motion.div>
         </div>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="hidden sm:block absolute bottom-8 left-1/2 -translate-x-1/2">
-          <motion.a href="#tentang" onClick={(e) => { e.preventDefault(); document.getElementById('tentang')?.scrollIntoView({ behavior: 'smooth' }); }} className="flex flex-col items-center gap-1 text-white/50 hover:text-white/80 transition-colors text-xs">
-            <span>Scroll</span>
-            <ChevronDownIcon className="w-4 h-4" />
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }} className="hidden sm:block absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
+          <motion.a href="#tentang" onClick={(e) => { e.preventDefault(); document.getElementById('tentang')?.scrollIntoView({ behavior: 'smooth' }); }}
+            className="flex flex-col items-center gap-1.5 text-white/40 hover:text-white/70 transition-colors duration-300"
+            animate={{ y: [0, 6, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}>
+            <span className="text-[11px] font-medium uppercase tracking-widest">Scroll</span>
+            <div className="w-5 h-8 rounded-full border-2 border-white/30 flex items-start justify-center p-1">
+              <motion.div className="w-1.5 h-1.5 rounded-full bg-white/60"
+                animate={{ y: [0, 10, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }} />
+            </div>
           </motion.a>
         </motion.div>
       </section>
