@@ -276,7 +276,7 @@ export default function BlogDetailPage() {
           )}
 
           {/* Content Body */}
-          <article className="prose prose-sm md:prose-base max-w-none text-gray-700 leading-relaxed whitespace-pre-line mb-8">
+          <article className="prose prose-lg md:prose-xl max-w-none text-gray-700 leading-relaxed mb-8 [&_p]:mb-5 [&_p]:leading-8 [&_p]:text-[17px] md:[&_p]:text-[19px]">
             {post.content}
           </article>
 
@@ -365,9 +365,9 @@ export default function BlogDetailPage() {
                           </div>
                         )}
                       </div>
-                      <div className="p-3">
-                        <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${rc.bg} ${rc.text}`}>{rp.category}</span>
-                        <h3 className="text-xs font-semibold text-foreground mt-1 line-clamp-2 group-hover:text-primary transition-colors">{rp.title}</h3>
+                      <div className="p-4">
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${rc.bg} ${rc.text}`}>{rp.category}</span>
+                        <h3 className="text-sm font-semibold text-foreground mt-1.5 line-clamp-2 group-hover:text-primary transition-colors">{rp.title}</h3>
                       </div>
                     </Link>
                   );
@@ -399,10 +399,10 @@ export default function BlogDetailPage() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <span className={`text-[10px] font-semibold ${pc.text}`}>{pp.category}</span>
-                        <h3 className="text-xs font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">{pp.title}</h3>
-                        <span className="text-[10px] text-gray-400 flex items-center gap-1 mt-0.5">
-                          <EyeIcon className="w-3 h-3" />
+                        <span className={`text-xs font-semibold ${pc.text}`}>{pp.category}</span>
+                        <h3 className="text-sm font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">{pp.title}</h3>
+                        <span className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                          <EyeIcon className="w-3.5 h-3.5" />
                           {formatViews(pp.views || 0)}
                         </span>
                       </div>
