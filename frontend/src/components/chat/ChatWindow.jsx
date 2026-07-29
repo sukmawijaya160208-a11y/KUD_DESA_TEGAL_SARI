@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
-import { ChatBubbleLeftRightIcon, PhoneIcon } from '@heroicons/react/24/outline';
+import { MessageCircle, Phone } from 'lucide-react';
 import ChatHeader from './ChatHeader';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
@@ -69,7 +69,7 @@ export default function ChatWindow({ conversation, messages, myId, onSend, onDel
     return (
       <div className="flex flex-col items-center justify-center h-full text-center px-8 bg-chat-pattern">
         <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-wa-primary/10 to-wa-primary/5 flex items-center justify-center mb-4">
-          <ChatBubbleLeftRightIcon className="w-10 h-10 text-wa-primary/40" />
+          <MessageCircle className="w-10 h-10 text-wa-primary/40" />
         </div>
         <h3 className="text-lg font-heading font-bold text-foreground">Pesan</h3>
         <p className="text-sm text-gray-400 mt-1 max-w-xs">
@@ -117,7 +117,7 @@ export default function ChatWindow({ conversation, messages, myId, onSend, onDel
           onClick={() => setShowCallHistory(true)}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-muted transition-colors cursor-pointer text-xs text-gray-500"
         >
-          <PhoneIcon className="w-3.5 h-3.5" />
+          <Phone className="w-3.5 h-3.5" />
           Riwayat Panggilan
         </button>
       </div>

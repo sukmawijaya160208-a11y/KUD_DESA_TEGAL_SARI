@@ -12,10 +12,10 @@ import DatePicker from '@/components/ui/DatePicker';
 import DocumentViewer from '@/components/DocumentViewer';
 import SignaturePad from '@/components/SignaturePad';
 import {
-  PlusIcon, PencilSquareIcon, TrashIcon,
-  XMarkIcon, PhotoIcon, CheckCircleIcon,
-  DocumentTextIcon, ExclamationCircleIcon,
-} from '@heroicons/react/24/outline';
+  Plus, SquarePen, Trash2,
+  X, Image, CheckCircle,
+  FileText, AlertCircle,
+} from 'lucide-react';
 
 const JENIS_OPTIONS = ['PSR', 'Intensifikasi', 'Ekstensifikasi', 'Pelatihan SDMPKS', 'Beasiswa SDMPKS', 'Kemitraan'];
 
@@ -223,7 +223,7 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
     >
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* NAMA & JENIS */}
-        <FormSection title="Informasi Program" icon={DocumentTextIcon}>
+        <FormSection title="Informasi Program" icon={FileText}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input label="Nama Program" value={form.nama} onChange={(e) => setForm({ ...form, nama: e.target.value })} required placeholder="PSR - Peremajaan Sawit Rakyat" />
             <Select label="Jenis" value={form.jenis} onChange={(e) => setForm({ ...form, jenis: e.target.value })}>
@@ -233,20 +233,20 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
         </FormSection>
 
         {/* FOTO PROGRAM */}
-        <FormSection title="Foto Program" icon={PhotoIcon}>
+        <FormSection title="Foto Program" icon={Image}>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {form.foto.map((url, idx) => (
               <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border border-border bg-muted">
                 <img src={url} alt="" className="w-full h-full object-cover" />
                 <button type="button" onClick={() => removeFoto(idx)}
                   className="absolute top-1 right-1 w-7 h-7 bg-red-500/90 text-white rounded-full flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity cursor-pointer shadow-lg backdrop-blur-sm">
-                  <XMarkIcon className="w-3.5 h-3.5" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
             ))}
             <label className="aspect-square rounded-xl border-2 border-dashed border-border bg-muted/50 flex items-center justify-center cursor-pointer hover:bg-muted hover:border-primary/40 transition-[background-color,border-color]">
               <div className="flex flex-col items-center gap-1">
-                <PhotoIcon className="w-6 h-6 text-gray-300" />
+                <Image className="w-6 h-6 text-gray-300" />
                 <span className="text-[10px] text-gray-400">Tambah</span>
               </div>
               <input type="file" className="hidden" accept="image/*" onChange={handleFotoUpload} />
@@ -255,12 +255,12 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
         </FormSection>
 
         {/* DESKRIPSI */}
-        <FormSection title="Deskripsi Program" icon={DocumentTextIcon}>
+        <FormSection title="Deskripsi Program" icon={FileText}>
           <Textarea value={form.deskripsi} onChange={(e) => setForm({ ...form, deskripsi: e.target.value })} rows={3} placeholder="Deskripsi lengkap program..." />
         </FormSection>
 
         {/* PERSYARATAN DOKUMEN */}
-        <FormSection title="Persyaratan Dokumen" icon={CheckCircleIcon}>
+        <FormSection title="Persyaratan Dokumen" icon={CheckCircle}>
           <div className="flex flex-wrap gap-2">
             {ALL_PERSYARATAN.map((p) => (
               <button key={p.value} type="button" onClick={() => togglePersyaratan(p.value)}
@@ -269,7 +269,7 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
                     ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
                     : 'bg-slate-100 text-slate-600 border-slate-200 hover:border-emerald-400 hover:bg-slate-50'
                 }`}>
-                {form.persyaratan.includes(p.value) && <CheckCircleIcon className="w-3.5 h-3.5 inline mr-1" />}
+                {form.persyaratan.includes(p.value) && <CheckCircle className="w-3.5 h-3.5 inline mr-1" />}
                 {p.label}
               </button>
             ))}
@@ -297,7 +297,7 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
                   <span key={idx} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 text-xs font-medium border border-purple-200">
                     {s}
                     <button type="button" onClick={() => togglePersyaratan(s)} className="text-purple-400 hover:text-purple-700 transition-colors">
-                      <XMarkIcon className="w-3 h-3" />
+                      <X className="w-3 h-3" />
                     </button>
                   </span>
                 );
@@ -307,7 +307,7 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
         </FormSection>
 
         {/* MANFAAT */}
-        <FormSection title="Manfaat Program" icon={PlusIcon}>
+        <FormSection title="Manfaat Program" icon={Plus}>
           <div className="flex gap-2 mb-2">
             <input type="text" value={manfaatInput} onChange={(e) => setManfaatInput(e.target.value)} onKeyDown={handleManfaatKeyDown} placeholder="Tambah manfaat..." className="flex-1 px-3 py-2 rounded-xl border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" />
             <button type="button" onClick={addManfaat} className="px-4 py-2 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-all">Tambah</button>
@@ -316,7 +316,7 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
             {form.manfaat.map((m, idx) => (
               <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-sm font-medium border border-emerald-200">
                 {m}
-                <button type="button" onClick={() => removeManfaat(m)} className="text-emerald-400 hover:text-emerald-700 transition-colors"><XMarkIcon className="w-3.5 h-3.5" /></button>
+                <button type="button" onClick={() => removeManfaat(m)} className="text-emerald-400 hover:text-emerald-700 transition-colors"><X className="w-3.5 h-3.5" /></button>
               </span>
             ))}
             {form.manfaat.length === 0 && <span className="text-sm text-gray-400 italic">Belum ada manfaat ditambahkan</span>}
@@ -361,7 +361,7 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
                 <div key={i} className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
                   <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-primary/5 to-transparent border-b border-border">
                     <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                      <DocumentTextIcon className="w-4 h-4 text-primary" />
+                      <FileText className="w-4 h-4 text-primary" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground text-sm">Surat Pernyataan {i}</h4>
@@ -429,7 +429,7 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
           {form.aktifkan_surat && (
             <div className="mt-6 p-4 bg-purple-50 rounded-xl border border-purple-200">
               <h4 className="font-semibold text-foreground text-sm mb-3 flex items-center gap-2">
-                <DocumentTextIcon className="w-4 h-4 text-purple-600" />
+                <FileText className="w-4 h-4 text-purple-600" />
                 Tanda Tangan Digital (Admin)
               </h4>
               <p className="text-xs text-gray-500 mb-4">
@@ -458,7 +458,7 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
         </div>
 
         {/* TANGGAL & KUOTA */}
-        <FormSection title="Periode & Kuota" icon={DocumentTextIcon}>
+        <FormSection title="Periode & Kuota" icon={FileText}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <DatePicker label="Tanggal Mulai" value={form.tanggal_mulai} onChange={(v) => setForm({ ...form, tanggal_mulai: v })} />
             <DatePicker label="Tanggal Selesai" value={form.tanggal_selesai} onChange={(v) => setForm({ ...form, tanggal_selesai: v })} />
@@ -475,14 +475,14 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
                 onClick={() => setConfirmDelete(true)}
                 className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
               >
-                <TrashIcon className="w-4 h-4" /> Hapus Program
+                <Trash2 className="w-4 h-4" /> Hapus Program
               </button>
             )}
           </div>
           <div className="flex gap-2">
             <Button variant="secondary" type="button" onClick={onClose}>Batal</Button>
             <Button type="submit" loading={submitting}>
-              {editing ? <PencilSquareIcon className="w-4 h-4" /> : <PlusIcon className="w-4 h-4" />}
+              {editing ? <SquarePen className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
               {editing ? 'Simpan Perubahan' : 'Simpan Program'}
             </Button>
           </div>
@@ -497,7 +497,7 @@ export default function EditProgramModal({ open, onClose, editing, onSaved }) {
             onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
-                <ExclamationCircleIcon className="w-6 h-6 text-red-600" />
+                <AlertCircle className="w-6 h-6 text-red-600" />
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">Hapus Program</h3>

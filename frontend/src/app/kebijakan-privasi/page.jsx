@@ -1,9 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { LockClosedIcon } from '@heroicons/react/24/outline';
+import { Lock, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 
 export default function KebijakanPrivasiPage() {
   return (
@@ -13,11 +12,11 @@ export default function KebijakanPrivasiPage() {
         <div className="max-w-4xl mx-auto relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <Link href="/login" className="inline-flex items-center gap-1.5 text-white/60 hover:text-white transition-colors text-sm mb-6 group">
-              <ChevronLeftIcon className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+              <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
               Kembali
             </Link>
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white/90 px-4 py-1.5 rounded-full text-sm mb-4 border border-white/10">
-              <LockClosedIcon className="w-4 h-4" />
+              <Lock className="w-4 h-4" />
               Privasi
             </div>
             <h1 className="font-heading font-bold text-white text-4xl md:text-5xl mb-3">Kebijakan Privasi</h1>

@@ -8,12 +8,7 @@ import { useToast } from '@/components/ToastProvider';
 import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
-import {
-  NewspaperIcon, PlusIcon, PencilSquareIcon, TrashIcon,
-  MagnifyingGlassIcon, XMarkIcon,
-  VideoCameraIcon, StarIcon, ClockIcon, DocumentTextIcon,
-  Cog6ToothIcon, BoltIcon, ArrowTopRightOnSquareIcon,
-} from '@heroicons/react/24/outline';
+import { Newspaper, Plus, SquarePen, Trash2, Search, X, Settings, FileText, Clock, Star, ExternalLink, Zap, Video } from 'lucide-react';
 
 const CATEGORY_COLORS = {
   Pelatihan: 'bg-blue-100 text-blue-700',
@@ -254,7 +249,7 @@ export default function AdminBlogPage() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-sm">
-            <NewspaperIcon className="w-6 h-6 text-white" />
+            <Newspaper className="w-6 h-6 text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Blog</h1>
@@ -263,24 +258,24 @@ export default function AdminBlogPage() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="secondary" onClick={() => { fetchCategories(); setCatModal(true); }}>
-            <Cog6ToothIcon className="w-4 h-4" /> Kategori
+            <Settings className="w-4 h-4" /> Kategori
           </Button>
           <Button onClick={() => { resetForm(); setCreateModal(true); }}>
-            <PlusIcon className="w-4 h-4" /> Artikel Baru
+            <Plus className="w-4 h-4" /> Artikel Baru
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <StatsCard icon={NewspaperIcon} label="Total Artikel" value={stats.total} color="rose" />
-        <StatsCard icon={DocumentTextIcon} label="Draft" value={stats.draft} color="warning" />
-        <StatsCard icon={ClockIcon} label="Published" value={stats.published} color="success" />
+        <StatsCard icon={Newspaper} label="Total Artikel" value={stats.total} color="rose" />
+        <StatsCard icon={FileText} label="Draft" value={stats.draft} color="warning" />
+        <StatsCard icon={Clock} label="Published" value={stats.published} color="success" />
       </div>
 
       <div className="bg-surface rounded-2xl border border-border">
         <div className="p-4 border-b border-border flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input placeholder="Cari judul artikel..." defaultValue={search} onChange={(e) => handleSearch(e.target.value)} className="w-full pl-9 pr-3 py-2 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all" />
           </div>
           <select value={filterCategory} onChange={(e) => startTransition(() => { setFilterCategory(e.target.value); setPage(1); })} className="px-3 py-2 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all">
@@ -297,7 +292,7 @@ export default function AdminBlogPage() {
             </div>
           ) : data.length === 0 ? (
             <div className="p-8 text-center">
-              <NewspaperIcon className="w-12 h-12 text-gray-200 mx-auto mb-3" />
+              <Newspaper className="w-12 h-12 text-gray-200 mx-auto mb-3" />
               <p className="text-gray-400">Belum ada artikel</p>
             </div>
           ) : (
@@ -323,7 +318,7 @@ export default function AdminBlogPage() {
                           <img src={post.media[0].url} alt="" className="w-9 h-9 rounded-lg object-cover border border-border shrink-0" />
                         ) : (
                           <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
-                            <NewspaperIcon className="w-4 h-4 text-gray-300" />
+                            <Newspaper className="w-4 h-4 text-gray-300" />
                           </div>
                         )}
                         <span className="text-sm font-medium text-foreground line-clamp-1">{post.title}</span>
@@ -343,7 +338,7 @@ export default function AdminBlogPage() {
                         className={`p-1.5 rounded-lg transition-colors cursor-pointer ${post.featured ? 'text-amber-500 bg-amber-50 hover:bg-amber-100' : 'text-gray-300 hover:text-amber-500 hover:bg-amber-50'}`}
                         title={post.featured ? 'Hapus unggulan' : 'Jadikan unggulan'}
                       >
-                        <StarIcon className="w-4 h-4" />
+                        <Star className="w-4 h-4" />
                       </button>
                     </td>
                     <td className="py-3 px-3 text-xs text-gray-400">{formatDate(post.created_at)}</td>
@@ -356,13 +351,13 @@ export default function AdminBlogPage() {
                           className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors"
                           title="Preview"
                         >
-                          <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+                          <ExternalLink className="w-4 h-4" />
                         </a>
                         <button onClick={() => openEdit(post)} className="p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer" title="Edit">
-                          <PencilSquareIcon className="w-4 h-4" />
+                          <SquarePen className="w-4 h-4" />
                         </button>
                         <button onClick={() => setDeleteModal(post.id)} className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors cursor-pointer" title="Hapus">
-                          <TrashIcon className="w-4 h-4" />
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </td>
@@ -402,7 +397,7 @@ export default function AdminBlogPage() {
               <div key={c.category} className="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-muted transition-colors">
                 <span className="text-sm font-medium text-foreground">{c.category} <span className="text-gray-400 font-normal">({c.total})</span></span>
                 <button onClick={() => handleDeleteCategory(c.category)} className="p-1 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
-                  <TrashIcon className="w-4 h-4" />
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             ))}
@@ -423,7 +418,7 @@ export default function AdminBlogPage() {
               <span className="text-xs text-gray-400 shrink-0">/blog/</span>
               <input value={form.slug} onChange={(e) => setForm((p) => ({ ...p, slug: slugify(e.target.value) }))} className="flex-1 px-3 py-2 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all" placeholder="judul-artikel" />
               <button onClick={() => setForm((p) => ({ ...p, slug: slugify(p.title) }))} className="text-xs text-primary hover:text-primary-dark shrink-0 cursor-pointer" title="Generate dari judul">
-                <BoltIcon className="w-4 h-4" />
+                <Zap className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -494,18 +489,18 @@ export default function AdminBlogPage() {
                 <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden border border-border bg-gray-50 group">
                   {f.type === 'video' ? (
                     <div className="w-full h-full flex items-center justify-center bg-gray-900">
-                      <VideoCameraIcon className="w-6 h-6 text-white/50" />
+                      <Video className="w-6 h-6 text-white/50" />
                     </div>
                   ) : (
                     <img src={f.url} alt="" className="w-full h-full object-cover" />
                   )}
                   <button onClick={() => setMediaFiles((prev) => prev.filter((_, j) => j !== i))} className="absolute top-0.5 right-0.5 w-5 h-5 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                    <XMarkIcon className="w-3 h-3 text-white" />
+                    <X className="w-3 h-3 text-white" />
                   </button>
                 </div>
               ))}
               <button onClick={() => fileInputRef.current?.click()} className="w-20 h-20 rounded-xl border-2 border-dashed border-border hover:border-primary/40 flex flex-col items-center justify-center text-gray-400 hover:text-primary transition-colors cursor-pointer">
-                <PlusIcon className="w-5 h-5" />
+                <Plus className="w-5 h-5" />
                 <span className="text-[9px] mt-0.5">Tambah</span>
               </button>
               <input ref={fileInputRef} type="file" multiple accept="image/*,video/*" onChange={handleFileSelect} className="hidden" />
@@ -531,7 +526,7 @@ export default function AdminBlogPage() {
               <span className="text-xs text-gray-400 shrink-0">/blog/</span>
               <input value={form.slug} onChange={(e) => setForm((p) => ({ ...p, slug: slugify(e.target.value) }))} className="flex-1 px-3 py-2 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all" />
               <button onClick={() => setForm((p) => ({ ...p, slug: slugify(p.title) }))} className="text-xs text-primary hover:text-primary-dark shrink-0 cursor-pointer">
-                <BoltIcon className="w-4 h-4" />
+                <Zap className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -601,13 +596,13 @@ export default function AdminBlogPage() {
                 <div key={m.id} className="relative w-20 h-20 rounded-xl overflow-hidden border border-border bg-gray-50 group">
                   {m.type === 'video' ? (
                     <div className="w-full h-full flex items-center justify-center bg-gray-900">
-                      <VideoCameraIcon className="w-6 h-6 text-white/50" />
+                      <Video className="w-6 h-6 text-white/50" />
                     </div>
                   ) : (
                     <img src={m.url} alt="" className="w-full h-full object-cover" />
                   )}
                   <button onClick={() => handleDeleteMedia(m.id)} className="absolute top-0.5 right-0.5 w-5 h-5 bg-red-500/80 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                    <XMarkIcon className="w-3 h-3 text-white" />
+                    <X className="w-3 h-3 text-white" />
                   </button>
                 </div>
               ))}
@@ -615,18 +610,18 @@ export default function AdminBlogPage() {
                 <div key={`new-${i}`} className="relative w-20 h-20 rounded-xl overflow-hidden border border-border bg-gray-50 group">
                   {f.type === 'video' ? (
                     <div className="w-full h-full flex items-center justify-center bg-gray-900">
-                      <VideoCameraIcon className="w-6 h-6 text-white/50" />
+                      <Video className="w-6 h-6 text-white/50" />
                     </div>
                   ) : (
                     <img src={f.url} alt="" className="w-full h-full object-cover" />
                   )}
                   <button onClick={() => setMediaFiles((prev) => prev.filter((_, j) => j !== i))} className="absolute top-0.5 right-0.5 w-5 h-5 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                    <XMarkIcon className="w-3 h-3 text-white" />
+                    <X className="w-3 h-3 text-white" />
                   </button>
                 </div>
               ))}
               <button onClick={() => fileInputRef.current?.click()} className="w-20 h-20 rounded-xl border-2 border-dashed border-border hover:border-primary/40 flex flex-col items-center justify-center text-gray-400 hover:text-primary transition-colors cursor-pointer">
-                <PlusIcon className="w-5 h-5" />
+                <Plus className="w-5 h-5" />
                 <span className="text-[9px] mt-0.5">Tambah</span>
               </button>
               <input ref={fileInputRef} type="file" multiple accept="image/*,video/*" onChange={handleFileSelect} className="hidden" />
@@ -653,7 +648,7 @@ export default function AdminBlogPage() {
         <div className="fixed inset-0 z-[9998] bg-black/85 flex items-center justify-center p-4" onClick={() => setPreviewImage(null)}>
           <div className="relative max-w-2xl w-full max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setPreviewImage(null)} className="absolute -top-3 -right-3 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center z-10 cursor-pointer">
-              <XMarkIcon className="w-4 h-4 text-gray-700" />
+              <X className="w-4 h-4 text-gray-700" />
             </button>
             <img src={previewImage} alt="Preview" className="w-full h-auto rounded-2xl shadow-2xl" />
           </div>

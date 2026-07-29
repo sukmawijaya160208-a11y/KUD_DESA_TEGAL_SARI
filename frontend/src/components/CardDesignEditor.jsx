@@ -8,7 +8,7 @@ import { useToast } from '@/components/ToastProvider';
 import Button from '@/components/ui/Button';
 import KartuAnggotaKud from '@/components/KartuAnggotaKud';
 import SignaturePad from '@/components/SignaturePad';
-import { CreditCardIcon } from '@heroicons/react/24/outline';
+import { CreditCard } from 'lucide-react';
 
 const ITEM_TYPE = 'FIELD';
 
@@ -268,7 +268,7 @@ function SideEditor({ side, label, fields, background, onToggle, onUpdate, onMov
         style={{ background: `linear-gradient(135deg, ${side === 'front' ? 'rgba(5, 150, 105, 0.05)' : 'rgba(2, 129, 67, 0.05)'}, transparent)` }}>
         <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
           style={{ background: side === 'front' ? 'rgba(5,150,105,0.1)' : 'rgba(2,129,67,0.1)' }}>
-          <CreditCardIcon className={`w-5 h-5 ${side === 'front' ? 'text-emerald-600' : 'text-emerald-700'}`} />
+          <CreditCard className={`w-5 h-5 ${side === 'front' ? 'text-emerald-600' : 'text-emerald-700'}`} />
         </div>
         <div>
           <h3 className="font-semibold text-foreground text-sm">{label}</h3>
@@ -503,7 +503,7 @@ function CardDesignEditorInner({ settingKud, settings, onSave }) {
         <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
           <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-emerald-500/5 to-transparent border-b border-border">
             <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0">
-              <CreditCardIcon className="w-5 h-5 text-emerald-600" />
+              <CreditCard className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
               <h3 className="font-semibold text-foreground text-sm">Template Kartu</h3>
@@ -611,7 +611,7 @@ function CardDesignEditorInner({ settingKud, settings, onSave }) {
         <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden sticky top-6">
           <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-emerald-500/5 to-transparent border-b border-border">
             <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0">
-              <CreditCardIcon className="w-5 h-5 text-emerald-600" />
+              <CreditCard className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
               <h3 className="font-semibold text-foreground text-sm">Pratinjau Kartu</h3>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
-import { SparklesIcon } from '@heroicons/react/24/outline';
+import { Sparkles } from 'lucide-react';
 
 export default function HeroSectionCMS() {
   const [formData, setFormData] = useState({
@@ -72,7 +72,7 @@ export default function HeroSectionCMS() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 sm:gap-4 border-b border-slate-200 pb-3 sm:pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md shrink-0">
-            <SparklesIcon className="w-5 h-5 text-white" />
+            <Sparkles className="w-5 h-5 text-white" />
           </div>
           <div>
             <h1 className="text-lg sm:text-2xl font-bold text-slate-800 leading-tight">Hero Section</h1>

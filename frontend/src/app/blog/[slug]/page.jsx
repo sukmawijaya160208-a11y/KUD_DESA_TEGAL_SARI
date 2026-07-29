@@ -6,10 +6,7 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import { formatDateLong } from '@/lib/date';
 import { api } from '@/lib/api';
 import Link from 'next/link';
-import {
-  NewspaperIcon, ClockIcon, EyeIcon, ArrowLeftIcon,
-  ChevronLeftIcon, ShareIcon, PhotoIcon, VideoCameraIcon,
-} from '@heroicons/react/24/outline';
+import { Newspaper, Clock, Eye, ArrowLeft, ChevronLeft, Share2, Image, Video } from 'lucide-react';
 
 const CATEGORY_COLORS = {
   Pelatihan: { bg: 'bg-blue-500/10', text: 'text-blue-600', dot: 'bg-blue-500' },
@@ -141,7 +138,7 @@ export default function BlogDetailPage() {
     return (
       <div className="min-h-[60vh] flex items-center justify-center px-6">
         <div className="text-center">
-          <NewspaperIcon className="w-20 h-20 text-gray-200 mx-auto mb-4" />
+          <Newspaper className="w-20 h-20 text-gray-200 mx-auto mb-4" />
           <h1 className="font-heading font-bold text-foreground text-2xl mb-2">
             {error || 'Artikel tidak ditemukan'}
           </h1>
@@ -149,7 +146,7 @@ export default function BlogDetailPage() {
             Halaman yang Anda cari tidak tersedia atau telah dihapus.
           </p>
           <Link href="/blog" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary-dark transition-colors">
-            <ArrowLeftIcon className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" />
             Kembali ke Blog
           </Link>
         </div>
@@ -172,7 +169,7 @@ export default function BlogDetailPage() {
         <div className="max-w-4xl mx-auto relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <Link href="/blog" className="inline-flex items-center gap-1.5 text-white/60 hover:text-white transition-colors text-sm mb-6 group">
-              <ChevronLeftIcon className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+              <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
               Kembali ke Blog
             </Link>
 
@@ -205,12 +202,12 @@ export default function BlogDetailPage() {
               <span>{formatDateLong(post.published_at || post.created_at)}</span>
               <span>·</span>
               <span className="flex items-center gap-1">
-                <ClockIcon className="w-3.5 h-3.5" />
+                <Clock className="w-3.5 h-3.5" />
                 {time} menit baca
               </span>
               <span>·</span>
               <span className="flex items-center gap-1">
-                <EyeIcon className="w-3.5 h-3.5" />
+                <Eye className="w-3.5 h-3.5" />
                 {formatViews(viewsCount)} dilihat
               </span>
             </div>
@@ -290,14 +287,14 @@ export default function BlogDetailPage() {
                 {post.media?.length > 0 && (
                   <>
                     <span className="text-gray-300">|</span>
-                    <PhotoIcon className="w-3.5 h-3.5" />
+                    <Image className="w-3.5 h-3.5" />
                     <span>{post.media.length} media</span>
                   </>
                 )}
                 {post.media?.filter((m) => m.type === 'video').length > 0 && (
                   <>
                     <span className="text-gray-300">·</span>
-                    <VideoCameraIcon className="w-3.5 h-3.5" />
+                    <Video className="w-3.5 h-3.5" />
                     <span>{post.media.filter((m) => m.type === 'video').length} video</span>
                   </>
                 )}
@@ -336,7 +333,7 @@ export default function BlogDetailPage() {
                   {copySuccess ? (
                     <svg className="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
                   ) : (
-                    <ShareIcon className="w-4 h-4" />
+                    <Share2 className="w-4 h-4" />
                   )}
                 </button>
               </div>
@@ -361,7 +358,7 @@ export default function BlogDetailPage() {
                           <img src={rp.media[0].url} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10">
-                            <NewspaperIcon className="w-8 h-8 text-primary/20" />
+                            <Newspaper className="w-8 h-8 text-primary/20" />
                           </div>
                         )}
                       </div>
@@ -394,7 +391,7 @@ export default function BlogDetailPage() {
                           <img src={pp.media[0].url} alt={pp.title} className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10">
-                            <NewspaperIcon className="w-5 h-5 text-primary/20" />
+                            <Newspaper className="w-5 h-5 text-primary/20" />
                           </div>
                         )}
                       </div>
@@ -402,7 +399,7 @@ export default function BlogDetailPage() {
                         <span className={`text-xs font-semibold ${pc.text}`}>{pp.category}</span>
                         <h3 className="text-sm font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">{pp.title}</h3>
                         <span className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
-                          <EyeIcon className="w-3.5 h-3.5" />
+                          <Eye className="w-3.5 h-3.5" />
                           {formatViews(pp.views || 0)}
                         </span>
                       </div>
@@ -419,7 +416,7 @@ export default function BlogDetailPage() {
               href="/blog"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary-dark transition-colors"
             >
-              <ArrowLeftIcon className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4" />
               Kembali ke Blog
             </Link>
           </div>

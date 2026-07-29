@@ -11,11 +11,7 @@ import { TableSkeleton } from '@/components/ui/Skeleton';
 import { formatDate } from '@/lib/date';
 
 
-import {
-  BookOpenIcon, EyeIcon, CheckCircleIcon, XCircleIcon,
-  XMarkIcon, ChevronDownIcon, ChevronUpIcon, TrashIcon,
-  ClockIcon, DocumentTextIcon, PrinterIcon
-} from '@heroicons/react/24/outline';
+import { Users, Eye, Search, Filter, X, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
 import ReviewModal from '@/components/ReviewModal';
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',
@@ -90,7 +86,7 @@ export default function AdminPendaftaranPage() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <BookOpenIcon className="w-6 h-6 text-primary" />
+            <BookOpen className="w-6 h-6 text-primary" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Pendaftaran Program</h1>
@@ -111,7 +107,7 @@ export default function AdminPendaftaranPage() {
       {filtered.length === 0 ? (
         <div className="text-center py-20">
           <div className="w-16 h-16 bg-muted rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <BookOpenIcon className="w-8 h-8 text-gray-300" />
+            <BookOpen className="w-8 h-8 text-gray-300" />
           </div>
           <p className="text-gray-400 text-lg font-medium">Belum ada pendaftaran</p>
         </div>
@@ -130,14 +126,14 @@ export default function AdminPendaftaranPage() {
                       <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
                         <span>{d.programKud?.nama}</span>
                         <span className="text-gray-300">|</span>
-                        <span className="flex items-center gap-1"><ClockIcon className="w-3 h-3" />{formatDate(d.created_at)}</span>
+                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{formatDate(d.created_at)}</span>
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusBg(d.status)}`}>{d.status}</span>
                     <button onClick={() => setExpandedId(expandedId === d.id ? null : d.id)} className="p-1.5 text-gray-400 hover:text-foreground transition-colors cursor-pointer">
-                      {expandedId === d.id ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />}
+                      {expandedId === d.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>
                   </div>
                 </div>
@@ -223,15 +219,15 @@ export default function AdminPendaftaranPage() {
 
                     <div className="flex items-center gap-2 pt-2 border-t border-border">
                       <Button size="sm" variant="secondary" onClick={() => handleReview(d)}>
-                        <PrinterIcon className="w-4 h-4" /> Review & Cetak
+                        <Printer className="w-4 h-4" /> Review & Cetak
                       </Button>
                       {d.status === 'pending' && (
                         <>
                           <Button size="sm" variant="success" onClick={() => handleVerifikasi(d.id, 'verified')}>
-                            <CheckCircleIcon className="w-4 h-4" /> Terima
+                            <CheckCircle className="w-4 h-4" /> Terima
                           </Button>
                           <Button size="sm" variant="danger" onClick={() => handleVerifikasi(d.id, 'rejected')}>
-                            <XCircleIcon className="w-4 h-4" /> Tolak
+                            <XCircle className="w-4 h-4" /> Tolak
                           </Button>
                         </>
                       )}
@@ -239,7 +235,7 @@ export default function AdminPendaftaranPage() {
                         <span className="text-xs text-gray-400 ml-auto">Catatan: {d.catatan_verifikasi}</span>
                       )}
                       <button onClick={() => handleDelete(d.id)} className="ml-auto p-1.5 text-gray-400 hover:text-destructive transition-colors cursor-pointer" title="Hapus">
-                        <TrashIcon className="w-4 h-4" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -256,7 +252,7 @@ export default function AdminPendaftaranPage() {
             <div className="absolute -top-8 left-0 right-0 flex items-center justify-between">
               <span className="text-white/80 text-sm font-medium">{previewLabel}</span>
               <button onClick={() => { setPreviewImage(null); setPreviewLabel(''); }} className="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center cursor-pointer transition-all">
-                <XMarkIcon className="w-4 h-4 text-white" />
+                <X className="w-4 h-4 text-white" />
               </button>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}

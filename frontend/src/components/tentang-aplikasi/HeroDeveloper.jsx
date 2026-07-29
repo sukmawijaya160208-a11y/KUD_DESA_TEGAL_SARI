@@ -1,6 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
-import { PhoneIcon, CameraIcon, EnvelopeIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
+import { Phone, Camera, Mail, SquarePen } from 'lucide-react';
 
 export default function HeroDeveloper({ data, admin, onEdit }) {
   if (!data) return null;
@@ -62,7 +62,7 @@ export default function HeroDeveloper({ data, admin, onEdit }) {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-colors text-sm"
                 >
-                  <PhoneIcon className="w-4 h-4" />
+                  <Phone className="w-4 h-4" />
                   {data.kontak}
                 </a>
               )}
@@ -82,7 +82,7 @@ export default function HeroDeveloper({ data, admin, onEdit }) {
                   href={`mailto:${data.email}`}
                   className="inline-flex items-center gap-2 text-slate-300 hover:text-blue-400 transition-colors text-sm"
                 >
-                  <EnvelopeIcon className="w-4 h-4" />
+                  <Mail className="w-4 h-4" />
                   {data.email}
                 </a>
               )}
@@ -101,7 +101,7 @@ export default function HeroDeveloper({ data, admin, onEdit }) {
               onClick={onEdit}
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-white/20 transition-all duration-200 text-sm font-medium backdrop-blur-sm"
             >
-              <PencilSquareIcon className="w-4 h-4" />
+              <SquarePen className="w-4 h-4" />
               Edit Profil
             </button>
           </motion.div>

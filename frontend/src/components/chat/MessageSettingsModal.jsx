@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { XMarkIcon, BellIcon, SpeakerWaveIcon, PhotoIcon, KeyIcon } from '@heroicons/react/24/outline';
+import { X, Bell, Volume2, Image, Key } from 'lucide-react';
 import { api } from '@/lib/api';
 
 const WALLPAPERS = [
@@ -71,7 +71,7 @@ export default function MessageSettingsModal({ open, onClose }) {
               <div className="flex items-center gap-2">
                 {saving && <span className="text-[10px] text-white/60">Menyimpan...</span>}
                 <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/20 transition-colors cursor-pointer">
-                  <XMarkIcon className="w-5 h-5 text-white" />
+                  <X className="w-5 h-5 text-white" />
                 </button>
               </div>
             </div>
@@ -95,7 +95,7 @@ export default function MessageSettingsModal({ open, onClose }) {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between py-2">
                         <div className="flex items-center gap-3">
-                          <BellIcon className="w-5 h-5 text-gray-400" />
+                          <Bell className="w-5 h-5 text-gray-400" />
                           <div>
                             <p className="text-sm font-medium text-foreground">Notifikasi Pesan</p>
                             <p className="text-[11px] text-gray-400">Tampilkan notifikasi saat ada pesan baru</p>
@@ -111,7 +111,7 @@ export default function MessageSettingsModal({ open, onClose }) {
 
                       <div className="flex items-center justify-between py-2">
                         <div className="flex items-center gap-3">
-                          <SpeakerWaveIcon className="w-5 h-5 text-gray-400" />
+                          <Volume2 className="w-5 h-5 text-gray-400" />
                           <div>
                             <p className="text-sm font-medium text-foreground">Suara Notifikasi</p>
                             <p className="text-[11px] text-gray-400">Pilih nada notifikasi pesan baru</p>
@@ -140,7 +140,7 @@ export default function MessageSettingsModal({ open, onClose }) {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between py-2">
                         <div className="flex items-center gap-3">
-                          <KeyIcon className="w-5 h-5 text-gray-400" />
+                          <Key className="w-5 h-5 text-gray-400" />
                           <div>
                             <p className="text-sm font-medium text-foreground">Enter untuk Kirim</p>
                             <p className="text-[11px] text-gray-400">Kirim pesan dengan tombol Enter</p>
@@ -156,7 +156,7 @@ export default function MessageSettingsModal({ open, onClose }) {
 
                       <div>
                         <div className="flex items-center gap-3 mb-3">
-                          <PhotoIcon className="w-5 h-5 text-gray-400" />
+                          <Image className="w-5 h-5 text-gray-400" />
                           <p className="text-sm font-medium text-foreground">Wallpaper Obrolan</p>
                         </div>
                         <div className="grid grid-cols-5 gap-2">

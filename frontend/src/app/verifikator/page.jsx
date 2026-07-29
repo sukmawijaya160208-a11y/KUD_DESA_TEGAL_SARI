@@ -8,11 +8,7 @@ import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
-import {
-  CheckBadgeIcon, EyeIcon, XMarkIcon, MagnifyingGlassIcon,
-  UsersIcon, ClockIcon, CheckCircleIcon, XCircleIcon,
-  FunnelIcon, ArrowUpIcon, ArrowDownIcon, ChevronDownIcon, ChevronRightIcon
-} from '@heroicons/react/24/outline';
+import { BadgeCheck, Eye, X, Search, CheckCircle, XCircle, Clock, ShieldCheck, FileText, CalendarDays, MapPin, Phone, Users, Filter, ArrowUp, ArrowDown, ChevronDown, ChevronRight, FileDown, Trash2, AlertTriangle, Plus, SquarePen, Image } from 'lucide-react';
 import { formatDate, formatRelative } from '@/lib/date';
 
 const containerAnim = {
@@ -40,7 +36,7 @@ const PekebunRow = memo(function PekebunRow({ d, onPreview, onVerifikasi, expand
       className={`border-b border-border/50 transition-colors hover:bg-muted/50 ${expanded ? 'bg-muted/30' : ''}`}>
       <td className="py-3 px-3 w-8">
         <button onClick={onToggleExpand} className="p-0.5 rounded hover:bg-muted transition-all cursor-pointer">
-          {expanded ? <ChevronDownIcon className="w-4 h-4 text-gray-400" /> : <ChevronRightIcon className="w-4 h-4 text-gray-400" />}
+          {expanded ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
         </button>
       </td>
       <td className="py-3 px-3">
@@ -63,17 +59,17 @@ const PekebunRow = memo(function PekebunRow({ d, onPreview, onVerifikasi, expand
         <div className="flex items-center gap-1">
           {d.foto_pekebun && (
             <button onClick={() => onPreview(d.foto_pekebun)} className="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors cursor-pointer" title="Foto">
-              <EyeIcon className="w-3.5 h-3.5" />
+              <Eye className="w-3.5 h-3.5" />
             </button>
           )}
           {d.upload_ktp && (
             <button onClick={() => onPreview(d.upload_ktp)} className="p-1.5 rounded-lg bg-purple-50 text-purple-600 hover:bg-purple-100 transition-colors cursor-pointer" title="KTP">
-              <EyeIcon className="w-3.5 h-3.5" />
+              <Eye className="w-3.5 h-3.5" />
             </button>
           )}
           {d.upload_kk && (
             <button onClick={() => onPreview(d.upload_kk)} className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors cursor-pointer" title="KK">
-              <EyeIcon className="w-3.5 h-3.5" />
+              <Eye className="w-3.5 h-3.5" />
             </button>
           )}
           {(!d.foto_pekebun && !d.upload_ktp && !d.upload_kk) && (
@@ -96,11 +92,11 @@ const PekebunRow = memo(function PekebunRow({ d, onPreview, onVerifikasi, expand
           <div className="flex items-center gap-1.5">
             <button onClick={() => onVerifikasi(d.id, 'verified')}
               className="px-2.5 py-1.5 rounded-lg bg-success/10 text-success hover:bg-success/20 transition-colors text-xs font-semibold cursor-pointer flex items-center gap-1">
-              <CheckCircleIcon className="w-3.5 h-3.5" /> Terima
+              <CheckCircle className="w-3.5 h-3.5" /> Terima
             </button>
             <button onClick={() => onVerifikasi(d.id, 'rejected')}
               className="px-2.5 py-1.5 rounded-lg bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors text-xs font-semibold cursor-pointer flex items-center gap-1">
-              <XCircleIcon className="w-3.5 h-3.5" /> Tolak
+              <XCircle className="w-3.5 h-3.5" /> Tolak
             </button>
           </div>
         ) : (
@@ -192,10 +188,10 @@ export default function VerifikatorPage() {
   };
 
   const renderSortIcon = (column) => {
-    if (sortKey !== column) return <ArrowUpIcon className="w-3 h-3 text-gray-300 group-hover:text-gray-400" />;
+    if (sortKey !== column) return <ArrowUp className="w-3 h-3 text-gray-300 group-hover:text-gray-400" />;
     return sortDir === 'asc'
-      ? <ArrowUpIcon className="w-3 h-3 text-primary" />
-      : <ArrowDownIcon className="w-3 h-3 text-primary" />;
+      ? <ArrowUp className="w-3 h-3 text-primary" />
+      : <ArrowDown className="w-3 h-3 text-primary" />;
   };
 
   const renderSortHeader = (column, children, className) => (
@@ -215,7 +211,7 @@ export default function VerifikatorPage() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-sm">
-            <CheckBadgeIcon className="w-6 h-6 text-white" />
+            <BadgeCheck className="w-6 h-6 text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Verifikasi Pekebun</h1>
@@ -226,9 +222,9 @@ export default function VerifikatorPage() {
 
       <div className="grid grid-cols-3 gap-4 mb-6">
         {[
-          { label: 'Menunggu', value: stats.pending, icon: ClockIcon, color: 'bg-amber-500', shadow: 'shadow-amber-500/20' },
-          { label: 'Disetujui', value: stats.verified, icon: CheckCircleIcon, color: 'bg-emerald-500', shadow: 'shadow-emerald-500/20' },
-          { label: 'Ditolak', value: stats.rejected, icon: XCircleIcon, color: 'bg-rose-500', shadow: 'shadow-rose-500/20' },
+          { label: 'Menunggu', value: stats.pending, icon: Clock, color: 'bg-amber-500', shadow: 'shadow-amber-500/20' },
+          { label: 'Disetujui', value: stats.verified, icon: CheckCircle, color: 'bg-emerald-500', shadow: 'shadow-emerald-500/20' },
+          { label: 'Ditolak', value: stats.rejected, icon: XCircle, color: 'bg-rose-500', shadow: 'shadow-rose-500/20' },
         ].map((s, i) => (
           <div key={i} className={`bg-surface rounded-2xl border border-border p-4 shadow-sm ${s.shadow} transition-all duration-200`}>
             <div className="flex items-center justify-between mb-2">
@@ -245,7 +241,7 @@ export default function VerifikatorPage() {
       <div className="bg-surface rounded-2xl border border-border mb-4 shadow-sm">
         <div className="p-4 border-b border-border flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input ref={searchRef}
               placeholder="Cari nama, NIK, atau WhatsApp..."
               defaultValue={search}
@@ -260,17 +256,17 @@ export default function VerifikatorPage() {
 
         {hasActiveFilters && (
           <div className="flex flex-wrap items-center gap-2 px-4 pb-3">
-            <span className="text-xs text-muted-foreground font-medium"><FunnelIcon className="w-3 h-3 inline mr-1" />Filter:</span>
+            <span className="text-xs text-muted-foreground font-medium"><Filter className="w-3 h-3 inline mr-1" />Filter:</span>
             {search && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
                 Cari: {search}
-                <button onClick={() => { setSearch(''); setPage(1); }} className="cursor-pointer hover:text-primary-dark"><XMarkIcon className="w-3 h-3" /></button>
+                <button onClick={() => { setSearch(''); setPage(1); }} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
               </span>
             )}
             {filterStatus !== 'pending' && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
                 Status: {filterStatus === 'verified' ? 'Disetujui' : 'Ditolak'}
-                <button onClick={() => setFilterStatus('pending')} className="cursor-pointer hover:text-primary-dark"><XMarkIcon className="w-3 h-3" /></button>
+                <button onClick={() => setFilterStatus('pending')} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
               </span>
             )}
             <button onClick={() => { setSearch(''); setFilterStatus('pending'); setPage(1); }}
@@ -288,7 +284,7 @@ export default function VerifikatorPage() {
             </div>
           ) : data.length === 0 ? (
             <div className="p-8 text-center">
-              <CheckBadgeIcon className="w-12 h-12 text-gray-200 mx-auto mb-3" />
+              <BadgeCheck className="w-12 h-12 text-gray-200 mx-auto mb-3" />
               <p className="text-muted-foreground">Tidak ada data pekebun</p>
             </div>
           ) : (
@@ -433,7 +429,7 @@ export default function VerifikatorPage() {
         <div className="fixed inset-0 z-[9998] bg-black/85 flex items-center justify-center p-4" onClick={() => setPreviewImage(null)}>
           <div className="relative max-w-2xl w-full max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setPreviewImage(null)} className="absolute -top-3 -right-3 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center z-10 cursor-pointer">
-              <XMarkIcon className="w-4 h-4 text-gray-700" />
+              <X className="w-4 h-4 text-gray-700" />
             </button>
             <img src={previewImage} alt="Preview" className="w-full h-auto rounded-2xl shadow-2xl" />
           </div>

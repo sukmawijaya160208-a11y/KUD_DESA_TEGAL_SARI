@@ -12,17 +12,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import { formatDate, formatRelative, todayStr } from '@/lib/date';
-import {
-  UsersIcon, ClipboardDocumentListIcon, MapPinIcon, CheckBadgeIcon,
-  ClockIcon, ChartBarIcon, BookOpenIcon, UserGroupIcon,
-  ArrowRightIcon, ArrowDownTrayIcon, Cog6ToothIcon, PlusCircleIcon,
-  EyeIcon, ChevronRightIcon, SparklesIcon, BanknotesIcon,
-  DocumentTextIcon, PhotoIcon, ArrowPathIcon, CalendarDaysIcon,
-  MagnifyingGlassIcon, ExclamationTriangleIcon, TrophyIcon,
-  CurrencyDollarIcon, BellAlertIcon, ShieldCheckIcon,
-  SunIcon, MoonIcon, UserCircleIcon, ArrowTrendingUpIcon,
-  ArrowTrendingDownIcon, FireIcon, RocketLaunchIcon,
-} from '@heroicons/react/24/outline';
+import { Users, ClipboardList, MapPin, BadgeCheck, Clock, BarChart3, BookOpen, User, DollarSign, Bell, ShieldCheck, Trash2, Plus, PlusCircle, X, SquarePen, FileText, Eye, CheckCircle, Image, Search, ArrowLeft, CalendarDays, Settings, RefreshCw, AlertTriangle, Pause, Play, Download, UserCircle, Flame, ChevronRight } from 'lucide-react';
 
 /* ============================================================
    CONSTANTS
@@ -38,23 +28,23 @@ const AREA_GRADIENT = { g1: '#3B82F6', g2: '#93C5FD' };
 const BAR_COLORS = ['#6366F1', '#8B5CF6', '#A78BFA', '#C4B5FD', '#DDD6FE'];
 
 const ACTIONS = [
-  { label: 'Tambah Pekebun', desc: 'Registrasi pekebun baru', icon: PlusCircleIcon, href: '/admin/pekebun', gradient: 'from-blue-500 to-indigo-600' },
-  { label: 'Buat Program', desc: 'Buka program KUD baru', icon: ClipboardDocumentListIcon, href: '/admin/program', gradient: 'from-purple-500 to-purple-600' },
-  { label: 'Atur Harga TBS', desc: 'Update harga TBS per kelas', icon: CurrencyDollarIcon, href: '/admin/harga-tbs', gradient: 'from-emerald-500 to-emerald-600' },
-  { label: 'Lihat Laporan', desc: 'Analitik dan rekap data', icon: ChartBarIcon, href: '/admin/laporan', gradient: 'from-cyan-500 to-cyan-600' },
-  { label: 'Verifikasi', desc: 'Review pendaftaran masuk', icon: ShieldCheckIcon, href: '/admin/pendaftaran', gradient: 'from-amber-500 to-amber-600' },
-  { label: 'Kelola User', desc: 'Manajemen akun pengguna', icon: UsersIcon, href: '/admin/users', gradient: 'from-rose-500 to-rose-600' },
-  { label: 'Backup Data', desc: 'Download backup database', icon: ArrowDownTrayIcon, href: '/admin/backup-restore', gradient: 'from-teal-500 to-teal-600' },
-  { label: 'Pengaturan', desc: 'Konfigurasi aplikasi', icon: Cog6ToothIcon, href: '/admin/pengaturan', gradient: 'from-gray-500 to-gray-600' },
+  { label: 'Tambah Pekebun', desc: 'Registrasi pekebun baru', icon: PlusCircle, href: '/admin/pekebun', gradient: 'from-blue-500 to-indigo-600' },
+  { label: 'Buat Program', desc: 'Buka program KUD baru', icon: ClipboardList, href: '/admin/program', gradient: 'from-purple-500 to-purple-600' },
+  { label: 'Atur Harga TBS', desc: 'Update harga TBS per kelas', icon: DollarSign, href: '/admin/harga-tbs', gradient: 'from-emerald-500 to-emerald-600' },
+  { label: 'Lihat Laporan', desc: 'Analitik dan rekap data', icon: BarChart3, href: '/admin/laporan', gradient: 'from-cyan-500 to-cyan-600' },
+  { label: 'Verifikasi', desc: 'Review pendaftaran masuk', icon: ShieldCheck, href: '/admin/pendaftaran', gradient: 'from-amber-500 to-amber-600' },
+  { label: 'Kelola User', desc: 'Manajemen akun pengguna', icon: Users, href: '/admin/users', gradient: 'from-rose-500 to-rose-600' },
+  { label: 'Backup Data', desc: 'Download backup database', icon: Download, href: '/admin/backup-restore', gradient: 'from-teal-500 to-teal-600' },
+  { label: 'Pengaturan', desc: 'Konfigurasi aplikasi', icon: Settings, href: '/admin/pengaturan', gradient: 'from-gray-500 to-gray-600' },
 ];
 
 const SUMMARY_STATS = [
-  { key: 'total_users', label: 'Total User', icon: UsersIcon, href: '/admin/users', color: 'text-blue-600', bg: 'bg-blue-100' },
-  { key: 'total_pekebun', label: 'Pekebun', icon: UserGroupIcon, href: '/admin/pekebun', color: 'text-emerald-600', bg: 'bg-emerald-100' },
-  { key: 'total_program', label: 'Program', icon: ClipboardDocumentListIcon, href: '/admin/program', color: 'text-purple-600', bg: 'bg-purple-100' },
-  { key: 'total_lahan', label: 'Lahan', icon: MapPinIcon, href: '/admin/lahan', color: 'text-orange-600', bg: 'bg-orange-100' },
-  { key: 'total_tbs', label: 'TBS Tercatat', icon: ChartBarIcon, href: '/admin/tbs', color: 'text-cyan-600', bg: 'bg-cyan-100' },
-  { key: 'total_pendaftaran', label: 'Pendaftaran', icon: BookOpenIcon, href: '/admin/pendaftaran', color: 'text-pink-600', bg: 'bg-pink-100' },
+  { key: 'total_users', label: 'Total User', icon: Users, href: '/admin/users', color: 'text-blue-600', bg: 'bg-blue-100' },
+  { key: 'total_pekebun', label: 'Pekebun', icon: Users, href: '/admin/pekebun', color: 'text-emerald-600', bg: 'bg-emerald-100' },
+  { key: 'total_program', label: 'Program', icon: ClipboardList, href: '/admin/program', color: 'text-purple-600', bg: 'bg-purple-100' },
+  { key: 'total_lahan', label: 'Lahan', icon: MapPin, href: '/admin/lahan', color: 'text-orange-600', bg: 'bg-orange-100' },
+  { key: 'total_tbs', label: 'TBS Tercatat', icon: BarChart3, href: '/admin/tbs', color: 'text-cyan-600', bg: 'bg-cyan-100' },
+  { key: 'total_pendaftaran', label: 'Pendaftaran', icon: BookOpen, href: '/admin/pendaftaran', color: 'text-pink-600', bg: 'bg-pink-100' },
 ];
 
 const SYSTEM_INFO = [
@@ -505,7 +495,7 @@ export default function AdminDashboard() {
       <motion.div variants={itemAnim} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-lg shadow-primary/20">
-            <UserCircleIcon className="w-7 h-7" />
+            <UserCircle className="w-7 h-7" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-foreground font-heading">{greeting}, {user?.name || 'Admin'}</h1>
@@ -519,14 +509,14 @@ export default function AdminDashboard() {
             className="p-2 rounded-xl border border-border bg-white hover:bg-gray-50 transition-colors cursor-pointer disabled:opacity-50"
             title="Refresh data"
           >
-            <ArrowPathIcon className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
           </button>
           <button
             onClick={() => setAutoRefresh(!autoRefresh)}
             className={`p-2 rounded-xl border transition-colors cursor-pointer ${autoRefresh ? 'bg-primary/10 border-primary/30 text-primary' : 'border-border bg-white text-gray-400'}`}
             title={autoRefresh ? 'Auto-refresh aktif' : 'Auto-refresh mati'}
           >
-            <ClockIcon className="w-4 h-4" />
+            <Clock className="w-4 h-4" />
           </button>
           <span className="text-[10px] text-gray-400 hidden sm:block">
             {autoRefresh ? `Auto ${formatRelative(lastRefresh)}` : 'Manual'}
@@ -553,27 +543,27 @@ export default function AdminDashboard() {
       <motion.div variants={itemAnim} className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
         {totalLuasHa && (
           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-700 font-medium">
-            <MapPinIcon className="w-3 h-3" /> Total Lahan: {totalLuasHa} ha
+            <MapPin className="w-3 h-3" /> Total Lahan: {totalLuasHa} ha
           </span>
         )}
         {lahanStats?.total_pekebun_dengan_lahan > 0 && (
           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 font-medium">
-            <UserGroupIcon className="w-3 h-3" /> {lahanStats.total_pekebun_dengan_lahan} pekebun punya lahan
+            <Users className="w-3 h-3" /> {lahanStats.total_pekebun_dengan_lahan} pekebun punya lahan
           </span>
         )}
         {programStats && (
           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 font-medium">
-            <FireIcon className="w-3 h-3" /> {programStats.aktif} program aktif dari {programStats.total}
+            <Flame className="w-3 h-3" /> {programStats.aktif} program aktif dari {programStats.total}
           </span>
         )}
         {stats?.total_pekebun_pending > 0 && (
           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 font-medium">
-            <ExclamationTriangleIcon className="w-3 h-3" /> {stats.total_pekebun_pending} pekebun pending
+            <AlertTriangle className="w-3 h-3" /> {stats.total_pekebun_pending} pekebun pending
           </span>
         )}
         {stats?.total_pendaftaran_pending > 0 && (
           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-rose-50 text-rose-700 font-medium">
-            <BellAlertIcon className="w-3 h-3" /> {stats.total_pendaftaran_pending} pendaftaran pending
+            <Bell className="w-3 h-3" /> {stats.total_pendaftaran_pending} pendaftaran pending
           </span>
         )}
       </motion.div>
@@ -608,10 +598,10 @@ export default function AdminDashboard() {
             <ActivityTimeline verifikasi={verifikasi} pendaftaran={pendaftaran} tbsList={tbsList} />
             <div className="mt-3 pt-3 border-t border-border flex gap-3">
               <button onClick={() => router.push('/admin/verifikasi-log')} className="text-xs text-primary font-medium hover:underline cursor-pointer flex items-center gap-1">
-                Semua Verifikasi <ChevronRightIcon className="w-3 h-3" />
+                Semua Verifikasi <ChevronRight className="w-3 h-3" />
               </button>
               <button onClick={() => router.push('/admin/pendaftaran')} className="text-xs text-primary font-medium hover:underline cursor-pointer flex items-center gap-1">
-                Semua Pendaftaran <ChevronRightIcon className="w-3 h-3" />
+                Semua Pendaftaran <ChevronRight className="w-3 h-3" />
               </button>
             </div>
           </Card>
@@ -621,7 +611,7 @@ export default function AdminDashboard() {
             <HargaTbsCards data={hargaTbs} />
             <div className="mt-3 pt-3 border-t border-border">
               <button onClick={() => router.push('/admin/harga-tbs')} className="text-xs text-primary font-medium hover:underline cursor-pointer flex items-center gap-1">
-                Kelola Harga TBS <ChevronRightIcon className="w-3 h-3" />
+                Kelola Harga TBS <ChevronRight className="w-3 h-3" />
               </button>
             </div>
           </Card>
@@ -635,7 +625,7 @@ export default function AdminDashboard() {
             <TopPekebun tbsList={tbsList} />
             <div className="mt-3 pt-3 border-t border-border">
               <button onClick={() => router.push('/admin/pekebun')} className="text-xs text-primary font-medium hover:underline cursor-pointer flex items-center gap-1">
-                Semua Pekebun <ChevronRightIcon className="w-3 h-3" />
+                Semua Pekebun <ChevronRight className="w-3 h-3" />
               </button>
             </div>
           </Card>

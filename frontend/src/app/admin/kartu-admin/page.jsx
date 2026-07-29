@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import KartuAdmin from '@/components/KartuAdmin';
 import { motion } from 'framer-motion';
-import { CreditCardIcon } from '@heroicons/react/24/outline';
+import { CreditCard } from 'lucide-react';
 
 export default function AdminKartuPage() {
   const [data, setData] = useState(null);
@@ -53,7 +53,7 @@ export default function AdminKartuPage() {
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
         <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-indigo-500/10 to-transparent border-b border-border">
           <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0">
-            <CreditCardIcon className="w-5 h-5 text-indigo-600" />
+            <CreditCard className="w-5 h-5 text-indigo-600" />
           </div>
           <div className="flex-1">
             <h3 className="font-semibold text-foreground text-sm">Kartu Identitas Admin</h3>

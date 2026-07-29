@@ -11,22 +11,17 @@ import { motion } from 'framer-motion';
 import CardDesignEditor from '@/components/CardDesignEditor';
 import SertifikatDesignEditor from '@/components/SertifikatDesignEditor';
 import AdminCardDesignEditor from '@/components/AdminCardDesignEditor';
-import {
-  Cog6ToothIcon, TrashIcon, PlusIcon, CreditCardIcon, BuildingOfficeIcon,
-  UserIcon, ShieldCheckIcon, ServerIcon, KeyIcon,
-  EyeIcon, EyeSlashIcon, ArrowRightOnRectangleIcon,
-  ArrowUpTrayIcon, ExclamationCircleIcon, UserCircleIcon,
-} from '@heroicons/react/24/outline';
+import { Settings, Trash2, Plus, CreditCard, Building, User, ShieldCheck, Server, Key, Eye, EyeOff, LogOut, Upload, AlertCircle, UserCircle } from 'lucide-react';
 
 const TABS = [
-  { id: 'profil', label: 'Profil Admin', icon: UserIcon, color: 'from-blue-500 to-blue-600' },
-  { id: 'info', label: 'Informasi KUD', icon: BuildingOfficeIcon, color: 'from-emerald-500 to-emerald-600' },
-  { id: 'keamanan', label: 'Keamanan & Akses', icon: ShieldCheckIcon, color: 'from-purple-500 to-purple-600' },
-  { id: 'sistem', label: 'Konfigurasi Sistem', icon: ServerIcon, color: 'from-amber-500 to-amber-600' },
-  { id: 'kartu-admin', label: 'Kartu Admin', icon: UserCircleIcon, color: 'from-indigo-500 to-indigo-600' },
-  { id: 'desain-kartu', label: 'Desain Kartu', icon: CreditCardIcon, color: 'from-emerald-600 to-emerald-700' },
-  { id: 'desain-sertifikat', label: 'Desain Sertifikat', icon: ShieldCheckIcon, color: 'from-amber-600 to-amber-700' },
-  { id: 'teks-login', label: 'Teks Login', icon: ArrowRightOnRectangleIcon, color: 'from-sky-500 to-sky-600' },
+  { id: 'profil', label: 'Profil Admin', icon: User, color: 'from-blue-500 to-blue-600' },
+  { id: 'info', label: 'Informasi KUD', icon: Building, color: 'from-emerald-500 to-emerald-600' },
+  { id: 'keamanan', label: 'Keamanan & Akses', icon: ShieldCheck, color: 'from-purple-500 to-purple-600' },
+  { id: 'sistem', label: 'Konfigurasi Sistem', icon: Server, color: 'from-amber-500 to-amber-600' },
+  { id: 'kartu-admin', label: 'Kartu Admin', icon: UserCircle, color: 'from-indigo-500 to-indigo-600' },
+  { id: 'desain-kartu', label: 'Desain Kartu', icon: CreditCard, color: 'from-emerald-600 to-emerald-700' },
+  { id: 'desain-sertifikat', label: 'Desain Sertifikat', icon: ShieldCheck, color: 'from-amber-600 to-amber-700' },
+  { id: 'teks-login', label: 'Teks Login', icon: LogOut, color: 'from-sky-500 to-sky-600' },
 ];
 
 const containerAnim = {
@@ -372,7 +367,7 @@ export default function AdminPengaturanPage() {
       {/* HEADER */}
       <motion.div variants={fadeUp} className="flex items-center gap-3">
         <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center shadow-md shrink-0">
-          <Cog6ToothIcon className="w-6 h-6 text-white" />
+          <Settings className="w-6 h-6 text-white" />
         </div>
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-foreground">Pengaturan</h1>
@@ -403,7 +398,7 @@ export default function AdminPengaturanPage() {
       {tab === 'profil' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-5">
-            <FormSection title="Data Admin" icon={UserIcon} description="Informasi profil administrator">
+            <FormSection title="Data Admin" icon={User} description="Informasi profil administrator">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input label="Nama Lengkap" value={profile?.name || settings.nama_admin || ''}
                   onChange={(e) => setSettings({ ...settings, nama_admin: e.target.value })} />
@@ -420,14 +415,14 @@ export default function AdminPengaturanPage() {
             </FormSection>
           </div>
           <div className="space-y-5">
-            <FormSection title="Foto Profil" icon={ArrowUpTrayIcon} description="Foto yang akan muncul di dashboard">
+            <FormSection title="Foto Profil" icon={Upload} description="Foto yang akan muncul di dashboard">
               <div className="flex flex-col items-center gap-4">
                 {profile?.foto_profil ? (
                   <img src={profile.foto_profil} alt="Foto Profil"
                     className="w-28 h-28 rounded-2xl object-cover border-4 border-primary/10 shadow-md" />
                 ) : (
                   <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border-2 border-dashed border-primary/20">
-                    <UserIcon className="w-10 h-10 text-primary/30" />
+                    <User className="w-10 h-10 text-primary/30" />
                   </div>
                 )}
                 <label className="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-medium cursor-pointer hover:bg-primary/90 transition-colors shadow-sm">
@@ -444,7 +439,7 @@ export default function AdminPengaturanPage() {
       {tab === 'info' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-5">
-            <FormSection title="Informasi KUD" icon={BuildingOfficeIcon} description="Data identitas resmi KUD">
+            <FormSection title="Informasi KUD" icon={Building} description="Data identitas resmi KUD">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {predefinedFields.map((f) => (
                   <div key={f.key}>
@@ -460,7 +455,7 @@ export default function AdminPengaturanPage() {
             </FormSection>
 
             {/* VISI MISI */}
-            <FormSection title="Visi & Misi" icon={BuildingOfficeIcon} description="Visi dan misi KUD untuk landing page">
+            <FormSection title="Visi & Misi" icon={Building} description="Visi dan misi KUD untuk landing page">
               <Textarea label="Visi" value={settings.visi_kud || ''}
                 onChange={(e) => setSettings({ ...settings, visi_kud: e.target.value })} rows={3} />
               <Textarea label="Misi" value={settings.misi_kud || ''}
@@ -473,7 +468,7 @@ export default function AdminPengaturanPage() {
 
           {/* LOGO SIDEBAR */}
           <div className="space-y-5">
-            <FormSection title="Logo KUD" icon={ArrowUpTrayIcon} description="Logo resmi KUD">
+            <FormSection title="Logo KUD" icon={Upload} description="Logo resmi KUD">
               <div className="flex flex-col items-center gap-4">
                 {settings.logo_kud ? (
                   <img src={settings.logo_kud} alt="Logo KUD" className="w-36 h-36 object-contain rounded-xl border border-border p-3 bg-white shadow-sm" />
@@ -487,7 +482,7 @@ export default function AdminPengaturanPage() {
               </div>
             </FormSection>
 
-            <FormSection title="Data KUD untuk Kartu Anggota" icon={CreditCardIcon} description="Informasi KUD yang muncul di kartu anggota">
+            <FormSection title="Data KUD untuk Kartu Anggota" icon={CreditCard} description="Informasi KUD yang muncul di kartu anggota">
               <div className="space-y-3">
                 <Input label="Nama KUD di Kartu" value={kud.nama_kud || settings.nama_kud || ''} onChange={(e) => handleKudChange('nama_kud', e.target.value)} />
                 <Textarea label="Alamat" value={kud.alamat || settings.alamat_kud || ''} onChange={(e) => handleKudChange('alamat', e.target.value)} rows={2} />
@@ -516,7 +511,7 @@ export default function AdminPengaturanPage() {
                 </div>
                 <div className="p-3 bg-gradient-to-br from-emerald-50 to-emerald-50/30 rounded-xl border border-emerald-100">
                   <p className="text-xs text-emerald-700 flex items-start gap-1.5">
-                    <CreditCardIcon className="w-4 h-4 shrink-0 mt-0.5" />
+                    <CreditCard className="w-4 h-4 shrink-0 mt-0.5" />
                     <span>Desain tampilan (warna, aturan, TTD, stempel) bisa diatur di tab <strong>&quot;Desain Kartu&quot;</strong></span>
                   </p>
                 </div>
@@ -531,7 +526,7 @@ export default function AdminPengaturanPage() {
       {tab === 'keamanan' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-5">
-            <FormSection title="Ubah Password" icon={KeyIcon} description="Perbarui password akun admin Anda">
+            <FormSection title="Ubah Password" icon={Key} description="Perbarui password akun admin Anda">
               <form onSubmit={handleChangePassword} className="space-y-4">
                 <div className="relative">
                   <Input label="Password Lama" type={showPasswords.old ? 'text' : 'password'}
@@ -540,7 +535,7 @@ export default function AdminPengaturanPage() {
                     required placeholder="Masukkan password saat ini" />
                   <button type="button" onClick={() => setShowPasswords({ ...showPasswords, old: !showPasswords.old })}
                     className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 cursor-pointer">
-                    {showPasswords.old ? <EyeSlashIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
+                    {showPasswords.old ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
                 <div className="relative">
@@ -550,7 +545,7 @@ export default function AdminPengaturanPage() {
                     required placeholder="Minimal 6 karakter" />
                   <button type="button" onClick={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
                     className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 cursor-pointer">
-                    {showPasswords.new ? <EyeSlashIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
+                    {showPasswords.new ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
                 <div className="relative">
@@ -560,28 +555,28 @@ export default function AdminPengaturanPage() {
                     required placeholder="Ulangi password baru" />
                   <button type="button" onClick={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })}
                     className="absolute right-3 top-[38px] text-gray-400 hover:text-gray-600 cursor-pointer">
-                    {showPasswords.confirm ? <EyeSlashIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
+                    {showPasswords.confirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
                 {passwordForm.new_password && passwordForm.confirm_password && passwordForm.new_password !== passwordForm.confirm_password && (
                   <p className="text-xs text-red-500 flex items-center gap-1">
-                    <ExclamationCircleIcon className="w-3.5 h-3.5" />
+                    <AlertCircle className="w-3.5 h-3.5" />
                     Password baru dan konfirmasi tidak cocok
                   </p>
                 )}
                 <Button type="submit" loading={savingPassword} disabled={!passwordForm.old_password || !passwordForm.new_password || !passwordForm.confirm_password}>
-                  <KeyIcon className="w-4 h-4" /> Ubah Password
+                  <Key className="w-4 h-4" /> Ubah Password
                 </Button>
               </form>
             </FormSection>
           </div>
 
           <div className="space-y-5">
-            <FormSection title="Two-Factor Authentication" icon={ShieldCheckIcon} description="Lapisan keamanan tambahan untuk akun Anda">
+            <FormSection title="Two-Factor Authentication" icon={ShieldCheck} description="Lapisan keamanan tambahan untuk akun Anda">
               <div className="flex items-center justify-between p-4 bg-gradient-to-br from-purple-50 to-purple-50/30 rounded-xl border border-purple-100">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${twoFactorEnabled ? 'bg-purple-500/10' : 'bg-gray-100'}`}>
-                    <ShieldCheckIcon className={`w-5 h-5 ${twoFactorEnabled ? 'text-purple-600' : 'text-gray-400'}`} />
+                    <ShieldCheck className={`w-5 h-5 ${twoFactorEnabled ? 'text-purple-600' : 'text-gray-400'}`} />
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-sm">Authentication (2FA)</p>
@@ -596,16 +591,16 @@ export default function AdminPengaturanPage() {
                 </button>
               </div>
               <div className={`p-3 rounded-xl text-xs flex items-start gap-1.5 ${twoFactorEnabled ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-slate-50 text-slate-500 border border-slate-200'}`}>
-                <ExclamationCircleIcon className="w-4 h-4 shrink-0 mt-0.5" />
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                 <span>{twoFactorEnabled ? '2FA hanya menyimpan preferensi. Implementasi autentikasi dua faktor membutuhkan integrasi email/authenticator di backend.' : '2FA saat ini nonaktif. Aktifkan hanya jika backend sudah mendukung authenticator app atau email OTP.'}</span>
               </div>
             </FormSection>
 
-            <FormSection title="Sesi Perangkat" icon={ArrowRightOnRectangleIcon} description="Kelola sesi login di semua perangkat">
+            <FormSection title="Sesi Perangkat" icon={LogOut} description="Kelola sesi login di semua perangkat">
               <div className="p-4 bg-gradient-to-br from-amber-50 to-amber-50/30 rounded-xl border border-amber-100">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                    <ArrowRightOnRectangleIcon className="w-5 h-5 text-amber-600" />
+                    <LogOut className="w-5 h-5 text-amber-600" />
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-sm">Logout Semua Perangkat</p>
@@ -613,7 +608,7 @@ export default function AdminPengaturanPage() {
                   </div>
                 </div>
                 <Button variant="danger" onClick={() => setShowLogoutConfirm(true)}>
-                  <ArrowRightOnRectangleIcon className="w-4 h-4" /> Logout Semua Perangkat
+                  <LogOut className="w-4 h-4" /> Logout Semua Perangkat
                 </Button>
               </div>
             </FormSection>
@@ -625,11 +620,11 @@ export default function AdminPengaturanPage() {
       {tab === 'sistem' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-5">
-            <FormSection title="Mode Maintenance" icon={ServerIcon} description="Aktifkan mode maintenance untuk menonaktifkan akses publik">
+            <FormSection title="Mode Maintenance" icon={Server} description="Aktifkan mode maintenance untuk menonaktifkan akses publik">
               <div className="flex items-center justify-between p-4 bg-gradient-to-br from-amber-50 to-amber-50/30 rounded-xl border border-amber-100">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${maintenanceMode ? 'bg-red-500/10' : 'bg-emerald-500/10'}`}>
-                    <ServerIcon className={`w-5 h-5 ${maintenanceMode ? 'text-red-600' : 'text-emerald-600'}`} />
+                    <Server className={`w-5 h-5 ${maintenanceMode ? 'text-red-600' : 'text-emerald-600'}`} />
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-sm">Maintenance Mode</p>
@@ -644,14 +639,14 @@ export default function AdminPengaturanPage() {
                 </button>
               </div>
               <div className={`p-3 rounded-xl text-xs flex items-start gap-1.5 ${maintenanceMode ? 'bg-red-50 border border-red-200 text-red-700' : 'bg-slate-50 border border-slate-200 text-slate-500'}`}>
-                <ExclamationCircleIcon className="w-4 h-4 shrink-0 mt-0.5" />
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                 <span>{maintenanceMode
                   ? 'Mode maintenance aktif — menyimpan preferensi. Untuk benar-benar memblokir akses publik, middleware backend perlu mengecek setting ini.'
                   : 'Mode maintenance nonaktif. Aktifkan untuk menyiapkan halaman maintenance sebelum mengaktifkan middleware backend.'}</span>
               </div>
             </FormSection>
 
-            <FormSection title="Kuota Default Program" icon={Cog6ToothIcon} description="Nilai kuota default saat membuat program baru">
+            <FormSection title="Kuota Default Program" icon={Settings} description="Nilai kuota default saat membuat program baru">
               <div className="flex gap-3 items-end">
                 <div className="flex-1">
                   <Input label="Kuota Default" type="number" value={defaultKuota}
@@ -662,7 +657,7 @@ export default function AdminPengaturanPage() {
               <p className="text-xs text-gray-400 mt-1">Nilai ini akan otomatis terisi saat admin membuat program baru</p>
             </FormSection>
 
-            <FormSection title="WhatsApp Gateway" icon={Cog6ToothIcon} description="Integrasi gateway WhatsApp untuk notifikasi otomatis">
+            <FormSection title="WhatsApp Gateway" icon={Settings} description="Integrasi gateway WhatsApp untuk notifikasi otomatis">
               <div className="space-y-3">
                 <Input label="URL Gateway" value={waGateway.wa_url}
                   onChange={(e) => setWaGateway({ ...waGateway, wa_url: e.target.value })}
@@ -688,7 +683,7 @@ export default function AdminPengaturanPage() {
           </div>
 
           <div className="space-y-5">
-            <FormSection title="Pengaturan Tambahan" icon={Cog6ToothIcon} description="Key-value custom untuk pengembangan lanjutan">
+            <FormSection title="Pengaturan Tambahan" icon={Settings} description="Key-value custom untuk pengembangan lanjutan">
               {customKeys.length > 0 && (
                 <div className="space-y-3 mb-4">
                   {customKeys.map((k) => (
@@ -698,7 +693,7 @@ export default function AdminPengaturanPage() {
                         <input value={settings[k] || ''} onChange={(e) => setSettings({ ...settings, [k]: e.target.value })}
                           className="flex-1 px-3 py-2 rounded-lg border border-border text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
                         <Button size="sm" loading={saving === k} onClick={() => updateSetting(k, settings[k])}>Simpan</Button>
-                        <button onClick={() => deleteSetting(k)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"><TrashIcon className="w-4 h-4" /></button>
+                        <button onClick={() => deleteSetting(k)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"><Trash2 className="w-4 h-4" /></button>
                       </div>
                     </div>
                   ))}
@@ -711,7 +706,7 @@ export default function AdminPengaturanPage() {
                     className="flex-1 px-3 py-2 rounded-xl border border-border text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
                   <input placeholder="Nilai" value={newVal} onChange={(e) => setNewVal(e.target.value)}
                     className="flex-1 px-3 py-2 rounded-xl border border-border text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
-                  <Button onClick={handleAddSetting}><PlusIcon className="w-4 h-4" /> Tambah</Button>
+                  <Button onClick={handleAddSetting}><Plus className="w-4 h-4" /> Tambah</Button>
                 </div>
               </div>
             </FormSection>
@@ -733,7 +728,7 @@ export default function AdminPengaturanPage() {
       {/* ===== TAB 6: DESAIN KARTU ===== */}
       {tab === 'desain-kartu' && (
         <div className="space-y-5">
-          <FormSection title="Teks Kartu Anggota" icon={CreditCardIcon} description="Aturan, slogan, dan teks di sisi belakang kartu anggota. Simpan dulu sebelum preview.">
+          <FormSection title="Teks Kartu Anggota" icon={CreditCard} description="Aturan, slogan, dan teks di sisi belakang kartu anggota. Simpan dulu sebelum preview.">
             <div className="space-y-3">
               <p className="text-xs font-semibold text-foreground/70">4 Poin Aturan Kartu:</p>
               {[0, 1, 2, 3].map((i) => (
@@ -780,7 +775,7 @@ export default function AdminPengaturanPage() {
       {tab === 'teks-login' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-5">
-            <FormSection title="Panel Kiri (Brand)" icon={ArrowRightOnRectangleIcon} description="Teks di panel branding halaman login">
+            <FormSection title="Panel Kiri (Brand)" icon={LogOut} description="Teks di panel branding halaman login">
               <Input label="Judul" value={loginConfig.left_panel?.title || ''} onChange={(e) => updateLoginField('left_panel.title', e.target.value)} />
               <Input label="Tagline" value={loginConfig.left_panel?.tagline || ''} onChange={(e) => updateLoginField('left_panel.tagline', e.target.value)} />
               {[0, 1, 2].map(i => (
@@ -789,7 +784,7 @@ export default function AdminPengaturanPage() {
                 }} />
               ))}
             </FormSection>
-            <FormSection title="Statistik Panel Kiri" icon={ArrowRightOnRectangleIcon} description="Angka statistik yang ditampilkan">
+            <FormSection title="Statistik Panel Kiri" icon={LogOut} description="Angka statistik yang ditampilkan">
               {[0, 1, 2].map(i => (
                 <div key={`stat-${i}`} className="grid grid-cols-2 gap-3">
                   <Input label={`Label ${i + 1}`} value={loginConfig.left_panel?.stats?.[i]?.label || ''} onChange={(e) => {
@@ -803,7 +798,7 @@ export default function AdminPengaturanPage() {
                 </div>
               ))}
             </FormSection>
-            <FormSection title="Panel Kanan (Form)" icon={ArrowRightOnRectangleIcon} description="Teks di area form login/register">
+            <FormSection title="Panel Kanan (Form)" icon={LogOut} description="Teks di area form login/register">
               <Input label="Heading" value={loginConfig.right_panel?.heading || ''} onChange={(e) => updateLoginField('right_panel.heading', e.target.value)} />
               <Input label="Subheading" value={loginConfig.right_panel?.subheading || ''} onChange={(e) => updateLoginField('right_panel.subheading', e.target.value)} />
               <Input label="Teks Tombol Masuk" value={loginConfig.right_panel?.button_text || ''} onChange={(e) => updateLoginField('right_panel.button_text', e.target.value)} />
@@ -813,7 +808,7 @@ export default function AdminPengaturanPage() {
             </div>
           </div>
           <div className="space-y-5">
-            <FormSection title="Pratinjau" icon={EyeIcon} description="Teks akan tampil seperti ini">
+            <FormSection title="Pratinjau" icon={Eye} description="Teks akan tampil seperti ini">
               <div className="bg-gradient-to-br from-primary/30 via-primary/5 to-transparent rounded-xl p-4 text-white text-xs space-y-2">
                 <p className="font-bold text-sm">{loginConfig.left_panel?.title || 'KUD Sari Subur'}</p>
                 <p className="text-white/50 text-[10px]">{loginConfig.left_panel?.tagline || 'Koperasi modern...'}</p>

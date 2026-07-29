@@ -1,7 +1,7 @@
 'use client';
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { PlayCircleIcon, ArrowUpTrayIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PlayCircle, Upload, Trash2 } from 'lucide-react';
 
 export default function VideoSection({ urlVideo, isAdmin, onUpload, onRemove, uploading }) {
   const fileRef = useRef(null);
@@ -33,7 +33,7 @@ export default function VideoSection({ urlVideo, isAdmin, onUpload, onRemove, up
         >
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm">
-              <PlayCircleIcon className="w-5 h-5 text-emerald-400" />
+              <PlayCircle className="w-5 h-5 text-emerald-400" />
               <span className="text-white/80 text-sm font-medium">Video Profil Aplikasi</span>
             </div>
           </div>
@@ -61,7 +61,7 @@ export default function VideoSection({ urlVideo, isAdmin, onUpload, onRemove, up
                     </div>
                   ) : (
                     <>
-                      <ArrowUpTrayIcon className="w-12 h-12 text-white/30 group-hover:text-emerald-400 transition-colors" />
+                      <Upload className="w-12 h-12 text-white/30 group-hover:text-emerald-400 transition-colors" />
                       <div className="text-center">
                         <p className="text-white/80 font-medium group-hover:text-emerald-400 transition-colors">
                           Upload Video Profil
@@ -127,7 +127,7 @@ export default function VideoSection({ urlVideo, isAdmin, onUpload, onRemove, up
                       </>
                     ) : (
                       <>
-                        <ArrowUpTrayIcon className="w-4 h-4" />
+                        <Upload className="w-4 h-4" />
                         Ganti Video
                       </>
                     )}

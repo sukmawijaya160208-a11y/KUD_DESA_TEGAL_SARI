@@ -1,6 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
-import { BanknotesIcon } from '@heroicons/react/24/outline';
+import { Banknote } from 'lucide-react';
 
 export default function DonasiCard({ data }) {
   if (!data) return null;
@@ -21,7 +21,7 @@ export default function DonasiCard({ data }) {
           <div className="bg-[#fffdf6] border border-amber-200/50 rounded-2xl p-8 sm:p-10">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
-                <BanknotesIcon className="w-5 h-5 text-amber-600" />
+                <Banknote className="w-5 h-5 text-amber-600" />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-gray-900">

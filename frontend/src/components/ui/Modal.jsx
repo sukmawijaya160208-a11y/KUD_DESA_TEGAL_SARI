@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { X } from 'lucide-react';
 
 export default function Modal({ open, onClose, title, children, maxWidth = 'max-w-lg' }) {
   const overlayRef = useRef();
@@ -22,7 +22,7 @@ export default function Modal({ open, onClose, title, children, maxWidth = 'max-
         <div className="flex items-center justify-between mb-5">
           <h3 className="font-heading font-bold text-foreground text-lg">{title}</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-foreground transition-colors p-2 cursor-pointer">
-            <XMarkIcon className="w-6 h-6" />
+            <X className="w-6 h-6" />
           </button>
         </div>
         {children}

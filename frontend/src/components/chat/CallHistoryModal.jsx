@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { XMarkIcon, PhoneIcon, VideoCameraIcon, ArrowDownIcon, PhoneXMarkIcon } from '@heroicons/react/24/outline';
+import { X, Phone, Video, ArrowDown, PhoneOff } from 'lucide-react';
 import { api } from '@/lib/api';
 
 function formatDate(dateStr) {
@@ -30,16 +30,16 @@ function formatDuration(sec) {
 }
 
 function CallIcon({ type, status, isIncoming }) {
-  if (status === 'missed') return <PhoneXMarkIcon className="w-5 h-5 text-red-500" />;
+  if (status === 'missed') return <PhoneOff className="w-5 h-5 text-red-500" />;
   if (!isIncoming) return (
     <div className="relative">
-      <PhoneIcon className="w-5 h-5 text-wa-accent" />
-      <ArrowDownIcon className="w-3 h-3 text-wa-accent absolute -bottom-1 -right-1" />
+      <Phone className="w-5 h-5 text-wa-accent" />
+      <ArrowDown className="w-3 h-3 text-wa-accent absolute -bottom-1 -right-1" />
     </div>
   );
   return type === 'video'
-    ? <VideoCameraIcon className="w-5 h-5 text-wa-primary" />
-    : <PhoneIcon className="w-5 h-5 text-wa-primary" />;
+    ? <Video className="w-5 h-5 text-wa-primary" />
+    : <Phone className="w-5 h-5 text-wa-primary" />;
 }
 
 export default function CallHistoryModal({ open, onClose, conversationId }) {
@@ -70,7 +70,7 @@ export default function CallHistoryModal({ open, onClose, conversationId }) {
             <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-wa-primary text-white shrink-0">
               <h3 className="text-base font-semibold">Riwayat Panggilan</h3>
               <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/20 transition-colors cursor-pointer">
-                <XMarkIcon className="w-5 h-5 text-white" />
+                <X className="w-5 h-5 text-white" />
               </button>
             </div>
 
@@ -90,7 +90,7 @@ export default function CallHistoryModal({ open, onClose, conversationId }) {
                 </div>
               ) : calls.length === 0 ? (
                 <div className="text-center py-12">
-                  <PhoneIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <Phone className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                   <p className="text-sm text-gray-500">Belum ada riwayat panggilan</p>
                 </div>
               ) : (

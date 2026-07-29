@@ -12,7 +12,7 @@ import DatePicker from '@/components/ui/DatePicker';
 import Modal from '@/components/ui/Modal';
 import PrintButton from '@/components/PrintButton';
 import { CardSkeleton } from '@/components/ui/Skeleton';
-import { UserIcon, PencilIcon, CameraIcon, DocumentTextIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { User, Pencil, Camera, FileText, ShieldCheck } from 'lucide-react';
 import KartuAnggotaKud from '@/components/KartuAnggotaKud';
 import SertifikatKeanggotaan from '@/components/SertifikatKeanggotaan';
 import { formatDate } from '@/lib/date';
@@ -94,7 +94,7 @@ function UploadField({ label, current, folder, onUpload, onDelete }) {
         <a href={displayUrl} target="_blank" rel="noopener noreferrer" className="block relative w-full h-32 rounded-xl overflow-hidden border border-border mb-2 group">
           <img src={displayUrl} alt={label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-            <CameraIcon className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Camera className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
         </a>
       )}
@@ -188,7 +188,7 @@ export default function PekebunProfilPage() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <UserIcon className="w-6 h-6 text-primary" />
+            <User className="w-6 h-6 text-primary" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Profil Saya</h1>
@@ -225,7 +225,7 @@ export default function PekebunProfilPage() {
             }}
           />
           <Button onClick={() => setEditing(!editing)}>
-            <PencilIcon className="w-4 h-4" /> {editing ? 'Batal' : 'Edit Profil'}
+            <Pencil className="w-4 h-4" /> {editing ? 'Batal' : 'Edit Profil'}
           </Button>
         </div>
       </div>
@@ -266,7 +266,7 @@ export default function PekebunProfilPage() {
                         <img src={profil.foto_pekebun} alt="" className="w-full h-full object-cover" />
                       </a>
                     ) : (
-                      <UserIcon className="w-8 h-8 text-primary/60" />
+                      <User className="w-8 h-8 text-primary/60" />
                     )}
                   </div>
                   <div>
@@ -301,7 +301,7 @@ export default function PekebunProfilPage() {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <UserIcon className="w-12 h-12 text-gray-200 mx-auto mb-3" />
+                    <User className="w-12 h-12 text-gray-200 mx-auto mb-3" />
                     <p className="text-muted-foreground">Lengkapi data profil Anda</p>
                   </div>
                 )}
@@ -323,7 +323,7 @@ export default function PekebunProfilPage() {
         <div className="mt-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-              <UserIcon className="w-6 h-6 text-primary" />
+              <User className="w-6 h-6 text-primary" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-foreground">Kartu Tanda Pengenal</h2>
@@ -362,7 +362,7 @@ export default function PekebunProfilPage() {
         <div className="mt-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
-              <ShieldCheckIcon className="w-6 h-6 text-amber-600" />
+              <ShieldCheck className="w-6 h-6 text-amber-600" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-foreground">Sertifikat Keanggotaan</h2>

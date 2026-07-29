@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { PrinterIcon, ArrowDownTrayIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { Printer, Download, FileText } from 'lucide-react';
 
 function formatTgl(d) {
   if (!d) return '-';
@@ -567,17 +567,17 @@ window.onload = function() { setTimeout(function(){ window.print(); }, 1000); };
             <div className="flex items-center gap-2">
               <button onClick={handleDownloadPdf} disabled={downloading}
                 className="inline-flex items-center gap-1.5 px-3 py-2 bg-white text-foreground rounded-xl text-sm font-semibold border border-border hover:bg-muted transition-all cursor-pointer disabled:opacity-50">
-                <DocumentTextIcon className="w-4 h-4" />
+                <FileText className="w-4 h-4" />
                 {downloading ? '...' : 'PDF'}
               </button>
               <button onClick={handleDownloadPng} disabled={downloading}
                 className="inline-flex items-center gap-1.5 px-3 py-2 bg-white text-foreground rounded-xl text-sm font-semibold border border-border hover:bg-muted transition-all cursor-pointer disabled:opacity-50">
-                <ArrowDownTrayIcon className="w-4 h-4" />
+                <Download className="w-4 h-4" />
                 {downloading ? '...' : 'PNG'}
               </button>
               <button onClick={handlePrint}
                 className="inline-flex items-center gap-2 px-4 py-2 text-white rounded-xl text-sm font-semibold hover:opacity-90 transition-all cursor-pointer" style={{ background: fc('subjudul', 'color') || '#059669' }}>
-                <PrinterIcon className="w-4 h-4" />
+                <Printer className="w-4 h-4" />
                 Cetak
               </button>
               {onClose && (

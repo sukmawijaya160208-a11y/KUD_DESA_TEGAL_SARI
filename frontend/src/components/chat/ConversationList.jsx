@@ -2,7 +2,7 @@
 
 import { useState, useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
-import { ChatBubbleLeftRightIcon, PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { MessageCircle, Plus, Search } from 'lucide-react';
 
 function timeAgo(dateStr) {
   if (!dateStr) return '';
@@ -41,13 +41,13 @@ const ConversationList = memo(function ConversationList({ conversations, activeI
       <div className="flex items-center justify-between px-4 py-3.5 border-b border-border shrink-0 bg-wa-primary text-white">
         <h2 className="text-lg font-heading font-semibold text-white">Pesan</h2>
         <button onClick={onNewChat} className="w-8 h-8 rounded-xl bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all cursor-pointer">
-          <PlusIcon className="w-5 h-5" />
+          <Plus className="w-5 h-5" />
         </button>
       </div>
 
       <div className="px-3 py-2.5 border-b border-border bg-white">
         <div className="flex items-center gap-2 bg-muted rounded-lg px-3 py-2 transition-all focus-within:ring-2 focus-within:ring-wa-accent/30">
-          <MagnifyingGlassIcon className="w-4 h-4 text-gray-400 shrink-0" />
+          <Search className="w-4 h-4 text-gray-400 shrink-0" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -73,7 +73,7 @@ const ConversationList = memo(function ConversationList({ conversations, activeI
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-6">
             <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
-              <ChatBubbleLeftRightIcon className="w-8 h-8 text-gray-300" />
+              <MessageCircle className="w-8 h-8 text-gray-300" />
             </div>
             <p className="text-sm font-medium text-gray-500">
               {search ? 'Tidak ditemukan' : 'Belum ada percakapan'}

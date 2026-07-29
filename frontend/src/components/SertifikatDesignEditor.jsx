@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Button from '@/components/ui/Button';
 import SertifikatKeanggotaan from '@/components/SertifikatKeanggotaan';
-import { ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { ShieldCheck } from 'lucide-react';
 
 const FIELD_LABELS = {
   border_deco: 'Border Dekorasi',
@@ -232,7 +232,7 @@ export default function SertifikatDesignEditor({ settingKud, onSave }) {
         <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
           <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-amber-500/5 to-transparent border-b border-border">
             <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
-              <ShieldCheckIcon className="w-5 h-5 text-amber-600" />
+              <ShieldCheck className="w-5 h-5 text-amber-600" />
             </div>
             <div>
               <h3 className="font-semibold text-foreground text-sm">Template Sertifikat</h3>
@@ -348,7 +348,7 @@ export default function SertifikatDesignEditor({ settingKud, onSave }) {
         <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden sticky top-6">
           <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-amber-500/5 to-transparent border-b border-border">
             <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
-              <ShieldCheckIcon className="w-5 h-5 text-amber-600" />
+              <ShieldCheck className="w-5 h-5 text-amber-600" />
             </div>
             <div>
               <h3 className="font-semibold text-foreground text-sm">Pratinjau Sertifikat</h3>

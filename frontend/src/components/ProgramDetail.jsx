@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import {
-  XMarkIcon, CalendarDaysIcon, UsersIcon, DocumentTextIcon,
-  CheckCircleIcon, ChevronRightIcon, PhotoIcon,
-  PencilSquareIcon,
-} from '@heroicons/react/24/outline';
+  X, CalendarDays, Users, FileText,
+  CheckCircle, ChevronRight, Image,
+  Pencil,
+} from 'lucide-react';
 import { formatDate, formatDateShort } from '@/lib/date';
 
 const PERSYARATAN_LABEL = {
@@ -44,7 +44,7 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
             onClick={onClose}
             className="absolute top-4 right-4 z-20 w-11 h-11 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-all cursor-pointer"
           >
-            <XMarkIcon className="w-5 h-5 text-gray-700" />
+            <X className="w-5 h-5 text-gray-700" />
           </button>
 
           {/* ===== GALLERY ===== */}
@@ -63,13 +63,13 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
                       onClick={() => setHeroIndex((prev) => (prev - 1 + fotos.length) % fotos.length)}
                       className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-all cursor-pointer"
                     >
-                      <ChevronRightIcon className="w-5 h-5 text-gray-700 rotate-180" />
+                      <ChevronRight className="w-5 h-5 text-gray-700 rotate-180" />
                     </button>
                     <button
                       onClick={() => setHeroIndex((prev) => (prev + 1) % fotos.length)}
                       className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-all cursor-pointer"
                     >
-                      <ChevronRightIcon className="w-5 h-5 text-gray-700" />
+                      <ChevronRight className="w-5 h-5 text-gray-700" />
                     </button>
                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
                       {fotos.map((_, idx) => (
@@ -102,7 +102,7 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
                     onClick={() => setGalleryOpen(true)}
                     className="shrink-0 w-16 h-12 rounded-lg border-2 border-dashed border-gray-300 bg-white flex items-center justify-center hover:border-primary transition-all cursor-pointer"
                   >
-                    <PhotoIcon className="w-5 h-5 text-gray-400" />
+                    <Image className="w-5 h-5 text-gray-400" />
                   </button>
                 </div>
               )}
@@ -110,7 +110,7 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
           ) : (
             <div className="w-full aspect-video bg-gradient-to-br from-primary/5 to-primary/10 flex items-center justify-center">
               <div className="text-center">
-                <PhotoIcon className="w-12 h-12 text-primary/30 mx-auto" />
+                <Image className="w-12 h-12 text-primary/30 mx-auto" />
                 <p className="text-sm text-gray-400 mt-2">Tidak ada foto</p>
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
               {/* Tanggal */}
               <div className="flex items-center gap-4 bg-gradient-to-br from-blue-50 to-blue-50/50 rounded-xl p-4 border border-blue-100/50">
                 <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
-                  <CalendarDaysIcon className="w-5 h-5 text-blue-600" />
+                  <CalendarDays className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-[10px] font-semibold text-blue-600/60 uppercase tracking-wider">Tanggal</p>
@@ -152,7 +152,7 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
               {/* Kuota */}
               <div className="flex items-center gap-4 bg-gradient-to-br from-emerald-50 to-emerald-50/50 rounded-xl p-4 border border-emerald-100/50">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0">
-                  <UsersIcon className="w-5 h-5 text-emerald-600" />
+                  <Users className="w-5 h-5 text-emerald-600" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-[10px] font-semibold text-emerald-600/60 uppercase tracking-wider">Kuota</p>
@@ -173,7 +173,7 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
               {/* Persyaratan */}
               <div className="flex items-center gap-4 bg-gradient-to-br from-amber-50 to-amber-50/50 rounded-xl p-4 border border-amber-100/50">
                 <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
-                  <DocumentTextIcon className="w-5 h-5 text-amber-600" />
+                  <FileText className="w-5 h-5 text-amber-600" />
                 </div>
                 <div>
                   <p className="text-[10px] font-semibold text-amber-600/60 uppercase tracking-wider">Persyaratan</p>
@@ -210,7 +210,7 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
                       key={s}
                       className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-border/60"
                     >
-                      <CheckCircleIcon className="w-5 h-5 text-emerald-500 shrink-0" />
+                      <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0" />
                       <span className="text-sm font-medium text-foreground">
                         {PERSYARATAN_LABEL[s] || s}
                       </span>
@@ -225,7 +225,7 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
               {role === 'pekebun' ? (
                 sudahDaftar ? (
                   <div className="flex items-center gap-3 p-4 bg-green-50 rounded-2xl border border-green-200">
-                    <CheckCircleIcon className="w-8 h-8 text-green-500 shrink-0" />
+                    <CheckCircle className="w-8 h-8 text-green-500 shrink-0" />
                     <div>
                       <p className="font-bold text-green-800">Anda sudah terdaftar</p>
                       <p className="text-sm text-green-600">Status pendaftaran dapat dilihat di bagian Program Saya</p>
@@ -233,7 +233,7 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
                   </div>
                 ) : penuh ? (
                   <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-200">
-                    <UsersIcon className="w-8 h-8 text-gray-400 shrink-0" />
+                    <Users className="w-8 h-8 text-gray-400 shrink-0" />
                     <div>
                       <p className="font-bold text-gray-700">Kuota Penuh</p>
                       <p className="text-sm text-gray-500">Program ini sudah mencapai batas kuota pendaftaran</p>
@@ -245,13 +245,13 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
                     className="w-full py-4 bg-gradient-to-r from-primary to-primary/80 text-white rounded-2xl text-lg font-bold hover:from-primary/90 hover:to-primary/70 transition-all shadow-lg shadow-primary/25 flex items-center justify-center gap-2 cursor-pointer"
                   >
                     Daftar Sekarang
-                    <ChevronRightIcon className="w-5 h-5" />
+                    <ChevronRight className="w-5 h-5" />
                   </button>
                 )
               ) : role === 'admin' && (
                 <div className="p-4 bg-blue-50 rounded-2xl border border-blue-200">
                   <p className="text-sm text-blue-700 font-medium flex items-center gap-2">
-                    <PencilSquareIcon className="w-4 h-4" />
+                    <Pencil className="w-4 h-4" />
                     Admin dapat mengelola program ini melalui halaman utama
                   </p>
                 </div>
@@ -285,13 +285,13 @@ export default function ProgramDetail({ program, open, onClose, role, onDaftar, 
                   onClick={() => setHeroIndex((prev) => (prev - 1 + fotos.length) % fotos.length)}
                   className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all cursor-pointer"
                 >
-                  <ChevronRightIcon className="w-6 h-6 text-white rotate-180" />
+                  <ChevronRight className="w-6 h-6 text-white rotate-180" />
                 </button>
                 <button
                   onClick={() => setHeroIndex((prev) => (prev + 1) % fotos.length)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all cursor-pointer"
                 >
-                  <ChevronRightIcon className="w-6 h-6 text-white" />
+                  <ChevronRight className="w-6 h-6 text-white" />
                 </button>
                 <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2">
                   {fotos.map((_, idx) => (

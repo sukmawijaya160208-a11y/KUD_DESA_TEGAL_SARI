@@ -1,6 +1,6 @@
 'use client';
 
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { X } from 'lucide-react';
 
 export default function ReplyPreview({ message, onCancel }) {
   if (!message) return null;
@@ -18,7 +18,7 @@ export default function ReplyPreview({ message, onCancel }) {
         </p>
       </div>
       <button onClick={onCancel} className="p-1 rounded-md hover:bg-muted transition-colors cursor-pointer shrink-0">
-        <XMarkIcon className="w-4 h-4 text-gray-400" />
+        <X className="w-4 h-4 text-gray-400" />
       </button>
     </div>
   );

@@ -6,7 +6,7 @@ import { useToast } from '@/components/ToastProvider';
 import Card from '@/components/ui/Card';
 import { TableSkeleton } from '@/components/ui/Skeleton';
 import { motion } from 'framer-motion';
-import { MapPinIcon, XMarkIcon, MagnifyingGlassIcon, PhotoIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { MapPin, X, Search, Image, FileText } from 'lucide-react';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -67,13 +67,13 @@ function LahanRow({ lahan, onPreview }) {
           {lahan.foto_petani && (
             <button onClick={() => onPreview(lahan.foto_petani, `Foto Petani - ${lahan.pekebun?.nama}`)}
               className="text-xs text-primary hover:underline cursor-pointer flex items-center gap-0.5">
-              <PhotoIcon className="w-3 h-3" /> Petani
+              <Image className="w-3 h-3" /> Petani
             </button>
           )}
           {fotoKebunArr.map((url, idx) => (
             <button key={idx} onClick={() => onPreview(url, `Foto Kebun ${idx + 1} - ${lahan.pekebun?.nama}`)}
               className="text-xs text-green-600 hover:underline cursor-pointer flex items-center gap-0.5">
-              <PhotoIcon className="w-3 h-3" /> K{idx + 1}
+              <Image className="w-3 h-3" /> K{idx + 1}
             </button>
           ))}
           {!lahan.foto_petani && fotoKebunArr.length === 0 && <span className="text-xs text-gray-400">-</span>}
@@ -83,12 +83,12 @@ function LahanRow({ lahan, onPreview }) {
         <div className="flex gap-2">
           {lahan.upload_surat_tanah && (
             <a href={lahan.upload_surat_tanah} target="_blank" className="text-xs text-primary hover:underline flex items-center gap-0.5">
-              <DocumentTextIcon className="w-3 h-3" /> Tanah
+              <FileText className="w-3 h-3" /> Tanah
             </a>
           )}
           {lahan.upload_surat_keterangan && (
             <a href={lahan.upload_surat_keterangan} target="_blank" className="text-xs text-primary hover:underline flex items-center gap-0.5">
-              <DocumentTextIcon className="w-3 h-3" /> Ket
+              <FileText className="w-3 h-3" /> Ket
             </a>
           )}
           {!lahan.upload_surat_tanah && !lahan.upload_surat_keterangan && <span className="text-xs text-gray-400">-</span>}
@@ -98,7 +98,7 @@ function LahanRow({ lahan, onPreview }) {
         {lahan.titik_koordinat ? (
           <button onClick={() => openMaps(lahan.titik_koordinat)}
             className="inline-flex items-center gap-0.5 text-xs text-blue-600 hover:underline cursor-pointer">
-            <MapPinIcon className="w-3.5 h-3.5" /> Buka
+            <MapPin className="w-3.5 h-3.5" /> Buka
           </button>
         ) : <span className="text-xs text-gray-400">-</span>}
       </td>
@@ -172,7 +172,7 @@ export default function AdminLahanPage() {
       <motion.div variants={fadeUp} className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-            <MapPinIcon className="w-6 h-6 text-white" />
+            <MapPin className="w-6 h-6 text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Data Lahan</h1>
@@ -183,9 +183,9 @@ export default function AdminLahanPage() {
 
       {stats && (
         <motion.div variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
-          <StatsCard label="Total Lahan" value={stats.total_lahan} icon={MapPinIcon} color="bg-gradient-to-br from-blue-500 to-blue-600" />
-          <StatsCard label="Total Luas (MÂ²)" value={Number(stats.total_luas_m2).toLocaleString()} icon={DocumentTextIcon} color="bg-gradient-to-br from-emerald-500 to-emerald-600" />
-          <StatsCard label="Pekebun dengan Lahan" value={stats.total_pekebun_dengan_lahan} icon={PhotoIcon} color="bg-gradient-to-br from-purple-500 to-purple-600" />
+          <StatsCard label="Total Lahan" value={stats.total_lahan} icon={MapPin} color="bg-gradient-to-br from-blue-500 to-blue-600" />
+          <StatsCard label="Total Luas (MÂ²)" value={Number(stats.total_luas_m2).toLocaleString()} icon={FileText} color="bg-gradient-to-br from-emerald-500 to-emerald-600" />
+          <StatsCard label="Pekebun dengan Lahan" value={stats.total_pekebun_dengan_lahan} icon={Image} color="bg-gradient-to-br from-purple-500 to-purple-600" />
         </motion.div>
       )}
 
@@ -193,7 +193,7 @@ export default function AdminLahanPage() {
         <Card>
           <div className="flex flex-col sm:flex-row gap-3 mb-4">
             <div className="relative flex-1">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 placeholder="Cari alamat atau pekebun..."
                 value={search}
@@ -254,7 +254,7 @@ export default function AdminLahanPage() {
               <span className="text-white/80 text-sm font-medium">{previewLabel}</span>
               <button onClick={() => { setPreviewImage(null); setPreviewLabel(''); }}
                 className="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center cursor-pointer transition-all">
-                <XMarkIcon className="w-4 h-4 text-white" />
+                <X className="w-4 h-4 text-white" />
               </button>
             </div>
             <img src={previewImage} alt="" className="w-full h-auto rounded-2xl shadow-2xl mt-6" />

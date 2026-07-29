@@ -1,22 +1,22 @@
 'use client';
 import { motion } from 'framer-motion';
 import {
-  PhoneIcon,
-  EnvelopeIcon,
-  CameraIcon,
-  AtSymbolIcon,
-  GlobeAltIcon,
-  MapPinIcon,
-  ArrowUpRightIcon,
-} from '@heroicons/react/24/outline';
+  Phone,
+  Mail,
+  Camera,
+  AtSign,
+  Globe,
+  MapPin,
+  ArrowUpRight,
+} from 'lucide-react';
 
 const INFO_FIELDS = [
-  { key: 'kontak', label: 'Kontak', icon: PhoneIcon, color: 'text-emerald-500', bgColor: 'bg-emerald-100' },
-  { key: 'email', label: 'Email', icon: EnvelopeIcon, color: 'text-emerald-500', bgColor: 'bg-emerald-100' },
-  { key: 'instagram', label: 'Instagram', icon: CameraIcon, color: 'text-pink-500', bgColor: 'bg-pink-100' },
-  { key: 'facebook', label: 'Facebook', icon: AtSymbolIcon, color: 'text-blue-500', bgColor: 'bg-blue-100' },
-  { key: 'website', label: 'Website', icon: GlobeAltIcon, color: 'text-purple-500', bgColor: 'bg-purple-100' },
-  { key: 'alamat', label: 'Alamat', icon: MapPinIcon, color: 'text-slate-500', bgColor: 'bg-slate-100' },
+  { key: 'kontak', label: 'Kontak', icon: Phone, color: 'text-emerald-500', bgColor: 'bg-emerald-100' },
+  { key: 'email', label: 'Email', icon: Mail, color: 'text-emerald-500', bgColor: 'bg-emerald-100' },
+  { key: 'instagram', label: 'Instagram', icon: Camera, color: 'text-pink-500', bgColor: 'bg-pink-100' },
+  { key: 'facebook', label: 'Facebook', icon: AtSign, color: 'text-blue-500', bgColor: 'bg-blue-100' },
+  { key: 'website', label: 'Website', icon: Globe, color: 'text-purple-500', bgColor: 'bg-purple-100' },
+  { key: 'alamat', label: 'Alamat', icon: MapPin, color: 'text-slate-500', bgColor: 'bg-slate-100' },
 ];
 
 function getHref(key, value) {
@@ -68,7 +68,7 @@ export default function InfoCards({ data }) {
                   </p>
                 </div>
                 {isClickable && (
-                  <ArrowUpRightIcon className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors shrink-0 mt-2" />
+                  <ArrowUpRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors shrink-0 mt-2" />
                 )}
               </div>
             );

@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { motion } from 'framer-motion';
-import { UserIcon, DocumentTextIcon, ClipboardDocumentListIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { User, FileText, ClipboardList, ChevronRight } from 'lucide-react';
 
 const container = {
   hidden: { opacity: 0 },
@@ -57,7 +57,7 @@ export default function PekebunDashboard() {
           <Card className="border border-primary/10 shadow-sm">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-md shadow-primary/20">
-                <UserIcon className="w-8 h-8 text-white" />
+                <User className="w-8 h-8 text-white" />
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="text-xl font-bold text-foreground">{profil.nama}</h2>
@@ -73,9 +73,9 @@ export default function PekebunDashboard() {
 
       <motion.div variants={itemAnim} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {[
-          { icon: DocumentTextIcon, label: 'Data Lahan', desc: `${profil?.lahan?.length || 0} lahan terdaftar`, href: '/pekebun/lahan', gradient: 'from-emerald-500 to-emerald-600' },
-          { icon: ClipboardDocumentListIcon, label: 'Program KUD', desc: 'Daftar & ikuti program', href: '/pekebun/program', gradient: 'from-primary to-primary-dark' },
-          { icon: UserIcon, label: 'Profil Saya', desc: 'Kelola data diri & dokumen', href: '/pekebun/profil', gradient: 'from-amber-500 to-amber-600' },
+          { icon: FileText, label: 'Data Lahan', desc: `${profil?.lahan?.length || 0} lahan terdaftar`, href: '/pekebun/lahan', gradient: 'from-emerald-500 to-emerald-600' },
+          { icon: ClipboardList, label: 'Program KUD', desc: 'Daftar & ikuti program', href: '/pekebun/program', gradient: 'from-primary to-primary-dark' },
+          { icon: User, label: 'Profil Saya', desc: 'Kelola data diri & dokumen', href: '/pekebun/profil', gradient: 'from-amber-500 to-amber-600' },
         ].map((item) => {
           const Icon = item.icon;
           return (
@@ -85,7 +85,7 @@ export default function PekebunDashboard() {
                 <div className={`w-12 h-12 bg-gradient-to-br ${item.gradient} rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform`}>
                   <Icon className="w-6 h-6 text-white" />
                 </div>
-                <ChevronRightIcon className="w-5 h-5 text-gray-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
               </div>
               <h3 className="font-bold text-foreground">{item.label}</h3>
               <p className="text-sm text-muted-foreground mt-0.5">{item.desc}</p>

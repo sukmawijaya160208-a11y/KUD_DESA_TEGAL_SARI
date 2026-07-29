@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { Search } from 'lucide-react';
 
 const TRENDING = [
   'https://media.tenor.com/8Qamkf5SMFIAAAAC/ok-thumbs-up.gif',
@@ -65,7 +65,7 @@ export default function GifPicker({ onSelect }) {
     >
       <div className="p-2.5 border-b border-border">
         <div className="relative">
-          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}

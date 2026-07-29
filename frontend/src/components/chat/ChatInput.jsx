@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
-import { PaperAirplaneIcon, PaperClipIcon, FaceSmileIcon, PhotoIcon, MusicalNoteIcon } from '@heroicons/react/24/outline';
+import { Send, Paperclip, Smile, Image, Music } from 'lucide-react';
 import EmojiPicker from './EmojiPicker';
 import GifPicker from './GifPicker';
 import StickerPicker from './StickerPicker';
@@ -17,7 +17,7 @@ function AttachmentPreviewInline({ file, onRemove }) {
         <img src={file.url} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0" loading="lazy" />
       ) : file.type?.startsWith('audio/') ? (
         <div className="w-10 h-10 rounded-lg bg-wa-primary/10 flex items-center justify-center shrink-0">
-          <MusicalNoteIcon className="w-5 h-5 text-wa-primary" />
+          <Music className="w-5 h-5 text-wa-primary" />
         </div>
       ) : (
         <div className="w-10 h-10 rounded-lg bg-gray-200 flex items-center justify-center shrink-0">
@@ -205,14 +205,14 @@ export default function ChatInput({ onSend, replyTo, onClearReply, conversationI
       <div className="flex items-end gap-1.5">
         <div className="flex items-center gap-0.5">
           <button onClick={() => setShowPicker(showPicker === 'emoji' ? null : 'emoji')} className={`p-2 rounded-xl transition-colors cursor-pointer ${showPicker === 'emoji' ? 'bg-wa-primary/10 text-wa-primary' : 'hover:bg-muted text-gray-400'}`}>
-            <FaceSmileIcon className="w-5 h-5" />
+            <Smile className="w-5 h-5" />
           </button>
           <div className="relative">
             <button onClick={() => fileRef.current?.click()} disabled={attaching} className="p-2 rounded-xl hover:bg-muted transition-colors cursor-pointer disabled:opacity-40 text-gray-400">
               {attaching ? (
                 <div className="w-5 h-5 border-2 border-wa-primary border-t-transparent rounded-full animate-spin" />
               ) : (
-                <PaperClipIcon className="w-5 h-5" />
+                <Paperclip className="w-5 h-5" />
               )}
             </button>
             <input ref={fileRef} type="file" accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.zip" className="hidden" onChange={handleFilePick} />
@@ -221,7 +221,7 @@ export default function ChatInput({ onSend, replyTo, onClearReply, conversationI
             GIF
           </button>
           <button onClick={() => setShowPicker(showPicker === 'sticker' ? null : 'sticker')} className={`p-2 rounded-xl transition-colors cursor-pointer ${showPicker === 'sticker' ? 'bg-wa-primary/10 text-wa-primary' : 'hover:bg-muted text-gray-400'}`}>
-            <PhotoIcon className="w-5 h-5" />
+            <Image className="w-5 h-5" />
           </button>
         </div>
 
@@ -243,7 +243,7 @@ export default function ChatInput({ onSend, replyTo, onClearReply, conversationI
             {sending ? (
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
-              <PaperAirplaneIcon className="w-4 h-4 text-white" />
+              <Send className="w-4 h-4 text-white" />
             )}
           </button>
         ) : (

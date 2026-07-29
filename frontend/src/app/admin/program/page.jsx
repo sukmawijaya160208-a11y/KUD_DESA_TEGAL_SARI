@@ -10,13 +10,7 @@ import ProgramDetail from '@/components/ProgramDetail';
 import { formatDate, formatDateShort } from '@/lib/date';
 import { JENIS_OPTIONS } from '@/constants/options';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ClipboardDocumentListIcon, PlusIcon, PencilSquareIcon, TrashIcon,
-  CalendarDaysIcon, UsersIcon, ChartBarIcon,
-  CheckCircleIcon, ClockIcon, XCircleIcon, MagnifyingGlassIcon,
-  ChevronDownIcon, ChevronUpIcon, EyeIcon, FunnelIcon,
-  SparklesIcon, DownloadIcon, ArrowUpIcon, ArrowDownIcon,
-} from '@heroicons/react/24/outline';
+import { ClipboardList, Plus, SquarePen, Trash2, CalendarDays, Users, BarChart3, CheckCircle, Clock, XCircle, Search, ChevronDown, ChevronUp, Eye, Filter, Sparkles, Download, ArrowUp, ArrowDown } from 'lucide-react';
 
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP',
@@ -79,15 +73,15 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
             </div>
           </div>
           <div className="absolute top-3 right-3 flex gap-1">
-            <button onClick={() => onDetail(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-all cursor-pointer" title="Detail"><EyeIcon className="w-3.5 h-3.5" /></button>
-            <button onClick={() => onEdit(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-150 cursor-pointer" title="Edit"><PencilSquareIcon className="w-3.5 h-3.5" /></button>
-            <button onClick={() => onDelete(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-red-400/60 transition-colors duration-150 cursor-pointer" title="Hapus"><TrashIcon className="w-3.5 h-3.5" /></button>
+            <button onClick={() => onDetail(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-all cursor-pointer" title="Detail"><Eye className="w-3.5 h-3.5" /></button>
+            <button onClick={() => onEdit(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-150 cursor-pointer" title="Edit"><SquarePen className="w-3.5 h-3.5" /></button>
+            <button onClick={() => onDelete(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-red-400/60 transition-colors duration-150 cursor-pointer" title="Hapus"><Trash2 className="w-3.5 h-3.5" /></button>
           </div>
         </div>
       ) : (
         <div className="h-36 bg-gradient-to-br from-slate-900 to-slate-700 flex items-center justify-center relative">
           <div className="text-center">
-            <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-2"><ClipboardDocumentListIcon className="w-6 h-6 text-white/40" /></div>
+            <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-2"><ClipboardList className="w-6 h-6 text-white/40" /></div>
             <h3 className="text-white font-bold">{program.nama}</h3>
             <div className="flex items-center justify-center gap-2 mt-1">
               <span className="text-white/50 text-xs">{program.jenis}</span>
@@ -95,9 +89,9 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
             </div>
           </div>
           <div className="absolute top-3 right-3 flex gap-1">
-            <button onClick={() => onDetail(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-all cursor-pointer" title="Detail"><EyeIcon className="w-3.5 h-3.5" /></button>
-            <button onClick={() => onEdit(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-150 cursor-pointer" title="Edit"><PencilSquareIcon className="w-3.5 h-3.5" /></button>
-            <button onClick={() => onDelete(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-red-400/60 transition-colors duration-150 cursor-pointer" title="Hapus"><TrashIcon className="w-3.5 h-3.5" /></button>
+            <button onClick={() => onDetail(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-all cursor-pointer" title="Detail"><Eye className="w-3.5 h-3.5" /></button>
+            <button onClick={() => onEdit(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-150 cursor-pointer" title="Edit"><SquarePen className="w-3.5 h-3.5" /></button>
+            <button onClick={() => onDelete(program)} className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center text-white hover:bg-red-400/60 transition-colors duration-150 cursor-pointer" title="Hapus"><Trash2 className="w-3.5 h-3.5" /></button>
           </div>
         </div>
       )}
@@ -122,7 +116,7 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
         <div className="flex items-center gap-3 text-xs text-gray-500">
           {program.tanggal_mulai && (
             <span className="flex items-center gap-1 bg-blue-50 text-blue-600 px-2 py-0.5 rounded-lg">
-              <CalendarDaysIcon className="w-3 h-3" />
+              <CalendarDays className="w-3 h-3" />
               {formatDate(program.tanggal_mulai, 'dd MMM')}
               {program.tanggal_selesai && ` - ${formatDateShort(program.tanggal_selesai)}`}
             </span>
@@ -131,7 +125,7 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
             <span className={`flex items-center gap-1 px-2 py-0.5 rounded-lg ${
               isPenuh ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'
             }`}>
-              <UsersIcon className="w-3 h-3" />
+              <Users className="w-3 h-3" />
               {pendaftarCount}/{kuota}
             </span>
           )}
@@ -194,7 +188,7 @@ function ProgramCard({ program, onEdit, onDelete, onDetail, onToggleAktif }) {
             <div>
               <button onClick={() => setExpanded(!expanded)}
                 className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors duration-150 cursor-pointer">
-                {expanded ? <ChevronUpIcon className="w-3.5 h-3.5" /> : <ChevronDownIcon className="w-3.5 h-3.5" />}
+                {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                 Lihat Pendaftar ({pendaftarCount})
               </button>
               <AnimatePresence>
@@ -376,7 +370,7 @@ export default function AdminProgramPage() {
       <motion.div variants={fadeUp} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-md shadow-purple-500/20 shrink-0">
-            <ClipboardDocumentListIcon className="w-6 h-6 text-white" />
+            <ClipboardList className="w-6 h-6 text-white" />
           </div>
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-foreground">Program KUD</h1>
@@ -384,30 +378,30 @@ export default function AdminProgramPage() {
           </div>
         </div>
         <Button onClick={() => { setEditing(null); setShowForm(true); }}>
-          <PlusIcon className="w-4 h-4" /> Tambah Program
+          <Plus className="w-4 h-4" /> Tambah Program
         </Button>
       </motion.div>
 
       {/* STATS ROW */}
       {stats && (
         <motion.div variants={fadeUp} className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <StatsCard label="Total Program" value={stats.total || 0} icon={ClipboardDocumentListIcon} color="bg-gradient-to-br from-blue-500 to-blue-600" />
-          <StatsCard label="Program Aktif" value={stats.aktif || 0} sub={stats.nonaktif ? `${stats.nonaktif} nonaktif` : ''} icon={CheckCircleIcon} color="bg-gradient-to-br from-emerald-500 to-emerald-600" />
-          <StatsCard label="Total Kuota" value={totalKuota} icon={ChartBarIcon} color="bg-gradient-to-br from-amber-500 to-amber-600" />
-          <StatsCard label="Total Pendaftar" value={totalPendaftar} sub={totalKuota ? `${Math.round((totalPendaftar / totalKuota) * 100)}% terisi` : ''} icon={UsersIcon} color="bg-gradient-to-br from-purple-500 to-purple-600" />
+          <StatsCard label="Total Program" value={stats.total || 0} icon={ClipboardList} color="bg-gradient-to-br from-blue-500 to-blue-600" />
+          <StatsCard label="Program Aktif" value={stats.aktif || 0} sub={stats.nonaktif ? `${stats.nonaktif} nonaktif` : ''} icon={CheckCircle} color="bg-gradient-to-br from-emerald-500 to-emerald-600" />
+          <StatsCard label="Total Kuota" value={totalKuota} icon={BarChart3} color="bg-gradient-to-br from-amber-500 to-amber-600" />
+          <StatsCard label="Total Pendaftar" value={totalPendaftar} sub={totalKuota ? `${Math.round((totalPendaftar / totalKuota) * 100)}% terisi` : ''} icon={Users} color="bg-gradient-to-br from-purple-500 to-purple-600" />
         </motion.div>
       )}
 
       {/* FILTERS */}
       <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-2 sm:gap-3">
         <div className="relative flex-1 min-w-[180px] max-w-sm">
-          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           <input type="text" placeholder="Cari program..." value={search} onChange={(e) => handleSearch(e.target.value)}
             className="w-full pl-9 pr-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-[border,box-shadow]" />
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
           <div className="relative">
-            <FunnelIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
             <select value={filterStatus} onChange={(e) => handleFilterStatus(e.target.value)}
               className="pl-8 pr-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-[border,box-shadow] appearance-none cursor-pointer">
               <option value="">Semua Status</option>
@@ -440,17 +434,17 @@ export default function AdminProgramPage() {
       {data.length === 0 && !search && !filterJenis && !filterStatus ? (
         <motion.div variants={fadeUp} className="text-center py-20">
           <div className="w-16 h-16 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <ClipboardDocumentListIcon className="w-8 h-8 text-purple-400" />
+            <ClipboardList className="w-8 h-8 text-purple-400" />
           </div>
           <p className="text-gray-400 text-lg font-medium">Belum Ada Program KUD</p>
           <p className="text-gray-400 text-sm mt-1 mb-6">Buat program KUD pertama Anda untuk memulai pendaftaran</p>
           <Button onClick={() => { setEditing(null); setShowForm(true); }}>
-            <PlusIcon className="w-4 h-4" /> Buat Program Baru
+            <Plus className="w-4 h-4" /> Buat Program Baru
           </Button>
         </motion.div>
       ) : data.length === 0 ? (
         <motion.div variants={fadeUp} className="text-center py-16">
-          <MagnifyingGlassIcon className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+          <Search className="w-10 h-10 text-gray-300 mx-auto mb-3" />
           <p className="text-gray-400 font-medium">Tidak ada program yang cocok</p>
           <p className="text-gray-400 text-sm mt-1">Coba ubah kata kunci atau filter pencarian</p>
         </motion.div>

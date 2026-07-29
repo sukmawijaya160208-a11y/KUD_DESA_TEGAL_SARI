@@ -9,12 +9,7 @@ import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
-import {
-  DocumentTextIcon, XMarkIcon, MapPinIcon,
-  ChevronDownIcon, ChevronRightIcon, MagnifyingGlassIcon,
-  CheckCircleIcon, XCircleIcon, ClockIcon,
-  FunnelIcon
-} from '@heroicons/react/24/outline';
+import { FileText, X, MapPin, ChevronDown, ChevronRight, Search, CheckCircle, XCircle, Clock, Filter } from 'lucide-react';
 
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',
@@ -62,7 +57,7 @@ const ProgramRow = memo(function ProgramRow({ d, expandedId, onToggle, onPreview
       <td className="py-3 px-3">
         <button onClick={() => onToggle(d.id)}
           className="p-0.5 rounded hover:bg-muted transition-all cursor-pointer">
-          {isExpanded ? <ChevronDownIcon className="w-4 h-4 text-gray-400" /> : <ChevronRightIcon className="w-4 h-4 text-gray-400" />}
+          {isExpanded ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
         </button>
       </td>
       <td className="py-3 px-3">
@@ -95,11 +90,11 @@ const ProgramRow = memo(function ProgramRow({ d, expandedId, onToggle, onPreview
             <>
               <button onClick={() => onVerifikasi(d.id, 'verified')}
                 className="p-1.5 rounded-lg bg-success/10 text-success hover:bg-success/20 transition-colors cursor-pointer" title="Setujui">
-                <CheckCircleIcon className="w-4 h-4" />
+                <CheckCircle className="w-4 h-4" />
               </button>
               <button onClick={() => onVerifikasi(d.id, 'rejected')}
                 className="p-1.5 rounded-lg bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors cursor-pointer" title="Tolak">
-                <XCircleIcon className="w-4 h-4" />
+                <XCircle className="w-4 h-4" />
               </button>
             </>
           )}
@@ -199,7 +194,7 @@ const ExpandedRow = memo(function ExpandedRow({ d, onPreview, onVerifikasi, cata
               {d.setuju_surat_1 !== undefined && d.programKud?.aktifkan_surat && (
                 <div>
                   <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                    <DocumentTextIcon className="w-3.5 h-3.5 inline mr-1" />
+                    <FileText className="w-3.5 h-3.5 inline mr-1" />
                     Status Persetujuan Surat
                   </h4>
                   <div className="space-y-1.5">
@@ -262,7 +257,7 @@ const ExpandedRow = memo(function ExpandedRow({ d, onPreview, onVerifikasi, cata
                             {l.titik_koordinat && (
                               <button onClick={() => openMaps(l.titik_koordinat)}
                                 className="flex items-center gap-1 px-2 py-1.5 bg-blue-50 text-primary rounded-lg text-[10px] font-medium hover:bg-blue-100 transition-all cursor-pointer">
-                                <MapPinIcon className="w-3 h-3" /> Maps
+                                <MapPin className="w-3 h-3" /> Maps
                               </button>
                             )}
                           </div>
@@ -289,10 +284,10 @@ const ExpandedRow = memo(function ExpandedRow({ d, onPreview, onVerifikasi, cata
                 {d.status === 'pending' ? (
                   <>
                     <Button variant="success" size="sm" onClick={() => onVerifikasi(d.id, 'verified')}>
-                      <CheckCircleIcon className="w-3.5 h-3.5" /> Setujui
+                      <CheckCircle className="w-3.5 h-3.5" /> Setujui
                     </Button>
                     <Button variant="danger" size="sm" onClick={() => onVerifikasi(d.id, 'rejected')}>
-                      <XCircleIcon className="w-3.5 h-3.5" /> Tolak
+                      <XCircle className="w-3.5 h-3.5" /> Tolak
                     </Button>
                   </>
                 ) : (
@@ -407,7 +402,7 @@ export default function VerifikatorProgramPage() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-sm">
-            <DocumentTextIcon className="w-6 h-6 text-white" />
+            <FileText className="w-6 h-6 text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Verifikasi Program</h1>
@@ -418,9 +413,9 @@ export default function VerifikatorProgramPage() {
 
       <div className="grid grid-cols-3 gap-4 mb-6">
         {[
-          { label: 'Menunggu', value: stats.pending, icon: ClockIcon, color: 'bg-amber-500', shadow: 'shadow-amber-500/20' },
-          { label: 'Disetujui', value: stats.verified, icon: CheckCircleIcon, color: 'bg-emerald-500', shadow: 'shadow-emerald-500/20' },
-          { label: 'Ditolak', value: stats.rejected, icon: XCircleIcon, color: 'bg-rose-500', shadow: 'shadow-rose-500/20' },
+          { label: 'Menunggu', value: stats.pending, icon: Clock, color: 'bg-amber-500', shadow: 'shadow-amber-500/20' },
+          { label: 'Disetujui', value: stats.verified, icon: CheckCircle, color: 'bg-emerald-500', shadow: 'shadow-emerald-500/20' },
+          { label: 'Ditolak', value: stats.rejected, icon: XCircle, color: 'bg-rose-500', shadow: 'shadow-rose-500/20' },
         ].map((s, i) => (
           <div key={i} className={`bg-surface rounded-2xl border border-border p-4 ${s.shadow} transition-all duration-200`}>
             <div className="flex items-center justify-between mb-2">
@@ -437,7 +432,7 @@ export default function VerifikatorProgramPage() {
       <div className="bg-surface rounded-2xl border border-border mb-4">
         <div className="p-4 border-b border-border flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input ref={searchRef}
               placeholder="Cari pekebun atau program..."
               defaultValue={search}
@@ -456,23 +451,23 @@ export default function VerifikatorProgramPage() {
 
         {hasActiveFilters && (
           <div className="flex flex-wrap items-center gap-2 px-4 pb-3">
-            <span className="text-xs text-gray-400 font-medium"><FunnelIcon className="w-3 h-3 inline mr-1" />Filter:</span>
+            <span className="text-xs text-gray-400 font-medium"><Filter className="w-3 h-3 inline mr-1" />Filter:</span>
             {search && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
                 Cari: {search}
-                <button onClick={() => { setSearch(''); setPage(1); }} className="cursor-pointer hover:text-primary-dark"><XMarkIcon className="w-3 h-3" /></button>
+                <button onClick={() => { setSearch(''); setPage(1); }} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
               </span>
             )}
             {filterProgram && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
                 Program: {programList.find(p => String(p.id) === String(filterProgram))?.nama || filterProgram}
-                <button onClick={() => { setFilterProgram(''); setPage(1); }} className="cursor-pointer hover:text-primary-dark"><XMarkIcon className="w-3 h-3" /></button>
+                <button onClick={() => { setFilterProgram(''); setPage(1); }} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
               </span>
             )}
             {filterStatus !== 'pending' && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
                 Status: {filterStatus === 'verified' ? 'Disetujui' : 'Ditolak'}
-                <button onClick={() => { setFilterStatus('pending'); setPage(1); }} className="cursor-pointer hover:text-primary-dark"><XMarkIcon className="w-3 h-3" /></button>
+                <button onClick={() => { setFilterStatus('pending'); setPage(1); }} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
               </span>
             )}
             <button onClick={() => { setSearch(''); setFilterProgram(''); setFilterStatus('pending'); setPage(1); }}
@@ -490,7 +485,7 @@ export default function VerifikatorProgramPage() {
             </div>
           ) : data.length === 0 ? (
             <div className="p-8 text-center">
-              <DocumentTextIcon className="w-12 h-12 text-gray-200 mx-auto mb-3" />
+              <FileText className="w-12 h-12 text-gray-200 mx-auto mb-3" />
               <p className="text-gray-400">Tidak ada data pendaftaran program</p>
             </div>
           ) : (
@@ -606,7 +601,7 @@ export default function VerifikatorProgramPage() {
           <div className="relative max-w-2xl w-full max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setPreviewImage(null)}
               className="absolute -top-3 -right-3 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center z-10 cursor-pointer">
-              <XMarkIcon className="w-4 h-4 text-gray-700" />
+              <X className="w-4 h-4 text-gray-700" />
             </button>
             <img src={previewImage} alt="Preview" className="w-full h-auto rounded-2xl shadow-2xl" />
           </div>

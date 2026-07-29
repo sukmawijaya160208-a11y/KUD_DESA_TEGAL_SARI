@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import {
-  CurrencyDollarIcon, CalendarDaysIcon, CheckCircleIcon,
-  ClockIcon, XCircleIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon,
-} from '@heroicons/react/24/outline';
+  DollarSign, CalendarDays, CheckCircle,
+  Clock, XCircle, TrendingUp, TrendingDown,
+} from 'lucide-react';
 import { formatDate, formatDateShort, todayStr } from '@/lib/date';
 
 const KELAS_DISPLAY = {
@@ -30,8 +30,8 @@ function getState(item) {
 
 function StateBadge({ state }) {
   const cfg = {
-    active: { icon: CheckCircleIcon, label: 'Berlaku', classes: 'bg-green-100 text-green-700 border-green-200' },
-    upcoming: { icon: ClockIcon, label: 'Akan Datang', classes: 'bg-blue-100 text-blue-700 border-blue-200' },
+    active: { icon: CheckCircle, label: 'Berlaku', classes: 'bg-green-100 text-green-700 border-green-200' },
+    upcoming: { icon: Clock, label: 'Akan Datang', classes: 'bg-blue-100 text-blue-700 border-blue-200' },
     expired: { icon: XCircleIcon, label: 'Berakhir', classes: 'bg-gray-100 text-gray-500 border-gray-200' },
   };
   const c = cfg[state];
@@ -87,7 +87,7 @@ export default function PekebunHargaTbsPage() {
         <div className="relative">
           <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full" />
           <div className="relative w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200/50">
-            <CurrencyDollarIcon className="w-7 h-7 text-white" />
+            <DollarSign className="w-7 h-7 text-white" />
           </div>
         </div>
         <div>
@@ -120,12 +120,12 @@ export default function PekebunHargaTbsPage() {
                     </div>
                     <div className="mt-4 pt-3 border-t border-white/10 space-y-1.5">
                       <p className="text-white/70 text-xs flex items-center gap-1.5">
-                        <CalendarDaysIcon className="w-3.5 h-3.5 shrink-0" />
+                        <CalendarDays className="w-3.5 h-3.5 shrink-0" />
                         <span>Mulai: <strong>{formatDate(aktif.dari_tanggal)}</strong></span>
                       </p>
                       {aktif.sampai_tanggal ? (
                         <p className="text-white/70 text-xs flex items-center gap-1.5">
-                          <CalendarDaysIcon className="w-3.5 h-3.5 shrink-0" />
+                          <CalendarDays className="w-3.5 h-3.5 shrink-0" />
                           <span>Sampai: <strong>{formatDate(aktif.sampai_tanggal)}</strong></span>
                         </p>
                       ) : (
@@ -141,7 +141,7 @@ export default function PekebunHargaTbsPage() {
                   </>
                 ) : (
                   <div className="py-6 text-center">
-                    <CurrencyDollarIcon className="w-10 h-10 text-white/20 mx-auto mb-2" />
+                    <DollarSign className="w-10 h-10 text-white/20 mx-auto mb-2" />
                     <p className="text-white/40 text-sm">Belum ada harga</p>
                     <p className="text-white/30 text-[11px] mt-1">Silakan cek kembali nanti</p>
                   </div>
@@ -170,7 +170,7 @@ export default function PekebunHargaTbsPage() {
               <div key={kelas} className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-xl text-xs">
                 <span className="font-medium text-gray-600">{KELAS_DISPLAY[kelas].label.replace(' —', ':')}</span>
                 <span className={`flex items-center gap-0.5 font-semibold ${up ? 'text-green-600' : down ? 'text-red-500' : 'text-gray-500'}`}>
-                  {up ? <ArrowTrendingUpIcon className="w-3.5 h-3.5" /> : down ? <ArrowTrendingDownIcon className="w-3.5 h-3.5" /> : null}
+                  {up ? <TrendingUp className="w-3.5 h-3.5" /> : down ? <TrendingDown className="w-3.5 h-3.5" /> : null}
                   {up ? `+${formatRp(diff)}` : down ? `-${formatRp(Math.abs(diff))}` : 'Tetap'} ({pct}%)
                 </span>
               </div>
@@ -205,12 +205,12 @@ export default function PekebunHargaTbsPage() {
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-2.5">
                             <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${state === 'expired' ? 'bg-gray-50' : state === 'upcoming' ? 'bg-blue-50' : 'bg-emerald-50'}`}>
-                              <CurrencyDollarIcon className={`w-4 h-4 ${state === 'expired' ? 'text-gray-400' : state === 'upcoming' ? 'text-blue-500' : 'text-emerald-600'}`} />
+                              <DollarSign className={`w-4 h-4 ${state === 'expired' ? 'text-gray-400' : state === 'upcoming' ? 'text-blue-500' : 'text-emerald-600'}`} />
                             </div>
                             <div>
                               <p className={`font-bold ${state === 'expired' ? 'text-gray-500 line-through' : 'text-foreground'}`}>{formatRp(item.harga_per_kg)}</p>
                               <p className="text-[10px] text-gray-400 flex items-center gap-1 mt-0.5">
-                                <CalendarDaysIcon className="w-3 h-3" />
+                                <CalendarDays className="w-3 h-3" />
                                 {formatDateShort(item.dari_tanggal)}{item.sampai_tanggal ? ` — ${formatDateShort(item.sampai_tanggal)}` : ' — ∞'}
                               </p>
                             </div>
@@ -234,7 +234,7 @@ export default function PekebunHargaTbsPage() {
       {allData.length === 0 && (
         <div className="text-center py-20">
           <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mx-auto mb-5 shadow-inner">
-            <CurrencyDollarIcon className="w-10 h-10 text-gray-300" />
+            <DollarSign className="w-10 h-10 text-gray-300" />
           </div>
           <p className="text-gray-500 text-lg font-medium">Belum ada informasi harga TBS</p>
           <p className="text-gray-400 text-sm mt-1">Admin belum menetapkan harga TBS</p>

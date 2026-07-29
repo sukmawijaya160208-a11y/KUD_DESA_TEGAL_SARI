@@ -9,7 +9,7 @@ import NewChatModal from './NewChatModal';
 import IncomingCall from './IncomingCall';
 import CallScreen from './CallScreen';
 import MessageSettingsModal from './MessageSettingsModal';
-import { ChatBubbleLeftRightIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
+import { MessageCircle, Settings } from 'lucide-react';
 
 const POLL_INTERVAL = 3000;
 
@@ -164,7 +164,7 @@ function ChatPageInner() {
             className="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-wa-primary hover:bg-wa-primary-dark text-white flex items-center justify-center shadow-lg transition-colors cursor-pointer z-10"
             title="Pengaturan Pesan"
           >
-            <Cog6ToothIcon className="w-5 h-5" />
+            <Settings className="w-5 h-5" />
           </button>
         </div>
 
@@ -185,7 +185,7 @@ function ChatPageInner() {
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center px-8 bg-chat-pattern">
               <div className="w-20 h-20 rounded-3xl bg-white/50 flex items-center justify-center mb-4">
-                <ChatBubbleLeftRightIcon className="w-10 h-10 text-wa-primary/40" />
+                <MessageCircle className="w-10 h-10 text-wa-primary/40" />
               </div>
               <h3 className="text-lg font-heading font-bold text-foreground">Pesan</h3>
               <p className="text-sm text-gray-400 mt-1 max-w-xs">

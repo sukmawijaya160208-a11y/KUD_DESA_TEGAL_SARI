@@ -8,16 +8,7 @@ import Modal from '@/components/ui/Modal';
 import FormModal from './components/FormModal';
 import HeroSectionCMS from './components/HeroSectionCMS';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  PlusIcon, PencilSquareIcon, TrashIcon, XMarkIcon,
-  ClipboardDocumentListIcon, AcademicCapIcon, PhotoIcon,
-  VideoCameraIcon, StarIcon, SparklesIcon,
-  ChartBarIcon, BuildingOffice2Icon, ChatBubbleLeftRightIcon,
-  QuestionMarkCircleIcon, PhoneIcon,
-  ChevronUpIcon, ChevronDownIcon, EyeIcon, EyeSlashIcon,
-  CalendarDaysIcon, BuildingOfficeIcon, MapPinIcon,
-  NewspaperIcon,
-} from '@heroicons/react/24/outline';
+import {   Sparkles, Plus, SquarePen, Trash2, X, ClipboardList, GraduationCap, Image, BarChart3, Building, MessageCircle, CircleHelp, Phone, Newspaper, CalendarDays, MapPin, Video, Star, ChevronUp, ChevronDown } from 'lucide-react';
 
 const containerAnim = {
   hidden: { opacity: 0 },
@@ -30,33 +21,33 @@ const fadeUp = {
 };
 
 const TABS = [
-  { id: 'hero', label: 'Hero Section', icon: NewspaperIcon, color: 'from-emerald-500 to-teal-600' },
-  { id: 'langkah', label: '6 Langkah', icon: ClipboardDocumentListIcon, color: 'from-blue-500 to-blue-600' },
-  { id: 'sertifikasi', label: 'Sertifikasi', icon: AcademicCapIcon, color: 'from-purple-500 to-purple-600' },
-  { id: 'dokumentasi', label: 'Dokumentasi', icon: PhotoIcon, color: 'from-green-500 to-green-600' },
-  { id: 'video', label: 'Video', icon: VideoCameraIcon, color: 'from-red-500 to-red-600' },
-  { id: 'keuntungan', label: 'Keuntungan', icon: StarIcon, color: 'from-yellow-500 to-amber-600' },
-  { id: 'fitur', label: 'Fitur', icon: SparklesIcon, color: 'from-indigo-500 to-indigo-600' },
-  { id: 'angka', label: 'KUD Angka', icon: ChartBarIcon, color: 'from-emerald-500 to-emerald-600' },
-  { id: 'mitra', label: 'Mitra', icon: BuildingOffice2Icon, color: 'from-cyan-500 to-cyan-600' },
-  { id: 'testimoni', label: 'Testimoni', icon: ChatBubbleLeftRightIcon, color: 'from-pink-500 to-pink-600' },
-  { id: 'faq', label: 'FAQ', icon: QuestionMarkCircleIcon, color: 'from-violet-500 to-violet-600' },
-  { id: 'layanan', label: 'Layanan', icon: PhoneIcon, color: 'from-rose-500 to-rose-600' },
+  { id: 'hero', label: 'Hero Section', icon: Newspaper, color: 'from-emerald-500 to-teal-600' },
+  { id: 'langkah', label: '6 Langkah', icon: ClipboardList, color: 'from-blue-500 to-blue-600' },
+  { id: 'sertifikasi', label: 'Sertifikasi', icon: GraduationCap, color: 'from-purple-500 to-purple-600' },
+  { id: 'dokumentasi', label: 'Dokumentasi', icon: Image, color: 'from-green-500 to-green-600' },
+  { id: 'video', label: 'Video', icon: Video, color: 'from-red-500 to-red-600' },
+  { id: 'keuntungan', label: 'Keuntungan', icon: Star, color: 'from-yellow-500 to-amber-600' },
+  { id: 'fitur', label: 'Fitur', icon: Sparkles, color: 'from-indigo-500 to-indigo-600' },
+  { id: 'angka', label: 'KUD Angka', icon: BarChart3, color: 'from-emerald-500 to-emerald-600' },
+  { id: 'mitra', label: 'Mitra', icon: Building, color: 'from-cyan-500 to-cyan-600' },
+  { id: 'testimoni', label: 'Testimoni', icon: MessageCircle, color: 'from-pink-500 to-pink-600' },
+  { id: 'faq', label: 'FAQ', icon: CircleHelp, color: 'from-violet-500 to-violet-600' },
+  { id: 'layanan', label: 'Layanan', icon: Phone, color: 'from-rose-500 to-rose-600' },
 ];
 
 const SECTION_LABELS = {
-  hero: { title: 'Hero Section', desc: 'Atur teks utama landing page KUD', icon: NewspaperIcon, color: 'from-emerald-500 to-teal-600' },
-  langkah: { title: '6 Langkah Jadi Anggota', desc: 'Atur alur pendaftaran anggota KUD', icon: ClipboardDocumentListIcon, color: 'from-blue-500 to-blue-600' },
-  sertifikasi: { title: 'Sertifikasi & Penghargaan', desc: 'Kelola sertifikasi, penghargaan, dan akreditasi', icon: AcademicCapIcon, color: 'from-purple-500 to-purple-600' },
-  dokumentasi: { title: 'Dokumentasi Kegiatan', desc: 'Upload foto dokumentasi kegiatan KUD', icon: PhotoIcon, color: 'from-green-500 to-green-600' },
-  video: { title: 'Multimedia Video', desc: 'Kelola video YouTube kegiatan KUD', icon: VideoCameraIcon, color: 'from-red-500 to-red-600' },
-  keuntungan: { title: 'Keuntungan Bergabung', desc: 'Atur daftar keuntungan menjadi anggota', icon: StarIcon, color: 'from-yellow-500 to-amber-600' },
-  fitur: { title: 'Fitur Aplikasi', desc: 'Kelola fitur-fitur aplikasi KUD', icon: SparklesIcon, color: 'from-indigo-500 to-indigo-600' },
-  angka: { title: 'KUD dalam Angka', desc: 'Atur statistik dan angka KUD', icon: ChartBarIcon, color: 'from-emerald-500 to-emerald-600' },
-  mitra: { title: 'Mitra & Kolaborasi', desc: 'Kelola daftar mitra KUD', icon: BuildingOffice2Icon, color: 'from-cyan-500 to-cyan-600' },
-  testimoni: { title: 'Testimoni Anggota', desc: 'Kelola testimoni anggota KUD', icon: ChatBubbleLeftRightIcon, color: 'from-pink-500 to-pink-600' },
-  faq: { title: 'FAQ', desc: 'Pertanyaan yang sering diajukan', icon: QuestionMarkCircleIcon, color: 'from-violet-500 to-violet-600' },
-  layanan: { title: 'Layanan', desc: 'Daftar layanan KUD', icon: PhoneIcon, color: 'from-rose-500 to-rose-600' },
+  hero: { title: 'Hero Section', desc: 'Atur teks utama landing page KUD', icon: Newspaper, color: 'from-emerald-500 to-teal-600' },
+  langkah: { title: '6 Langkah Jadi Anggota', desc: 'Atur alur pendaftaran anggota KUD', icon: ClipboardList, color: 'from-blue-500 to-blue-600' },
+  sertifikasi: { title: 'Sertifikasi & Penghargaan', desc: 'Kelola sertifikasi, penghargaan, dan akreditasi', icon: GraduationCap, color: 'from-purple-500 to-purple-600' },
+  dokumentasi: { title: 'Dokumentasi Kegiatan', desc: 'Upload foto dokumentasi kegiatan KUD', icon: Image, color: 'from-green-500 to-green-600' },
+  video: { title: 'Multimedia Video', desc: 'Kelola video YouTube kegiatan KUD', icon: Video, color: 'from-red-500 to-red-600' },
+  keuntungan: { title: 'Keuntungan Bergabung', desc: 'Atur daftar keuntungan menjadi anggota', icon: Star, color: 'from-yellow-500 to-amber-600' },
+  fitur: { title: 'Fitur Aplikasi', desc: 'Kelola fitur-fitur aplikasi KUD', icon: Sparkles, color: 'from-indigo-500 to-indigo-600' },
+  angka: { title: 'KUD dalam Angka', desc: 'Atur statistik dan angka KUD', icon: BarChart3, color: 'from-emerald-500 to-emerald-600' },
+  mitra: { title: 'Mitra & Kolaborasi', desc: 'Kelola daftar mitra KUD', icon: Building, color: 'from-cyan-500 to-cyan-600' },
+  testimoni: { title: 'Testimoni Anggota', desc: 'Kelola testimoni anggota KUD', icon: MessageCircle, color: 'from-pink-500 to-pink-600' },
+  faq: { title: 'FAQ', desc: 'Pertanyaan yang sering diajukan', icon: CircleHelp, color: 'from-violet-500 to-violet-600' },
+  layanan: { title: 'Layanan', desc: 'Daftar layanan KUD', icon: Phone, color: 'from-rose-500 to-rose-600' },
 };
 
 const SertifikasiCard = memo(function SertifikasiCard({ item, onEdit, onDelete }) {
@@ -75,7 +66,7 @@ const SertifikasiCard = memo(function SertifikasiCard({ item, onEdit, onDelete }
             </div>
           ) : (
             <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30 shadow-lg">
-              <AcademicCapIcon className="w-6 h-6 text-white" />
+              <GraduationCap className="w-6 h-6 text-white" />
             </div>
           )}
           <div className="text-white">
@@ -93,7 +84,7 @@ const SertifikasiCard = memo(function SertifikasiCard({ item, onEdit, onDelete }
         <div className="flex flex-wrap gap-1.5">
           {item.meta_data?.lembaga && (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-50 text-purple-700 rounded-lg text-[10px] font-medium border border-purple-100">
-              <BuildingOfficeIcon className="w-3 h-3" /> {item.meta_data.lembaga}
+              <Building className="w-3 h-3" /> {item.meta_data.lembaga}
             </span>
           )}
           {item.order !== undefined && item.order !== null && (
@@ -107,11 +98,11 @@ const SertifikasiCard = memo(function SertifikasiCard({ item, onEdit, onDelete }
       <div className="flex items-center justify-between px-4 py-3 bg-gray-50/80 border-t border-border">
         <button onClick={() => onEdit(item)}
           className="flex items-center gap-1 text-xs font-medium text-purple-600 hover:text-purple-800 hover:bg-purple-50 px-3 py-1.5 rounded-lg transition-colors duration-150 cursor-pointer">
-          <PencilSquareIcon className="w-3.5 h-3.5" /> Edit Data
+          <SquarePen className="w-3.5 h-3.5" /> Edit Data
         </button>
         <button onClick={() => onDelete(item)}
           className="flex items-center gap-1 text-xs font-medium text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors duration-150 cursor-pointer">
-          <TrashIcon className="w-3.5 h-3.5" /> Hapus
+          <Trash2 className="w-3.5 h-3.5" /> Hapus
         </button>
       </div>
     </motion.div>
@@ -176,12 +167,12 @@ const DefaultCard = memo(function DefaultCard({ item, activeTab, onEdit, onDelet
           )}
           {item.meta_data.alamat && (
             <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">
-              <MapPinIcon className="w-3 h-3 inline mr-0.5" />{item.meta_data.alamat}
+              <MapPin className="w-3 h-3 inline mr-0.5" />{item.meta_data.alamat}
             </span>
           )}
           {item.meta_data.youtube_id && (
             <span className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full font-medium">
-              <VideoCameraIcon className="w-3 h-3 inline mr-0.5" />YouTube
+              <Video className="w-3 h-3 inline mr-0.5" />YouTube
             </span>
           )}
           {item.meta_data.kontak && (
@@ -197,23 +188,23 @@ const DefaultCard = memo(function DefaultCard({ item, activeTab, onEdit, onDelet
         <div className="flex items-center gap-1">
           <button onClick={() => onEdit(item)}
             className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1.5 rounded-lg transition-colors duration-150 cursor-pointer">
-            <PencilSquareIcon className="w-3.5 h-3.5" /> Edit
+            <SquarePen className="w-3.5 h-3.5" /> Edit
           </button>
           <button onClick={() => onDelete(item)}
             className="flex items-center gap-1 text-xs font-medium text-red-600 hover:text-red-800 hover:bg-red-50 px-2 py-1.5 rounded-lg transition-colors duration-150 cursor-pointer">
-            <TrashIcon className="w-3.5 h-3.5" /> Hapus
+            <Trash2 className="w-3.5 h-3.5" /> Hapus
           </button>
         </div>
         <div className="flex items-center gap-0.5">
           <button onClick={() => {}}
             className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all cursor-pointer"
             title="Naik">
-            <ChevronUpIcon className="w-3.5 h-3.5" />
+            <ChevronUp className="w-3.5 h-3.5" />
           </button>
           <button onClick={() => {}}
             className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-150 cursor-pointer"
             title="Turun">
-            <ChevronDownIcon className="w-3.5 h-3.5" />
+            <ChevronDown className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -291,7 +282,7 @@ export default function LandingPageAdmin() {
           </div>
         </div>
         <Button onClick={() => { setEditing(null); setShowForm(true); }}>
-          <PlusIcon className="w-4 h-4" /> Tambah Data
+          <Plus className="w-4 h-4" /> Tambah Data
         </Button>
       </motion.div>
 
@@ -324,7 +315,7 @@ export default function LandingPageAdmin() {
             className="w-full pl-3 pr-8 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors" />
           {searchQuery && (
             <button onClick={() => setSearchQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer">
-              <XMarkIcon className="w-4 h-4" />
+              <X className="w-4 h-4" />
             </button>
           )}
         </div>
@@ -361,7 +352,7 @@ export default function LandingPageAdmin() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4" onClick={() => setLightbox(null)}>
             <button onClick={() => setLightbox(null)} className="absolute top-4 right-4 text-white/70 hover:text-white z-10 cursor-pointer">
-              <XMarkIcon className="w-8 h-8" />
+              <X className="w-8 h-8" />
             </button>
             <motion.img key={lightbox} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
               onClick={(e) => e.stopPropagation()} src={lightbox} alt="Preview"

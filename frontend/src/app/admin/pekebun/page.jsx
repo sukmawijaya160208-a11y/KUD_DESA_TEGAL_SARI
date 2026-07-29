@@ -11,12 +11,7 @@ import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import DatePicker from '@/components/ui/DatePicker';
 import { motion } from 'framer-motion';
-import {
-  PencilSquareIcon, TrashIcon, PlusIcon, EyeIcon, XMarkIcon,
-  MagnifyingGlassIcon, UsersIcon, CheckCircleIcon, ClockIcon,
-  PhotoIcon, IdentificationIcon, DevicePhoneMobileIcon, PrinterIcon,
-  DocumentArrowDownIcon,
-} from '@heroicons/react/24/outline';
+import { SquarePen, Trash2, Plus, Eye, X, Search, Filter, ArrowUp, ArrowDown, ChevronDown, ChevronRight, FileDown, ShieldAlert, CheckCircle, MapPin, CalendarDays, FileText, Phone, Users, AlertTriangle } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { formatDate } from '@/lib/date';
 
@@ -116,13 +111,13 @@ function PekebunRow({ pekebun, onEdit, onDelete, onDetail, onPreview, onPrint })
             <PrinterIcon className="w-4 h-4" />
           </button>
           <button onClick={() => onDetail(pekebun)} className="p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer" title="Detail">
-            <EyeIcon className="w-4 h-4" />
+            <Eye className="w-4 h-4" />
           </button>
           <button onClick={() => onEdit(pekebun)} className="p-1.5 text-primary hover:bg-primary/10 rounded-lg transition-colors cursor-pointer" title="Edit">
-            <PencilSquareIcon className="w-4 h-4" />
+            <SquarePen className="w-4 h-4" />
           </button>
           <button onClick={() => onDelete(pekebun)} className="p-1.5 text-destructive hover:bg-destructive/10 rounded-lg transition-colors cursor-pointer" title="Hapus">
-            <TrashIcon className="w-4 h-4" />
+            <Trash2 className="w-4 h-4" />
           </button>
         </div>
       </td>
@@ -468,7 +463,7 @@ export default function AdminPekebunPage() {
       <motion.div variants={fadeUp} className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
-            <UsersIcon className="w-6 h-6 text-white" />
+            <Users className="w-6 h-6 text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Data Pekebun</h1>
@@ -477,23 +472,23 @@ export default function AdminPekebunPage() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={handlePrintAll} className="mr-2"><PrinterIcon className="w-4 h-4" /> Cetak Laporan</Button>
-          <Button variant="outline" onClick={() => setImportModal(true)}><DocumentArrowDownIcon className="w-4 h-4" /> Import Excel</Button>
-          <Button onClick={openCreate}><PlusIcon className="w-4 h-4" /> Tambah Pekebun</Button>
+          <Button variant="outline" onClick={() => setImportModal(true)}><FileDown className="w-4 h-4" /> Import Excel</Button>
+          <Button onClick={openCreate}><Plus className="w-4 h-4" /> Tambah Pekebun</Button>
         </div>
       </motion.div>
 
       <motion.div variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-5">
-        <StatsCard label="Total Pekebun" value={stats.total} icon={UsersIcon} color="bg-gradient-to-br from-blue-500 to-blue-600" />
+        <StatsCard label="Total Pekebun" value={stats.total} icon={Users} color="bg-gradient-to-br from-blue-500 to-blue-600" />
         <StatsCard label="Pending" value={stats.pending} icon={ClockIcon} color="bg-gradient-to-br from-yellow-500 to-yellow-600" />
-        <StatsCard label="Verified" value={stats.verified} icon={CheckCircleIcon} color="bg-gradient-to-br from-emerald-500 to-emerald-600" />
-        <StatsCard label="Rejected" value={stats.rejected} icon={XMarkIcon} color="bg-gradient-to-br from-red-500 to-red-600" />
+        <StatsCard label="Verified" value={stats.verified} icon={CheckCircle} color="bg-gradient-to-br from-emerald-500 to-emerald-600" />
+        <StatsCard label="Rejected" value={stats.rejected} icon={X} color="bg-gradient-to-br from-red-500 to-red-600" />
       </motion.div>
 
       <motion.div variants={fadeUp}>
         <Card>
           <div className="flex flex-col sm:flex-row gap-3 mb-4">
             <div className="relative flex-1">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 placeholder="Cari nama, NIK, atau WhatsApp..."
                 value={search}
@@ -630,7 +625,7 @@ export default function AdminPekebunPage() {
                     <button onClick={() => setPreviewImage(detailModal.foto_pekebun)} className="group relative aspect-square rounded-xl overflow-hidden border border-border bg-muted cursor-pointer">
                       <img src={detailModal.foto_pekebun} alt="Foto" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                        <EyeIcon className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <Eye className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
                       <span className="absolute bottom-1 left-1 text-[10px] bg-black/60 text-white px-1.5 py-0.5 rounded">Foto</span>
                     </button>
@@ -639,7 +634,7 @@ export default function AdminPekebunPage() {
                     <button onClick={() => setPreviewImage(detailModal.upload_ktp)} className="group relative aspect-square rounded-xl overflow-hidden border border-border bg-muted cursor-pointer">
                       <img src={detailModal.upload_ktp} alt="KTP" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                        <EyeIcon className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <Eye className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
                       <span className="absolute bottom-1 left-1 text-[10px] bg-black/60 text-white px-1.5 py-0.5 rounded">KTP</span>
                     </button>
@@ -648,7 +643,7 @@ export default function AdminPekebunPage() {
                     <button onClick={() => setPreviewImage(detailModal.upload_kk)} className="group relative aspect-square rounded-xl overflow-hidden border border-border bg-muted cursor-pointer">
                       <img src={detailModal.upload_kk} alt="KK" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                        <EyeIcon className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <Eye className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
                       <span className="absolute bottom-1 left-1 text-[10px] bg-black/60 text-white px-1.5 py-0.5 rounded">KK</span>
                     </button>
@@ -719,7 +714,7 @@ export default function AdminPekebunPage() {
             <div className="flex items-center justify-between gap-2">
               <p className="text-xs font-semibold text-gray-500">Template Kolom</p>
               <button onClick={handleDownloadTemplate} className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold rounded-lg transition-all cursor-pointer">
-                <DocumentArrowDownIcon className="w-3.5 h-3.5" />
+                <FileDown className="w-3.5 h-3.5" />
                 Download Template Excel
               </button>
             </div>
@@ -749,7 +744,7 @@ export default function AdminPekebunPage() {
             </div>
             <div className="flex items-center gap-3 p-4 border-2 border-dashed border-border rounded-xl hover:border-primary/50 transition-colors cursor-pointer" onClick={() => importRef.current?.click()}>
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                <DocumentArrowDownIcon className="w-5 h-5 text-primary rotate-180" />
+                <FileDown className="w-5 h-5 text-primary rotate-180" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground">Klik untuk pilih file Excel</p>
@@ -847,7 +842,7 @@ export default function AdminPekebunPage() {
         <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-4" onClick={() => setPreviewImage(null)}>
           <div className="relative max-w-3xl w-full max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setPreviewImage(null)} className="absolute -top-3 -right-3 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center z-10 cursor-pointer">
-              <XMarkIcon className="w-4 h-4 text-gray-700" />
+              <X className="w-4 h-4 text-gray-700" />
             </button>
             <img src={previewImage} alt="Preview" className="w-full h-auto rounded-2xl shadow-2xl" />
           </div>

@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { PlayCircleIcon } from '@heroicons/react/24/outline';
+import { PlayCircle } from 'lucide-react';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
 
 export default function VideoGallery({ youtubeUrl, isAdmin, onUpdateUrl }) {
@@ -25,7 +25,7 @@ export default function VideoGallery({ youtubeUrl, isAdmin, onUpdateUrl }) {
         >
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm">
-              <PlayCircleIcon className="w-5 h-5 text-emerald-400" />
+              <PlayCircle className="w-5 h-5 text-emerald-400" />
               <span className="text-white/80 text-sm font-medium">Video Profil Aplikasi</span>
             </div>
           </div>

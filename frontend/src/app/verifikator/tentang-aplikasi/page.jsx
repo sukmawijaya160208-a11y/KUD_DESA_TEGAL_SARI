@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
-import { SparklesIcon } from '@heroicons/react/24/outline';
+import { Sparkles } from 'lucide-react';
 import HeroDeveloper from '@/components/tentang-aplikasi/HeroDeveloper';
 import VideoGallery from '@/components/tentang-aplikasi/VideoGallery';
 import AboutSection from '@/components/tentang-aplikasi/AboutSection';
@@ -43,7 +43,7 @@ export default function VerifikatorTentangAplikasiPage() {
           <div className="w-16 h-px bg-gray-200 rounded-full mx-auto mb-8" />
           <p className="text-gray-400 text-sm italic">Wassalamu&apos;alaikum, Wr.Wb</p>
           <div className="flex items-center justify-center gap-1.5 mt-3 text-gray-400 text-xs">
-            <SparklesIcon className="w-3.5 h-3.5" />
+            <Sparkles className="w-3.5 h-3.5" />
             <span>KUD Desa Sari Subur</span>
           </div>
         </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { PhoneIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Phone, X } from 'lucide-react';
 import { useCall } from './CallProvider';
 
 export default function IncomingCall() {
@@ -42,7 +42,7 @@ export default function IncomingCall() {
             className="w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-colors cursor-pointer shadow-lg"
             title="Tolak"
           >
-            <XMarkIcon className="w-6 h-6 text-white" />
+            <X className="w-6 h-6 text-white" />
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.9 }}
@@ -53,7 +53,7 @@ export default function IncomingCall() {
             className="w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center transition-colors cursor-pointer shadow-lg"
             title="Terima"
           >
-            <PhoneIcon className="w-6 h-6 text-white" />
+            <Phone className="w-6 h-6 text-white" />
           </motion.button>
         </div>
       </div>

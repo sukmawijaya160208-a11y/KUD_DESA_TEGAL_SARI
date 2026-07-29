@@ -9,12 +9,12 @@ import DocumentViewer from '@/components/DocumentViewer';
 import SignaturePad from '@/components/SignaturePad';
 import { formatDate } from '@/lib/date';
 import {
-  ClipboardDocumentListIcon, CalendarDaysIcon, UsersIcon,
-  ArrowLeftIcon, DocumentIcon, ShieldCheckIcon, XMarkIcon,
-  CheckCircleIcon, ExclamationCircleIcon, MapPinIcon,
-  PencilSquareIcon, ChevronLeftIcon, ChevronRightIcon,
-  CheckIcon, EyeIcon, FolderOpenIcon, PhotoIcon,
-} from '@heroicons/react/24/outline';
+  ClipboardList, CalendarDays, Users,
+  ArrowLeft, File, ShieldCheck, X,
+  CheckCircle, AlertCircle, MapPin,
+  SquarePen, ChevronLeft, ChevronRight,
+  Check, Eye, FolderOpen, Image,
+} from 'lucide-react';
 
 const BERKAS_CEK = [
   { key: 'ktp', label: 'Foto KTP', field: 'upload_ktp', sumber: 'profil' },
@@ -37,7 +37,7 @@ function StepIndicator({ current, steps }) {
                 isActive ? 'bg-blue-800 text-white ring-4 ring-blue-100' :
                 'bg-gray-100 text-gray-400'
               }`}>
-                {isCompleted ? <CheckIcon className="w-5 h-5" /> : num}
+                {isCompleted ? <Check className="w-5 h-5" /> : num}
               </div>
               <span className={`text-[11px] font-medium mt-1.5 whitespace-nowrap hidden sm:block ${
                 isActive ? 'text-blue-800' : isCompleted ? 'text-emerald-600' : 'text-gray-400'
@@ -242,14 +242,14 @@ export default function DaftarProgramPage() {
       {step === 1 && (
         <button onClick={() => router.push('/pekebun/program')}
           className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 mb-4 transition-colors cursor-pointer">
-          <ArrowLeftIcon className="w-4 h-4" /> Kembali ke Program
+          <ArrowLeft className="w-4 h-4" /> Kembali ke Program
         </button>
       )}
 
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 mb-6">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-800 to-blue-600 flex items-center justify-center shrink-0">
-            <ClipboardDocumentListIcon className="w-6 h-6 text-white" />
+            <ClipboardList className="w-6 h-6 text-white" />
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold text-gray-900 truncate">{program.nama}</h1>
@@ -258,13 +258,13 @@ export default function DaftarProgramPage() {
           <div className="hidden sm:flex items-center gap-3 text-xs text-gray-500">
             {program.kuota && (
               <span className="flex items-center gap-1">
-                <UsersIcon className="w-4 h-4" />
+                <Users className="w-4 h-4" />
                 {program.pendaftaran_program_count || 0}/{program.kuota}
               </span>
             )}
             {program.tanggal_mulai && (
               <span className="flex items-center gap-1">
-                <CalendarDaysIcon className="w-4 h-4" />
+                <CalendarDays className="w-4 h-4" />
                 {formatDate(program.tanggal_mulai, 'dd MMM')}
                 {program.tanggal_selesai && ` - ${formatDate(program.tanggal_selesai, 'dd MMM')}`}
               </span>
@@ -275,7 +275,7 @@ export default function DaftarProgramPage() {
 
       {sudahDaftar && (
         <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700 mb-6 flex items-center gap-2">
-          <CheckCircleIcon className="w-5 h-5 shrink-0" />
+          <CheckCircle className="w-5 h-5 shrink-0" />
           Anda sudah mendaftar program ini.
           <button onClick={() => router.push('/pekebun/program')} className="underline font-medium ml-auto cursor-pointer shrink-0">
             Lihat status →
@@ -291,12 +291,12 @@ export default function DaftarProgramPage() {
           {step === 1 && (
             <div>
               <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <MapPinIcon className="w-5 h-5 text-blue-800" />
+                <MapPin className="w-5 h-5 text-blue-800" />
                 Pilih Lahan Sawit
               </h2>
               {lahanSaya.length === 0 ? (
                 <div className="bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-xl p-5">
-                  <ExclamationCircleIcon className="w-5 h-5 inline-block mr-1.5 -mt-0.5" />
+                  <AlertCircle className="w-5 h-5 inline-block mr-1.5 -mt-0.5" />
                   Anda belum memiliki data lahan.{' '}
                   <a href="/pekebun/lahan" className="text-blue-800 underline font-medium">
                     Daftarkan lahan Anda
@@ -340,7 +340,7 @@ export default function DaftarProgramPage() {
           {step === 2 && (
             <div className="space-y-6">
               <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <DocumentIcon className="w-5 h-5 text-blue-800" />
+                <File className="w-5 h-5 text-blue-800" />
                 Surat Pernyataan & Tanda Tangan
               </h2>
 
@@ -357,8 +357,8 @@ export default function DaftarProgramPage() {
                         checked ? 'bg-emerald-100' : 'bg-blue-100'
                       }`}>
                         {checked
-                          ? <CheckCircleIcon className="w-4 h-4 text-emerald-600" />
-                          : <DocumentIcon className="w-4 h-4 text-blue-600" />
+                          ? <CheckCircle className="w-4 h-4 text-emerald-600" />
+                          : <File className="w-4 h-4 text-blue-600" />
                         }
                       </div>
                       <div className="flex-1 min-w-0">
@@ -402,8 +402,8 @@ export default function DaftarProgramPage() {
                     ttd ? 'bg-emerald-100' : 'bg-purple-100'
                   }`}>
                     {ttd
-                      ? <CheckCircleIcon className="w-4 h-4 text-emerald-600" />
-                      : <PencilSquareIcon className="w-4 h-4 text-purple-600" />
+                      ? <CheckCircle className="w-4 h-4 text-emerald-600" />
+                      : <SquarePen className="w-4 h-4 text-purple-600" />
                     }
                   </div>
                   <div className="flex-1 min-w-0">
@@ -432,13 +432,13 @@ export default function DaftarProgramPage() {
           {step === 3 && (
             <div>
               <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <FolderOpenIcon className="w-5 h-5 text-blue-800" />
+                <FolderOpen className="w-5 h-5 text-blue-800" />
                 Status Berkas Profil
               </h2>
 
               {!semuaBerkasLengkap && (
                 <div className="p-4 bg-red-50 border-2 border-red-300 rounded-xl text-sm text-red-800 mb-5 flex items-start gap-3">
-                  <ExclamationCircleIcon className="w-6 h-6 shrink-0 mt-0.5" />
+                  <AlertCircle className="w-6 h-6 shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold">⚠️ Belum Lengkap — Lengkapi Dulu!</p>
                     <p className="text-xs text-red-700 mt-0.5">
@@ -452,7 +452,7 @@ export default function DaftarProgramPage() {
 
               {semuaBerkasLengkap && (
                 <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700 mb-5 flex items-center gap-2">
-                  <CheckCircleIcon className="w-5 h-5 shrink-0" />
+                  <CheckCircle className="w-5 h-5 shrink-0" />
                   Semua berkas persyaratan sudah lengkap.
                 </div>
               )}
@@ -468,8 +468,8 @@ export default function DaftarProgramPage() {
                           b.ada ? 'bg-emerald-100' : 'bg-red-100'
                         }`}>
                           {b.ada
-                            ? <CheckCircleIcon className="w-4 h-4 text-emerald-600" />
-                            : <ExclamationCircleIcon className="w-4 h-4 text-red-500" />
+                            ? <CheckCircle className="w-4 h-4 text-emerald-600" />
+                            : <AlertCircle className="w-4 h-4 text-red-500" />
                           }
                         </div>
                         <div className="min-w-0">
@@ -480,12 +480,12 @@ export default function DaftarProgramPage() {
                       <div className="shrink-0 ml-3">
                         {b.ada ? (
                           <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
-                            <CheckIcon className="w-3 h-3" /> Ter-upload
+                            <Check className="w-3 h-3" /> Ter-upload
                           </span>
                         ) : (
                           <a href="/pekebun/profil"
                             className="text-[10px] font-semibold text-red-600 bg-red-50 px-2.5 py-1.5 rounded-full border border-red-200 hover:bg-red-100 transition-colors flex items-center gap-1.5 animate-pulse">
-                            <ExclamationCircleIcon className="w-3.5 h-3.5" /> Belum Lengkap (Lengkapi Dulu)
+                            <AlertCircle className="w-3.5 h-3.5" /> Belum Lengkap (Lengkapi Dulu)
                           </a>
                         )}
                       </div>
@@ -493,7 +493,7 @@ export default function DaftarProgramPage() {
                     {b.ada && b.nilai && (
                       <div className="px-4 pb-4 pt-0">
                         <div className="flex items-center gap-2 text-xs text-blue-600">
-                          <PhotoIcon className="w-3.5 h-3.5" />
+                          <Image className="w-3.5 h-3.5" />
                           <span className="truncate max-w-[200px]">{b.nilai.split('/').pop()}</span>
                           <button onClick={() => window.open(b.nilai, '_blank')}
                             className="underline hover:text-blue-800 cursor-pointer">
@@ -507,7 +507,7 @@ export default function DaftarProgramPage() {
               </div>
 
               <div className="mt-5 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800 flex items-start gap-3">
-                <ShieldCheckIcon className="w-5 h-5 shrink-0 mt-0.5" />
+                <ShieldCheck className="w-5 h-5 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-medium">Status ini hanya sebagai informasi</p>
                   <p className="text-xs text-blue-600 mt-0.5">
@@ -523,14 +523,14 @@ export default function DaftarProgramPage() {
           {step === 4 && (
             <div className="space-y-4">
               <h2 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <ShieldCheckIcon className="w-5 h-5 text-blue-800" />
+                <ShieldCheck className="w-5 h-5 text-blue-800" />
                 Konfirmasi Pendaftaran
               </h2>
 
               <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-5">
                 <div className="flex items-center gap-2 pb-3 mb-3 border-b border-gray-100">
                   <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <ClipboardDocumentListIcon className="w-4 h-4 text-blue-800" />
+                    <ClipboardList className="w-4 h-4 text-blue-800" />
                   </div>
                   <h3 className="font-semibold text-gray-900 text-sm">Program</h3>
                 </div>
@@ -561,7 +561,7 @@ export default function DaftarProgramPage() {
                 <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-5">
                   <div className="flex items-center gap-2 pb-3 mb-3 border-b border-gray-100">
                     <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <MapPinIcon className="w-4 h-4 text-blue-800" />
+                      <MapPin className="w-4 h-4 text-blue-800" />
                     </div>
                     <h3 className="font-semibold text-gray-900 text-sm">Lahan Terpilih</h3>
                   </div>
@@ -585,7 +585,7 @@ export default function DaftarProgramPage() {
               <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-5">
                 <div className="flex items-center gap-2 pb-3 mb-3 border-b border-gray-100">
                   <div className="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center">
-                    <DocumentIcon className="w-4 h-4 text-emerald-600" />
+                    <File className="w-4 h-4 text-emerald-600" />
                   </div>
                   <h3 className="font-semibold text-gray-900 text-sm">Surat & Tanda Tangan</h3>
                 </div>
@@ -595,20 +595,20 @@ export default function DaftarProgramPage() {
                     return (
                       <div key={i} className="flex items-center justify-between py-2">
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <CheckCircleIcon className="w-4 h-4 text-emerald-500 shrink-0" />
+                          <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
                           <span className="text-sm text-gray-700 truncate">{judul}</span>
                         </div>
                         <button onClick={() => setPreviewSurat(i)}
                           className="text-xs font-medium text-blue-800 hover:text-blue-600 underline cursor-pointer flex items-center gap-1 shrink-0 ml-3">
-                          <EyeIcon className="w-3.5 h-3.5" /> Lihat
+                          <Eye className="w-3.5 h-3.5" /> Lihat
                         </button>
                       </div>
                     );
                   })}
                   <div className="border-t border-gray-100 pt-3 mt-3 flex items-center gap-2.5">
                     {ttd
-                      ? <CheckCircleIcon className="w-4 h-4 text-emerald-500 shrink-0" />
-                      : <ExclamationCircleIcon className="w-4 h-4 text-red-400 shrink-0" />
+                      ? <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
+                      : <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
                     }
                     <span className={`text-sm ${ttd ? 'text-gray-700' : 'text-red-500'}`}>
                       Tanda Tangan Digital
@@ -628,8 +628,8 @@ export default function DaftarProgramPage() {
                     semuaBerkasLengkap ? 'bg-emerald-100' : 'bg-amber-100'
                   }`}>
                     {semuaBerkasLengkap
-                      ? <CheckCircleIcon className="w-4 h-4 text-emerald-600" />
-                      : <ExclamationCircleIcon className="w-4 h-4 text-amber-600" />
+                      ? <CheckCircle className="w-4 h-4 text-emerald-600" />
+                      : <AlertCircle className="w-4 h-4 text-amber-600" />
                     }
                   </div>
                   <h3 className="font-semibold text-gray-900 text-sm">Status Berkas</h3>
@@ -639,8 +639,8 @@ export default function DaftarProgramPage() {
                     <div key={b.key} className="flex items-center justify-between py-1.5">
                       <div className="flex items-center gap-2.5 min-w-0">
                         {b.ada
-                          ? <CheckCircleIcon className="w-4 h-4 text-emerald-500 shrink-0" />
-                          : <ExclamationCircleIcon className="w-4 h-4 text-amber-400 shrink-0" />
+                          ? <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
+                          : <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
                         }
                         <span className="text-sm text-gray-700">{b.label}</span>
                       </div>
@@ -657,7 +657,7 @@ export default function DaftarProgramPage() {
               </div>
 
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800 flex items-start gap-3">
-                <ShieldCheckIcon className="w-5 h-5 shrink-0 mt-0.5" />
+                <ShieldCheck className="w-5 h-5 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-medium">Pastikan data Anda sudah benar</p>
                   <p className="text-xs text-blue-600 mt-0.5">
@@ -675,7 +675,7 @@ export default function DaftarProgramPage() {
               {step > 1 ? (
                 <button onClick={goBack}
                   className="h-11 px-5 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer flex items-center gap-1.5">
-                  <ChevronLeftIcon className="w-4 h-4" /> Kembali
+                  <ChevronLeft className="w-4 h-4" /> Kembali
                 </button>
               ) : (
                 <div />
@@ -688,12 +688,12 @@ export default function DaftarProgramPage() {
                       ? 'bg-blue-800 text-white hover:bg-blue-700 shadow-sm'
                       : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                   }`}>
-                  Lanjut <ChevronRightIcon className="w-4 h-4" />
+                  Lanjut <ChevronRight className="w-4 h-4" />
                 </button>
               ) : (
                 <Button onClick={handleSubmit} loading={submitting}
                   className="h-11 px-6 bg-blue-800 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold shadow-sm">
-                  <ShieldCheckIcon className="w-4 h-4" />
+                  <ShieldCheck className="w-4 h-4" />
                   {submitting ? 'Mendaftarkan...' : 'Daftar Sekarang'}
                 </Button>
               )}
@@ -714,7 +714,7 @@ export default function DaftarProgramPage() {
               </h3>
               <button onClick={() => setPreviewSurat(null)}
                 className="w-7 h-7 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center cursor-pointer transition-colors">
-                <XMarkIcon className="w-4 h-4 text-gray-500" />
+                <X className="w-4 h-4 text-gray-500" />
               </button>
             </div>
             <div className="p-5">

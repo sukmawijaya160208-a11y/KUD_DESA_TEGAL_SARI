@@ -7,29 +7,29 @@ import { useLogo } from '@/hooks/useLogo';
 import { useToast } from '@/components/ToastProvider';
 import NotifDropdown from '@/components/NotifDropdown';
 import {
-  HomeIcon, UsersIcon, ClipboardDocumentListIcon, Cog6ToothIcon,
-  ChartBarIcon, CheckBadgeIcon, ClockIcon, UserIcon,
-  DocumentTextIcon, ArrowRightOnRectangleIcon, Bars3Icon,
-  BellIcon, MapPinIcon, ShieldExclamationIcon, UserGroupIcon,
-  BookOpenIcon, CurrencyDollarIcon, ArrowDownTrayIcon, ChatBubbleLeftRightIcon, InformationCircleIcon,
-  ChevronDoubleLeftIcon, ChevronDoubleRightIcon, NewspaperIcon, Squares2X2Icon, CreditCardIcon
-} from '@heroicons/react/24/outline';
+  Home, Users, UsersRound, ClipboardList, Settings,
+  BarChart3, BadgeCheck, Clock, User,
+  FileText, LogOut, Menu,
+  Bell, MapPin, ShieldAlert, BookOpen,
+  DollarSign, Download, MessageCircle, Info,
+  ChevronsLeft, ChevronsRight, Newspaper, LayoutGrid, CreditCard
+} from 'lucide-react';
 
 const iconMap = {
-  Dashboard: HomeIcon, 'Data Pekebun': UsersIcon, 'Program KUD': ClipboardDocumentListIcon,
-  Pengaturan: Cog6ToothIcon, Laporan: ChartBarIcon, 'Verifikasi Pekebun': CheckBadgeIcon,
-  'Verifikasi Program': DocumentTextIcon, Riwayat: ClockIcon, 'Profil Saya': UserIcon,
-  'Data Lahan': DocumentTextIcon,
-  'Data Lahan Admin': MapPinIcon,
-  'Verifikasi Log': ShieldExclamationIcon, 'Manajemen User': UserGroupIcon,
-  Pendaftaran: BookOpenIcon,
-  'Harga TBS': CurrencyDollarIcon,
-  'Backup & Restore': ArrowDownTrayIcon,
-  Blog: NewspaperIcon,
-  'Landing Page': Squares2X2Icon,
-  'Kartu Admin': CreditCardIcon,
-  Pesan: ChatBubbleLeftRightIcon,
-  'Tentang Aplikasi': InformationCircleIcon,
+  Dashboard: Home, 'Data Pekebun': Users, 'Program KUD': ClipboardList,
+  Pengaturan: Settings, Laporan: BarChart3, 'Verifikasi Pekebun': BadgeCheck,
+  'Verifikasi Program': FileText, Riwayat: Clock, 'Profil Saya': User,
+  'Data Lahan': FileText,
+  'Data Lahan Admin': MapPin,
+  'Verifikasi Log': ShieldAlert, 'Manajemen User': UsersRound,
+  Pendaftaran: BookOpen,
+  'Harga TBS': DollarSign,
+  'Backup & Restore': Download,
+  Blog: Newspaper,
+  'Landing Page': LayoutGrid,
+  'Kartu Admin': CreditCard,
+  Pesan: MessageCircle,
+  'Tentang Aplikasi': Info,
 };
 
 const menuTheme = {
@@ -199,7 +199,7 @@ const items = menuItems[role] || [];
           <button onClick={() => { router.push('/notifikasi'); setOpen(false); }}
             className={`sidebar-link w-full text-left text-white/70 hover:text-white hover:bg-white/10 relative group ${collapsed ? 'justify-center px-0' : ''}`}>
             <div className="shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-sm">
-              <BellIcon className="w-5 h-5 text-white" />
+              <Bell className="w-5 h-5 text-white" />
             </div>
             {!collapsed && <span>Notifikasi</span>}
             {collapsed && (
@@ -234,7 +234,7 @@ const items = menuItems[role] || [];
           <button onClick={handleLogout}
             className={`sidebar-link w-full text-left text-white/40 hover:text-red-300 text-xs relative group ${collapsed ? 'justify-center px-0 mt-0' : 'mt-1'}`}>
             <div className="shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-sm">
-              <ArrowRightOnRectangleIcon className="w-4 h-4 text-white" />
+              <LogOut className="w-4 h-4 text-white" />
             </div>
             {!collapsed && <span>Keluar</span>}
             {collapsed && (
@@ -247,9 +247,9 @@ const items = menuItems[role] || [];
           <button onClick={toggleCollapse}
             className="w-full flex items-center justify-center py-2 text-white/30 hover:text-white/60 transition-colors cursor-pointer group">
             {collapsed ? (
-              <ChevronDoubleRightIcon className="w-4 h-4" />
+              <ChevronsRight className="w-4 h-4" />
             ) : (
-              <ChevronDoubleLeftIcon className="w-4 h-4" />
+              <ChevronsLeft className="w-4 h-4" />
             )}
           </button>
         </div>
@@ -258,7 +258,7 @@ const items = menuItems[role] || [];
       <div className={`flex-1 flex flex-col overflow-hidden ${isChatPage ? '' : ''}`}>
         <header className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 border-b border-white/10 px-6 py-3 flex items-center gap-4 lg:hidden shadow-md">
           <button onClick={() => setOpen(true)} className="text-white p-2 cursor-pointer">
-            <Bars3Icon className="w-6 h-6" />
+            <Menu className="w-6 h-6" />
           </button>
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 bg-white rounded-md flex items-center justify-center overflow-hidden shadow-sm">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { EyeIcon, PrinterIcon, XMarkIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { Eye, Printer, X, Download } from 'lucide-react';
 
 export default function PrintPreview({ title, fetchAll, renderContent, onLoad, pdfUrl, pdfFileName = 'dokumen.pdf' }) {
   const [isMobile, setIsMobile] = useState(false);
@@ -122,7 +122,7 @@ export default function PrintPreview({ title, fetchAll, renderContent, onLoad, p
     <>
       <button onClick={handlePreview} disabled={loading}
         className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl text-sm font-semibold hover:from-blue-700 hover:to-blue-600 disabled:opacity-60 transition-all shadow-sm shadow-blue-200 cursor-pointer">
-        <EyeIcon className={`w-4 h-4 ${loading ? 'animate-pulse' : ''}`} />
+        <Eye className={`w-4 h-4 ${loading ? 'animate-pulse' : ''}`} />
         {loading ? 'Memuat...' : 'Preview'}
       </button>
 
@@ -144,14 +144,14 @@ export default function PrintPreview({ title, fetchAll, renderContent, onLoad, p
                     </>
                   ) : (
                     <>
-                      {isMobile && pdfUrl ? <ArrowDownTrayIcon className="w-4 h-4" /> : <PrinterIcon className="w-4 h-4" />}
+                      {isMobile && pdfUrl ? <Download className="w-4 h-4" /> : <Printer className="w-4 h-4" />}
                       {isMobile && pdfUrl ? 'Download PDF' : 'Cetak'}
                     </>
                   )}
                 </button>
                 <button onClick={() => setPreview(null)}
                   className="p-2 text-gray-400 hover:text-gray-600 rounded-xl hover:bg-gray-100 transition-all cursor-pointer">
-                  <XMarkIcon className="w-5 h-5" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
             </div>

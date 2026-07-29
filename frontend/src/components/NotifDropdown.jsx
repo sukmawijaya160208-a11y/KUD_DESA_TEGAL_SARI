@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
-import { BellIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { Bell, Check } from 'lucide-react';
 
 export default function NotifDropdown() {
   const [open, setOpen] = useState(false);
@@ -31,7 +31,7 @@ export default function NotifDropdown() {
   return (
     <div ref={ref} className="relative">
       <button onClick={() => setOpen(!open)} className="relative p-2.5 text-foreground/60 hover:text-foreground transition-colors cursor-pointer">
-        <BellIcon className="w-5 h-5" />
+        <Bell className="w-5 h-5" />
         {count > 0 && <span className="absolute -top-0.5 -right-0.5 bg-destructive text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm">{count > 9 ? '9+' : count}</span>}
       </button>
 
@@ -39,7 +39,7 @@ export default function NotifDropdown() {
         <div className="absolute right-0 top-full mt-2 w-80 bg-surface rounded-2xl shadow-xl border border-border z-50 max-h-96 overflow-y-auto">
           <div className="sticky top-0 bg-surface z-10 flex items-center justify-between px-4 py-3 border-b border-border rounded-t-2xl">
             <h3 className="font-heading font-bold text-foreground text-sm">Notifikasi</h3>
-            {count > 0 && <button onClick={async () => { await api.notifikasi.markAllAsRead().catch(() => {}); setCount(0); setNotifs((prev) => prev.map((n) => ({ ...n, is_read: true }))); }} className="text-xs text-primary hover:underline cursor-pointer flex items-center gap-1"><CheckIcon className="w-3 h-3" /> Tandai dibaca</button>}
+            {count > 0 && <button onClick={async () => { await api.notifikasi.markAllAsRead().catch(() => {}); setCount(0); setNotifs((prev) => prev.map((n) => ({ ...n, is_read: true }))); }} className="text-xs text-primary hover:underline cursor-pointer flex items-center gap-1"><Check className="w-3 h-3" /> Tandai dibaca</button>}
           </div>
           {notifs.length === 0 ? (
             <p className="text-gray-400 text-sm text-center py-8">Tidak ada notifikasi</p>

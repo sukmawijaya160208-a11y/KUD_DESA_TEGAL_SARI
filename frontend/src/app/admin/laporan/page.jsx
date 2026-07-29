@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import Card from '@/components/ui/Card';
-import { ChartBarSquareIcon } from '@heroicons/react/24/outline';
+import { BarChart3 } from 'lucide-react';
 
 function Bar({ label, value, max, color }) {
   const pct = max > 0 ? (value / max) * 100 : 0;
@@ -39,7 +39,7 @@ export default function AdminLaporanPage() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center shadow-sm">
-            <ChartBarSquareIcon className="w-5 h-5 text-primary" />
+            <BarChart3 className="w-5 h-5 text-primary" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Laporan</h1>

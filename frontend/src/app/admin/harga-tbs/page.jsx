@@ -9,10 +9,7 @@ import Textarea from '@/components/ui/Textarea';
 import Select from '@/components/ui/Select';
 import Modal from '@/components/ui/Modal';
 import DatePicker from '@/components/ui/DatePicker';
-import {
-  CurrencyDollarIcon, PlusIcon, PencilIcon, TrashIcon,
-  CalendarDaysIcon, CheckCircleIcon, ClockIcon,
-} from '@heroicons/react/24/outline';
+import { DollarSign, Plus, Pencil, Trash2, CalendarDays, CheckCircle, Clock } from 'lucide-react';
 import { formatDate, todayStr } from '@/lib/date';
 
 const KELAS = { A: 'Tandan Buah Segar A', B: 'Tandan Buah Segar B', C: 'Tandan Buah Segar C' };
@@ -36,9 +33,9 @@ function stateOf(item) {
 
 function BadgeState({ s }) {
   const m = {
-    active: { icon: CheckCircleIcon, label: 'Aktif', cls: 'bg-green-50 text-green-700 border-green-200' },
-    upcoming: { icon: ClockIcon, label: 'Akan Datang', cls: 'bg-blue-50 text-blue-700 border-blue-200' },
-    expired: { icon: ClockIcon, label: 'Kadaluarsa', cls: 'bg-gray-50 text-gray-500 border-gray-200' },
+    active: { icon: CheckCircle, label: 'Aktif', cls: 'bg-green-50 text-green-700 border-green-200' },
+    upcoming: { icon: Clock, label: 'Akan Datang', cls: 'bg-blue-50 text-blue-700 border-blue-200' },
+    expired: { icon: Clock, label: 'Kadaluarsa', cls: 'bg-gray-50 text-gray-500 border-gray-200' },
   };
   const c = m[s];
   const Icon = c.icon;
@@ -109,7 +106,7 @@ export default function AdminHargaTbsPage() {
       <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 bg-emerald-600 rounded-xl flex items-center justify-center shadow-sm">
-            <CurrencyDollarIcon className="w-5.5 h-5.5 text-white" />
+            <DollarSign className="w-5.5 h-5.5 text-white" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-foreground">Update Harga TBS</h1>
@@ -117,7 +114,7 @@ export default function AdminHargaTbsPage() {
           </div>
         </div>
         <Button onClick={openAdd} size="sm" className="gap-1.5">
-          <PlusIcon className="w-4 h-4" /> Tambah Harga
+          <Plus className="w-4 h-4" /> Tambah Harga
         </Button>
       </div>
 
@@ -136,16 +133,16 @@ export default function AdminHargaTbsPage() {
                 <>
                   <div className="text-2xl font-bold text-foreground tracking-tight mb-1">{rupiah(a.harga_per_kg)}</div>
                   <p className="text-[11px] text-gray-400 flex items-center gap-1">
-                    <CalendarDaysIcon className="w-3 h-3" />
+                    <CalendarDays className="w-3 h-3" />
                     {formatDate(a.dari_tanggal)} — {a.sampai_tanggal ? formatDate(a.sampai_tanggal) : '∞'}
                   </p>
                   {a.keterangan && <p className="text-[10px] text-gray-400 mt-2 line-clamp-1">{a.keterangan}</p>}
                   <div className="flex gap-1.5 mt-3 pt-3 border-t border-border">
                     <button onClick={() => openEdit(a)} className={`flex items-center gap-1 px-2.5 py-1.5 ${c.bg} ${c.text} rounded-lg text-[10px] font-medium hover:opacity-80 transition-all cursor-pointer`}>
-                      <PencilIcon className="w-3 h-3" /> Edit
+                      <Pencil className="w-3 h-3" /> Edit
                     </button>
                     <button onClick={() => setDel(a)} className="flex items-center gap-1 px-2.5 py-1.5 bg-red-50 text-red-600 rounded-lg text-[10px] font-medium hover:opacity-80 transition-all cursor-pointer">
-                      <TrashIcon className="w-3 h-3" /> Hapus
+                      <Trash2 className="w-3 h-3" /> Hapus
                     </button>
                   </div>
                 </>
@@ -176,7 +173,7 @@ export default function AdminHargaTbsPage() {
 
         {riwayat.length === 0 ? (
           <div className="text-center py-12">
-            <CurrencyDollarIcon className="w-10 h-10 text-gray-200 mx-auto mb-2" />
+            <DollarSign className="w-10 h-10 text-gray-200 mx-auto mb-2" />
             <p className="text-gray-400 text-sm">Belum ada riwayat harga</p>
           </div>
         ) : (
@@ -193,7 +190,7 @@ export default function AdminHargaTbsPage() {
                   <div className="flex-1 min-w-0">
                     <span className={`text-sm font-semibold ${s === 'expired' ? 'text-gray-400 line-through' : 'text-foreground'}`}>{rupiah(item.harga_per_kg)}</span>
                     <span className="text-[11px] text-gray-400 ml-3">
-                      <CalendarDaysIcon className="w-3 h-3 inline mr-0.5 align-text-bottom" />
+                      <CalendarDays className="w-3 h-3 inline mr-0.5 align-text-bottom" />
                       {formatDate(item.dari_tanggal)} — {item.sampai_tanggal ? formatDate(item.sampai_tanggal) : '∞'}
                     </span>
                     {item.keterangan && <span className="text-[10px] text-gray-400 ml-2 hidden sm:inline">{item.keterangan}</span>}
@@ -201,10 +198,10 @@ export default function AdminHargaTbsPage() {
                   <BadgeState s={s} />
                   <div className="flex gap-1 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity shrink-0">
                     <button onClick={() => openEdit(item)} className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all cursor-pointer">
-                      <PencilIcon className="w-3.5 h-3.5" />
+                      <Pencil className="w-3.5 h-3.5" />
                     </button>
                     <button onClick={() => setDel(item)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all cursor-pointer">
-                      <TrashIcon className="w-3.5 h-3.5" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -244,7 +241,7 @@ export default function AdminHargaTbsPage() {
         {del && (
           <div className="text-center py-2">
             <div className="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <TrashIcon className="w-6 h-6 text-red-500" />
+              <Trash2 className="w-6 h-6 text-red-500" />
             </div>
             <p className="text-gray-700 font-medium">Hapus harga ini?</p>
             <p className="text-lg font-bold text-foreground mt-2">{rupiah(del.harga_per_kg)}</p>

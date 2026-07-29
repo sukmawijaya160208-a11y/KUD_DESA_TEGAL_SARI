@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import { ArrowLeftIcon, PhoneIcon, VideoCameraIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { ArrowLeft, Phone, Video, EllipsisVertical } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 function isOnline(user) {
@@ -17,7 +17,7 @@ const ChatHeader = memo(function ChatHeader({ conversation, myId, onMobileBack, 
   return (
     <div className="flex items-center gap-2 px-4 py-2.5 bg-wa-primary text-white shrink-0 z-10">
       <button onClick={onMobileBack} className="lg:hidden p-1.5 -ml-1.5 rounded-xl hover:bg-white/20 transition-colors cursor-pointer">
-        <ArrowLeftIcon className="w-5 h-5 text-white" />
+        <ArrowLeft className="w-5 h-5 text-white" />
       </button>
       <div className="relative shrink-0">
         <div className="w-9 h-9 rounded-full bg-white/25 flex items-center justify-center text-white text-sm font-bold overflow-hidden">
@@ -58,13 +58,13 @@ const ChatHeader = memo(function ChatHeader({ conversation, myId, onMobileBack, 
       </div>
       <div className="flex items-center gap-1">
         <button onClick={onCall} className="p-2 rounded-xl hover:bg-white/20 transition-colors cursor-pointer" title="Panggilan Suara">
-          <PhoneIcon className="w-5 h-5 text-white" />
+          <Phone className="w-5 h-5 text-white" />
         </button>
         <button onClick={onVideoCall} className="p-2 rounded-xl hover:bg-white/20 transition-colors cursor-pointer" title="Panggilan Video">
-          <VideoCameraIcon className="w-5 h-5 text-white" />
+          <Video className="w-5 h-5 text-white" />
         </button>
         <button className="p-2 rounded-xl hover:bg-white/20 transition-colors cursor-pointer" title="Lainnya">
-          <EllipsisVerticalIcon className="w-5 h-5 text-white" />
+          <EllipsisVertical className="w-5 h-5 text-white" />
         </button>
       </div>
     </div>

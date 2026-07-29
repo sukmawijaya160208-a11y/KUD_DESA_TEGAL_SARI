@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { PhoneIcon, MicrophoneIcon, VideoCameraIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
+import { Phone, Mic, Video, Volume2 } from 'lucide-react';
 import { useCall } from './CallProvider';
 
 export default function CallScreen() {
@@ -112,15 +112,15 @@ export default function CallScreen() {
           {!isRinging && (
             <>
               <button onClick={toggleMute} className={`w-14 h-14 rounded-full flex items-center justify-center transition-colors cursor-pointer ${activeCall.muted ? 'bg-red-500 text-white' : 'bg-white/20 text-white hover:bg-white/30'}`}>
-                <MicrophoneIcon className="w-6 h-6" />
+                <Mic className="w-6 h-6" />
               </button>
               {isVideo && (
                 <button onClick={toggleCamera} className={`w-14 h-14 rounded-full flex items-center justify-center transition-colors cursor-pointer ${activeCall.videoOff ? 'bg-red-500 text-white' : 'bg-white/20 text-white hover:bg-white/30'}`}>
-                  <VideoCameraIcon className="w-6 h-6" />
+                  <Video className="w-6 h-6" />
                 </button>
               )}
               <button className="w-14 h-14 rounded-full bg-white/20 text-white hover:bg-white/30 flex items-center justify-center transition-colors cursor-pointer">
-                <SpeakerWaveIcon className="w-6 h-6" />
+                <Volume2 className="w-6 h-6" />
               </button>
             </>
           )}
@@ -129,7 +129,7 @@ export default function CallScreen() {
             onClick={endCall}
             className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-colors cursor-pointer shadow-lg"
           >
-            <PhoneIcon className="w-7 h-7 text-white rotate-135" style={{ transform: 'rotate(135deg)' }} />
+            <Phone className="w-7 h-7 text-white rotate-135" style={{ transform: 'rotate(135deg)' }} />
           </motion.button>
         </div>
       </div>

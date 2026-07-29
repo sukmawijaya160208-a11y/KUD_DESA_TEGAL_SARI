@@ -7,7 +7,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 import Modal from '@/components/ui/Modal';
-import { PlusIcon, PencilSquareIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Plus, SquarePen, X } from 'lucide-react';
 
 const SECTION_FIELDS = {
   langkah: [
@@ -248,7 +248,7 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
                     <img src={form.media_url} alt="" className="h-24 rounded-xl border border-border object-cover" />
                     <button type="button" onClick={() => handleField('media_url', '')}
                       className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center cursor-pointer shadow">
-                      <XMarkIcon className="w-3 h-3" />
+                      <X className="w-3 h-3" />
                     </button>
                   </div>
                 ) : (
@@ -301,7 +301,7 @@ export default function FormModal({ open, onClose, editing, sectionType, onSaved
           <div className="flex gap-2">
             <Button variant="secondary" type="button" onClick={onClose}>Batal</Button>
             <Button type="submit" loading={submitting}>
-              {editing ? <PencilSquareIcon className="w-4 h-4" /> : <PlusIcon className="w-4 h-4" />}
+              {editing ? <SquarePen className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
               {editing ? 'Simpan Perubahan' : 'Simpan Data'}
             </Button>
           </div>

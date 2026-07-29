@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { PrinterIcon } from '@heroicons/react/24/outline';
+import { Printer } from 'lucide-react';
 
 const PRINT_STYLES = `
   @page { size: landscape; margin: 15mm 20mm; }
@@ -162,7 +162,7 @@ export default function PrintButton({ title, fetchAll, renderContent, onLoad, pd
   return (
     <button onClick={handlePrint} disabled={loading}
       className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-xl text-sm font-semibold hover:from-emerald-700 hover:to-emerald-600 disabled:opacity-60 transition-all shadow-sm shadow-emerald-200 cursor-pointer">
-      <PrinterIcon className={`w-4 h-4 ${loading ? 'animate-pulse' : ''}`} />
+      <Printer className={`w-4 h-4 ${loading ? 'animate-pulse' : ''}`} />
       {loading ? 'Memproses...' : 'Cetak'}
     </button>
   );

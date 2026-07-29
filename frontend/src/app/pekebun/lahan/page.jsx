@@ -10,7 +10,7 @@ import Select from '@/components/ui/Select';
 import Modal from '@/components/ui/Modal';
 import PrintButton from '@/components/PrintButton';
 import { CardSkeleton } from '@/components/ui/Skeleton';
-import { MapPinIcon, PlusIcon, TrashIcon, XMarkIcon, EyeIcon, CameraIcon, PhotoIcon, PencilIcon, ArrowDownTrayIcon, DocumentTextIcon } from '@heroicons/react/24/outline';
+import { MapPin, Plus, Trash2, X, Eye, Camera, Image, Pencil, Download, FileText } from 'lucide-react';
 
 function isPdfUrl(url) {
   return url && (url.endsWith('.pdf') || url.includes('.pdf?'));
@@ -54,19 +54,19 @@ function SingleUpload({ label, folder, onUpload, current }) {
         {displayUrl ? (
           pdf ? (
             <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-border bg-orange-50 shrink-0 flex items-center justify-center">
-              <DocumentTextIcon className="w-8 h-8 text-orange-500" />
+              <FileText className="w-8 h-8 text-orange-500" />
             </div>
           ) : (
             <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-border bg-muted group shrink-0">
               <img src={displayUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center">
-                <EyeIcon className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Eye className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </div>
           )
         ) : (
           <div className="w-20 h-20 rounded-xl border-2 border-dashed border-border bg-muted/50 flex items-center justify-center shrink-0">
-            <CameraIcon className="w-6 h-6 text-gray-300" />
+            <Camera className="w-6 h-6 text-gray-300" />
           </div>
         )}
         <div className="flex-1">
@@ -123,7 +123,7 @@ function MultiUpload({ label, folder, urls = [], onUpdate }) {
             <div key={idx} className="relative w-20 h-20 rounded-xl overflow-hidden border border-border bg-muted group">
               {pdf ? (
                 <div className="w-full h-full flex items-center justify-center bg-orange-50">
-                  <DocumentTextIcon className="w-8 h-8 text-orange-500" />
+                  <FileText className="w-8 h-8 text-orange-500" />
                 </div>
               ) : (
                 <img src={url} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
@@ -131,7 +131,7 @@ function MultiUpload({ label, folder, urls = [], onUpdate }) {
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all" />
               <button onClick={() => removePhoto(idx)}
                 className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-destructive text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer shadow-lg">
-                <XMarkIcon className="w-3 h-3" />
+                <X className="w-3 h-3" />
               </button>
             </div>
           );
@@ -142,7 +142,7 @@ function MultiUpload({ label, folder, urls = [], onUpdate }) {
               <span className="text-xs text-primary">...</span>
             ) : (
               <div className="flex flex-col items-center gap-0.5">
-                <PlusIcon className="w-5 h-5 text-gray-300 group-hover:text-primary transition-colors" />
+                <Plus className="w-5 h-5 text-gray-300 group-hover:text-primary transition-colors" />
                 <span className="text-[10px] text-gray-400">{urls.length}/{maxPhotos}</span>
               </div>
             )}
@@ -166,10 +166,10 @@ function PreviewModal({ url, label, onClose }) {
           <div className="flex items-center gap-2">
             <a href={url} download
               className="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center cursor-pointer transition-all">
-              <ArrowDownTrayIcon className="w-4 h-4 text-white" />
+              <Download className="w-4 h-4 text-white" />
             </a>
             <button onClick={onClose} className="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center cursor-pointer transition-all">
-              <XMarkIcon className="w-4 h-4 text-white" />
+              <X className="w-4 h-4 text-white" />
             </button>
           </div>
         </div>
@@ -345,7 +345,7 @@ export default function PekebunLahanPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <MapPinIcon className="w-7 h-7 text-primary" />
+          <MapPin className="w-7 h-7 text-primary" />
           <div>
             <h1 className="text-2xl font-bold text-foreground">Data Lahan</h1>
             <p className="text-sm text-gray-500 mt-0.5">Kelola lahan perkebunan Anda</p>
@@ -359,7 +359,7 @@ export default function PekebunLahanPage() {
             pdfUrl="/api/admin/export/lahan/pdf"
           />
           <Button onClick={() => { resetForm(); setShowForm(!showForm); }}>
-            <PlusIcon className="w-4 h-4" /> {showForm ? 'Batal' : 'Tambah Lahan'}
+            <Plus className="w-4 h-4" /> {showForm ? 'Batal' : 'Tambah Lahan'}
           </Button>
         </div>
       </div>
@@ -368,7 +368,7 @@ export default function PekebunLahanPage() {
         <Card className="mb-6 border border-primary/20 shadow-md shadow-primary/5">
           <div className="flex items-center gap-2 mb-4 pb-3 border-b border-border">
             <div className="w-8 h-8 bg-primary/10 rounded-xl flex items-center justify-center">
-              <MapPinIcon className="w-4 h-4 text-primary" />
+              <MapPin className="w-4 h-4 text-primary" />
             </div>
             <h2 className="font-bold text-foreground">{editingId ? 'Edit Lahan' : 'Form Tambah Lahan'}</h2>
           </div>
@@ -389,7 +389,7 @@ export default function PekebunLahanPage() {
                 {form.titik_koordinat && (
                   <button type="button" onClick={() => openMaps(form.titik_koordinat)}
                     className="mt-1 text-xs text-primary hover:underline inline-flex items-center gap-0.5 cursor-pointer">
-                    <MapPinIcon className="w-3 h-3" /> Uji coba buka di Google Maps
+                    <MapPin className="w-3 h-3" /> Uji coba buka di Google Maps
                   </button>
                 )}
               </div>
@@ -401,7 +401,7 @@ export default function PekebunLahanPage() {
                 <div className="space-y-1">
                   <label className="block text-xs font-medium text-gray-500 mb-1.5">Upload Surat Tanah</label>
                   <label className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 rounded-xl text-sm text-gray-600 cursor-pointer hover:bg-gray-100 border border-dashed border-border transition-all">
-                    {form.upload_surat_tanah ? <span className="text-green-600 text-xs">✓ Terupload</span> : <><PhotoIcon className="w-4 h-4" /> Pilih File</>}
+                    {form.upload_surat_tanah ? <span className="text-green-600 text-xs">✓ Terupload</span> : <><Image className="w-4 h-4" /> Pilih File</>}
                     <input type="file" className="hidden" accept="image/*,.pdf,application/pdf" onChange={async (e) => { const f = e.target.files[0]; if (!f) return; try { const r = await api.upload('/upload/surat-tanah', f); setForm({ ...form, upload_surat_tanah: r.url }); toast.success('Surat tanah berhasil diupload'); } catch (err) { toast.error(err.message); } }} />
                   </label>
                   {isPdfUrl(form.upload_surat_tanah) && <p className="text-xs text-orange-600 mt-1">{getFileName(form.upload_surat_tanah)}</p>}
@@ -409,7 +409,7 @@ export default function PekebunLahanPage() {
                 <div className="space-y-1">
                   <label className="block text-xs font-medium text-gray-500 mb-1.5">Upload Surat Keterangan</label>
                   <label className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 rounded-xl text-sm text-gray-600 cursor-pointer hover:bg-gray-100 border border-dashed border-border transition-all">
-                    {form.upload_surat_keterangan ? <span className="text-green-600 text-xs">✓ Terupload</span> : <><PhotoIcon className="w-4 h-4" /> Pilih File</>}
+                    {form.upload_surat_keterangan ? <span className="text-green-600 text-xs">✓ Terupload</span> : <><Image className="w-4 h-4" /> Pilih File</>}
                     <input type="file" className="hidden" accept="image/*,.pdf,application/pdf" onChange={async (e) => { const f = e.target.files[0]; if (!f) return; try { const r = await api.upload('/upload/surat-keterangan', f); setForm({ ...form, upload_surat_keterangan: r.url }); toast.success('Surat keterangan berhasil diupload'); } catch (err) { toast.error(err.message); } }} />
                   </label>
                   {isPdfUrl(form.upload_surat_keterangan) && <p className="text-xs text-orange-600 mt-1">{getFileName(form.upload_surat_keterangan)}</p>}
@@ -428,7 +428,7 @@ export default function PekebunLahanPage() {
             <div className="flex gap-2 justify-end pt-2">
               <Button type="button" variant="secondary" onClick={resetForm}>Batal</Button>
               <Button type="submit" loading={submitting}>
-                <PlusIcon className="w-4 h-4" /> {editingId ? 'Simpan Perubahan' : 'Simpan Lahan'}
+                <Plus className="w-4 h-4" /> {editingId ? 'Simpan Perubahan' : 'Simpan Lahan'}
               </Button>
             </div>
           </form>
@@ -438,11 +438,11 @@ export default function PekebunLahanPage() {
       {data.length === 0 ? (
         <div className="text-center py-20">
           <div className="w-16 h-16 bg-muted rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <MapPinIcon className="w-8 h-8 text-gray-300" />
+            <MapPin className="w-8 h-8 text-gray-300" />
           </div>
           <p className="text-gray-400 text-lg font-medium">Belum ada data lahan</p>
           <p className="text-gray-400 text-sm mt-1">Tambahkan lahan perkebunan Anda untuk memulai</p>
-          <Button className="mt-4" onClick={() => setShowForm(true)}><PlusIcon className="w-4 h-4" /> Tambah Lahan</Button>
+          <Button className="mt-4" onClick={() => setShowForm(true)}><Plus className="w-4 h-4" /> Tambah Lahan</Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -451,7 +451,7 @@ export default function PekebunLahanPage() {
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1 min-w-0">
                   <h3 className="font-bold text-foreground flex items-center gap-1.5">
-                    <MapPinIcon className="w-4 h-4 text-primary shrink-0" />
+                    <MapPin className="w-4 h-4 text-primary shrink-0" />
                     <span className="truncate">{l.alamat_lahan}</span>
                   </h3>
                   <div className="flex flex-wrap gap-2 mt-2">
@@ -462,10 +462,10 @@ export default function PekebunLahanPage() {
                 </div>
                 <div className="flex items-center gap-1">
                   <button onClick={() => openEdit(l)} className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all lg:opacity-0 lg:group-hover:opacity-100 cursor-pointer">
-                    <PencilIcon className="w-4 h-4" />
+                    <Pencil className="w-4 h-4" />
                   </button>
                   <button onClick={() => setDeleteModal(l)} className="p-1.5 text-gray-400 hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all lg:opacity-0 lg:group-hover:opacity-100 cursor-pointer">
-                    <TrashIcon className="w-4 h-4" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -476,7 +476,7 @@ export default function PekebunLahanPage() {
                     className="relative w-16 h-16 rounded-xl overflow-hidden border border-border bg-muted shrink-0 group/thumb cursor-pointer">
                     {isPdfUrl(l.foto_petani) ? (
                       <div className="w-full h-full flex items-center justify-center bg-orange-50">
-                        <DocumentTextIcon className="w-6 h-6 text-orange-500" />
+                        <FileText className="w-6 h-6 text-orange-500" />
                       </div>
                     ) : (
                       <img src={l.foto_petani} alt="" className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform" />
@@ -489,7 +489,7 @@ export default function PekebunLahanPage() {
                     className="relative w-16 h-16 rounded-xl overflow-hidden border border-border bg-muted shrink-0 group/thumb cursor-pointer">
                     {isPdfUrl(url) ? (
                       <div className="w-full h-full flex items-center justify-center bg-orange-50">
-                        <DocumentTextIcon className="w-6 h-6 text-orange-500" />
+                        <FileText className="w-6 h-6 text-orange-500" />
                       </div>
                     ) : (
                       <img src={url} alt="" className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform" />
@@ -503,19 +503,19 @@ export default function PekebunLahanPage() {
                 {l.upload_surat_tanah && (
                   <button onClick={() => setPreview({ url: l.upload_surat_tanah, label: 'Surat Tanah' })}
                     className="text-xs bg-gray-50 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-all inline-flex items-center gap-1 cursor-pointer">
-                    <DocumentTextIcon className="w-3.5 h-3.5 text-orange-500" /> Surat Tanah
+                    <FileText className="w-3.5 h-3.5 text-orange-500" /> Surat Tanah
                   </button>
                 )}
                 {l.upload_surat_keterangan && (
                   <button onClick={() => setPreview({ url: l.upload_surat_keterangan, label: 'Surat Keterangan' })}
                     className="text-xs bg-gray-50 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-all inline-flex items-center gap-1 cursor-pointer">
-                    <DocumentTextIcon className="w-3.5 h-3.5 text-orange-500" /> Keterangan
+                    <FileText className="w-3.5 h-3.5 text-orange-500" /> Keterangan
                   </button>
                 )}
                 {l.titik_koordinat && (
                   <button onClick={() => openMaps(l.titik_koordinat)}
                     className="text-xs bg-blue-50 text-primary px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-all inline-flex items-center gap-1 cursor-pointer">
-                    <MapPinIcon className="w-3 h-3" /> Buka Google Maps
+                    <MapPin className="w-3 h-3" /> Buka Google Maps
                   </button>
                 )}
               </div>

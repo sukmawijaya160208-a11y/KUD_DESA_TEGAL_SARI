@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MagnifyingGlassIcon, ChevronLeftIcon, ChevronRightIcon, FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Search, ChevronLeft, ChevronRight, Filter, X } from 'lucide-react';
 
 const PAGE_SIZES = [10, 25, 50, 100];
 
@@ -79,7 +79,7 @@ export default function DataTable({
             <div className="flex items-center gap-2 flex-wrap">
               {search !== undefined && (
                 <div className="relative">
-                  <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     value={search}
                     onChange={(e) => onSearch?.(e.target.value)}
@@ -99,17 +99,17 @@ export default function DataTable({
           </div>
           {hasActiveFilters && (
             <div className="flex flex-wrap items-center gap-2 mt-3">
-              <span className="text-xs text-gray-500 font-medium"><FunnelIcon className="w-3 h-3 inline mr-1" />Filter:</span>
+              <span className="text-xs text-gray-500 font-medium"><Filter className="w-3 h-3 inline mr-1" />Filter:</span>
               {search && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
                   Cari: {search}
-                  <button onClick={() => onSearch?.('')} className="cursor-pointer hover:text-primary-dark"><XMarkIcon className="w-3 h-3" /></button>
+                  <button onClick={() => onSearch?.('')} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
                 </span>
               )}
               {filters?.filter((f) => f.value).map((f) => (
                 <span key={f.key} className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
                   {f.label}: {f.options.find((o) => o.value === f.value)?.label || f.value}
-                  <button onClick={() => onFilterChange?.(f.key, '')} className="cursor-pointer hover:text-primary-dark"><XMarkIcon className="w-3 h-3" /></button>
+                  <button onClick={() => onFilterChange?.(f.key, '')} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
                 </span>
               ))}
               <button onClick={() => { onSearch?.(''); filters?.forEach((f) => onFilterChange?.(f.key, '')); }}
@@ -128,7 +128,7 @@ export default function DataTable({
         ) : data.length === 0 ? (
           <div className="p-12 text-center">
             <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-              <MagnifyingGlassIcon className="w-7 h-7 text-gray-300" />
+              <Search className="w-7 h-7 text-gray-300" />
             </div>
             <p className="text-gray-400 text-sm">{emptyMessage}</p>
           </div>
@@ -187,7 +187,7 @@ export default function DataTable({
           <div className="flex items-center gap-1.5">
             <button disabled={currentPage <= 1} onClick={() => onPageChange?.(currentPage - 1)}
               className="px-3 py-1.5 rounded-lg border border-border/50 text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer flex items-center gap-1">
-              <ChevronLeftIcon className="w-3 h-3" /> Prev
+              <ChevronLeft className="w-3 h-3" /> Prev
             </button>
             {generatePageNumbers().map((p) => (
               <button key={p} onClick={() => onPageChange?.(p)}
@@ -201,7 +201,7 @@ export default function DataTable({
             ))}
             <button disabled={currentPage >= lastPage} onClick={() => onPageChange?.(currentPage + 1)}
               className="px-3 py-1.5 rounded-lg border border-border/50 text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer flex items-center gap-1">
-              Next <ChevronRightIcon className="w-3 h-3" />
+              Next <ChevronRight className="w-3 h-3" />
             </button>
             {lastPage > 7 && (
               <div className="flex items-center gap-1 ml-2">

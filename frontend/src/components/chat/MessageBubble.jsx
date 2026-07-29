@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, memo } from 'react';
 import { motion } from 'framer-motion';
-import { XMarkIcon, ArrowDownTrayIcon, PlayIcon, PauseIcon } from '@heroicons/react/24/outline';
+import { X, Download, Play, Pause } from 'lucide-react';
 
 function formatTime(dateStr) {
   if (!dateStr) return '';
@@ -75,7 +75,7 @@ function AudioPlayer({ attachment, isMine }) {
     <div className={`flex items-center gap-2 min-w-[180px] ${isMine ? '' : ''}`}>
       <audio ref={audioRef} src={attachment?.url} onTimeUpdate={handleTimeUpdate} onEnded={handleEnded} preload="metadata" />
       <button onClick={togglePlay} className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${isMine ? 'bg-foreground/10 hover:bg-foreground/20' : 'bg-primary/10 hover:bg-primary/20'}`}>
-        {playing ? <PauseIcon className={`w-4 h-4 ${isMine ? 'text-foreground' : 'text-primary'}`} /> : <PlayIcon className={`w-4 h-4 ${isMine ? 'text-foreground' : 'text-primary'} ml-0.5`} />}
+        {playing ? <Pause className={`w-4 h-4 ${isMine ? 'text-foreground' : 'text-primary'}`} /> : <Play className={`w-4 h-4 ${isMine ? 'text-foreground' : 'text-primary'} ml-0.5`} />}
       </button>
       <div className="flex-1">
           <div className={`h-1.5 rounded-full ${isMine ? 'bg-foreground/10' : 'bg-gray-200'} relative`}>
@@ -99,7 +99,7 @@ function AttachmentContent({ attachment, isMine }) {
         {lightbox && (
           <div className="fixed inset-0 z-[9999] bg-black/85 flex items-center justify-center p-4" onClick={() => setLightbox(false)}>
             <button onClick={() => setLightbox(false)} className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer z-10">
-              <XMarkIcon className="w-6 h-6" />
+              <X className="w-6 h-6" />
             </button>
             <img src={attachment.url} alt={attachment.name} className="max-w-full max-h-full object-contain" onClick={(e) => e.stopPropagation()} loading="lazy" />
           </div>
@@ -129,7 +129,7 @@ function AttachmentContent({ attachment, isMine }) {
         <p className="text-sm font-medium truncate">{attachment.name}</p>
         <p className="text-[10px] opacity-60">{attachment.size ? `${(attachment.size / 1024).toFixed(0)} KB` : ''}</p>
       </div>
-      <ArrowDownTrayIcon className="w-4 h-4 shrink-0 opacity-60" />
+      <Download className="w-4 h-4 shrink-0 opacity-60" />
     </a>
   );
 }

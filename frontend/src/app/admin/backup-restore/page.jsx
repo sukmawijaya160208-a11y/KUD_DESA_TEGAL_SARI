@@ -7,10 +7,10 @@ import { useToast } from '@/components/ToastProvider';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import {
-  ArrowDownTrayIcon, ArrowUpTrayIcon, ExclamationTriangleIcon,
-  CheckCircleIcon, XCircleIcon, ShieldCheckIcon, DocumentTextIcon,
-  ClockIcon, CircleStackIcon, CloudArrowDownIcon,
-} from '@heroicons/react/24/outline';
+  Download, Upload, AlertTriangle,
+  CheckCircle, XCircle, ShieldCheck, FileText,
+  Clock, Database, CloudDownload,
+} from 'lucide-react';
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -115,22 +115,22 @@ export default function BackupRestorePage() {
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
         <div className="relative flex items-start gap-5">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
-            <CircleStackIcon className="w-7 h-7 text-white" />
+            <Database className="w-7 h-7 text-white" />
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-heading font-bold text-foreground">Backup & Restore</h1>
             <p className="text-sm text-gray-500 mt-1">Kelola cadangan data KUD. Download backup, restore dari file, atau reset data dengan aman.</p>
             <div className="flex flex-wrap gap-4 mt-4">
               <div className="flex items-center gap-2 text-xs text-gray-400 bg-surface/80 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-border">
-                <CircleStackIcon className="w-3.5 h-3.5 text-primary" />
+                <Database className="w-3.5 h-3.5 text-primary" />
                 <span><strong className="text-foreground">12</strong> tabel</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-gray-400 bg-surface/80 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-border">
-                <DocumentTextIcon className="w-3.5 h-3.5 text-emerald-500" />
+                <FileText className="w-3.5 h-3.5 text-emerald-500" />
                 <span>Format <strong className="text-foreground">JSON</strong></span>
               </div>
               <div className="flex items-center gap-2 text-xs text-gray-400 bg-surface/80 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-border">
-                <ShieldCheckIcon className="w-3.5 h-3.5 text-amber-500" />
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
                 <span>Termasuk <strong className="text-foreground">metadata</strong></span>
               </div>
             </div>
@@ -147,7 +147,7 @@ export default function BackupRestorePage() {
             <div className="relative space-y-5">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0">
-                  <CloudArrowDownIcon className="w-6 h-6 text-white" />
+                  <CloudDownload className="w-6 h-6 text-white" />
                 </div>
                 <div>
                   <h2 className="text-lg font-heading font-bold text-foreground">Download Backup</h2>
@@ -157,21 +157,21 @@ export default function BackupRestorePage() {
 
               <div className="bg-blue-50/50 rounded-xl p-4 space-y-2 text-sm text-gray-600 border border-blue-100">
                 <div className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="w-4 h-4 text-blue-500 shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-blue-500 shrink-0" />
                   <span>10 tabel termasuk users, pekebun, lahan, program, TBS</span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="w-4 h-4 text-blue-500 shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-blue-500 shrink-0" />
                   <span>Format JSON — portable dan mudah diverifikasi</span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="w-4 h-4 text-blue-500 shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-blue-500 shrink-0" />
                   <span>Dilengkapi metadata (versi, timestamp, jumlah record)</span>
                 </div>
               </div>
 
               <Button onClick={handleBackup} loading={backupLoading} className="w-full">
-                <ArrowDownTrayIcon className="w-4 h-4" />
+                <Download className="w-4 h-4" />
                 {backupLoading ? 'Menyiapkan backup...' : 'Download Backup'}
               </Button>
             </div>
@@ -185,7 +185,7 @@ export default function BackupRestorePage() {
             <div className="relative space-y-5">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/20 shrink-0">
-                  <ArrowUpTrayIcon className="w-6 h-6 text-white" />
+                  <Upload className="w-6 h-6 text-white" />
                 </div>
                 <div>
                   <h2 className="text-lg font-heading font-bold text-foreground">Restore Backup</h2>
@@ -198,7 +198,7 @@ export default function BackupRestorePage() {
                   onClick={() => restoreRef.current?.click()}
                   className="border-2 border-dashed border-border rounded-xl p-8 text-center hover:border-emerald-400 hover:bg-emerald-50/30 transition-all duration-200 cursor-pointer group"
                 >
-                  <ArrowUpTrayIcon className="w-10 h-10 mx-auto text-gray-300 group-hover:text-emerald-400 transition-colors mb-3" />
+                  <Upload className="w-10 h-10 mx-auto text-gray-300 group-hover:text-emerald-400 transition-colors mb-3" />
                   <p className="text-sm font-medium text-foreground">Pilih file backup</p>
                   <p className="text-xs text-gray-400 mt-1">Format .json — Drag & drop atau klik</p>
                   {restoreFile && (
@@ -208,16 +208,16 @@ export default function BackupRestorePage() {
               ) : (
                 <div className="bg-emerald-50/50 rounded-xl p-4 space-y-2 border border-emerald-100">
                   <div className="flex items-center gap-2 text-sm text-emerald-700">
-                    <CheckCircleIcon className="w-4 h-4 shrink-0" />
+                    <CheckCircle className="w-4 h-4 shrink-0" />
                     <span className="font-medium">File backup valid</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 pt-1">
                     <div className="flex items-center gap-1.5">
-                      <CircleStackIcon className="w-3.5 h-3.5" />
+                      <Database className="w-3.5 h-3.5" />
                       <span>{formatNumber(totalRecords)} record</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <DocumentTextIcon className="w-3.5 h-3.5" />
+                      <FileText className="w-3.5 h-3.5" />
                       <span>{tableList.length} tabel</span>
                     </div>
                   </div>
@@ -236,18 +236,18 @@ export default function BackupRestorePage() {
               <div className="flex gap-2">
                 {restoreParsed && (
                   <Button variant="ghost" onClick={() => { setRestoreParsed(null); setRestoreFile(null); }} className="flex-1" disabled={restoreLoading}>
-                    <XCircleIcon className="w-4 h-4" /> Batal
+                    <XCircle className="w-4 h-4" /> Batal
                   </Button>
                 )}
                 {restoreParsed && (
                   <Button onClick={handleRestore} loading={restoreLoading} className="flex-1 bg-emerald-600 hover:bg-emerald-700">
-                    <ArrowUpTrayIcon className="w-4 h-4" />
+                    <Upload className="w-4 h-4" />
                     {restoreLoading ? 'Merestorasi...' : `Restore ${formatNumber(totalRecords)} Record`}
                   </Button>
                 )}
                 {!restoreParsed && restoreFile && (
                   <Button variant="ghost" onClick={() => { setRestoreFile(null); restoreRef.current.value = ''; }} className="flex-1">
-                    <XCircleIcon className="w-4 h-4" /> Hapus
+                    <XCircle className="w-4 h-4" /> Hapus
                   </Button>
                 )}
               </div>
@@ -263,7 +263,7 @@ export default function BackupRestorePage() {
           <div className="relative space-y-5">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-destructive to-destructive/70 flex items-center justify-center shadow-lg shadow-destructive/20 shrink-0">
-                <ExclamationTriangleIcon className="w-6 h-6 text-white" />
+                <AlertTriangle className="w-6 h-6 text-white" />
               </div>
               <div>
                 <div className="flex items-center gap-2.5">
@@ -279,7 +279,7 @@ export default function BackupRestorePage() {
                 <h4 className="text-sm font-semibold text-foreground">Yang akan dihapus:</h4>
                 <ul className="space-y-1 text-xs text-gray-600">
                   {['Semua pekebun & lahannya', 'Program KUD & pendaftaran', 'Riwayat TBS & harga TBS', 'Notifikasi & verifikasi log', 'User non-admin'].map((item) => (
-                    <li key={item} className="flex items-center gap-2"><XCircleIcon className="w-3.5 h-3.5 text-destructive/60 shrink-0" />{item}</li>
+                    <li key={item} className="flex items-center gap-2"><XCircle className="w-3.5 h-3.5 text-destructive/60 shrink-0" />{item}</li>
                   ))}
                 </ul>
               </div>
@@ -287,7 +287,7 @@ export default function BackupRestorePage() {
                 <h4 className="text-sm font-semibold text-foreground">Yang tetap aman:</h4>
                 <ul className="space-y-1 text-xs text-gray-600">
                   {['Akun Admin tetap utuh', 'Pengaturan aplikasi', 'Sesi login tidak terganggu'].map((item) => (
-                    <li key={item} className="flex items-center gap-2"><ShieldCheckIcon className="w-3.5 h-3.5 text-emerald-500/60 shrink-0" />{item}</li>
+                    <li key={item} className="flex items-center gap-2"><ShieldCheck className="w-3.5 h-3.5 text-emerald-500/60 shrink-0" />{item}</li>
                   ))}
                 </ul>
               </div>
@@ -310,13 +310,13 @@ export default function BackupRestorePage() {
                 variant="danger"
                 className="shrink-0"
               >
-                <ExclamationTriangleIcon className="w-4 h-4" />
+                <AlertTriangle className="w-4 h-4" />
                 {resetLoading ? 'Mereset...' : 'Reset Semua Data'}
               </Button>
             </div>
 
             <div className="flex items-center gap-2 px-1">
-              <ClockIcon className="w-3.5 h-3.5 text-gray-400" />
+              <Clock className="w-3.5 h-3.5 text-gray-400" />
               <span className="text-[11px] text-gray-400">Backup data terlebih dahulu sebelum reset untuk menghindari kehilangan data.</span>
             </div>
           </div>
@@ -326,7 +326,7 @@ export default function BackupRestorePage() {
       {/* Footer */}
       <motion.div variants={fadeUp} className="text-center py-4">
         <p className="text-xs text-gray-400">
-          <ShieldCheckIcon className="w-3.5 h-3.5 inline mr-1" />
+          <ShieldCheck className="w-3.5 h-3.5 inline mr-1" />
           Semua operasi backup & restore menggunakan database transaction untuk menjaga integritas data.
         </p>
       </motion.div>

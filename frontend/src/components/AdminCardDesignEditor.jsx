@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Button from '@/components/ui/Button';
 import KartuAdmin from '@/components/KartuAdmin';
-import { PencilIcon, ArrowPathIcon, EyeIcon, SwatchIcon } from '@heroicons/react/24/outline';
+import { Pencil, RefreshCw, Eye, SwatchBook } from 'lucide-react';
 
 const FONT_OPTIONS = [
   { value: 'Inter', label: 'Inter' },
@@ -315,7 +315,7 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
       <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
         <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-indigo-500/10 to-transparent border-b border-border">
           <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0">
-            <SwatchIcon className="w-5 h-5 text-indigo-600" />
+            <SwatchBook className="w-5 h-5 text-indigo-600" />
           </div>
           <div>
             <h3 className="font-semibold text-foreground text-sm">Desain Kartu Admin</h3>
@@ -326,10 +326,10 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
           {/* Sub Tabs */}
           <div className="flex gap-1.5 mb-5 overflow-x-auto pb-1">
             {[
-              { id: 'tampilan', label: 'Tampilan', icon: SwatchIcon },
-              { id: 'depan', label: 'Sisi Depan', icon: EyeIcon },
-              { id: 'belakang', label: 'Sisi Belakang', icon: EyeIcon },
-              { id: 'data', label: 'Data & Upload', icon: PencilIcon },
+              { id: 'tampilan', label: 'Tampilan', icon: SwatchBook },
+              { id: 'depan', label: 'Sisi Depan', icon: Eye },
+              { id: 'belakang', label: 'Sisi Belakang', icon: Eye },
+              { id: 'data', label: 'Data & Upload', icon: Pencil },
             ].map((t) => {
               const Icon = t.icon;
               const isActive = tab === t.id;
@@ -373,7 +373,7 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
                       <label className="text-xs font-semibold text-foreground mb-2 block">Warna Depan (gradient)</label>
                       <div className="flex gap-2 items-center">
                         <input type="color" value={frontBgColor} onChange={(e) => setFrontBgColor(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
-                        <ArrowPathIcon className="w-4 h-4 text-gray-400" />
+                        <RefreshCw className="w-4 h-4 text-gray-400" />
                         <input type="color" value={frontBgColor2} onChange={(e) => setFrontBgColor2(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
                         <span className="text-[10px] text-gray-400 ml-1">{frontBgColor} → {frontBgColor2}</span>
                       </div>
@@ -382,7 +382,7 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
                       <label className="text-xs font-semibold text-foreground mb-2 block">Warna Belakang (gradient)</label>
                       <div className="flex gap-2 items-center">
                         <input type="color" value={backBgColor} onChange={(e) => setBackBgColor(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
-                        <ArrowPathIcon className="w-4 h-4 text-gray-400" />
+                        <RefreshCw className="w-4 h-4 text-gray-400" />
                         <input type="color" value={backBgColor2} onChange={(e) => setBackBgColor2(e.target.value)} className="w-10 h-10 rounded-xl border border-border cursor-pointer" />
                         <span className="text-[10px] text-gray-400 ml-1">{backBgColor} → {backBgColor2}</span>
                       </div>
@@ -533,7 +533,7 @@ export default function AdminCardDesignEditor({ settingKud, settings, onSave }) 
       <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
         <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-indigo-500/10 to-transparent border-b border-border">
           <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0">
-            <EyeIcon className="w-5 h-5 text-indigo-600" />
+            <Eye className="w-5 h-5 text-indigo-600" />
           </div>
           <div>
             <h3 className="font-semibold text-foreground text-sm">Preview Kartu Admin</h3>

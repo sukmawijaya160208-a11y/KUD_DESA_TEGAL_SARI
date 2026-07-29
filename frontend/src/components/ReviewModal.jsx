@@ -6,9 +6,9 @@ import Button from '@/components/ui/Button';
 import KartuAnggotaKud from '@/components/KartuAnggotaKud';
 import { formatDate } from '@/lib/date';
 import {
-  EyeIcon, CheckCircleIcon, XCircleIcon, DocumentTextIcon,
-  CreditCardIcon, XMarkIcon
-} from '@heroicons/react/24/outline';
+  Eye, CheckCircle, XCircle, FileText,
+  CreditCard, X
+} from 'lucide-react';
 
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',
@@ -17,8 +17,8 @@ const PERSYARATAN_LABEL = {
 };
 
 const TABS = [
-  { id: 'detail', label: 'Detail Pendaftaran', icon: EyeIcon },
-  { id: 'kartu', label: 'Kartu Anggota', icon: CreditCardIcon },
+  { id: 'detail', label: 'Detail Pendaftaran', icon: Eye },
+  { id: 'kartu', label: 'Kartu Anggota', icon: CreditCard },
 ];
 
 export default function ReviewModal({ open, onClose, data, onVerifikasi, kartuAnggota }) {
@@ -31,7 +31,7 @@ export default function ReviewModal({ open, onClose, data, onVerifikasi, kartuAn
   if (!data) return null;
 
   const tabs = onVerifikasi
-    ? [...TABS, { id: 'verifikasi', label: 'Verifikasi', icon: CheckCircleIcon }]
+    ? [...TABS, { id: 'verifikasi', label: 'Verifikasi', icon: CheckCircle }]
     : TABS;
 
   const d = data;
@@ -131,7 +131,7 @@ export default function ReviewModal({ open, onClose, data, onVerifikasi, kartuAn
             {hasSurat && (
               <div>
                 <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                  <DocumentTextIcon className="w-3 h-3 inline mr-1" />Status Persetujuan Surat
+                  <FileText className="w-3 h-3 inline mr-1" />Status Persetujuan Surat
                 </h4>
                 <div className="space-y-1.5">
                   {[
@@ -191,10 +191,10 @@ export default function ReviewModal({ open, onClose, data, onVerifikasi, kartuAn
                 <div className="flex items-center gap-2 justify-end">
                   <Button variant="ghost" onClick={onClose}>Batal</Button>
                   <Button variant="success" loading={submitting} onClick={() => handleVerifikasi('verified')}>
-                    <CheckCircleIcon className="w-4 h-4" /> Setujui
+                    <CheckCircle className="w-4 h-4" /> Setujui
                   </Button>
                   <Button variant="danger" loading={submitting} onClick={() => handleVerifikasi('rejected')}>
-                    <XCircleIcon className="w-4 h-4" /> Tolak
+                    <XCircle className="w-4 h-4" /> Tolak
                   </Button>
                 </div>
               </>
@@ -210,7 +210,7 @@ export default function ReviewModal({ open, onClose, data, onVerifikasi, kartuAn
               <span className="text-white/80 text-sm font-medium">{previewLabel}</span>
               <button onClick={() => { setPreviewImage(null); setPreviewLabel(''); }}
                 className="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center cursor-pointer transition-all">
-                <XMarkIcon className="w-4 h-4 text-white" />
+                <X className="w-4 h-4 text-white" />
               </button>
             </div>
             <img src={previewImage} alt="" className="w-full h-auto rounded-2xl shadow-2xl mt-6" />

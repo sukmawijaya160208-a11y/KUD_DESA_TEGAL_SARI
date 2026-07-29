@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { DollarSign } from 'lucide-react';
 
 export default function TbsCalculator() {
   const [hektar, setHektar] = useState(2);
@@ -39,7 +39,7 @@ export default function TbsCalculator() {
           </div>
         </div>
         <div className="bg-gradient-to-br from-emerald-50 to-white rounded-xl p-6 border border-emerald-100/50">
-          <h4 className="font-bold font-heading text-foreground text-sm mb-4 flex items-center gap-2"><CurrencyDollarIcon className="w-4 h-4 text-primary" />Estimasi Pendapatan</h4>
+          <h4 className="font-bold font-heading text-foreground text-sm mb-4 flex items-center gap-2"><DollarSign className="w-4 h-4 text-primary" />Estimasi Pendapatan</h4>
           <div className="space-y-3">
             <div className="flex justify-between text-sm"><span className="text-muted-foreground">Total Pohon</span><span className="font-semibold">{totalPohon.toLocaleString()}</span></div>
             <div className="flex justify-between text-sm"><span className="text-muted-foreground">Estimasi TBS Panen</span><span className="font-semibold">{estimasiTbs.toLocaleString()} tandan</span></div>

@@ -5,10 +5,7 @@ import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { formatDateLong, formatDateShort } from '@/lib/date';
 import { api } from '@/lib/api';
 import Link from 'next/link';
-import {
-  NewspaperIcon, MagnifyingGlassIcon, ClockIcon,
-  EyeIcon, ArrowUpIcon,
-} from '@heroicons/react/24/outline';
+import { Newspaper, Search, Clock, Eye, ArrowUp } from 'lucide-react';
 
 const CATEGORY_COLORS = {
   Pelatihan: { bg: 'bg-blue-500/10', text: 'text-blue-600', dot: 'bg-blue-500' },
@@ -129,7 +126,7 @@ export default function BlogPage() {
         <section className="relative bg-gradient-to-br from-slate-900 via-primary/90 to-slate-800 px-6 lg:px-12 pb-16 pt-12">
           <div className="max-w-7xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white/90 px-4 py-1.5 rounded-full text-sm mb-4">
-              <NewspaperIcon className="w-4 h-4" />
+              <Newspaper className="w-4 h-4" />
               Blog KUD
             </div>
             <h1 className="font-heading font-bold text-white text-4xl md:text-5xl mb-3">Berita & Artikel KUD Sari Subur</h1>
@@ -155,7 +152,7 @@ export default function BlogPage() {
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white/90 px-4 py-1.5 rounded-full text-sm mb-4 border border-white/10">
-              <NewspaperIcon className="w-4 h-4" />
+              <Newspaper className="w-4 h-4" />
               Blog KUD
             </div>
             <h1 className="font-heading font-bold text-white text-4xl md:text-5xl mb-3">
@@ -172,7 +169,7 @@ export default function BlogPage() {
       <div className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-3 flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <MagnifyingGlassIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               placeholder="Cari artikel..."
               value={search}
@@ -233,7 +230,7 @@ export default function BlogPage() {
               </>
             ) : (
               <>
-                <NewspaperIcon className="w-16 h-16 text-gray-200 mx-auto mb-4" />
+                <Newspaper className="w-16 h-16 text-gray-200 mx-auto mb-4" />
                 <p className="text-gray-400 text-lg">Tidak ada artikel ditemukan</p>
               </>
             )}
@@ -249,7 +246,7 @@ export default function BlogPage() {
                       {posts[0].media?.[0]?.url ? (
                         <img src={imgUrl(posts[0].media[0].url)} alt={posts[0].title} className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center"><NewspaperIcon className="w-20 h-20 text-primary/20" /></div>
+                        <div className="w-full h-full flex items-center justify-center"><Newspaper className="w-20 h-20 text-primary/20" /></div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent md:hidden" />
                     </div>
@@ -264,11 +261,11 @@ export default function BlogPage() {
                         {posts[0].excerpt || (posts[0].content ?? '').slice(0, 200) + '...'}
                       </p>
                       <div className="flex items-center gap-3 text-xs text-gray-400">
-                        <span className="flex items-center gap-1"><ClockIcon className="w-3.5 h-3.5" />{readingTime(posts[0].content)} menit</span>
+                        <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{readingTime(posts[0].content)} menit</span>
                         <span className="w-1 h-1 rounded-full bg-gray-300" />
                         <span>{formatDateLong(posts[0].published_at || posts[0].created_at)}</span>
                         <span className="w-1 h-1 rounded-full bg-gray-300" />
-                        <span className="flex items-center gap-1"><EyeIcon className="w-3.5 h-3.5" />{formatViews(posts[0].views || 0)}</span>
+                        <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{formatViews(posts[0].views || 0)}</span>
                       </div>
                     </div>
                   </div>
@@ -289,13 +286,13 @@ export default function BlogPage() {
                         {thumb ? (
                           <img src={imgUrl(thumb)} alt={post.title} className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105" />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center"><NewspaperIcon className="w-14 h-14 text-primary/20" /></div>
+                          <div className="w-full h-full flex items-center justify-center"><Newspaper className="w-14 h-14 text-primary/20" /></div>
                         )}
                         <span className={`absolute top-3 left-3 px-3 py-1 rounded-lg text-xs font-bold shadow-lg ${catColor.bg} ${catColor.text} backdrop-blur-md`}>
                           {post.category || 'Artikel'}
                         </span>
                         <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm text-white/90 px-2.5 py-1 rounded-lg text-xs">
-                          <EyeIcon className="w-3.5 h-3.5" />
+                          <Eye className="w-3.5 h-3.5" />
                           {formatViews(post.views || 0)}
                         </div>
                       </div>
@@ -308,7 +305,7 @@ export default function BlogPage() {
                         </p>
                         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                           <span className="flex items-center gap-1.5 text-xs text-gray-400">
-                            <ClockIcon className="w-3.5 h-3.5" />
+                            <Clock className="w-3.5 h-3.5" />
                             {time} menit
                           </span>
                           <span className="text-xs text-gray-400">
@@ -360,7 +357,7 @@ export default function BlogPage() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-primary text-white shadow-lg hover:bg-primary-dark transition-colors flex items-center justify-center z-50 cursor-pointer"
           >
-            <ArrowUpIcon className="w-5 h-5" />
+            <ArrowUp className="w-5 h-5" />
           </motion.button>
         )}
       </AnimatePresence>

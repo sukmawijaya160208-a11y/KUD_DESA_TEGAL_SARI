@@ -2,8 +2,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
-  XMarkIcon, CameraIcon, CheckCircleIcon,
-} from '@heroicons/react/24/outline';
+  X, Camera, CheckCircle,
+} from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
@@ -47,7 +47,7 @@ export default function EditModal({ show, onClose, data, onSave, onUploadFoto, s
             onClick={onClose}
             className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
           >
-            <XMarkIcon className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
 
@@ -64,11 +64,11 @@ export default function EditModal({ show, onClose, data, onSave, onUploadFoto, s
                   <>
                     <img src={edit.foto_pengembang} alt="Preview" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <CameraIcon className="w-6 h-6 text-white" />
+                      <Camera className="w-6 h-6 text-white" />
                     </div>
                   </>
                 ) : (
-                  <CameraIcon className="w-8 h-8 text-gray-400 group-hover:text-primary transition-colors" />
+                  <Camera className="w-8 h-8 text-gray-400 group-hover:text-primary transition-colors" />
                 )}
               </div>
               <div className="text-sm text-gray-500">
@@ -140,7 +140,7 @@ export default function EditModal({ show, onClose, data, onSave, onUploadFoto, s
           <Button variant="ghost" onClick={onClose}>Batal</Button>
           <Button variant="primary" onClick={handleSave} loading={saving} disabled={saving}>
             {saving ? 'Menyimpan...' : (
-              <><CheckCircleIcon className="w-4 h-4" /> Simpan</>
+              <><CheckCircle className="w-4 h-4" /> Simpan</>
             )}
           </Button>
         </div>

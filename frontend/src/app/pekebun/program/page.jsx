@@ -10,10 +10,10 @@ import KartuAnggotaKud from '@/components/KartuAnggotaKud';
 import { formatDate, formatDateShort } from '@/lib/date';
 import Modal from '@/components/ui/Modal';
 import {
-  ClipboardDocumentListIcon, CheckCircleIcon, CalendarDaysIcon, UsersIcon,
-  ChevronRightIcon, XMarkIcon, MapPinIcon, ClockIcon,
-  DocumentTextIcon, FunnelIcon, CreditCardIcon, PrinterIcon
-} from '@heroicons/react/24/outline';
+  ClipboardList, CheckCircle, CalendarDays, Users,
+  ChevronRight, X, MapPin, Clock,
+  FileText, Filter, CreditCard, Printer
+} from 'lucide-react';
 
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',
@@ -95,7 +95,7 @@ export default function PekebunProgramPage() {
     <div>
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-          <ClipboardDocumentListIcon className="w-6 h-6 text-primary" />
+          <ClipboardList className="w-6 h-6 text-primary" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Program KUD</h1>
@@ -111,7 +111,7 @@ export default function PekebunProgramPage() {
       {tersedia.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-2xl border border-border">
           <div className="w-14 h-14 bg-muted rounded-xl flex items-center justify-center mx-auto mb-3">
-            <ClipboardDocumentListIcon className="w-7 h-7 text-gray-300" />
+            <ClipboardList className="w-7 h-7 text-gray-300" />
           </div>
           <p className="text-gray-400">Belum ada program tersedia</p>
         </div>
@@ -144,14 +144,14 @@ export default function PekebunProgramPage() {
                   <div className="flex items-center gap-3 text-xs text-gray-500 flex-wrap">
                     {p.tanggal_mulai && (
                       <span className="flex items-center gap-1">
-                        <CalendarDaysIcon className="w-3.5 h-3.5" />
+                        <CalendarDays className="w-3.5 h-3.5" />
                         {formatDate(p.tanggal_mulai, 'dd MMM')}
                         {p.tanggal_selesai && ` - ${formatDateShort(p.tanggal_selesai)}`}
                       </span>
                     )}
                     {p.kuota && (
                       <span className="flex items-center gap-1">
-                        <UsersIcon className="w-3.5 h-3.5" />
+                        <Users className="w-3.5 h-3.5" />
                         {p.pendaftaran_program_count || 0}/{p.kuota}
                       </span>
                     )}
@@ -172,13 +172,13 @@ export default function PekebunProgramPage() {
                     </button>
                     {sudahDaftar ? (
                       <span className="flex items-center gap-1.5 px-3 py-1.5 bg-green-100 text-green-700 rounded-xl text-sm font-semibold">
-                        <CheckCircleIcon className="w-4 h-4" /> Sudah Daftar
+                        <CheckCircle className="w-4 h-4" /> Sudah Daftar
                       </span>
                     ) : penuh ? (
                       <span className="px-3 py-1.5 bg-gray-100 text-gray-500 rounded-xl text-sm font-semibold">Kuota Penuh</span>
                     ) : (
                       <Button size="sm" onClick={() => router.push(`/pekebun/program/daftar/${p.id}`)}>
-                        Daftar <ChevronRightIcon className="w-4 h-4" />
+                        Daftar <ChevronRight className="w-4 h-4" />
                       </Button>
                     )}
                   </div>
@@ -198,13 +198,13 @@ export default function PekebunProgramPage() {
             </h2>
             <button onClick={handleKartuAnggota} disabled={kartuLoading}
               className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-xl text-sm font-semibold hover:from-emerald-700 hover:to-emerald-600 disabled:opacity-60 transition-all shadow-sm cursor-pointer">
-              <CreditCardIcon className="w-4 h-4" />
+              <CreditCard className="w-4 h-4" />
               {kartuLoading ? 'Memuat...' : 'Kartu Anggota'}
             </button>
           </div>
 
           <div className="flex items-center gap-1.5 mb-4 overflow-x-auto pb-1">
-            <FunnelIcon className="w-3.5 h-3.5 text-gray-400 mr-1 shrink-0" />
+            <Filter className="w-3.5 h-3.5 text-gray-400 mr-1 shrink-0" />
             {filterTabs.map((tab) => (
               <button key={tab.value} onClick={() => setFilterStatus(tab.value)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
@@ -230,7 +230,7 @@ export default function PekebunProgramPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                        <ClipboardDocumentListIcon className="w-5 h-5 text-primary" />
+                        <ClipboardList className="w-5 h-5 text-primary" />
                       </div>
                       <div className="min-w-0">
                         <h3 className="font-bold text-foreground truncate">{s.program_kud?.nama}</h3>
@@ -246,7 +246,7 @@ export default function PekebunProgramPage() {
                       </span>
                       <button onClick={() => setExpandedRegId(isOpen ? null : s.id)}
                         className="text-gray-400 hover:text-foreground transition-colors cursor-pointer p-1">
-                        <ChevronRightIcon className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-90' : ''}`} />
+                        <ChevronRight className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-90' : ''}`} />
                       </button>
                     </div>
                   </div>
@@ -255,14 +255,14 @@ export default function PekebunProgramPage() {
                     <div className="mt-4 pt-4 border-t border-border space-y-3 animate-fade-in">
                       {s.tanggal_daftar && (
                         <div className="flex items-center gap-2 text-xs text-gray-500">
-                          <ClockIcon className="w-3.5 h-3.5 text-gray-400" />
+                          <Clock className="w-3.5 h-3.5 text-gray-400" />
                           Mendaftar: {formatDate(s.tanggal_daftar, 'dd MMM yyyy HH:mm')}
                         </div>
                       )}
 
                       {s.lahan && (
                         <div className="flex items-center gap-2 text-xs text-gray-500">
-                          <MapPinIcon className="w-3.5 h-3.5 text-gray-400" />
+                          <MapPin className="w-3.5 h-3.5 text-gray-400" />
                           Lahan: {s.lahan.alamat_lahan} ({Number(s.lahan.luas_lahan_m2 || 0).toLocaleString()} M²)
                         </div>
                       )}
@@ -295,7 +295,7 @@ export default function PekebunProgramPage() {
 
                       {s.verified_at && (
                         <div className="flex items-center gap-2 text-xs text-green-600">
-                          <CheckCircleIcon className="w-3.5 h-3.5" />
+                          <CheckCircle className="w-3.5 h-3.5" />
                           Diverifikasi: {formatDate(s.verified_at, 'dd MMM yyyy HH:mm')}
                         </div>
                       )}
@@ -316,7 +316,7 @@ export default function PekebunProgramPage() {
               <span className="text-white/80 text-sm font-medium">{previewLabel}</span>
               <button onClick={() => { setPreviewImage(null); setPreviewLabel(''); }}
                 className="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center cursor-pointer transition-all">
-                <XMarkIcon className="w-4 h-4 text-white" />
+                <X className="w-4 h-4 text-white" />
               </button>
             </div>
             <img src={previewImage} alt="" className="w-full h-auto rounded-2xl shadow-2xl mt-6" />

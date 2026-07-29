@@ -4,9 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
-import {
-  XMarkIcon, MagnifyingGlassIcon, UserPlusIcon,
-} from '@heroicons/react/24/outline';
+import { X, Search, UserPlus } from 'lucide-react';
 
 export default function NewChatModal({ open, onClose, onStart }) {
   const toast = useToast();
@@ -67,13 +65,13 @@ export default function NewChatModal({ open, onClose, onStart }) {
             <div className="flex items-center justify-between px-5 py-4 border-b border-border">
               <h2 className="text-lg font-heading font-bold text-foreground">Percakapan Baru</h2>
               <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-muted transition-colors cursor-pointer">
-                <XMarkIcon className="w-5 h-5 text-gray-400" />
+                <X className="w-5 h-5 text-gray-400" />
               </button>
             </div>
 
             <div className="px-5 py-3 border-b border-border">
               <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -111,7 +109,7 @@ export default function NewChatModal({ open, onClose, onStart }) {
                       {creating === user.id ? (
                         <div className="w-5 h-5 border-2 border-wa-primary border-t-transparent rounded-full animate-spin" />
                       ) : (
-                        <UserPlusIcon className="w-5 h-5 text-wa-primary" />
+                        <UserPlus className="w-5 h-5 text-wa-primary" />
                       )}
                     </div>
                   </button>

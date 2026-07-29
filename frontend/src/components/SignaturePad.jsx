@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { ArrowPathIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { RefreshCw, Check } from 'lucide-react';
 
 export default function SignaturePad({ value, onChange, height = 150 }) {
   const canvasRef = useRef(null);
@@ -111,7 +111,7 @@ export default function SignaturePad({ value, onChange, height = 150 }) {
           onClick={handleClear}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors cursor-pointer"
         >
-          <ArrowPathIcon className="w-3.5 h-3.5" />
+          <RefreshCw className="w-3.5 h-3.5" />
           Hapus
         </button>
         <button
@@ -119,7 +119,7 @@ export default function SignaturePad({ value, onChange, height = 150 }) {
           disabled={!drawn}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-emerald-600 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <CheckIcon className="w-3.5 h-3.5" />
+          <Check className="w-3.5 h-3.5" />
           Gunakan
         </button>
         {value && (
