@@ -7,9 +7,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLogo } from '@/hooks/useLogo';
 import { api } from '@/lib/api';
 import MapSection from '@/components/MapSection';
-import TbsCalculator from '@/components/TbsCalculator';
 import Modal from '@/components/ui/Modal';
 import Hero3DScene from '@/components/Hero3DScene';
+import HargaTbsWidget from '@/components/HargaTbsWidget';
 
 import {
   Squares2X2Icon, ChatBubbleLeftRightIcon,
@@ -868,17 +868,13 @@ export default function Home() {
 
       
 
-{/* ===== KALKULATOR TBS ===== */}
+{/* ===== HARGA TBS TERKINI ===== */}
       <section className="py-10 md:py-12 bg-gradient-to-b from-emerald-50/30 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader badge="Kalkulator" title="Kalkulator TBS" subtitle="Simulasi pendapatan Anda dari hasil kebun kelapa sawit." />
-          <div className="rounded-2xl bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg p-6 md:p-8">
-            <TbsCalculator />
-          </div>
+          <SectionHeader badge="Harga TBS" title="Harga TBS Terkini" subtitle="Pantau harga TBS terbaru yang ditetapkan oleh KUD. Data langsung dari sistem, diperbarui otomatis." />
+          <HargaTbsWidget />
         </div>
       </section>
-
-      
 
 {/* ===== BLOG TERBARU ===== */}
       <section id="blog" className="py-10 md:py-12 bg-gradient-to-b from-white to-emerald-50/30 scroll-mt-16 md:scroll-mt-20 relative overflow-hidden">
