@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { formatDateLong } from '@/lib/date';
@@ -8,7 +8,6 @@ import { api } from '@/lib/api';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
 import {
   NewspaperIcon, ClockIcon, EyeIcon, ArrowLeftIcon,
   ChevronLeftIcon, ShareIcon, PhotoIcon, VideoCameraIcon,
@@ -168,7 +167,7 @@ export default function BlogDetailPage() {
   const thumb = post.media?.[0]?.url || null;
 
   const paragraphCounter = useRef(0);
-  const mdComponents = {
+  const mdComponents = useMemo(() => ({
     p: ({ children }) => {
       paragraphCounter.current += 1;
       const isFirst = paragraphCounter.current === 1;
@@ -218,7 +217,7 @@ export default function BlogDetailPage() {
     li: ({ children }) => <li className="text-[17px] md:text-[19px] leading-relaxed">{children}</li>,
     h2: ({ children }) => <h2 className="font-heading font-bold text-foreground text-xl md:text-2xl mt-8 mb-4">{children}</h2>,
     h3: ({ children }) => <h3 className="font-heading font-bold text-foreground text-lg md:text-xl mt-6 mb-3">{children}</h3>,
-  };
+  }), []);
 
   return (
     <div>
@@ -338,8 +337,7 @@ export default function BlogDetailPage() {
             <ReactMarkdown
               key={post.content}
               remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeRaw]}
-              components={{ ...mdComponents, paragraphCounter: undefined }}
+              components={mdComponents}
             >
               {post.content}
             </ReactMarkdown>
