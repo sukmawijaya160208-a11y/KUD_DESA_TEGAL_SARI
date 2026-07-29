@@ -12,20 +12,29 @@ import Hero3DScene from '@/components/Hero3DScene';
 import HargaTbsWidget from '@/components/HargaTbsWidget';
 
 import {
-  Squares2X2Icon, ChatBubbleLeftRightIcon,
-  QuestionMarkCircleIcon, NewspaperIcon, ArrowRightIcon,
-  ChevronDownIcon, Bars3Icon, XMarkIcon, PhoneIcon,
-  PlayIcon, CalendarDaysIcon, UserGroupIcon,
-  MapPinIcon, AcademicCapIcon,
-  ShieldCheckIcon, HandRaisedIcon, CurrencyDollarIcon,
-  ChartBarIcon, CheckBadgeIcon,
-  StarIcon, HeartIcon, ArrowUpIcon,
-  ChevronLeftIcon, ChevronRightIcon, MagnifyingGlassIcon,
-  DocumentTextIcon, GlobeAltIcon,
-  BellAlertIcon, FolderIcon,
-  BuildingOfficeIcon, PhotoIcon, VideoCameraIcon,
-  SparklesIcon, ClipboardDocumentListIcon, BuildingOffice2Icon
-} from '@heroicons/react/24/outline';
+  LayoutGrid, MessageCircle, CircleHelp, Newspaper,
+  Phone, CalendarDays, MapPin, GraduationCap,
+  ShieldCheck, Hand, DollarSign, BarChart3,
+  BadgeCheck, FileText, Globe, Bell, Folder,
+  Building2, Image, Video, ClipboardList,
+  Building,
+} from 'lucide-react';
+
+import { AnimateIcon } from '@/components/animate-ui/icons/icon';
+
+import { ArrowRightIcon } from '@/components/animate-ui/icons/arrow-right';
+import { ChevronDownIcon } from '@/components/animate-ui/icons/chevron-down';
+import { MenuIcon } from '@/components/animate-ui/icons/menu';
+import { XIcon } from '@/components/animate-ui/icons/x';
+import { PlayIcon } from '@/components/animate-ui/icons/play';
+import { UsersIcon as UserGroupIcon } from '@/components/animate-ui/icons/users';
+import { HeartIcon } from '@/components/animate-ui/icons/heart';
+import { StarIcon } from '@/components/animate-ui/icons/star';
+import { SearchIcon } from '@/components/animate-ui/icons/search';
+import { SparklesIcon } from '@/components/animate-ui/icons/sparkles';
+import { ArrowUpIcon } from '@/components/animate-ui/icons/arrow-up';
+import { ChevronLeftIcon } from '@/components/animate-ui/icons/chevron-left';
+import { ChevronRightIcon } from '@/components/animate-ui/icons/chevron-right';
 
 const easeSmooth = [0.16, 1, 0.3, 1];
 const easeSpring = { type: 'spring', stiffness: 260, damping: 28 };
@@ -79,12 +88,12 @@ function LogoDisplay({ logoUrl, className }) {
 }
 
 const JENIS_ICON = {
-  PSR: AcademicCapIcon,
-  Intensifikasi: ChartBarIcon,
-  Ekstensifikasi: GlobeAltIcon,
-  'Pelatihan SDMPKS': AcademicCapIcon,
-  'Beasiswa SDMPKS': AcademicCapIcon,
-  Kemitraan: HandRaisedIcon,
+  PSR: GraduationCap,
+  Intensifikasi: BarChart3,
+  Ekstensifikasi: Globe,
+  'Pelatihan SDMPKS': GraduationCap,
+  'Beasiswa SDMPKS': GraduationCap,
+  Kemitraan: Hand,
 };
 
 const JENIS_COLORS = {
@@ -101,14 +110,34 @@ const DEFAULT_COLOR = { bg: 'bg-gray-50', icon: 'text-gray-600', card: 'gray' };
 const BLOG_CATEGORIES = ['Semua', 'Pelatihan', 'Sosial', 'Pendidikan'];
 
 const ICON_MAP = {
-  DocumentTextIcon, FolderIcon, ShieldCheckIcon, HandRaisedIcon,
-  UserGroupIcon, CheckBadgeIcon, CurrencyDollarIcon, AcademicCapIcon,
-  ChartBarIcon, GlobeAltIcon, StarIcon, PhoneIcon, MapPinIcon,
-  ChatBubbleLeftRightIcon, Squares2X2Icon, CalendarDaysIcon,
-  BellAlertIcon, BuildingOfficeIcon, ArrowRightIcon, HeartIcon,
-  PlayIcon, NewspaperIcon, QuestionMarkCircleIcon, PhotoIcon,
-  VideoCameraIcon, SparklesIcon, ClipboardDocumentListIcon,
-  BuildingOffice2Icon,
+  DocumentTextIcon: FileText,
+  FolderIcon: Folder,
+  ShieldCheckIcon: ShieldCheck,
+  HandRaisedIcon: Hand,
+  UserGroupIcon: UserGroupIcon,
+  CheckBadgeIcon: BadgeCheck,
+  CurrencyDollarIcon: DollarSign,
+  AcademicCapIcon: GraduationCap,
+  ChartBarIcon: BarChart3,
+  GlobeAltIcon: Globe,
+  StarIcon: StarIcon,
+  PhoneIcon: Phone,
+  MapPinIcon: MapPin,
+  ChatBubbleLeftRightIcon: MessageCircle,
+  Squares2X2Icon: LayoutGrid,
+  CalendarDaysIcon: CalendarDays,
+  BellAlertIcon: Bell,
+  BuildingOfficeIcon: Building2,
+  ArrowRightIcon: ArrowRightIcon,
+  HeartIcon: HeartIcon,
+  PlayIcon: PlayIcon,
+  NewspaperIcon: Newspaper,
+  QuestionMarkCircleIcon: CircleHelp,
+  PhotoIcon: Image,
+  VideoCameraIcon: Video,
+  SparklesIcon: SparklesIcon,
+  ClipboardDocumentListIcon: ClipboardList,
+  BuildingOffice2Icon: Building,
 };
 
 
@@ -171,14 +200,14 @@ function Counter({ end, suffix, label, duration = 2000, prefix }) {
 function ProgramModal({ program, onClose }) {
   const router = useRouter();
   const colors = JENIS_COLORS[program?.jenis] || DEFAULT_COLOR;
-  const Icon = JENIS_ICON[program?.jenis] || Squares2X2Icon;
+  const Icon = JENIS_ICON[program?.jenis] || LayoutGrid;
   return (
     <AnimatePresence>
       {program && (
         <motion.div key={program.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
           <motion.div initial={{ opacity: 0, scale: 0.95, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 30 }} transition={{ type: 'spring', damping: 25 }} className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl max-w-lg w-full p-6 md:p-8 relative overflow-hidden border border-white/50 max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/30 to-transparent pointer-events-none" />
-            <button onClick={onClose} className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-gray-100 transition-colors shadow-sm"><XMarkIcon className="w-5 h-5" /></button>
+            <button onClick={onClose} className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-gray-100 transition-colors shadow-sm"><XIcon className="w-5 h-5" /></button>
             <div className="relative z-10 flex items-center gap-3 mb-4">
               <div className={`w-14 h-14 rounded-xl ${colors.bg} flex items-center justify-center shadow-sm`}><Icon className={`w-7 h-7 ${colors.icon}`} /></div>
               <div>
@@ -219,7 +248,7 @@ function ProgramModal({ program, onClose }) {
 
             {program.persyaratan?.length > 0 && (
               <div className="relative z-10 mb-5">
-                <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2"><FolderIcon className="w-4 h-4 text-primary" /> Persyaratan</h4>
+                <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2"><Folder className="w-4 h-4 text-primary" /> Persyaratan</h4>
                 <ul className="space-y-2">
                   {program.persyaratan.map((s, idx) => (
                     <li key={idx} className="flex items-start gap-3">
@@ -233,7 +262,7 @@ function ProgramModal({ program, onClose }) {
 
             {program.manfaat?.length > 0 && (
               <div className="relative z-10 mb-5">
-                <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2"><CheckBadgeIcon className="w-4 h-4 text-emerald-500" /> Manfaat Program</h4>
+                <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2"><BadgeCheck className="w-4 h-4 text-emerald-500" /> Manfaat Program</h4>
                 <ul className="space-y-2">
                   {program.manfaat.map((m, idx) => (
                     <li key={idx} className="flex items-start gap-3">
@@ -259,7 +288,7 @@ function VideoModal({ videoId, onClose }) {
       {videoId && (
         <motion.div key={videoId} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl" onClick={onClose}>
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ type: 'spring', damping: 25 }} className="relative w-full max-w-4xl aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10" onClick={(e) => e.stopPropagation()}>
-            <button onClick={onClose} className="absolute top-3 right-3 z-10 p-2 rounded-full bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 transition-colors border border-white/20"><XMarkIcon className="w-5 h-5" /></button>
+            <button onClick={onClose} className="absolute top-3 right-3 z-10 p-2 rounded-full bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 transition-colors border border-white/20"><XIcon className="w-5 h-5" /></button>
             <iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1`} allow="autoplay; encrypted-media" allowFullScreen className="w-full h-full" />
           </motion.div>
         </motion.div>
@@ -274,7 +303,7 @@ function HeroDecorativeVisual() {
       <div className="relative z-10 flex items-center justify-center">
         <div className="w-48 h-48 lg:w-56 lg:h-56 rounded-full bg-gradient-to-br from-emerald-400/20 via-emerald-300/10 to-teal-400/20 backdrop-blur-sm border border-white/10 flex items-center justify-center">
           <div className="w-36 h-36 lg:w-44 lg:h-44 rounded-full bg-gradient-to-br from-emerald-500/30 via-emerald-400/20 to-teal-500/30 border border-white/20 flex items-center justify-center shadow-2xl shadow-emerald-500/20 overflow-hidden p-2">
-            <img src="/logo-kud.jpeg" alt="KUD Sari Subur" className="w-full h-full object-contain rounded-full" />
+            <img src="/logo-hero.png" alt="KUD Sari Subur" className="w-full h-full object-contain rounded-full" />
           </div>
         </div>
       </div>
@@ -422,7 +451,7 @@ export default function Home() {
       <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/[0.04] group-hover:ring-primary/20 pointer-events-none transition-all duration-500" />
     </motion.article>
   )) : (<div className="col-span-full text-center py-12">
-      <NewspaperIcon className="w-16 h-16 text-gray-200 mx-auto mb-4" />
+      <Newspaper className="w-16 h-16 text-gray-200 mx-auto mb-4" />
       <p className="text-gray-500 text-lg font-medium">Tidak ada artikel dengan kategori &quot;{blogCategory}&quot;</p>
       <p className="text-gray-300 text-sm mt-1">Coba kategori lain atau lihat semua artikel</p>
       <button onClick={() => { setBlogCategory('Semua'); setBlogSearch(''); }} className="mt-4 px-5 py-2 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors">
@@ -432,13 +461,13 @@ export default function Home() {
   );
 
   const navLinks = [
-    { href: '#blog', label: 'Blog', icon: NewspaperIcon },
-    { href: '#program', label: 'Program', icon: Squares2X2Icon },
-    { href: '#harga-tbs', label: 'Harga TBS', icon: CurrencyDollarIcon },
-    { href: '#fitur', label: 'Fitur', icon: ChartBarIcon },
-    { href: '#layanan', label: 'Layanan', icon: PhoneIcon },
-    { href: '#testimoni', label: 'Testimoni', icon: ChatBubbleLeftRightIcon },
-    { href: '#faq', label: 'FAQ', icon: QuestionMarkCircleIcon },
+    { href: '#blog', label: 'Blog', icon: Newspaper },
+    { href: '#program', label: 'Program', icon: LayoutGrid },
+    { href: '#harga-tbs', label: 'Harga TBS', icon: DollarSign },
+    { href: '#fitur', label: 'Fitur', icon: BarChart3 },
+    { href: '#layanan', label: 'Layanan', icon: Phone },
+    { href: '#testimoni', label: 'Testimoni', icon: MessageCircle },
+    { href: '#faq', label: 'FAQ', icon: CircleHelp },
   ];
 
   return (
@@ -471,7 +500,7 @@ export default function Home() {
               ) : null}
             </div>
             <button onClick={() => setMobileOpen(!mobileOpen)} className={`md:hidden p-2 rounded-lg transition-colors ${scrolled ? 'text-foreground' : 'text-white'}`}>
-              {mobileOpen ? <XMarkIcon className="w-6 h-6" /> : <Bars3Icon className="w-6 h-6" />}
+              {mobileOpen ? <XIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
             </button>
           </div>
         </div>
@@ -530,7 +559,7 @@ export default function Home() {
         </div>
 
         <div className="absolute inset-0 z-[3] flex items-center justify-center pointer-events-none opacity-10 lg:opacity-20">
-          <img src="/logo-kud.jpeg" alt="" className="w-72 h-72 lg:w-96 lg:h-96 object-contain" />
+          <img src="/logo-hero.png" alt="" className="w-72 h-72 lg:w-96 lg:h-96 object-contain" />
         </div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10 md:pt-32 md:pb-24 text-center">
@@ -588,10 +617,10 @@ export default function Home() {
 
           {mounted && heroData && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-8 sm:mt-14 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:gap-x-10 text-white/60 text-xs sm:text-sm">
-              <div className="flex items-center gap-1.5"><ShieldCheckIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />Terpercaya</div>
+              <div className="flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />Terpercaya</div>
               <div className="flex items-center gap-1.5"><UserGroupIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />371+ Anggota</div>
-              <div className="flex items-center gap-1.5"><HeartIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />Ramah Lingkungan</div>
-              <div className="flex items-center gap-1.5"><CheckBadgeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />Berbadan Hukum</div>
+              <div className="flex items-center gap-1.5"><HeartIcon animateOnHover className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />Ramah Lingkungan</div>
+              <div className="flex items-center gap-1.5"><BadgeCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />Berbadan Hukum</div>
             </motion.div>
           )}
         </div>
@@ -636,13 +665,13 @@ export default function Home() {
             </div>
           ) : programs.length === 0 ? (
             <div className="text-center py-16">
-              <FolderIcon className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+              <Folder className="w-16 h-16 mx-auto text-gray-300 mb-4" />
               <p className="text-muted-foreground">Belum ada program tersedia</p>
             </div>
           ) : (
             <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {programs.map((program) => {
-                const Icon = JENIS_ICON[program.jenis] || Squares2X2Icon;
+                const Icon = JENIS_ICON[program.jenis] || LayoutGrid;
                 const colors = JENIS_COLORS[program.jenis] || DEFAULT_COLOR;
                 return (
                   <motion.div key={program.id} variants={itemVariants} whileHover={{ y: -8, scale: 1.02 }} className="group relative rounded-2xl p-6 cursor-pointer overflow-hidden bg-white/70 backdrop-blur-xl border border-white/40 shadow-lg hover:shadow-xl hover:border-white/60 transition-all" onClick={() => setProgramModal(program)}>
@@ -686,7 +715,7 @@ export default function Home() {
             <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/40 via-primary/20 to-transparent hidden md:block" />
             <div className="space-y-8 md:space-y-0">
               {langkah.map((item, idx) => {
-                const Icn = ICON_MAP[item.meta_data?.icon] || DocumentTextIcon;
+                const Icn = ICON_MAP[item.meta_data?.icon] || FileText;
                 const isLeft = idx % 2 === 0;
                 return (
                   <motion.div key={item.id || item.order || idx} initial={{ opacity: 0, x: isLeft ? -30 : 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.15 }} className={`relative flex items-start gap-6 md:gap-0 md:flex ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'} py-4 md:py-0 md:h-40`}>
@@ -725,7 +754,7 @@ export default function Home() {
           <SectionHeader badge="Pengakuan" title="Sertifikasi & Penghargaan" subtitle="Berbagai sertifikasi dan penghargaan yang telah diraih KUD Desa Sari Subur." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {sertifikasi.map((item, idx) => {
-              const Icn = ICON_MAP[item.meta_data?.icon] || ShieldCheckIcon;
+              const Icn = ICON_MAP[item.meta_data?.icon] || ShieldCheck;
               return (
                 <motion.div key={item.id || idx} variants={scaleIn} whileHover={{ y: -4 }} className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-shadow">
                   {item.media_url ? (
@@ -748,7 +777,7 @@ export default function Home() {
                     <div className="pt-1">
                       <button onClick={() => setSertifikasiDetail(item)}
                         className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors cursor-pointer">
-                        <DocumentTextIcon className="w-3.5 h-3.5" /> Detail
+                        <FileText className="w-3.5 h-3.5" /> Detail
                       </button>
                     </div>
                   </div>
@@ -793,7 +822,7 @@ export default function Home() {
           {dokumentasiData.length === 0 ? (
             <div className="text-center py-16">
               <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
-                <PhotoIcon className="w-8 h-8 text-gray-400" />
+                <Image className="w-8 h-8 text-gray-400" />
               </div>
               <p className="text-gray-500">Belum ada dokumentasi</p>
             </div>
@@ -822,7 +851,7 @@ export default function Home() {
                     <img src={`https://img.youtube.com/vi/${vidId}/hqdefault.jpg`} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-white transition-all"><PlayIcon className="w-6 h-6 text-emerald-700 ml-0.5" /></div>
+                      <div className="w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:bg-white transition-all"><PlayIcon animateOnHover className="w-6 h-6 text-emerald-700 ml-0.5" /></div>
                     </div>
                   </div>
                   <div className="p-4">
@@ -845,7 +874,7 @@ export default function Home() {
           <SectionHeader badge="Mengapa KUD" title="Keuntungan Bergabung" subtitle="Rasakan manfaat nyata menjadi bagian dari keluarga besar KUD Desa Sari Subur." light />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {keuntungan.map((item, idx) => {
-              const Icn = ICON_MAP[item.meta_data?.icon] || CurrencyDollarIcon;
+              const Icn = ICON_MAP[item.meta_data?.icon] || DollarSign;
               return (
                 <motion.div key={item.id || idx} variants={itemVariants} whileHover={{ y: -6, scale: 1.03 }} className="group relative p-5 sm:p-6 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-all shadow-lg shadow-black/10">
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/5 to-transparent pointer-events-none" />
@@ -878,7 +907,7 @@ export default function Home() {
           <SectionHeader badge="Blog" title="Artikel & Berita Terbaru" subtitle="Informasi terkini seputar KUD, pertanian sawit, dan kegiatan anggota." />
           <div className="flex flex-col sm:flex-row items-center gap-3 mb-10">
             <div className="relative flex-1 w-full max-w-md">
-              <MagnifyingGlassIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <SearchIcon animateOnHover className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input type="text" placeholder="Cari artikel..." value={blogSearch} onChange={(e) => setBlogSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-white/80 backdrop-blur-sm text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all shadow-sm" />
             </div>
@@ -1047,7 +1076,7 @@ export default function Home() {
               </>
             ) : (
               <div className="text-center py-12">
-                <ChatBubbleLeftRightIcon className="w-16 h-16 mx-auto text-white/20 mb-4" />
+                <MessageCircle className="w-16 h-16 mx-auto text-white/20 mb-4" />
                 <p className="text-white/50">Belum ada testimoni</p>
               </div>
             )}
@@ -1063,7 +1092,7 @@ export default function Home() {
           <SectionHeader badge="Kontak" title="Layanan & Dukungan" subtitle="Hubungi kami melalui berbagai saluran yang tersedia." />
           <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {layananData.map((item, idx) => {
-              const Icn = ICON_MAP[item.meta_data?.icon] || PhoneIcon;
+              const Icn = ICON_MAP[item.meta_data?.icon] || Phone;
               return (
                 <motion.div key={item.id || idx} variants={itemVariants} whileHover={{ y: -5, scale: 1.02 }} className="group relative p-5 sm:p-6 rounded-2xl overflow-hidden bg-white/70 backdrop-blur-sm border border-white/40 shadow-lg hover:shadow-xl transition-all text-center">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-emerald-50/30 pointer-events-none" />
@@ -1224,13 +1253,13 @@ export default function Home() {
                 <div className="bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
                   <div className="flex flex-col items-center gap-3">
                     <div className="w-14 h-14 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                      <ChatBubbleLeftRightIcon className="w-7 h-7 text-emerald-400" />
+                      <MessageCircle className="w-7 h-7 text-emerald-400" />
                     </div>
                     <p className="text-white/80 text-sm font-medium">Admin KUD Sari Subur</p>
                     <p className="text-emerald-400 font-bold text-lg">{pengaturan.wa_admin || '08xxxxxxxxx'}</p>
                     <a href={`https://wa.me/${(pengaturan.wa_admin || '').replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-white font-bold shadow-xl shadow-emerald-600/30 hover:bg-emerald-600 transition-all text-sm">
-                      <ChatBubbleLeftRightIcon className="w-4 h-4" /> Hubungi via WhatsApp
+                      <MessageCircle className="w-4 h-4" /> Hubungi via WhatsApp
                     </a>
                   </div>
                 </div>
@@ -1264,7 +1293,7 @@ export default function Home() {
                   {pengaturan.alamat_kud && (
                     <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm text-left">
                       <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0">
-                        <MapPinIcon className="w-5 h-5 text-amber-400" />
+                        <MapPin className="w-5 h-5 text-amber-400" />
                       </div>
                       <div>
                         <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">Alamat</p>
@@ -1332,9 +1361,9 @@ export default function Home() {
             <div>
               <h4 className="font-bold text-white mb-4 font-heading">Kontak</h4>
               <ul className="space-y-3 text-sm">
-                <li className="flex items-start gap-2"><MapPinIcon className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />Jl. Tegal Sari No. 123, Kec. Tegal Sari</li>
-                <li className="flex items-start gap-2"><PhoneIcon className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />0851-6988-3337</li>
-                <li className="flex items-start gap-2"><GlobeAltIcon className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />kud-sari-subur.my.id</li>
+                <li className="flex items-start gap-2"><MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />Jl. Tegal Sari No. 123, Kec. Tegal Sari</li>
+                <li className="flex items-start gap-2"><Phone className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />0851-6988-3337</li>
+                <li className="flex items-start gap-2"><Globe className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />kud-sari-subur.my.id</li>
               </ul>
             </div>
           </div>
@@ -1408,7 +1437,7 @@ function DokumentasiGallery({ items }) {
   if (imgItems.length === 0) {
     return (
       <div className="text-center py-16">
-        <PhotoIcon className="w-16 h-16 text-gray-300 mx-auto mb-3" />
+        <Image className="w-16 h-16 text-gray-300 mx-auto mb-3" />
         <p className="text-gray-500">Belum ada foto dokumentasi</p>
       </div>
     );
@@ -1443,7 +1472,7 @@ function DokumentasiGallery({ items }) {
                 {item.description && <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{item.description}</p>}
                 <button onClick={() => setDetailItem(item)}
                   className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors cursor-pointer mt-1">
-                  <DocumentTextIcon className="w-3.5 h-3.5" /> Detail
+                  <FileText className="w-3.5 h-3.5" /> Detail
                 </button>
               </div>
             </motion.div>
@@ -1497,7 +1526,7 @@ function DokumentasiGallery({ items }) {
             onClick={() => setOpen(false)}
           >
             <button onClick={() => setOpen(false)} className="absolute top-4 right-4 text-white/70 hover:text-white z-10 cursor-pointer">
-              <XMarkIcon className="w-8 h-8" />
+              <XIcon className="w-8 h-8" />
             </button>
             {imgItems.length > 1 && (
               <>
