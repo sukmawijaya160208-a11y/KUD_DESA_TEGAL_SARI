@@ -23,6 +23,13 @@ class BlogPost extends Model
         ];
     }
 
+    protected $appends = ['content_html'];
+
+    public function getContentHtmlAttribute()
+    {
+        return Str::markdown($this->content);
+    }
+
     public function media()
     {
         return $this->hasMany(BlogMedia::class)->orderBy('order');

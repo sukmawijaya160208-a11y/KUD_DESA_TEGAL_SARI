@@ -1,13 +1,11 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { formatDateLong } from '@/lib/date';
 import { api } from '@/lib/api';
 import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import {
   NewspaperIcon, ClockIcon, EyeIcon, ArrowLeftIcon,
   ChevronLeftIcon, ShareIcon, PhotoIcon, VideoCameraIcon,
@@ -88,8 +86,6 @@ export default function BlogDetailPage() {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  useEffect(() => { paragraphCounter.current = 0; }, [post?.content]);
-
   const openLightbox = (media, index) => {
     setLightboxMedia(media);
     setLightboxIndex(index);
@@ -165,59 +161,6 @@ export default function BlogDetailPage() {
   const time = readingTime(post.content);
   const hasYouTube = parseYouTubeId(post.content);
   const thumb = post.media?.[0]?.url || null;
-
-  const paragraphCounter = useRef(0);
-  const mdComponents = useMemo(() => ({
-    p: ({ children }) => {
-      paragraphCounter.current += 1;
-      const isFirst = paragraphCounter.current === 1;
-      return (
-        <p className={`text-justify leading-relaxed mb-5 text-[17px] md:text-[19px] ${isFirst ? 'text-lg md:text-xl text-gray-800' : 'text-gray-700'}`}>
-          {isFirst && (
-            <span className="float-left text-4xl md:text-5xl font-bold text-emerald-700 leading-none mr-2 mt-1">
-              {typeof children === 'string' ? children.charAt(0) : 'P'}
-            </span>
-          )}
-          {children}
-        </p>
-      );
-    },
-    blockquote: ({ children }) => {
-      paragraphCounter.current += 1;
-      return (
-        <blockquote className="my-8 p-5 md:p-6 bg-emerald-50/60 border-l-4 border-emerald-600 rounded-r-xl text-slate-800 shadow-sm">
-          <div className="text-base md:text-lg font-medium leading-relaxed [&_p]:mb-0 [&_p]:text-inherit">
-            {children}
-          </div>
-        </blockquote>
-      );
-    },
-    ul: ({ children }) => {
-      const items = Array.isArray(children) ? children : [children];
-      const hasBold = items.some((child) => {
-        const c = child?.props?.children;
-        return Array.isArray(c) ? c.some((x) => x?.type === 'strong') : false;
-      });
-      if (hasBold) {
-        return (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 not-prose">
-            {items.map((item, i) => (
-              <div key={i} className="p-5 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-emerald-300 transition-colors">
-                <div className="space-y-1.5 text-sm md:text-base text-slate-600 [&_strong]:text-foreground [&_strong]:font-bold [&_strong]:block [&_strong]:mb-1 [&_strong]:text-base">
-                  {item?.props?.children}
-                </div>
-              </div>
-            ))}
-          </div>
-        );
-      }
-      return <ul className="list-disc list-inside space-y-1.5 text-gray-700 mb-5">{children}</ul>;
-    },
-    ol: ({ children }) => <ol className="list-decimal list-inside space-y-1.5 text-gray-700 mb-5">{children}</ol>,
-    li: ({ children }) => <li className="text-[17px] md:text-[19px] leading-relaxed">{children}</li>,
-    h2: ({ children }) => <h2 className="font-heading font-bold text-foreground text-xl md:text-2xl mt-8 mb-4">{children}</h2>,
-    h3: ({ children }) => <h3 className="font-heading font-bold text-foreground text-lg md:text-xl mt-6 mb-3">{children}</h3>,
-  }), []);
 
   return (
     <div>
@@ -333,14 +276,8 @@ export default function BlogDetailPage() {
           )}
 
           {/* Content Body */}
-          <article className="max-w-none text-gray-700 leading-relaxed mb-8">
-            <ReactMarkdown
-              key={post.content}
-              remarkPlugins={[remarkGfm]}
-              components={mdComponents}
-            >
-              {post.content}
-            </ReactMarkdown>
+          <article className="article-content mb-8">
+            <div dangerouslySetInnerHTML={{ __html: post.content_html }} />
           </article>
 
           {/* Tags / Meta Footer */}
