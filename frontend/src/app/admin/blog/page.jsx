@@ -453,7 +453,6 @@ export default function AdminBlogPage() {
                 {[
                   { cmd: 'bold', label: 'B', style: 'font-bold' },
                   { cmd: 'italic', label: 'I', style: 'italic' },
-                  { cmd: 'underline', label: 'U', style: 'underline' },
                 ].map((t) => (
                   <button
                     key={t.cmd}
@@ -466,10 +465,7 @@ export default function AdminBlogPage() {
                       const end = ta.selectionEnd;
                       const text = ta.value;
                       const selected = text.substring(start, end);
-                      let wrapped;
-                      if (t.cmd === 'bold') wrapped = `**${selected}**`;
-                      else if (t.cmd === 'italic') wrapped = `_${selected}_`;
-                      else wrapped = `<u>${selected}</u>`;
+                      const wrapped = t.cmd === 'bold' ? `**${selected}**` : `_${selected}_`;
                       setForm((p) => ({ ...p, content: text.substring(0, start) + wrapped + text.substring(end) }));
                       setTimeout(() => { ta.focus(); ta.setSelectionRange(start + wrapped.length, start + wrapped.length); }, 0);
                     }}
@@ -479,7 +475,7 @@ export default function AdminBlogPage() {
                   </button>
                 ))}
                 <span className="text-gray-300 mx-1">|</span>
-                <span className="text-[10px] text-gray-400">Markdown support: **bold** _italic_</span>
+                <span className="text-[10px] text-gray-400">Markdown: **bold** _italic_</span>
               </div>
               <textarea
                 id="blog-content"
@@ -565,7 +561,6 @@ export default function AdminBlogPage() {
                 {[
                   { cmd: 'bold', label: 'B', style: 'font-bold' },
                   { cmd: 'italic', label: 'I', style: 'italic' },
-                  { cmd: 'underline', label: 'U', style: 'underline' },
                 ].map((t) => (
                   <button
                     key={t.cmd}
@@ -578,10 +573,7 @@ export default function AdminBlogPage() {
                       const end = ta.selectionEnd;
                       const text = ta.value;
                       const selected = text.substring(start, end);
-                      let wrapped;
-                      if (t.cmd === 'bold') wrapped = `**${selected}**`;
-                      else if (t.cmd === 'italic') wrapped = `_${selected}_`;
-                      else wrapped = `<u>${selected}</u>`;
+                      const wrapped = t.cmd === 'bold' ? `**${selected}**` : `_${selected}_`;
                       setForm((p) => ({ ...p, content: text.substring(0, start) + wrapped + text.substring(end) }));
                       setTimeout(() => { ta.focus(); ta.setSelectionRange(start + wrapped.length, start + wrapped.length); }, 0);
                     }}

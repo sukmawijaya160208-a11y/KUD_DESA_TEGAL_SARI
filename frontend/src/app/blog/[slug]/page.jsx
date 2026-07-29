@@ -6,6 +6,8 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import { formatDateLong } from '@/lib/date';
 import { api } from '@/lib/api';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import {
   NewspaperIcon, ClockIcon, EyeIcon, ArrowLeftIcon,
   ChevronLeftIcon, ShareIcon, PhotoIcon, VideoCameraIcon,
@@ -276,8 +278,10 @@ export default function BlogDetailPage() {
           )}
 
           {/* Content Body */}
-          <article className="prose prose-lg md:prose-xl max-w-none text-gray-700 leading-relaxed mb-8 [&_p]:mb-5 [&_p]:leading-8 [&_p]:text-[17px] md:[&_p]:text-[19px]">
-            {post.content}
+          <article className="prose prose-lg md:prose-xl max-w-none text-gray-700 leading-relaxed mb-8 prose-headings:font-heading prose-headings:font-bold prose-headings:text-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-strong:text-foreground">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {post.content}
+            </ReactMarkdown>
           </article>
 
           {/* Tags / Meta Footer */}

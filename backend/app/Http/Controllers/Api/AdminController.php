@@ -821,7 +821,6 @@ class AdminController extends Controller
         while (BlogPost::where('slug', $validated['slug'])->exists()) {
             $validated['slug'] = $baseSlug . '-' . $counter++;
         }
-        $validated['content'] = strip_tags($validated['content']);
         $validated['created_by'] = $request->user()->id;
 
         DB::beginTransaction();
@@ -861,9 +860,6 @@ class AdminController extends Controller
             'featured' => 'sometimes|boolean',
         ]);
 
-        if (isset($validated['content'])) {
-            $validated['content'] = strip_tags($validated['content']);
-        }
         $validated['updated_by'] = $request->user()->id;
 
         $blogPost->update($validated);
