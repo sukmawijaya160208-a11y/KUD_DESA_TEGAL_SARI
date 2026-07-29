@@ -430,7 +430,7 @@ export default function Home() {
           {post.category}
         </div>
         <div className="absolute bottom-3 left-3 z-[2] flex items-center gap-1.5 text-xs text-white bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
-          <CalendarDaysIcon className="w-3 h-3" />
+          <CalendarDays className="w-3 h-3" />
           {post.published_at ? new Date(post.published_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : post.date}
         </div>
       </div>
