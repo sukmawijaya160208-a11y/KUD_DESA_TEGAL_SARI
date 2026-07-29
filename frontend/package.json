@@ -28,6 +28,8 @@
     "react-markdown": "^10.1.0",
     "react-signature-canvas": "^1.1.0-alpha.2",
     "recharts": "^3.9.2",
+    "rehype-raw": "^7.0.0",
+    "remark-directive": "^4.0.0",
     "remark-gfm": "^4.0.1",
     "three": "^0.185.1",
     "xlsx": "^0.18.5"

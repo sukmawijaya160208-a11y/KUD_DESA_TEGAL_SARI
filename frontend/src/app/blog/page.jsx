@@ -260,7 +260,7 @@ export default function BlogPage() {
                       <h2 className="font-heading font-bold text-foreground text-xl md:text-2xl leading-tight mb-3 group-hover:text-primary transition-colors line-clamp-3">
                         {posts[0].title}
                       </h2>
-                      <p className="text-sm md:text-base text-gray-500 leading-relaxed line-clamp-3 mb-4 whitespace-pre-line">
+                      <p className="text-sm md:text-base text-gray-500 leading-relaxed line-clamp-3 mb-4 whitespace-pre-line text-justify">
                         {posts[0].excerpt || (posts[0].content ?? '').slice(0, 200) + '...'}
                       </p>
                       <div className="flex items-center gap-3 text-xs text-gray-400">
@@ -303,7 +303,7 @@ export default function BlogPage() {
                         <h3 className="font-heading font-bold text-foreground text-base md:text-lg leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                           {post.title}
                         </h3>
-                        <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-4 whitespace-pre-line">
+                        <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-4 whitespace-pre-line text-justify">
                           {post.excerpt || (post.content ?? '').slice(0, 150) + '...'}
                         </p>
                         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
