@@ -6,15 +6,15 @@ import Sidebar from '@/components/layout/Sidebar';
 
 export default function NotifikasiLayout({ children }) {
   const router = useRouter();
-  const [role] = useState(() => {
-    if (typeof window === 'undefined') return null;
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return user.role || null;
-  });
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
-    if (!role) router.push('/login');
-  }, [role, router]);
+    if (typeof window === 'undefined') return;
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const r = user.role || null;
+    setRole(r);
+    if (!r) router.push('/login');
+  }, [router]);
 
   if (!role) return null;
   return <Sidebar role={role}>{children}</Sidebar>;

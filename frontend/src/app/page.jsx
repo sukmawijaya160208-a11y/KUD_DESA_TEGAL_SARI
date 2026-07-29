@@ -270,24 +270,21 @@ function VideoModal({ videoId, onClose }) {
 
 function HeroDecorativeVisual() {
   return (
-    <div className="relative w-full max-w-md mx-auto">
+    <div className="relative w-full max-w-sm mx-auto">
       <div className="relative z-10 flex items-center justify-center">
-        <div className="w-64 h-64 lg:w-72 lg:h-72 rounded-full bg-gradient-to-br from-emerald-400/20 via-emerald-300/10 to-teal-400/20 backdrop-blur-sm border border-white/10 flex items-center justify-center">
-          <div className="w-48 h-48 lg:w-56 lg:h-56 rounded-full bg-gradient-to-br from-emerald-500/30 via-emerald-400/20 to-teal-500/30 border border-white/20 flex items-center justify-center shadow-2xl shadow-emerald-500/20">
-            <div className="text-center">
-              <div className="text-6xl lg:text-7xl font-extrabold font-heading bg-gradient-to-br from-emerald-300 via-green-200 to-teal-300 bg-clip-text text-transparent leading-none">KUD</div>
-              <div className="text-xs font-medium text-white/50 mt-2 uppercase tracking-[0.2em]">Sari Subur</div>
-            </div>
+        <div className="w-48 h-48 lg:w-56 lg:h-56 rounded-full bg-gradient-to-br from-emerald-400/20 via-emerald-300/10 to-teal-400/20 backdrop-blur-sm border border-white/10 flex items-center justify-center">
+          <div className="w-36 h-36 lg:w-44 lg:h-44 rounded-full bg-gradient-to-br from-emerald-500/30 via-emerald-400/20 to-teal-500/30 border border-white/20 flex items-center justify-center shadow-2xl shadow-emerald-500/20 overflow-hidden p-2">
+            <img src="/logo-kud.jpeg" alt="KUD Sari Subur" className="w-full h-full object-contain rounded-full" />
           </div>
         </div>
       </div>
-      <motion.div className="absolute -top-4 -right-4 w-20 h-20 rounded-xl bg-gradient-to-br from-emerald-400/20 to-transparent border border-white/10 backdrop-blur-sm flex items-center justify-center"
+      <motion.div className="absolute -top-3 -right-3 w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-400/20 to-transparent border border-white/10 backdrop-blur-sm flex items-center justify-center"
         animate={{ y: [0, -8, 0], rotate: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}>
-        <LeafIcon className="w-8 h-8 text-emerald-300/60" />
+        <LeafIcon className="w-6 h-6 text-emerald-300/60" />
       </motion.div>
-      <motion.div className="absolute -bottom-2 -left-6 w-16 h-16 rounded-xl bg-gradient-to-br from-teal-400/20 to-transparent border border-white/10 backdrop-blur-sm flex items-center justify-center"
+      <motion.div className="absolute -bottom-2 -left-5 w-14 h-14 rounded-xl bg-gradient-to-br from-teal-400/20 to-transparent border border-white/10 backdrop-blur-sm flex items-center justify-center"
         animate={{ y: [0, 6, 0], rotate: [0, -5, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}>
-        <LeafIcon className="w-6 h-6 text-teal-300/60" />
+        <LeafIcon className="w-5 h-5 text-teal-300/60" />
       </motion.div>
     </div>
   );
@@ -437,7 +434,9 @@ export default function Home() {
   const navLinks = [
     { href: '#blog', label: 'Blog', icon: NewspaperIcon },
     { href: '#program', label: 'Program', icon: Squares2X2Icon },
+    { href: '#harga-tbs', label: 'Harga TBS', icon: CurrencyDollarIcon },
     { href: '#fitur', label: 'Fitur', icon: ChartBarIcon },
+    { href: '#layanan', label: 'Layanan', icon: PhoneIcon },
     { href: '#testimoni', label: 'Testimoni', icon: ChatBubbleLeftRightIcon },
     { href: '#faq', label: 'FAQ', icon: QuestionMarkCircleIcon },
   ];
@@ -530,70 +529,65 @@ export default function Home() {
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 2 }} />
         </div>
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10 md:pt-32 md:pb-24">
-          <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-center">
-            {/* LEFT: Text */}
-            <div className="lg:col-span-3 text-center lg:text-left">
-              {mounted && !heroData ? (
-                <div className="space-y-4 sm:space-y-6 animate-pulse">
-                  <div className="h-5 w-48 bg-white/10 rounded-full mx-auto lg:mx-0" />
-                  <div className="h-10 sm:h-16 w-full max-w-lg bg-white/10 rounded-xl mx-auto lg:mx-0" />
-                  <div className="h-4 w-full max-w-md bg-white/10 rounded mx-auto lg:mx-0" />
-                  <div className="h-4 w-3/4 max-w-sm bg-white/10 rounded mx-auto lg:mx-0" />
-                  <div className="flex gap-3 justify-center lg:justify-start">
-                    <div className="h-12 w-36 bg-white/10 rounded-xl" />
-                    <div className="h-12 w-44 bg-white/10 rounded-xl" />
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-                    <motion.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-4 sm:mb-6">
-                      {heroData?.meta_data?.sub_judul || 'Koperasi Unit Desa Tegal Sari'}
-                    </motion.span>
-                  </motion.div>
-                  <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-heading text-white leading-tight max-w-4xl mx-auto lg:mx-0">
-                    {heroData?.title ? (
-                      heroData.title.includes('KUD') ? (
-                        <>{heroData.title.split('KUD')[0]}<span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD{heroData.title.split('KUD')[1] || ''}</span></>
-                      ) : heroData.title
-                    ) : (
-                      <>Maju Bersama{' '}<span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD Sari Subur</span></>
-                    )}
-                  </motion.h1>
-                  <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-3 sm:mt-6 text-sm sm:text-lg md:text-xl text-white/70 max-w-3xl leading-snug sm:leading-relaxed mx-auto lg:mx-0">
-                    {heroData?.meta_data?.deskripsi || heroData?.description || 'Koperasi petani kelapa sawit yang berkomitmen meningkatkan kesejahteraan anggota melalui kemitraan berkelanjutan, inovasi, dan gotong royong.'}
-                  </motion.p>
-                  {(heroData?.meta_data?.catatan_hukum) && (
-                    <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.8 }} className="mt-2 sm:mt-4 text-[11px] sm:text-sm md:text-base text-white/50 max-w-2xl leading-snug sm:leading-relaxed italic mx-auto lg:mx-0">
-                      {heroData.meta_data.catatan_hukum}
-                    </motion.p>
-                  )}
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-5 sm:mt-10 flex flex-col sm:flex-row items-center lg:items-start gap-3 sm:gap-4">
-                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => router.push('/login?tab=register')} className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center justify-center gap-2 text-sm sm:text-base overflow-hidden">
-                      <span className="absolute inset-0 bg-gradient-to-r from-emerald-100 via-white to-emerald-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <span className="relative z-10">Jadi Anggota</span>
-                      <ArrowRightIcon className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                    </motion.button>
-                    <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} href="#tentang" onClick={(e) => { e.preventDefault(); document.getElementById('tentang')?.scrollIntoView({ behavior: 'smooth' }); }}
-                      className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-sm sm:text-base backdrop-blur-sm overflow-hidden">
-                      <span className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <span className="relative z-10">Pelajari Lebih Lanjut</span>
-                      <ChevronDownIcon className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-y-0.5 transition-transform duration-300" />
-                    </motion.a>
-                  </motion.div>
-                </>
-              )}
-            </div>
+        <div className="absolute inset-0 z-[3] flex items-center justify-center pointer-events-none opacity-10 lg:opacity-20">
+          <img src="/logo-kud.jpeg" alt="" className="w-72 h-72 lg:w-96 lg:h-96 object-contain" />
+        </div>
 
-            {/* RIGHT: Visual (desktop only) */}
-            <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="hidden lg:flex lg:col-span-2 items-center justify-center">
-              <HeroDecorativeVisual />
-            </motion.div>
-          </div>
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10 md:pt-32 md:pb-24 text-center">
+          {mounted && !heroData ? (
+            <div className="space-y-4 sm:space-y-6 animate-pulse max-w-3xl mx-auto">
+              <div className="h-5 w-48 bg-white/10 rounded-full mx-auto" />
+              <div className="h-10 sm:h-16 w-full max-w-lg bg-white/10 rounded-xl mx-auto" />
+              <div className="h-4 w-full max-w-md bg-white/10 rounded mx-auto" />
+              <div className="h-4 w-3/4 max-w-sm bg-white/10 rounded mx-auto" />
+              <div className="flex gap-3 justify-center">
+                <div className="h-12 w-36 bg-white/10 rounded-xl" />
+                <div className="h-12 w-44 bg-white/10 rounded-xl" />
+              </div>
+            </div>
+          ) : (
+            <>
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+                <motion.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }} className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm mb-4 sm:mb-6">
+                  {heroData?.meta_data?.sub_judul || 'Koperasi Unit Desa Tegal Sari'}
+                </motion.span>
+              </motion.div>
+              <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }}
+                className={`${heroData?.meta_data?.ukuran_font === 'kecil' ? 'text-2xl sm:text-5xl md:text-6xl lg:text-6xl' : heroData?.meta_data?.ukuran_font === 'besar' ? 'text-4xl sm:text-6xl md:text-7xl lg:text-8xl' : 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl'} font-bold font-heading text-white leading-tight max-w-5xl mx-auto`}>
+                {heroData?.title ? (
+                  heroData.title.includes('KUD') ? (
+                    <>{heroData.title.split('KUD')[0]}<span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD{heroData.title.split('KUD')[1] || ''}</span></>
+                  ) : heroData.title
+                ) : (
+                  <>Maju Bersama{' '}<span className="bg-gradient-to-r from-emerald-300 via-green-300 to-teal-300 bg-clip-text text-transparent">KUD Sari Subur</span></>
+                )}
+              </motion.h1>
+              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="mt-3 sm:mt-6 text-sm sm:text-lg md:text-xl text-white/70 max-w-3xl mx-auto leading-snug sm:leading-relaxed">
+                {heroData?.meta_data?.deskripsi || heroData?.description || 'Koperasi petani kelapa sawit yang berkomitmen meningkatkan kesejahteraan anggota melalui kemitraan berkelanjutan, inovasi, dan gotong royong.'}
+              </motion.p>
+              {(heroData?.meta_data?.catatan_hukum) && (
+                <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.8 }} className="mt-2 sm:mt-4 text-[11px] sm:text-sm md:text-base text-white/50 max-w-2xl mx-auto leading-snug sm:leading-relaxed italic">
+                  {heroData.meta_data.catatan_hukum}
+                </motion.p>
+              )}
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="mt-5 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => router.push('/login?tab=register')} className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-white text-emerald-900 font-bold shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all flex items-center justify-center gap-2 text-sm sm:text-base overflow-hidden">
+                  <span className="absolute inset-0 bg-gradient-to-r from-emerald-100 via-white to-emerald-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <span className="relative z-10">Jadi Anggota</span>
+                  <ArrowRightIcon className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </motion.button>
+                <motion.a whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} href="#tentang" onClick={(e) => { e.preventDefault(); document.getElementById('tentang')?.scrollIntoView({ behavior: 'smooth' }); }}
+                  className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2 text-sm sm:text-base backdrop-blur-sm overflow-hidden">
+                  <span className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <span className="relative z-10">Pelajari Lebih Lanjut</span>
+                  <ChevronDownIcon className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-y-0.5 transition-transform duration-300" />
+                </motion.a>
+              </motion.div>
+            </>
+          )}
 
           {mounted && heroData && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-8 sm:mt-14 flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-2 md:gap-x-10 text-white/60 text-xs sm:text-sm">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="mt-8 sm:mt-14 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:gap-x-10 text-white/60 text-xs sm:text-sm">
               <div className="flex items-center gap-1.5"><ShieldCheckIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />Terpercaya</div>
               <div className="flex items-center gap-1.5"><UserGroupIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />371+ Anggota</div>
               <div className="flex items-center gap-1.5"><HeartIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />Ramah Lingkungan</div>

@@ -212,6 +212,7 @@ class LandingPageController extends Controller
                 'judul_utama' => $hero->title ?? '',
                 'deskripsi' => $meta['deskripsi'] ?? '',
                 'catatan_hukum' => $meta['catatan_hukum'] ?? '',
+                'ukuran_font' => $meta['ukuran_font'] ?? 'sedang',
             ],
         ]);
     }
@@ -223,6 +224,7 @@ class LandingPageController extends Controller
             'judul_utama' => 'nullable|string|max:255',
             'deskripsi' => 'nullable|string',
             'catatan_hukum' => 'nullable|string',
+            'ukuran_font' => 'nullable|string|in:kecil,sedang,besar',
         ]);
 
         $hero = LandingContent::firstOrNew(['section_type' => 'hero']);
@@ -231,6 +233,7 @@ class LandingPageController extends Controller
             'sub_judul' => strip_tags($validated['sub_judul'] ?? ''),
             'deskripsi' => strip_tags($validated['deskripsi'] ?? ''),
             'catatan_hukum' => strip_tags($validated['catatan_hukum'] ?? ''),
+            'ukuran_font' => $validated['ukuran_font'] ?? 'sedang',
         ];
         $hero->is_active = true;
         $hero->order = 0;
@@ -244,6 +247,7 @@ class LandingPageController extends Controller
                 'judul_utama' => $hero->title ?? '',
                 'deskripsi' => $hero->meta_data['deskripsi'] ?? '',
                 'catatan_hukum' => $hero->meta_data['catatan_hukum'] ?? '',
+                'ukuran_font' => $hero->meta_data['ukuran_font'] ?? 'sedang',
             ],
         ]);
     }

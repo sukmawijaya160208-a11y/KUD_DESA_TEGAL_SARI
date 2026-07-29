@@ -525,9 +525,14 @@ export default function AuthPage() {
   const [showRegPassword, setShowRegPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
-  const [showBenefits, setShowBenefits] = useState(
-    typeof window !== 'undefined' ? window.matchMedia('(min-width: 768px)').matches : false
-  );
+  const [showBenefits, setShowBenefits] = useState(false);
+  const [showBenefitsMounted, setShowBenefitsMounted] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setShowBenefits(window.matchMedia('(min-width: 768px)').matches);
+    setShowBenefitsMounted(true);
+  }, []);
 
   const [login, setLogin] = useState({ email: '', password: '' });
   const [loginErrors, setLoginErrors] = useState({});
