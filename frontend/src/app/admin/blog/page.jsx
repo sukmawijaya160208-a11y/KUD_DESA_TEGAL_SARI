@@ -298,15 +298,15 @@ export default function AdminBlogPage() {
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 text-white">
-                  <th className="text-left py-3 px-3 font-semibold text-white/80 first:rounded-l-lg">Judul</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Kategori</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Status</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Views</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Penulis</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Unggulan</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Tanggal</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80 last:rounded-r-lg">Aksi</th>
+                <tr className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-500 text-white rounded-xl">
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider first:rounded-l-lg">Judul</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Kategori</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Status</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Views</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Penulis</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Unggulan</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Tanggal</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider last:rounded-r-lg">Aksi</th>
                 </tr>
               </thead>
               <tbody>

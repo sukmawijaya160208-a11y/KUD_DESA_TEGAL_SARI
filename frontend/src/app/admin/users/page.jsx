@@ -253,14 +253,14 @@ export default function AdminUsersPage() {
   };
 
   const renderSortIcon = (column) => {
-    if (sortKey !== column) return <ArrowUp className="w-3 h-3 text-gray-300 group-hover:text-gray-400" />;
+    if (sortKey !== column) return <ArrowUp className="w-3 h-3 text-white/50 group-hover:text-white/70" />;
     return sortDir === 'asc'
-      ? <ArrowUp className="w-3 h-3 text-primary" />
-      : <ArrowDown className="w-3 h-3 text-primary" />;
+      ? <ArrowUp className="w-3 h-3 text-white" />
+      : <ArrowDown className="w-3 h-3 text-white" />;
   };
 
   const renderSortHeader = (column, children, className) => (
-    <th className={`text-left py-3 px-3 font-semibold text-foreground/70 group cursor-pointer select-none ${className || ''}`} onClick={() => toggleSort(column)}>
+    <th className={`text-left py-3 px-3 font-bold text-white/90 uppercase tracking-wider text-[11px] group cursor-pointer select-none ${className || ''}`} onClick={() => toggleSort(column)}>
       <div className="flex items-center gap-1">
         {children}
         {renderSortIcon(column)}
@@ -615,7 +615,7 @@ export default function AdminUsersPage() {
       {/* === PAGE HEADER === */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center overflow-hidden shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-700 flex items-center justify-center overflow-hidden shadow-sm ring-2 ring-emerald-400/20">
             {logoUrl ? (
               <img src={logoUrl} alt="KUD" className="w-full h-full object-contain p-1" />
             ) : (
@@ -640,7 +640,7 @@ export default function AdminUsersPage() {
           { label: 'Verifikasi Rate', value: `${stats.verifiedRate}%`, icon: CheckCircle, color: 'bg-amber-500', shadow: 'shadow-amber-500/20', sub: `${stats.verified} verified / ${stats.pending} pending` },
           { label: 'User Baru (30hr)', value: newUsers, icon: BarChart3, color: 'bg-cyan-500', shadow: 'shadow-cyan-500/20' },
         ].map((s, i) => (
-          <div key={i} className={`bg-surface rounded-2xl border border-border p-4 ${s.shadow} transition-all duration-200`}>
+          <div key={i} className={`bg-white rounded-2xl border border-gray-100 p-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200`}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-gray-400 font-medium">{s.label}</span>
               <div className={`w-8 h-8 rounded-lg ${s.color} flex items-center justify-center`}>
@@ -659,7 +659,7 @@ export default function AdminUsersPage() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input ref={searchRef} placeholder="Cari nama, email, atau NIK..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all" />
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none transition-all hover:border-gray-300" />
           </div>
           <Select value={filterRole} onChange={(e) => { setFilterRole(e.target.value); setPage(1); }} className="min-w-[140px]">
             <option value="">Semua Role</option>
@@ -745,23 +745,23 @@ export default function AdminUsersPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border">
+              <tr className="bg-gradient-to-r from-emerald-700 to-emerald-600">
                 <th className="py-3 px-3 w-10">
                   <input type="checkbox" checked={allSelected} ref={(el) => { if (el) el.indeterminate = someSelected && !allSelected; }}
-                    onChange={toggleSelectAll} className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer" />
+                    onChange={toggleSelectAll} className="w-4 h-4 rounded border-white/30 text-emerald-500 focus:ring-emerald-400 cursor-pointer bg-white/10" />
                 </th>
-                <th className="py-3 px-2 w-8" />
+                <th className="py-3 px-2 w-8"></th>
                 {renderSortHeader('name', 'Nama', 'min-w-[140px]')}
                 {renderSortHeader('email', 'Email', 'min-w-[160px] hidden md:table-cell')}
                 {renderSortHeader('role', 'Role')}
                 {renderSortHeader('status', 'Status Pekebun')}
                 {renderSortHeader('nik', 'NIK', 'hidden md:table-cell')}
                 {renderSortHeader('no_whatsapp', 'Kontak', 'hidden md:table-cell')}
-                <th className="text-left py-3 px-3 font-semibold text-foreground/70 hidden md:table-cell">Dokumen</th>
+                <th className="text-left py-3 px-3 font-bold text-white/90 uppercase tracking-wider text-[11px] hidden md:table-cell">Dokumen</th>
                 {renderSortHeader('lahan', 'Lahan', 'text-center hidden md:table-cell')}
                 {renderSortHeader('program', 'Program', 'text-center hidden md:table-cell')}
                 {renderSortHeader('created_at', 'Tgl Daftar', 'hidden md:table-cell')}
-                <th className="text-left py-3 px-3 font-semibold text-foreground/70">Aksi</th>
+                <th className="text-left py-3 px-3 font-bold text-white/90 uppercase tracking-wider text-[11px]">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -985,19 +985,19 @@ export default function AdminUsersPage() {
         })}
 
         {/* === PAGINATION === */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 pt-4 border-t border-border">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-3 text-sm text-gray-500">
             <span>Menampilkan {sorted.length === 0 ? 0 : (safePage - 1) * perPage + 1} - {Math.min(safePage * perPage, sorted.length)} dari {sorted.length} data</span>
             <div className="flex items-center gap-1">
               <span className="text-xs">per halaman:</span>
-              <select value={perPage} onChange={(e) => { setPerPage(Number(e.target.value)); setPage(1); }} className="border border-border rounded-lg px-2 py-1 text-xs bg-white focus:ring-ring/30 focus:border-primary outline-none cursor-pointer">
+              <select value={perPage} onChange={(e) => { setPerPage(Number(e.target.value)); setPage(1); }} className="border border-gray-200 rounded-xl px-2 py-1 text-xs bg-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none cursor-pointer hover:border-gray-300">
                 {PAGE_SIZES.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button disabled={safePage <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}
-              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">« Prev</button>
+              className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs disabled:opacity-40 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer font-medium">« Prev</button>
             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
               let pageNum;
               if (totalPages <= 7) pageNum = i + 1;
@@ -1006,18 +1006,18 @@ export default function AdminUsersPage() {
               else pageNum = safePage - 3 + i;
               return (
                 <button key={pageNum} onClick={() => setPage(pageNum)}
-                  className={`w-8 h-8 rounded-lg text-xs font-medium transition-all cursor-pointer ${safePage === pageNum ? 'bg-primary text-white shadow-sm' : 'border border-border hover:bg-muted text-gray-600'}`}>
+                  className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer ${safePage === pageNum ? 'bg-gradient-to-br from-emerald-600 to-emerald-500 text-white shadow-sm' : 'border border-gray-200 hover:bg-gray-50 text-muted-foreground hover:border-gray-300'}`}>
                   {pageNum}
                 </button>
               );
             })}
             <button disabled={safePage >= totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Next »</button>
+              className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs disabled:opacity-40 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer font-medium">Next »</button>
             <div className="flex items-center gap-1 ml-2">
               <span className="text-xs text-gray-400">Go:</span>
               <input type="number" min={1} max={totalPages} value={gotoPage} onChange={(e) => setGotoPage(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') { const v = parseInt(gotoPage); if (v >= 1 && v <= totalPages) setPage(v); setGotoPage(''); } }}
-                className="w-14 px-2 py-1 rounded-lg border border-border text-xs bg-white focus:ring-ring/30 focus:border-primary outline-none" />
+                className="w-14 px-2 py-1 rounded-xl border border-gray-200 text-xs bg-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none hover:border-gray-300" />
             </div>
           </div>
         </div>

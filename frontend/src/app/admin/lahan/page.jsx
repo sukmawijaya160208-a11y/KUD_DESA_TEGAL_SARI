@@ -213,14 +213,14 @@ export default function AdminLahanPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 text-white rounded-xl">
-                  <th className="text-left py-3 px-3 font-semibold text-white/80 first:rounded-l-lg">Pekebun</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Alamat Lahan</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Surat</th>
-                  <th className="text-right py-3 px-3 font-semibold text-white/80">Luas (MÂ²)</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Foto</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Dokumen</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80 last:rounded-r-lg">Map</th>
+                <tr className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-500 text-white rounded-xl">
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider first:rounded-l-lg">Pekebun</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Alamat Lahan</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Surat</th>
+                  <th className="text-right py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Luas (M²)</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Foto</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Dokumen</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider last:rounded-r-lg">Map</th>
                 </tr>
               </thead>
               <tbody>

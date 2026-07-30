@@ -493,13 +493,13 @@ export default function AdminPekebunPage() {
                 placeholder="Cari nama, NIK, atau WhatsApp..."
                 value={search}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all"
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 outline-none transition-all shadow-sm"
               />
             </div>
             <select
               value={filterStatus}
               onChange={(e) => handleFilter(e.target.value)}
-              className="px-4 py-2.5 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all"
+              className="px-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 outline-none transition-all shadow-sm"
             >
               <option value="">Semua Status</option>
               <option value="pending">Pending</option>
@@ -510,14 +510,14 @@ export default function AdminPekebunPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 text-white rounded-xl">
-                  <th className="text-left py-3 px-3 font-semibold text-white/80 first:rounded-l-lg">Pekebun</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">NIK</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">WhatsApp</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Lahan</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Dokumen</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80">Status</th>
-                  <th className="text-left py-3 px-3 font-semibold text-white/80 last:rounded-r-lg">Aksi</th>
+                <tr className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-500 text-white rounded-xl">
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider first:rounded-l-lg">Pekebun</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">NIK</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">WhatsApp</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Lahan</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Dokumen</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider">Status</th>
+                  <th className="text-left py-3.5 px-3 font-bold text-white/90 text-[11px] uppercase tracking-wider last:rounded-r-lg">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -545,9 +545,9 @@ export default function AdminPekebunPage() {
               <span className="text-sm text-gray-500">{meta.total} data - Halaman {meta.current_page} dari {meta.last_page}</span>
               <div className="flex gap-2">
                 <button disabled={meta.current_page <= 1} onClick={() => handlePage(meta.current_page - 1)}
-                  className="px-3 py-1.5 rounded-lg border border-border text-sm disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Prev</button>
+                  className="px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium disabled:opacity-40 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer shadow-sm">Prev</button>
                 <button disabled={meta.current_page >= meta.last_page} onClick={() => handlePage(meta.current_page + 1)}
-                  className="px-3 py-1.5 rounded-lg border border-border text-sm disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Next</button>
+                  className="px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium disabled:opacity-40 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer shadow-sm">Next</button>
               </div>
             </div>
           )}

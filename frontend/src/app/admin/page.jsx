@@ -78,17 +78,17 @@ function AnimatedCounter({ value, suffix = '', decimals = 0 }) {
 function StatCard({ icon: Icon, label, value, href, color, bg, onClick }) {
   return (
     <motion.button
-      whileHover={{ scale: 1.02, y: -2 }}
+      whileHover={{ scale: 1.02, y: -3 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="flex items-center gap-3 p-4 bg-surface rounded-2xl border border-border hover:shadow-md hover:border-primary/20 transition-all duration-200 cursor-pointer text-left w-full"
+      className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 hover:shadow-lg hover:shadow-emerald-500/5 hover:border-emerald-200/50 transition-all duration-200 cursor-pointer text-left w-full group"
     >
-      <div className={`w-10 h-10 rounded-xl ${bg} ${color} flex items-center justify-center shrink-0`}>
+      <div className={`w-10 h-10 rounded-xl ${bg} ${color} flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-all duration-200`}>
         <Icon className="w-5 h-5" />
       </div>
       <div className="min-w-0">
-        <p className="text-xs text-gray-500 truncate">{label}</p>
-        <p className="text-lg font-bold text-foreground tabular-nums">
+        <p className="text-xs text-gray-500 truncate group-hover:text-gray-700 transition-colors">{label}</p>
+        <p className="text-lg font-bold text-foreground tabular-nums leading-tight">
           <AnimatedCounter value={value || 0} />
         </p>
       </div>
@@ -206,13 +206,31 @@ function ProgressBarsWidget({ data }) {
 }
 
 function ActivityTimeline({ verifikasi, pendaftaran, tbsList }) {
+  const getIcon = (type, tindakan) => {
+    if (type === 'verifikasi') {
+      if (tindakan === 'terima') return CheckCircle;
+      if (tindakan === 'tolak') return X;
+      return FileText;
+    }
+    if (type === 'pendaftaran') return ClipboardList;
+    return BarChart3;
+  };
+  const getIconBg = (type, tindakan) => {
+    if (type === 'verifikasi') {
+      if (tindakan === 'terima') return 'bg-emerald-100 text-emerald-600';
+      if (tindakan === 'tolak') return 'bg-red-100 text-red-600';
+      return 'bg-amber-100 text-amber-600';
+    }
+    if (type === 'pendaftaran') return 'bg-blue-100 text-blue-600';
+    return 'bg-purple-100 text-purple-600';
+  };
   const items = useMemo(() => {
     const all = [
       ...(verifikasi || []).map((v) => ({
         id: `v-${v.id}`,
         time: v.created_at,
         type: 'verifikasi',
-        icon: v.tindakan === 'terima' ? '✅' : v.tindakan === 'tolak' ? '❌' : '📝',
+        tindakan: v.tindakan,
         label: v.tindakan === 'terima' ? 'Menerima' : v.tindakan === 'tolak' ? 'Menolak' : 'Memperbaiki',
         desc: v.user?.name || 'Admin',
         extra: v.catatan,
@@ -221,7 +239,6 @@ function ActivityTimeline({ verifikasi, pendaftaran, tbsList }) {
         id: `p-${p.id}`,
         time: p.created_at,
         type: 'pendaftaran',
-        icon: '📋',
         label: 'Mendaftar',
         desc: p.pekebun?.nama || '-',
         extra: p.program_kud?.nama || '-',
@@ -230,7 +247,6 @@ function ActivityTimeline({ verifikasi, pendaftaran, tbsList }) {
         id: `t-${t.id}`,
         time: t.created_at,
         type: 'tbs',
-        icon: '📦',
         label: 'Catat TBS',
         desc: t.pekebun?.nama || '-',
         extra: `${formatNumberId(t.jumlah_tbs || 0)} kg`,
@@ -242,22 +258,26 @@ function ActivityTimeline({ verifikasi, pendaftaran, tbsList }) {
   if (items.length === 0) return <p className="text-sm text-gray-400 py-8 text-center">Belum ada aktivitas</p>;
   return (
     <div className="space-y-0">
-      {items.map((item, i) => (
-        <div key={item.id} className="flex gap-3 pb-4 relative last:pb-0">
-          {i < items.length - 1 && <div className="absolute left-[15px] top-8 bottom-0 w-px bg-gray-200" />}
-          <div className="shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm">
-            {item.icon}
+      {items.map((item, i) => {
+        const ActIcon = getIcon(item.type, item.tindakan);
+        const iconBg = getIconBg(item.type, item.tindakan);
+        return (
+          <div key={item.id} className="flex gap-3 pb-4 relative last:pb-0">
+            {i < items.length - 1 && <div className="absolute left-[15px] top-8 bottom-0 w-px bg-gray-200" />}
+            <div className={`shrink-0 w-8 h-8 rounded-full ${iconBg} flex items-center justify-center`}>
+              <ActIcon className="w-4 h-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm text-foreground">
+                <span className="font-medium">{item.label}</span>{' '}
+                <span className="text-gray-500">{item.desc}</span>
+              </p>
+              {item.extra && <p className="text-xs text-gray-400 mt-0.5">{item.extra}</p>}
+              <p className="text-[10px] text-gray-400 mt-0.5">{formatRelative(item.time)}</p>
+            </div>
           </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm text-foreground">
-              <span className="font-medium">{item.label}</span>{' '}
-              <span className="text-gray-500">{item.desc}</span>
-            </p>
-            {item.extra && <p className="text-xs text-gray-400 mt-0.5">{item.extra}</p>}
-            <p className="text-[10px] text-gray-400 mt-0.5">{formatRelative(item.time)}</p>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -352,10 +372,21 @@ function TopPekebun({ tbsList }) {
     <div className="space-y-3">
       {ranking.map((p, i) => {
         const pct = (p.total / max) * 100;
-        const medals = ['🥇', '🥈', '🥉'];
+        const medalColors = ['text-amber-500', 'text-gray-400', 'text-orange-600'];
+        const medalBg = ['bg-amber-100', 'bg-gray-100', 'bg-orange-100'];
         return (
           <div key={p.nama} className="flex items-center gap-3">
-            <span className="text-base w-5 text-center">{medals[i] || `#${i + 1}`}</span>
+            <div className={`w-7 h-7 rounded-full ${medalBg[i] || 'bg-gray-50'} flex items-center justify-center shrink-0`}>
+              {i === 0 ? (
+                <svg className="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              ) : i === 1 ? (
+                <svg className="w-3.5 h-3.5 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              ) : i === 2 ? (
+                <svg className="w-3.5 h-3.5 text-orange-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              ) : (
+                <span className="text-xs font-bold text-gray-400">#{i + 1}</span>
+              )}
+            </div>
             <div className="flex-1 min-w-0">
               <div className="flex justify-between text-sm mb-0.5">
                 <span className="text-foreground font-medium truncate">{p.nama}</span>
@@ -506,14 +537,14 @@ export default function AdminDashboard() {
           <button
             onClick={handleRefresh}
             disabled={loading}
-            className="p-2 rounded-xl border border-border bg-white hover:bg-gray-50 transition-colors cursor-pointer disabled:opacity-50"
+            className="p-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer disabled:opacity-50 shadow-sm"
             title="Refresh data"
           >
-            <RefreshCw className={`w-4 h-4 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 text-gray-500 ${loading ? 'animate-spin' : ''}`} />
           </button>
           <button
             onClick={() => setAutoRefresh(!autoRefresh)}
-            className={`p-2 rounded-xl border transition-colors cursor-pointer ${autoRefresh ? 'bg-primary/10 border-primary/30 text-primary' : 'border-border bg-white text-gray-400'}`}
+            className={`p-2.5 rounded-xl border transition-all cursor-pointer shadow-sm ${autoRefresh ? 'bg-emerald-50 border-emerald-200 text-emerald-600 hover:bg-emerald-100' : 'border-gray-200 bg-white text-gray-400 hover:bg-gray-50'}`}
             title={autoRefresh ? 'Auto-refresh aktif' : 'Auto-refresh mati'}
           >
             <Clock className="w-4 h-4" />
@@ -638,22 +669,22 @@ export default function AdminDashboard() {
       </div>
 
       {/* ===== SYSTEM INFO FOOTER ===== */}
-      <motion.div variants={itemAnim} className="bg-surface rounded-2xl border border-border p-4">
+      <motion.div variants={itemAnim} className="bg-white rounded-2xl border border-gray-100 p-4 hover:shadow-sm transition-shadow">
         <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-gray-400">
           <div className="flex items-center gap-4">
             <span className="font-semibold text-foreground">Sistem</span>
             {SYSTEM_INFO.map((info) => (
-              <span key={info.label} className="inline-flex items-center gap-1">
+              <span key={info.label} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50">
                 <span className="text-gray-500">{info.label}:</span>
                 <span className="font-medium text-foreground">{info.value}</span>
               </span>
             ))}
           </div>
           <div className="flex items-center gap-4">
-            <span>Last refresh: {formatRelative(lastRefresh)}</span>
-            <span className="inline-flex items-center gap-1">
+            <span className="text-gray-400">Last refresh: {formatRelative(lastRefresh)}</span>
+            <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50">
               <span className={`w-1.5 h-1.5 rounded-full ${autoRefresh ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`} />
-              {autoRefresh ? 'Auto-refresh 30s' : 'Refresh manual'}
+              {autoRefresh ? 'Auto-refresh 30s' : 'Manual'}
             </span>
           </div>
         </div>

@@ -124,14 +124,14 @@ export default function VerifikasiLogPage() {
   };
 
   const renderSortIcon = (column) => {
-    if (sortKey !== column) return <ArrowUp className="w-3 h-3 text-gray-300 group-hover:text-gray-400" />;
+    if (sortKey !== column) return <ArrowUp className="w-3 h-3 text-white/50 group-hover:text-white/70" />;
     return sortDir === 'asc'
-      ? <ArrowUp className="w-3 h-3 text-primary" />
-      : <ArrowDown className="w-3 h-3 text-primary" />;
+      ? <ArrowUp className="w-3 h-3 text-white" />
+      : <ArrowDown className="w-3 h-3 text-white" />;
   };
 
   const renderSortHeader = (column, children, className) => (
-    <th className={`text-left py-3 px-3 font-semibold text-foreground/70 group cursor-pointer select-none ${className || ''}`}
+    <th className={`text-left py-3 px-3 font-bold text-white/90 uppercase tracking-wider text-[11px] group cursor-pointer select-none ${className || ''}`}
       onClick={() => toggleSort(column)}>
       <div className="flex items-center gap-1">
         {children}
@@ -177,8 +177,8 @@ export default function VerifikasiLogPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center shadow-sm">
-            <ShieldAlert className="w-5 h-5 text-primary" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-700 flex items-center justify-center shadow-sm ring-2 ring-emerald-400/20">
+            <ShieldAlert className="w-5 h-5 text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Verifikasi Log</h1>
@@ -193,7 +193,7 @@ export default function VerifikasiLogPage() {
           { label: 'Disetujui', value: stats.terima, icon: CheckCircle, color: 'bg-emerald-500', shadow: 'shadow-emerald-500/20' },
           { label: 'Ditolak', value: stats.tolak, icon: XCircle, color: 'bg-rose-500', shadow: 'shadow-rose-500/20' },
         ].map((s, i) => (
-          <div key={i} className={`bg-surface rounded-2xl border border-border p-4 ${s.shadow} transition-all duration-200`}>
+          <div key={i} className={`bg-white rounded-2xl border border-gray-100 p-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200`}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-gray-400 font-medium">{s.label}</span>
               <div className={`w-8 h-8 rounded-lg ${s.color} flex items-center justify-center`}>
@@ -211,7 +211,7 @@ export default function VerifikasiLogPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input ref={searchRef} placeholder="Cari verifikator, catatan, atau target..."
               value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all" />
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none transition-all hover:border-gray-300" />
           </div>
           <Select value={filterTindakan} onChange={(e) => { setFilterTindakan(e.target.value); setPage(1); }} className="min-w-[160px]">
             {TINDAKAN_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -222,24 +222,24 @@ export default function VerifikasiLogPage() {
         </div>
 
         {hasActiveFilters && (
-          <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-border">
+          <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-gray-100">
             <span className="text-xs text-gray-400 font-medium"><Filter className="w-3 h-3 inline mr-1" />Filter:</span>
             {search && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-medium">
                 Cari: {search}
-                <button onClick={() => setSearch('')} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
+                <button onClick={() => setSearch('')} className="cursor-pointer hover:text-emerald-800"><X className="w-3 h-3" /></button>
               </span>
             )}
             {filterTindakan && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-medium">
                 Tindakan: {filterTindakan === 'terima' ? 'Disetujui' : 'Ditolak'}
-                <button onClick={() => setFilterTindakan('')} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
+                <button onClick={() => setFilterTindakan('')} className="cursor-pointer hover:text-emerald-800"><X className="w-3 h-3" /></button>
               </span>
             )}
             {filterTipe && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-medium">
                 Tipe: {filterTipe}
-                <button onClick={() => setFilterTipe('')} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
+                <button onClick={() => setFilterTipe('')} className="cursor-pointer hover:text-emerald-800"><X className="w-3 h-3" /></button>
               </span>
             )}
             <button onClick={clearFilters}
@@ -252,15 +252,15 @@ export default function VerifikasiLogPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border">
-                <th className="py-3 px-3 w-8" />
+              <tr className="bg-gradient-to-r from-emerald-700 to-emerald-600">
+                <th className="py-3 px-3 w-8"></th>
                 {renderSortHeader('created_at', 'Waktu', 'min-w-[140px]')}
                 {renderSortHeader('verifikator', 'Verifikator')}
                 {renderSortHeader('tipe', 'Tipe')}
                 {renderSortHeader('target', 'Target')}
                 {renderSortHeader('tindakan', 'Tindakan')}
-                <th className="text-left py-3 px-3 font-semibold text-foreground/70">Catatan</th>
-                <th className="text-left py-3 px-3 font-semibold text-foreground/70">Detail</th>
+                <th className="text-left py-3 px-3 font-bold text-white/90 uppercase tracking-wider text-[11px]">Catatan</th>
+                <th className="text-left py-3 px-3 font-bold text-white/90 uppercase tracking-wider text-[11px]">Detail</th>
               </tr>
             </thead>
             <tbody>
@@ -324,7 +324,7 @@ export default function VerifikasiLogPage() {
           if (!expandedRows.has(v.id)) return null;
           const p = v.verifiable;
           return (
-            <div key={`exp-${v.id}`} className="border-t border-border bg-muted/20 animate-fade-in">
+            <div key={`exp-${v.id}`} className="border-t border-gray-100 bg-gray-50/50 animate-fade-in">
               <div className="p-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
                   {[
@@ -342,24 +342,24 @@ export default function VerifikasiLogPage() {
                   ))}
                 </div>
                 {p && (p.foto_pekebun || p.upload_ktp || p.upload_kk) && (
-                  <div className="mt-3 pt-3 border-t border-border">
+                  <div className="mt-3 pt-3 border-t border-gray-200">
                     <span className="text-gray-400 text-[11px] block mb-2">Dokumen Terkait</span>
                     <div className="flex flex-wrap gap-2">
                       {p.foto_pekebun && (
                         <button onClick={() => setPreviewImage(p.foto_pekebun)}
-                          className="w-14 h-14 rounded-lg overflow-hidden border border-border bg-white cursor-pointer hover:ring-2 hover:ring-primary transition-all">
+                          className="w-14 h-14 rounded-lg overflow-hidden border border-gray-200 bg-white cursor-pointer hover:ring-2 hover:ring-emerald-500 transition-all">
                           <img src={p.foto_pekebun} alt="" className="w-full h-full object-cover" />
                         </button>
                       )}
                       {p.upload_ktp && (
                         <button onClick={() => setPreviewImage(p.upload_ktp)}
-                          className="w-14 h-14 rounded-lg overflow-hidden border border-border bg-white cursor-pointer hover:ring-2 hover:ring-primary transition-all">
+                          className="w-14 h-14 rounded-lg overflow-hidden border border-gray-200 bg-white cursor-pointer hover:ring-2 hover:ring-emerald-500 transition-all">
                           <img src={p.upload_ktp} alt="" className="w-full h-full object-cover" />
                         </button>
                       )}
                       {p.upload_kk && (
                         <button onClick={() => setPreviewImage(p.upload_kk)}
-                          className="w-14 h-14 rounded-lg overflow-hidden border border-border bg-white cursor-pointer hover:ring-2 hover:ring-primary transition-all">
+                          className="w-14 h-14 rounded-lg overflow-hidden border border-gray-200 bg-white cursor-pointer hover:ring-2 hover:ring-emerald-500 transition-all">
                           <img src={p.upload_kk} alt="" className="w-full h-full object-cover" />
                         </button>
                       )}
@@ -371,20 +371,20 @@ export default function VerifikasiLogPage() {
           );
         })}
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 pt-4 border-t border-border">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-3 text-sm text-gray-500">
             <span>Menampilkan {sorted.length === 0 ? 0 : (safePage - 1) * perPage + 1} - {Math.min(safePage * perPage, sorted.length)} dari {sorted.length} data</span>
             <div className="flex items-center gap-1">
               <span className="text-xs">per halaman:</span>
               <select value={perPage} onChange={(e) => { setPerPage(Number(e.target.value)); setPage(1); }}
-                className="border border-border rounded-lg px-2 py-1 text-xs bg-white focus:ring-ring/30 focus:border-primary outline-none cursor-pointer">
+                className="border border-gray-200 rounded-xl px-2 py-1 text-xs bg-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none cursor-pointer hover:border-gray-300">
                 {PAGE_SIZES.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button disabled={safePage <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}
-              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Â« Prev</button>
+              className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs disabled:opacity-40 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer font-medium">Â« Prev</button>
             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
               let pageNum;
               if (totalPages <= 7) pageNum = i + 1;
@@ -393,18 +393,18 @@ export default function VerifikasiLogPage() {
               else pageNum = safePage - 3 + i;
               return (
                 <button key={pageNum} onClick={() => setPage(pageNum)}
-                  className={`w-8 h-8 rounded-lg text-xs font-medium transition-all cursor-pointer ${safePage === pageNum ? 'bg-primary text-white shadow-sm' : 'border border-border hover:bg-muted text-gray-600'}`}>
+                  className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer ${safePage === pageNum ? 'bg-gradient-to-br from-emerald-600 to-emerald-500 text-white shadow-sm' : 'border border-gray-200 hover:bg-gray-50 text-muted-foreground hover:border-gray-300'}`}>
                   {pageNum}
                 </button>
               );
             })}
             <button disabled={safePage >= totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-              className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Next Â»</button>
+              className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs disabled:opacity-40 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer font-medium">Next Â»</button>
             <div className="flex items-center gap-1 ml-2">
               <span className="text-xs text-gray-400">Go:</span>
               <input type="number" min={1} max={totalPages} value={gotoPage} onChange={(e) => setGotoPage(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') { const v = parseInt(gotoPage); if (v >= 1 && v <= totalPages) setPage(v); setGotoPage(''); } }}
-                className="w-14 px-2 py-1 rounded-lg border border-border text-xs bg-white focus:ring-ring/30 focus:border-primary outline-none" />
+                className="w-14 px-2 py-1 rounded-xl border border-gray-200 text-xs bg-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none hover:border-gray-300" />
             </div>
           </div>
         </div>
@@ -412,8 +412,8 @@ export default function VerifikasiLogPage() {
 
       {detailModal && (
         <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4" onClick={() => setDetailModal(null)}>
-          <div className="bg-surface rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-4 border-b border-border sticky top-0 bg-surface z-10">
+          <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
               <h3 className="text-lg font-bold text-foreground">Detail Verifikasi</h3>
               <button onClick={() => setDetailModal(null)} className="p-1.5 rounded-lg hover:bg-muted cursor-pointer">
                 <X className="w-5 h-5 text-gray-400" />

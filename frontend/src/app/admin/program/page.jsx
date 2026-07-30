@@ -397,13 +397,13 @@ export default function AdminProgramPage() {
         <div className="relative flex-1 min-w-[180px] max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           <input type="text" placeholder="Cari program..." value={search} onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-[border,box-shadow]" />
+            className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-[border,box-shadow] hover:border-gray-300" />
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
           <div className="relative">
             <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
             <select value={filterStatus} onChange={(e) => handleFilterStatus(e.target.value)}
-              className="pl-8 pr-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-[border,box-shadow] appearance-none cursor-pointer">
+              className="pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-[border,box-shadow] appearance-none cursor-pointer hover:border-gray-300">
               <option value="">Semua Status</option>
               <option value="aktif">Aktif</option>
               <option value="nonaktif">Nonaktif</option>
@@ -411,12 +411,12 @@ export default function AdminProgramPage() {
             </select>
           </div>
           <select value={filterJenis} onChange={(e) => handleFilterJenis(e.target.value)}
-            className="px-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-[border,box-shadow] cursor-pointer">
+            className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-[border,box-shadow] cursor-pointer hover:border-gray-300">
             <option value="">Semua Jenis</option>
             {JENIS_OPTIONS.filter(j => j.value).map((j) => (<option key={j.value} value={j.value}>{j.label}</option>))}
           </select>
           <select value={sortOrder} onChange={(e) => handleSort(e.target.value)}
-            className="px-3 py-2 text-sm border border-border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-[border,box-shadow] cursor-pointer">
+            className="px-3 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-[border,box-shadow] cursor-pointer hover:border-gray-300">
             {SORT_OPTIONS.map((s) => (<option key={s.value} value={s.value}>{s.label}</option>))}
           </select>
         </div>
@@ -461,7 +461,7 @@ export default function AdminProgramPage() {
         <motion.div variants={fadeUp} className="flex items-center justify-center gap-1.5">
           {Array.from({ length: meta.last_page }, (_, i) => i + 1).map((page) => (
             <button key={page} onClick={() => fetchData({ page })}
-              className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors cursor-pointer ${meta.current_page === page ? 'bg-primary text-white shadow-sm' : 'bg-white text-gray-600 border border-border hover:bg-gray-50'}`}>
+              className={`w-8 h-8 rounded-xl text-sm font-bold transition-all cursor-pointer ${meta.current_page === page ? 'bg-gradient-to-br from-emerald-600 to-emerald-500 text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'}`}>
               {page}
             </button>
           ))}

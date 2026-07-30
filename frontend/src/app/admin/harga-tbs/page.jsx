@@ -124,7 +124,7 @@ export default function AdminHargaTbsPage() {
           const a = aktif[k];
           const c = COLORS[k];
           return (
-            <div key={k} className={`bg-white rounded-xl border border-border border-l-4 ${c.border} p-5 shadow-sm hover:shadow-md transition-shadow`}>
+            <div key={k} className={`bg-white rounded-2xl border border-gray-100 border-l-4 ${c.border} p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all`}>
               <div className="flex items-center justify-between mb-3">
                 <span className={`text-sm font-semibold ${c.label}`}>{KELAS[k]}</span>
                 <span className={`w-2.5 h-2.5 rounded-full ${a ? c.dot : 'bg-gray-200'}`} />
@@ -137,7 +137,7 @@ export default function AdminHargaTbsPage() {
                     {formatDate(a.dari_tanggal)} — {a.sampai_tanggal ? formatDate(a.sampai_tanggal) : '∞'}
                   </p>
                   {a.keterangan && <p className="text-[10px] text-gray-400 mt-2 line-clamp-1">{a.keterangan}</p>}
-                  <div className="flex gap-1.5 mt-3 pt-3 border-t border-border">
+                  <div className="flex gap-1.5 mt-3 pt-3 border-t border-gray-100">
                     <button onClick={() => openEdit(a)} className={`flex items-center gap-1 px-2.5 py-1.5 ${c.bg} ${c.text} rounded-lg text-[10px] font-medium hover:opacity-80 transition-all cursor-pointer`}>
                       <Pencil className="w-3 h-3" /> Edit
                     </button>
@@ -158,13 +158,13 @@ export default function AdminHargaTbsPage() {
       </div>
 
       {/* RIWAYAT TAB */}
-      <div className="bg-white rounded-xl border border-border shadow-sm">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <h2 className="text-sm font-semibold text-foreground">Riwayat Harga</h2>
           <div className="flex gap-1">
             {['ALL', 'A', 'B', 'C'].map((t) => (
               <button key={t} onClick={() => setTab(t)}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${tab === t ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-100'}`}>
+                className={`px-3 py-1.5 rounded-xl text-[11px] font-medium transition-all cursor-pointer ${tab === t ? 'bg-gradient-to-br from-emerald-600 to-emerald-500 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'}`}>
                 {t === 'ALL' ? 'Semua' : <><span className="sm:hidden">{t}</span><span className="hidden sm:inline">{KELAS[t]}</span></>}
               </button>
             ))}

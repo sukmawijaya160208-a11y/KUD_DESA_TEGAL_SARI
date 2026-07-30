@@ -24,22 +24,28 @@ function MeshBg() {
   return (
     <div className="fixed inset-0 z-[1] pointer-events-none overflow-hidden">
       <motion.div
-        animate={{ rotate: [0, 15, 0] }}
+        animate={{ rotate: [0, 15, 0], scale: [1, 1.05, 1] }}
         transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
-        className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full opacity-[0.07]"
+        className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full opacity-[0.08]"
         style={{ background: 'radial-gradient(circle, #4CAF50, transparent 70%)' }}
       />
       <motion.div
-        animate={{ rotate: [0, -20, 0] }}
+        animate={{ rotate: [0, -20, 0], scale: [1, 1.08, 1] }}
         transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
-        className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.06]"
+        className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.07]"
         style={{ background: 'radial-gradient(circle, #FFD700, transparent 70%)' }}
       />
       <motion.div
-        animate={{ scale: [1, 1.1, 1] }}
+        animate={{ scale: [1, 1.15, 1], opacity: [0.04, 0.07, 0.04] }}
         transition={{ duration: 30, repeat: Infinity, ease: 'easeInOut' }}
         className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full opacity-[0.04]"
         style={{ background: 'radial-gradient(circle, #2E7D32, transparent 70%)' }}
+      />
+      <motion.div
+        animate={{ scale: [1, 1.12, 1], opacity: [0, 0.05, 0] }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
+        className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full"
+        style={{ background: 'radial-gradient(circle, #059669, transparent 70%)' }}
       />
     </div>
   );
@@ -89,9 +95,10 @@ function isPhone(v) {
 
 function BrandPanel({ logoUrl, showBenefits, onToggleBenefits, loginConfig }) {
   return (
-    <div className="relative md:w-[38%] bg-gradient-to-br from-primary/30 via-primary/5 to-transparent overflow-hidden">
-      <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary-light/10 rounded-full blur-3xl" />
-      <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-accent/10 rounded-full blur-3xl" />
+    <div className="relative md:w-[38%] bg-gradient-to-br from-emerald-500/30 via-emerald-600/10 to-emerald-700/5 overflow-hidden">
+      <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-300/10 rounded-full blur-3xl" />
+      <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-teal-400/10 rounded-full blur-3xl" />
+      <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-emerald-400/5 rounded-full blur-2xl" />
 
       <div className="relative z-10 h-full flex flex-col p-4 md:p-6 lg:p-8">
         <div className="flex items-center justify-between md:block">
@@ -176,15 +183,15 @@ function BrandPanel({ logoUrl, showBenefits, onToggleBenefits, loginConfig }) {
 
 function TabNav({ tab, onSwitch }) {
   return (
-    <div className="relative flex bg-gray-100 rounded-xl p-1 shrink-0">
+    <div className="relative flex bg-emerald-50/50 rounded-2xl p-1 shrink-0 border border-emerald-100/50">
       {(['login', 'register']).map((t) => (
         <button key={t} onClick={() => onSwitch(t)}
-          className={`relative flex-1 py-3 sm:py-2.5 text-sm font-semibold rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 ${
-            tab === t ? 'text-primary' : 'text-gray-400 hover:text-gray-600'
+          className={`relative flex-1 py-3 sm:py-2.5 text-sm font-bold rounded-xl transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-1 ${
+            tab === t ? 'text-emerald-700' : 'text-gray-400 hover:text-gray-600'
           }`}>
           {t === 'login' ? 'Masuk' : 'Daftar'}
           {tab === t && (
-            <motion.div layoutId="tab-bg" className="absolute inset-0 bg-white rounded-lg shadow-sm -z-10"
+            <motion.div layoutId="tab-bg" className="absolute inset-0 bg-white rounded-xl shadow-sm border border-emerald-100 -z-10"
               transition={{ type: 'spring', stiffness: 400, damping: 30 }} />
           )}
         </button>
@@ -281,10 +288,10 @@ function LoginForm({ login, setLogin, loginErrors, loading, onSubmit, onForgotPa
 
       <div className="mt-auto pt-3 md:pt-5 space-y-2">
         <button type="submit" disabled={loading}
-          className={`relative overflow-hidden w-full min-h-[52px] py-3 rounded-xl font-semibold text-sm lg:text-base transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+          className={`relative overflow-hidden w-full min-h-[52px] py-3 rounded-2xl font-bold text-sm lg:text-base transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
             loading
-              ? 'bg-primary/70 text-white shadow-primary/10'
-              : 'bg-primary text-white hover:bg-primary-dark hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98] shadow-primary/20'
+              ? 'bg-emerald-600/70 text-white shadow-emerald-500/10'
+              : 'bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 hover:shadow-xl hover:shadow-emerald-600/30 active:scale-[0.98] shadow-emerald-600/20'
           }`}>
           {loading ? (
             <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
@@ -466,10 +473,10 @@ function RegisterForm({ reg, setReg, updateReg, regErrors, regStep, setRegStep, 
                   Kembali
                 </button>
                 <button type="submit" disabled={loading}
-                  className={`relative overflow-hidden flex-1 min-h-[52px] py-3 rounded-xl font-semibold text-sm transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
+                  className={`relative overflow-hidden flex-1 min-h-[52px] py-3 rounded-2xl font-bold text-sm transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
                     loading
-                      ? 'bg-accent/70 text-white shadow-accent/10'
-                      : 'bg-accent text-white hover:bg-accent-hover hover:shadow-xl hover:shadow-accent/30 active:scale-[0.98] shadow-accent/20'
+                      ? 'bg-emerald-600/70 text-white shadow-emerald-500/10'
+                      : 'bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 hover:shadow-xl hover:shadow-emerald-600/30 active:scale-[0.98] shadow-emerald-600/20'
                   }`}>
                   {loading ? (
                     <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
@@ -696,11 +703,11 @@ export default function AuthPage() {
         style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.97 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4 }}
-        className="relative z-10 w-full max-w-5xl flex flex-col md:flex-row rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-white/10 backdrop-blur-sm"
-        style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)' }}
+        initial={{ opacity: 0, scale: 0.97, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="relative z-10 w-full max-w-5xl flex flex-col md:flex-row rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl shadow-black/20 border border-white/15 backdrop-blur-md"
+        style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%)' }}
       >
         <BrandPanel logoUrl={logoUrl} showBenefits={showBenefits} onToggleBenefits={toggleBenefits} loginConfig={loginConfig} />
 

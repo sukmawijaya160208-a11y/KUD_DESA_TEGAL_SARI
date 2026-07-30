@@ -188,14 +188,14 @@ export default function VerifikatorPage() {
   };
 
   const renderSortIcon = (column) => {
-    if (sortKey !== column) return <ArrowUp className="w-3 h-3 text-gray-300 group-hover:text-gray-400" />;
+    if (sortKey !== column) return <ArrowUp className="w-3 h-3 text-white/50 group-hover:text-white/70" />;
     return sortDir === 'asc'
-      ? <ArrowUp className="w-3 h-3 text-primary" />
-      : <ArrowDown className="w-3 h-3 text-primary" />;
+      ? <ArrowUp className="w-3 h-3 text-white" />
+      : <ArrowDown className="w-3 h-3 text-white" />;
   };
 
   const renderSortHeader = (column, children, className) => (
-    <th className={`text-left py-3 px-3 font-semibold text-foreground/70 group cursor-pointer select-none ${className || ''}`}
+    <th className={`text-left py-3 px-3 font-bold text-white/90 uppercase tracking-wider text-[11px] group cursor-pointer select-none ${className || ''}`}
       onClick={() => toggleSort(column)}>
       <div className="flex items-center gap-1">
         {children}
@@ -210,7 +210,7 @@ export default function VerifikatorPage() {
     <motion.div variants={containerAnim} initial="hidden" animate="show">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-700 flex items-center justify-center shadow-sm ring-2 ring-emerald-400/20">
             <BadgeCheck className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -226,7 +226,7 @@ export default function VerifikatorPage() {
           { label: 'Disetujui', value: stats.verified, icon: CheckCircle, color: 'bg-emerald-500', shadow: 'shadow-emerald-500/20' },
           { label: 'Ditolak', value: stats.rejected, icon: XCircle, color: 'bg-rose-500', shadow: 'shadow-rose-500/20' },
         ].map((s, i) => (
-          <div key={i} className={`bg-surface rounded-2xl border border-border p-4 shadow-sm ${s.shadow} transition-all duration-200`}>
+          <div key={i} className={`bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200`}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-muted-foreground font-medium">{s.label}</span>
               <div className={`w-8 h-8 rounded-lg ${s.color} flex items-center justify-center shadow-sm`}>
@@ -238,15 +238,15 @@ export default function VerifikatorPage() {
         ))}
       </div>
 
-      <div className="bg-surface rounded-2xl border border-border mb-4 shadow-sm">
-        <div className="p-4 border-b border-border flex flex-wrap items-center gap-3">
+      <div className="bg-white rounded-2xl border border-gray-100 mb-4 shadow-sm">
+        <div className="p-4 border-b border-gray-100 flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input ref={searchRef}
               placeholder="Cari nama, NIK, atau WhatsApp..."
               defaultValue={search}
               onChange={(e) => handleSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-xl border border-border text-sm bg-white focus:ring-2 focus:ring-ring/30 focus:border-primary outline-none transition-all"
+              className="w-full pl-9 pr-3 py-2 rounded-xl border border-gray-200 text-sm bg-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none transition-all hover:border-gray-300"
             />
           </div>
           <Select value={filterStatus} onChange={(e) => { startTransition(() => { setFilterStatus(e.target.value); setPage(1); }); }} className="min-w-[160px]">
@@ -258,15 +258,15 @@ export default function VerifikatorPage() {
           <div className="flex flex-wrap items-center gap-2 px-4 pb-3">
             <span className="text-xs text-muted-foreground font-medium"><Filter className="w-3 h-3 inline mr-1" />Filter:</span>
             {search && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-medium">
                 Cari: {search}
-                <button onClick={() => { setSearch(''); setPage(1); }} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
+                <button onClick={() => { setSearch(''); setPage(1); }} className="cursor-pointer hover:text-emerald-800"><X className="w-3 h-3" /></button>
               </span>
             )}
             {filterStatus !== 'pending' && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-medium">
                 Status: {filterStatus === 'verified' ? 'Disetujui' : 'Ditolak'}
-                <button onClick={() => setFilterStatus('pending')} className="cursor-pointer hover:text-primary-dark"><X className="w-3 h-3" /></button>
+                <button onClick={() => setFilterStatus('pending')} className="cursor-pointer hover:text-emerald-800"><X className="w-3 h-3" /></button>
               </span>
             )}
             <button onClick={() => { setSearch(''); setFilterStatus('pending'); setPage(1); }}
@@ -275,7 +275,7 @@ export default function VerifikatorPage() {
         )}
       </div>
 
-      <div className="bg-surface rounded-2xl border border-border shadow-sm">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
         <div className="overflow-x-auto">
           {loading ? (
             <div className="p-8 text-center text-muted-foreground">
@@ -290,14 +290,14 @@ export default function VerifikatorPage() {
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border">
-                  <th className="py-3 px-3 w-8" />
+                <tr className="bg-gradient-to-r from-emerald-700 to-emerald-600">
+                  <th className="py-3 px-3 w-8"></th>
                   {renderSortHeader('nama', 'Pekebun', 'min-w-[200px]')}
-                  <th className="text-left py-3 px-3 font-semibold text-foreground/70">WhatsApp</th>
-                  <th className="text-left py-3 px-3 font-semibold text-foreground/70">Dokumen</th>
-                  <th className="text-left py-3 px-3 font-semibold text-foreground/70">Lahan</th>
+                  <th className="text-left py-3 px-3 font-bold text-white/90 uppercase tracking-wider text-[11px]">WhatsApp</th>
+                  <th className="text-left py-3 px-3 font-bold text-white/90 uppercase tracking-wider text-[11px]">Dokumen</th>
+                  <th className="text-left py-3 px-3 font-bold text-white/90 uppercase tracking-wider text-[11px]">Lahan</th>
                   {renderSortHeader('status', 'Status')}
-                  <th className="text-left py-3 px-3 font-semibold text-foreground/70">Aksi</th>
+                  <th className="text-left py-3 px-3 font-bold text-white/90 uppercase tracking-wider text-[11px]">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -322,7 +322,7 @@ export default function VerifikatorPage() {
         {data.map((d) => {
           if (!expandedRows.has(d.id)) return null;
           return (
-            <div key={`exp-${d.id}`} className="border-t border-border bg-muted/20 animate-fade-in">
+            <div key={`exp-${d.id}`} className="border-t border-gray-100 bg-gray-50/50 animate-fade-in">
               <div className="p-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
                   {[
@@ -342,7 +342,7 @@ export default function VerifikatorPage() {
                   ))}
                 </div>
                 {(d.foto_pekebun || d.upload_ktp || d.upload_kk) && (
-                  <div className="mt-3 pt-3 border-t border-border">
+                  <div className="mt-3 pt-3 border-t border-gray-200">
                     <span className="text-muted-foreground text-[11px] block mb-2">Dokumen</span>
                     <div className="flex flex-wrap gap-2">
                       {d.foto_pekebun && (
@@ -385,20 +385,20 @@ export default function VerifikatorPage() {
         })}
 
         {meta.lastPage > 1 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 border-t border-border">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 border-t border-gray-100">
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
               <span>Halaman {meta.currentPage} dari {meta.lastPage} (Total: {meta.total})</span>
               <div className="flex items-center gap-1">
                 <span className="text-xs">per halaman:</span>
                 <select value={perPage} onChange={(e) => { setPerPage(Number(e.target.value)); setPage(1); }}
-                  className="border border-border rounded-lg px-2 py-1 text-xs bg-white focus:ring-ring/30 focus:border-primary outline-none cursor-pointer">
+                  className="border border-gray-200 rounded-xl px-2 py-1 text-xs bg-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none cursor-pointer hover:border-gray-300">
                   {PAGE_SIZES.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <button disabled={meta.currentPage <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}
-                className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">« Prev</button>
+                className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs disabled:opacity-40 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer font-medium">« Prev</button>
               {Array.from({ length: Math.min(meta.lastPage, 7) }, (_, i) => {
                 let pageNum;
                 if (meta.lastPage <= 7) pageNum = i + 1;
@@ -407,18 +407,18 @@ export default function VerifikatorPage() {
                 else pageNum = meta.currentPage - 3 + i;
                 return (
                   <button key={pageNum} onClick={() => setPage(pageNum)}
-                    className={`w-8 h-8 rounded-lg text-xs font-medium transition-all cursor-pointer ${meta.currentPage === pageNum ? 'bg-primary text-white shadow-sm' : 'border border-border hover:bg-muted text-muted-foreground'}`}>
+                    className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer ${meta.currentPage === pageNum ? 'bg-gradient-to-br from-emerald-600 to-emerald-500 text-white shadow-sm' : 'border border-gray-200 hover:bg-gray-50 text-muted-foreground hover:border-gray-300'}`}>
                     {pageNum}
                   </button>
                 );
               })}
               <button disabled={meta.currentPage >= meta.lastPage} onClick={() => setPage(p => Math.min(meta.lastPage, p + 1))}
-                className="px-3 py-1.5 rounded-lg border border-border text-xs disabled:opacity-40 hover:bg-muted transition-all cursor-pointer">Next »</button>
+                className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs disabled:opacity-40 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer font-medium">Next »</button>
               <div className="flex items-center gap-1 ml-2">
                 <span className="text-xs text-muted-foreground">Go:</span>
                 <input type="number" min={1} max={meta.lastPage} value={gotoPage} onChange={(e) => setGotoPage(e.target.value)}
                   onKeyDown={(e) => { if (e.key === 'Enter') { const v = parseInt(gotoPage); if (v >= 1 && v <= meta.lastPage) setPage(v); setGotoPage(''); } }}
-                  className="w-14 px-2 py-1 rounded-lg border border-border text-xs bg-white focus:ring-ring/30 focus:border-primary outline-none" />
+                  className="w-14 px-2 py-1 rounded-xl border border-gray-200 text-xs bg-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none hover:border-gray-300" />
               </div>
             </div>
           </div>
