@@ -13,17 +13,21 @@
   --color-accent: #F59E0B;
   --color-accent-hover: #D97706;
   --color-accent-light: #FEF3C7;
-  --color-background: #F0FDF4;
+  --color-background: #F7F8FA;
   --color-foreground: #0F172A;
   --color-muted: #F1F5F9;
-  --color-muted-foreground: #64748B;
-  --color-border: #E2E8F0;
+  --color-muted-foreground: #6B7280;
+  --color-border: #E5E7EB;
   --color-destructive: #DC2626;
   --color-destructive-hover: #B91C1C;
   --color-warning: #D97706;
   --color-success: #059669;
   --color-surface: #FFFFFF;
   --color-ring: #059669;
+  --color-card-border: #E5E7EB;
+  --color-card-hover-border: #D1D5DB;
+  --color-table-header-bg: #065F46;
+  --color-table-header-text: #FFFFFF;
 
   --color-kud-green: #065F46;
   --color-kud-green-light: #34D399;
@@ -36,8 +40,9 @@
   --font-sans: 'Work Sans', system-ui, sans-serif;
   --font-heading: 'Outfit', system-ui, sans-serif;
 
-  --shadow-card: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
-  --shadow-card-hover: 0 10px 30px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
+  --shadow-elevated: 0 20px 60px rgba(0,0,0,0.1), 0 8px 20px rgba(0,0,0,0.06);
   --shadow-glass: 0 8px 32px rgba(0,0,0,0.06);
   --shadow-glass-lg: 0 16px 48px rgba(0,0,0,0.08);
   --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);

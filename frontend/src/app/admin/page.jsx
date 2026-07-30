@@ -525,7 +525,7 @@ export default function AdminDashboard() {
       {/* ===== HEADER ===== */}
       <motion.div variants={itemAnim} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-lg shadow-primary/20">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white shadow-lg shadow-emerald-600/20 ring-1 ring-emerald-400/20">
             <UserCircle className="w-7 h-7" />
           </div>
           <div>
@@ -627,7 +627,7 @@ export default function AdminDashboard() {
             className="h-full"
           >
             <ActivityTimeline verifikasi={verifikasi} pendaftaran={pendaftaran} tbsList={tbsList} />
-            <div className="mt-3 pt-3 border-t border-border flex gap-3">
+            <div className="mt-3 pt-3 border-t border-gray-100 flex gap-3">
               <button onClick={() => router.push('/admin/verifikasi-log')} className="text-xs text-primary font-medium hover:underline cursor-pointer flex items-center gap-1">
                 Semua Verifikasi <ChevronRight className="w-3 h-3" />
               </button>
@@ -640,7 +640,7 @@ export default function AdminDashboard() {
         <motion.div variants={itemAnim}>
           <Card title="Harga TBS Saat Ini" subtitle="Tarif aktif per kelas" className="h-full">
             <HargaTbsCards data={hargaTbs} />
-            <div className="mt-3 pt-3 border-t border-border">
+            <div className="mt-3 pt-3 border-t border-gray-100">
               <button onClick={() => router.push('/admin/harga-tbs')} className="text-xs text-primary font-medium hover:underline cursor-pointer flex items-center gap-1">
                 Kelola Harga TBS <ChevronRight className="w-3 h-3" />
               </button>
@@ -654,7 +654,7 @@ export default function AdminDashboard() {
         <motion.div variants={itemAnim}>
           <Card title="Top Pekebun" subtitle="Peringkat berdasarkan total TBS" className="h-full">
             <TopPekebun tbsList={tbsList} />
-            <div className="mt-3 pt-3 border-t border-border">
+            <div className="mt-3 pt-3 border-t border-gray-100">
               <button onClick={() => router.push('/admin/pekebun')} className="text-xs text-primary font-medium hover:underline cursor-pointer flex items-center gap-1">
                 Semua Pekebun <ChevronRight className="w-3 h-3" />
               </button>
