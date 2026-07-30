@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Printer } from 'lucide-react';
+import { formatDateId, formatTimeId } from '@/lib/date';
 
 const PRINT_STYLES = `
   @page { size: landscape; margin: 15mm 20mm; }
@@ -68,8 +69,8 @@ export default function PrintButton({ title, fetchAll, renderContent, onLoad, pd
           <div class="kud-identity">Kec. Megang Sakti, Kabupaten Musi Rawas, Sumatera Selatan</div>
         </div>
         <div class="head-date">
-          ${new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}<br>
-          ${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+          ${formatDateId(Date.now(), { weekday: true, year: 'numeric', month: 'long', day: 'numeric' })}<br>
+          ${formatTimeId(Date.now())}
         </div>
       </div>
       <div class="doc-title">${title}</div>

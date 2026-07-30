@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Phone, Video, ArrowDown, PhoneOff } from 'lucide-react';
 import { api } from '@/lib/api';
+import { formatDateId, formatTimeId } from '@/lib/date';
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
@@ -13,12 +14,11 @@ function formatDate(dateStr) {
   yesterday.setDate(yesterday.getDate() - 1);
   if (d.toDateString() === today.toDateString()) return 'Hari ini';
   if (d.toDateString() === yesterday.toDateString()) return 'Kemarin';
-  return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  return formatDateId(d, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function formatTime(dateStr) {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+  return formatTimeId(dateStr);
 }
 
 function formatDuration(sec) {

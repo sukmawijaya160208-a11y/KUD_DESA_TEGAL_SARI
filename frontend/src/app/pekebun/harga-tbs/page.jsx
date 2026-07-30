@@ -32,7 +32,7 @@ function StateBadge({ state }) {
   const cfg = {
     active: { icon: CheckCircle, label: 'Berlaku', classes: 'bg-green-100 text-green-700 border-green-200' },
     upcoming: { icon: Clock, label: 'Akan Datang', classes: 'bg-blue-100 text-blue-700 border-blue-200' },
-    expired: { icon: XCircleIcon, label: 'Berakhir', classes: 'bg-gray-100 text-gray-500 border-gray-200' },
+    expired: { icon: XCircle, label: 'Berakhir', classes: 'bg-gray-100 text-gray-500 border-gray-200' },
   };
   const c = cfg[state];
   const Icon = c.icon;

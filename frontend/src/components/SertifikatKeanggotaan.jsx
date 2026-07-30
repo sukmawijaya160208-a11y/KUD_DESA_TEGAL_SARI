@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useMemo, useCallback, useEffect } from 'react';
+import { formatDateId } from '@/lib/date';
 
 const DEFAULT_CONFIG = {
   template: 'classic-gold',
@@ -47,9 +48,8 @@ const TEMPLATES = {
 
 function formatDateLocal(dateStr) {
   if (!dateStr) return '-';
-  const d = new Date(dateStr);
-  if (isNaN(d)) return dateStr;
-  return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  const formatted = formatDateId(dateStr, { day: 'numeric', month: 'long', year: 'numeric' });
+  return formatted || dateStr;
 }
 
 function SertifikatContent({ data, config, width }) {

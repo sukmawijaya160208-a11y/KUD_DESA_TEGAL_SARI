@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import { formatDateId } from '@/lib/date';
 
 const KADES_MAP = {
   'tegal sari': { nama: 'SISWOYO', title: 'Kepala Desa Tegalsari Kecamatan Megang Sakti' },
@@ -53,11 +54,7 @@ function replacePlaceholders(text, data) {
 
 function todayDateStr() {
   try {
-    return new Date().toLocaleDateString('id-ID', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
+    return formatDateId(Date.now(), { day: 'numeric', month: 'long', year: 'numeric' });
   } catch {
     return '_________________________';
   }

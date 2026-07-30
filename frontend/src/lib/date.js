@@ -1,6 +1,26 @@
 import { format as fnsFormat, formatDistanceToNow, isToday, isYesterday, parseISO, isValid } from 'date-fns';
 import { id } from 'date-fns/locale';
 
+export function formatTimeId(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return '';
+  return fnsFormat(d, 'HH:mm', { locale: id });
+}
+
+export function formatDateId(dateStr, options) {
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return '';
+  const { day = 'numeric', month = 'long', year = 'numeric', weekday } = options || {};
+  let fmt = '';
+  if (weekday) fmt += 'EEEE, ';
+  fmt += day === 'numeric' ? 'd' : 'dd';
+  fmt += ' ';
+  fmt += month === 'long' ? 'MMMM' : 'MMM';
+  if (year === 'numeric') fmt += ' yyyy';
+  return fnsFormat(d, fmt, { locale: id });
+}
+
 export function formatDate(date, fmt = 'dd MMM yyyy') {
   const d = typeof date === 'string' ? parseISO(date) : date;
   if (!isValid(d)) return '';

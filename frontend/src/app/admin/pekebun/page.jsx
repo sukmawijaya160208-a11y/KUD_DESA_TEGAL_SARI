@@ -13,7 +13,7 @@ import DatePicker from '@/components/ui/DatePicker';
 import { motion } from 'framer-motion';
 import { SquarePen, Trash2, Plus, Eye, X, Search, Filter, ArrowUp, ArrowDown, ChevronDown, ChevronRight, FileDown, ShieldAlert, CheckCircle, MapPin, CalendarDays, FileText, Phone, Users, AlertTriangle } from 'lucide-react';
 import * as XLSX from 'xlsx';
-import { formatDate } from '@/lib/date';
+import { formatDate, formatDateId } from '@/lib/date';
 
 const isMobile = typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
@@ -299,7 +299,7 @@ export default function AdminPekebunPage() {
 </style></head><body>
   <div class="kop"><h1>KOPERASI UNIT DESA (KUD) SARI SUBUR</h1><p>Desa Tegal Sari, Kec. Megang Sakti, Kab. Musi Rawas, Sumatera Selatan</p><div class="title">LAPORAN DATA ANGGOTA PEKEBUN</div></div>
   <table><thead><tr><th>No</th><th>Nama</th><th>NIK</th><th>No. WA</th><th>Lahan</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>
-  <div class="footer">Total: ${data.length} pekebun &nbsp;|&nbsp; Dicetak: ${new Date().toLocaleDateString('id-ID')}</div>
+  <div class="footer">Total: ${data.length} pekebun &nbsp;|&nbsp; Dicetak: ${formatDateId(Date.now())}</div>
 <script>window.onload=function(){setTimeout(function(){window.print();window.close();},100);};</script>
 </body></html>`);
     win.document.close();

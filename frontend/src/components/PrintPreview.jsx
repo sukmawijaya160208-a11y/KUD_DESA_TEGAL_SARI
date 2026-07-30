@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Eye, Printer, X, Download } from 'lucide-react';
+import { formatDateId } from '@/lib/date';
 
 export default function PrintPreview({ title, fetchAll, renderContent, onLoad, pdfUrl, pdfFileName = 'dokumen.pdf' }) {
   const [isMobile, setIsMobile] = useState(false);
@@ -75,7 +76,7 @@ export default function PrintPreview({ title, fetchAll, renderContent, onLoad, p
               <div class="kud-name">KUD Desa Sari Subur</div>
               <div class="kud-sub">Sistem Informasi Koperasi Unit Desa</div>
             </div>
-            <div class="head-date">${new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+            <div class="head-date">${formatDateId(Date.now(), { weekday: true, year: 'numeric', month: 'long', day: 'numeric' })}</div>
           </div>
         </div>
         <div class="doc-title">${title}</div>

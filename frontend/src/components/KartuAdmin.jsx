@@ -2,11 +2,11 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { Printer, Download, FileText } from 'lucide-react';
+import { formatDateId } from '@/lib/date';
 
 function formatTgl(d) {
   if (!d) return '-';
-  const date = new Date(d);
-  return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  return formatDateId(d, { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 const DEFAULT_CONFIG = {

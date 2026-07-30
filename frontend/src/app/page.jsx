@@ -10,6 +10,7 @@ import MapSection from '@/components/MapSection';
 import Modal from '@/components/ui/Modal';
 import Hero3DScene from '@/components/Hero3DScene';
 import HargaTbsWidget from '@/components/HargaTbsWidget';
+import { formatDateId } from '@/lib/date';
 
 import {
   LayoutGrid, MessageCircle, CircleHelp, Newspaper,
@@ -229,13 +230,13 @@ function ProgramModal({ program, onClose }) {
               {program.tanggal_mulai && (
                 <div className="p-3 rounded-xl bg-gray-50/80 border border-white/40">
                   <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Mulai</div>
-                  <div className="text-sm font-medium text-foreground">{new Date(program.tanggal_mulai).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                  <div className="text-sm font-medium text-foreground">{formatDateId(program.tanggal_mulai, { day: 'numeric', month: 'long', year: 'numeric' })}</div>
                 </div>
               )}
               {program.tanggal_selesai && (
                 <div className="p-3 rounded-xl bg-gray-50/80 border border-white/40">
                   <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Selesai</div>
-                  <div className="text-sm font-medium text-foreground">{new Date(program.tanggal_selesai).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                  <div className="text-sm font-medium text-foreground">{formatDateId(program.tanggal_selesai, { day: 'numeric', month: 'long', year: 'numeric' })}</div>
                 </div>
               )}
               {program.kuota && (
@@ -431,7 +432,7 @@ export default function Home() {
         </div>
         <div className="absolute bottom-3 left-3 z-[2] flex items-center gap-1.5 text-xs text-white bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
           <CalendarDays className="w-3 h-3" />
-          {post.published_at ? new Date(post.published_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : post.date}
+          {post.published_at ? formatDateId(post.published_at, { day: 'numeric', month: 'short', year: 'numeric' }) : post.date}
         </div>
       </div>
       <div className="p-5">
@@ -1489,7 +1490,7 @@ function DokumentasiGallery({ items }) {
             )}
             <div>
               {detailItem.created_at && (
-                <p className="text-xs text-gray-400 mb-1">{new Date(detailItem.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                <p className="text-xs text-gray-400 mb-1">{formatDateId(detailItem.created_at, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
               )}
               {detailItem.title && <h3 className="font-bold text-foreground text-lg">{detailItem.title}</h3>}
             </div>

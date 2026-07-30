@@ -29,7 +29,7 @@ export default function HeroDeveloper({ data, admin, onEdit }) {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-slate-700/50 text-slate-400">
-                    <CameraIcon className="w-16 h-16" />
+                    <Camera className="w-16 h-16" />
                   </div>
                 )}
               </div>
@@ -73,7 +73,7 @@ export default function HeroDeveloper({ data, admin, onEdit }) {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-slate-300 hover:text-pink-400 transition-colors text-sm"
                 >
-                  <CameraIcon className="w-4 h-4" />
+                  <Camera className="w-4 h-4" />
                   {data.instagram}
                 </a>
               )}

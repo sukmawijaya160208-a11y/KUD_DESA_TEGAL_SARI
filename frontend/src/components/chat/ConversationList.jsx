@@ -3,6 +3,7 @@
 import { useState, useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import { MessageCircle, Plus, Search } from 'lucide-react';
+import { formatDateId } from '@/lib/date';
 
 function timeAgo(dateStr) {
   if (!dateStr) return '';
@@ -14,7 +15,7 @@ function timeAgo(dateStr) {
   if (hours < 24) return `${hours}j`;
   const days = Math.floor(hours / 24);
   if (days < 7) return `${days}h`;
-  return new Date(dateStr).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+  return formatDateId(dateStr, { day: 'numeric', month: 'short' });
 }
 
 function otherUser(conversation, myId) {

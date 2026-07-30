@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { DollarSign, RefreshCw, CalendarDays, BadgeCheck } from 'lucide-react';
 import { api } from '@/lib/api';
+import { formatDateId } from '@/lib/date';
 
 const KELAS_INFO = {
   A: { label: 'Kelas A', desc: 'Kualitas Terbaik', bg: 'from-emerald-500/20 to-emerald-600/10', border: 'border-emerald-500/30', text: 'text-emerald-600', badge: 'bg-emerald-500' },
@@ -59,7 +60,7 @@ function PriceCard({ kelas, data, index }) {
 
       <div className="flex items-center gap-1.5 text-[11px] text-gray-400">
         <CalendarDays className="w-3.5 h-3.5" />
-        <span>Berlaku {new Date(data.dari_tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+        <span>Berlaku {formatDateId(data.dari_tanggal, { day: 'numeric', month: 'long', year: 'numeric' })}</span>
       </div>
 
       {data.keterangan && (
@@ -120,7 +121,7 @@ export default function HargaTbsWidget() {
               {latestDate && (
                 <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1.5">
                   <CalendarDays className="w-3.5 h-3.5" />
-                  Update: {new Date(latestDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  Update: {formatDateId(latestDate, { day: 'numeric', month: 'long', year: 'numeric' })}
                 </p>
               )}
             </div>

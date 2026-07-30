@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 import * as XLSX from 'xlsx';
 import { useLogo } from '@/hooks/useLogo';
 import { useToast } from '@/components/ToastProvider';
-import { formatDate, formatRelative } from '@/lib/date';
+import { formatDate, formatRelative, formatDateId } from '@/lib/date';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -551,7 +551,7 @@ export default function AdminUsersPage() {
         <h2>Daftar User (${printData.length} user)</h2>
         <table><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
         <tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>
-        <div class="footer">Dicetak pada ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+        <div class="footer">Dicetak pada ${formatDateId(Date.now(), { day: 'numeric', month: 'long', year: 'numeric' })}</div>
         <script>window.onload=function(){window.print();window.close();};<\/script>
       </body></html>
     `);

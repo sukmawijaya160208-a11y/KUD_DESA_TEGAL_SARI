@@ -6,6 +6,7 @@ import ChatHeader from './ChatHeader';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
 import CallHistoryModal from './CallHistoryModal';
+import { formatDateId } from '@/lib/date';
 
 function groupByDate(messages) {
   const groups = [];
@@ -29,7 +30,7 @@ function formatDate(dateStr) {
   yesterday.setDate(yesterday.getDate() - 1);
   if (d.toDateString() === today.toDateString()) return 'Hari ini';
   if (d.toDateString() === yesterday.toDateString()) return 'Kemarin';
-  return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  return formatDateId(d, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 export default function ChatWindow({ conversation, messages, myId, onSend, onDeleteMessage, onCall, onVideoCall, onMobileBack, otherTyping }) {

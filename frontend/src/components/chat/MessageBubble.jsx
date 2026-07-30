@@ -1,13 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect, memo } from 'react';
-import { motion } from 'framer-motion';
 import { X, Download, Play, Pause } from 'lucide-react';
-
-function formatTime(dateStr) {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-}
+import { formatTimeId } from '@/lib/date';
+import { Message, MessageContent, MessageFooter, MessageAvatar } from '@/components/ui/message';
 
 const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/gif'];
 
@@ -150,14 +146,14 @@ const MessageBubble = memo(function MessageBubble({ message, isMine, onReply, on
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`flex ${isMine ? 'justify-end' : 'justify-start'} px-4 mb-1`}
+    <Message
+      align={isMine ? "end" : "start"}
+      className={`${isMine ? 'ml-auto' : ''} w-fit max-w-[80%] lg:max-w-[65%] px-4 mb-1 relative`}
     >
-      <div className={`max-w-[80%] lg:max-w-[65%] relative ${isMine ? 'order-1' : 'order-1'}`}>
-        <div
-          className={`relative rounded-2xl px-4 py-2.5 ${
+      <MessageAvatar />
+      <div className="flex min-w-0 flex-col flex-1">
+        <MessageContent
+          className={`gap-0 rounded-2xl px-4 py-2.5 ${
             isMine
               ? 'bg-wa-primary-light text-foreground rounded-br-sm bubble-tail-out'
               : 'bg-white text-foreground rounded-bl-sm bubble-tail-in border border-border shadow-sm'
@@ -181,13 +177,13 @@ const MessageBubble = memo(function MessageBubble({ message, isMine, onReply, on
           {message.message === '[Pesan telah dihapus]' && (
             <p className="text-xs italic opacity-60">Pesan telah dihapus</p>
           )}
-          <div className={`flex items-center gap-1 mt-1 ${isMine ? 'justify-end' : 'justify-start'}`}>
-            <span className={`text-[10px] ${isMine ? 'text-foreground/50' : 'text-gray-400'}`}>
-              {formatTime(message.created_at)}
-            </span>
-            {isMine && <ReadReceipt status={message.status} />}
-          </div>
-        </div>
+        </MessageContent>
+        <MessageFooter className="px-1 gap-1">
+          <span className={`text-[10px] ${isMine ? 'text-foreground/50' : 'text-gray-400'}`}>
+            {formatTimeId(message.created_at)}
+          </span>
+          {isMine && <ReadReceipt status={message.status} />}
+        </MessageFooter>
       </div>
 
       {context && (
@@ -209,7 +205,7 @@ const MessageBubble = memo(function MessageBubble({ message, isMine, onReply, on
           </div>
         </>
       )}
-    </motion.div>
+    </Message>
   );
 });
 

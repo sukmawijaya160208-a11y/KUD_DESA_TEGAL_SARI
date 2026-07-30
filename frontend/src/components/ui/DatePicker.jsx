@@ -1,16 +1,11 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { formatDateId } from '@/lib/date';
 
 function formatIndonesianDate(dateString) {
   if (!dateString) return '';
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return dateString;
-  return date.toLocaleDateString('id-ID', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
+  return formatDateId(dateString, { day: 'numeric', month: 'long', year: 'numeric' }) || dateString;
 }
 
 export default function DatePicker({

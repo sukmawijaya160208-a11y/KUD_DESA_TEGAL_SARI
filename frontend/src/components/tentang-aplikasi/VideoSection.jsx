@@ -137,7 +137,7 @@ export default function VideoSection({ urlVideo, isAdmin, onUpload, onRemove, up
                     onClick={onRemove}
                     className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-xl border border-red-500/30 transition-all duration-200 text-sm font-medium backdrop-blur-sm"
                   >
-                    <TrashIcon className="w-4 h-4" />
+                    <Trash2 className="w-4 h-4" />
                     Hapus Video
                   </button>
                   <input
