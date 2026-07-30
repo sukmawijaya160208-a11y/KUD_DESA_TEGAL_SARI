@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { DollarSign } from 'lucide-react';
+import { DollarSign } from '@/lib/animated-icons';
 
 export default function TbsCalculator() {
   const [hektar, setHektar] = useState(2);
@@ -16,7 +16,7 @@ export default function TbsCalculator() {
   const pendapatan = totalBerat * harga;
   const pendapatanPerBulan = pendapatan / 6;
 
-  const formatRupiah = (num) => 'Rp ' + Math.round(num).toLocaleString('id-ID');
+  const formatRupiah = (num) => 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(num));
 
   return (
     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-2xl mx-auto bg-white rounded-2xl shadow-card border border-gray-100 p-6 md:p-8">

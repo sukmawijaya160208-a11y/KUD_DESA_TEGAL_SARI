@@ -14,7 +14,7 @@ import {
   CheckCircle, AlertCircle, MapPin,
   SquarePen, ChevronLeft, ChevronRight,
   Check, Eye, FolderOpen, Image,
-} from 'lucide-react';
+} from '@/lib/animated-icons';
 
 const BERKAS_CEK = [
   { key: 'ktp', label: 'Foto KTP', field: 'upload_ktp', sumber: 'profil' },

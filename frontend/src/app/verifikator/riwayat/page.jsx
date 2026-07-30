@@ -8,7 +8,7 @@ import { useToast } from '@/components/ToastProvider';
 import Card from '@/components/ui/Card';
 import Modal from '@/components/ui/Modal';
 import Select from '@/components/ui/Select';
-import { Clock, CheckCircle, XCircle, Search, Filter, X, ArrowUp, ArrowDown, Eye, ShieldCheck, Trash2, ExternalLink, ChevronDown, ChevronRight, AlertTriangle, FileDown } from 'lucide-react';
+import { Clock, CheckCircle, XCircle, Search, Filter, X, ArrowUp, ArrowDown, Eye, ShieldCheck, Trash2, ExternalLink, ChevronDown, ChevronRight, AlertTriangle, FileDown } from '@/lib/animated-icons';
 
 const TINDAKAN_OPTIONS = [
   { value: '', label: 'Semua Tindakan' },

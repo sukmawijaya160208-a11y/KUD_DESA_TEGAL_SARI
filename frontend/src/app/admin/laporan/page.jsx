@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import Card from '@/components/ui/Card';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3 } from '@/lib/animated-icons';
 
 function Bar({ label, value, max, color }) {
   const pct = max > 0 ? (value / max) * 100 : 0;

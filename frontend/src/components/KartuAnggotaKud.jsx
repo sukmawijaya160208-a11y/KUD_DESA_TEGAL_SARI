@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { Printer, Download, FileText } from 'lucide-react';
+import { Printer, Download, FileText } from '@/lib/animated-icons';
 import { formatDateId } from '@/lib/date';
 
 function formatTgl(d) {

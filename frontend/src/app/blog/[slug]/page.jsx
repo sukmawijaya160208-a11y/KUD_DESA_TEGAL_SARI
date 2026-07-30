@@ -6,7 +6,7 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import { formatDateLong } from '@/lib/date';
 import { api } from '@/lib/api';
 import Link from 'next/link';
-import { Newspaper, Clock, Eye, ArrowLeft, ChevronLeft, Share2, Image, Video } from 'lucide-react';
+import { Newspaper, Clock, Eye, ArrowLeft, ChevronLeft, Share2, Image, Video } from '@/lib/animated-icons';
 
 const CATEGORY_COLORS = {
   Pelatihan: { bg: 'bg-blue-500/10', text: 'text-blue-600', dot: 'bg-blue-500' },

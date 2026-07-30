@@ -8,7 +8,7 @@ import Badge from '@/components/ui/Badge';
 import { TableSkeleton } from '@/components/ui/Skeleton';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
-import { ShieldAlert, Search, Filter, X, CheckCircle, XCircle, ArrowUp, ArrowDown, Clock, Eye, ChevronDown, ChevronRight } from 'lucide-react';
+import { ShieldAlert, Search, Filter, X, CheckCircle, XCircle, ArrowUp, ArrowDown, Clock, Eye, ChevronDown, ChevronRight } from '@/lib/animated-icons';
 import { formatDate, formatRelative } from '@/lib/date';
 const TINDAKAN_OPTIONS = [
   { value: '', label: 'Semua Tindakan' },

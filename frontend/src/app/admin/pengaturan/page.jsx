@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 import CardDesignEditor from '@/components/CardDesignEditor';
 import SertifikatDesignEditor from '@/components/SertifikatDesignEditor';
 import AdminCardDesignEditor from '@/components/AdminCardDesignEditor';
-import { Settings, Trash2, Plus, CreditCard, Building, User, ShieldCheck, Server, Key, Eye, EyeOff, LogOut, Upload, AlertCircle, UserCircle } from 'lucide-react';
+import { Settings, Trash2, Plus, CreditCard, Building, User, ShieldCheck, Server, Key, Eye, EyeOff, LogOut, Upload, AlertCircle, UserCircle } from '@/lib/animated-icons';
 
 const TABS = [
   { id: 'profil', label: 'Profil Admin', icon: User, color: 'from-blue-500 to-blue-600' },

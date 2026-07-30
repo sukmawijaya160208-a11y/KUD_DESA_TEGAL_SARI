@@ -14,7 +14,7 @@ import Modal from '@/components/ui/Modal';
 import DateRangePicker from '@/components/ui/DateRangePicker';
 import Badge from '@/components/ui/Badge';
 import { TableSkeleton } from '@/components/ui/Skeleton';
-import { Users, Eye, X, Search, Filter, ArrowUp, ArrowDown, ChevronDown, ChevronRight, FileDown, Trash2, AlertTriangle, RefreshCw, SquarePen, User, Phone, Image, ShieldCheck, CheckCircle, MapPin, ClipboardList, BarChart3 } from 'lucide-react';
+import { Users, Eye, X, Search, Filter, ArrowUp, ArrowDown, ChevronDown, ChevronRight, FileDown, Trash2, AlertTriangle, RefreshCw, SquarePen, User, Phone, Image, ShieldCheck, CheckCircle, MapPin, ClipboardList, BarChart3 } from '@/lib/animated-icons';
   const ROLE_STYLES = {
     admin: 'bg-blue-100 text-blue-700 ring-blue-300',
     verifikator: 'bg-purple-100 text-purple-700 ring-purple-300',

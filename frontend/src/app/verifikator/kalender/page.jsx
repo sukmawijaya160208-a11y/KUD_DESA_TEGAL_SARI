@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays } from '@/lib/animated-icons';
 import { Calendar } from '@/components/ui/calendar';
 import Card from '@/components/ui/Card';
 

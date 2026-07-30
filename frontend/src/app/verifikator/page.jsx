@@ -8,7 +8,7 @@ import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
-import { BadgeCheck, Eye, X, Search, CheckCircle, XCircle, Clock, ShieldCheck, FileText, CalendarDays, MapPin, Phone, Users, Filter, ArrowUp, ArrowDown, ChevronDown, ChevronRight, FileDown, Trash2, AlertTriangle, Plus, SquarePen, Image } from 'lucide-react';
+import { BadgeCheck, Eye, X, Search, CheckCircle, XCircle, Clock, ShieldCheck, FileText, CalendarDays, MapPin, Phone, Users, Filter, ArrowUp, ArrowDown, ChevronDown, ChevronRight, FileDown, Trash2, AlertTriangle, Plus, SquarePen, Image } from '@/lib/animated-icons';
 import { formatDate, formatRelative } from '@/lib/date';
 
 const containerAnim = {

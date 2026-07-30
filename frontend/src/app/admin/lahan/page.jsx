@@ -6,7 +6,7 @@ import { useToast } from '@/components/ToastProvider';
 import Card from '@/components/ui/Card';
 import { TableSkeleton } from '@/components/ui/Skeleton';
 import { motion } from 'framer-motion';
-import { MapPin, X, Search, Image, FileText } from 'lucide-react';
+import { MapPin, X, Search, Image, FileText } from '@/lib/animated-icons';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },

@@ -8,7 +8,7 @@ import { formatDate } from '@/lib/date';
 import {
   Eye, CheckCircle, XCircle, FileText,
   CreditCard, X
-} from 'lucide-react';
+} from '@/lib/animated-icons';
 
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',

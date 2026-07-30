@@ -6,7 +6,7 @@ import { useToast } from '@/components/ToastProvider';
 import {
   DollarSign, CalendarDays, CheckCircle,
   Clock, XCircle, TrendingUp, TrendingDown,
-} from 'lucide-react';
+} from '@/lib/animated-icons';
 import { formatDate, formatDateShort, todayStr } from '@/lib/date';
 
 const KELAS_DISPLAY = {

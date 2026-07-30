@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, ChevronLeft, ChevronRight, Filter, X } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Filter, X } from '@/lib/animated-icons';
 
 const PAGE_SIZES = [10, 25, 50, 100];
 

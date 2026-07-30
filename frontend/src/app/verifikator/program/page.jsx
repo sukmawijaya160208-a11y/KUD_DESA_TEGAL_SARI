@@ -9,7 +9,7 @@ import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
-import { FileText, X, MapPin, ChevronDown, ChevronRight, Search, CheckCircle, XCircle, Clock, Filter } from 'lucide-react';
+import { FileText, X, MapPin, ChevronDown, ChevronRight, Search, CheckCircle, XCircle, Clock, Filter } from '@/lib/animated-icons';
 
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',

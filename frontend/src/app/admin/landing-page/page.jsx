@@ -8,7 +8,7 @@ import Modal from '@/components/ui/Modal';
 import FormModal from './components/FormModal';
 import HeroSectionCMS from './components/HeroSectionCMS';
 import { motion, AnimatePresence } from 'framer-motion';
-import {   Sparkles, Plus, SquarePen, Trash2, X, ClipboardList, GraduationCap, Image, BarChart3, Building, MessageCircle, CircleHelp, Phone, Newspaper, CalendarDays, MapPin, Video, Star, ChevronUp, ChevronDown } from 'lucide-react';
+import {   Sparkles, Plus, SquarePen, Trash2, X, ClipboardList, GraduationCap, Image, BarChart3, Building, MessageCircle, CircleHelp, Phone, Newspaper, CalendarDays, MapPin, Video, Star, ChevronUp, ChevronDown } from '@/lib/animated-icons';
 
 const containerAnim = {
   hidden: { opacity: 0 },

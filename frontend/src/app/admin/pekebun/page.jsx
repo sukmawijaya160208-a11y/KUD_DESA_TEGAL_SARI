@@ -11,7 +11,7 @@ import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import DatePicker from '@/components/ui/DatePicker';
 import { motion } from 'framer-motion';
-import { SquarePen, Trash2, Plus, Eye, X, Search, Filter, ArrowUp, ArrowDown, ChevronDown, ChevronRight, FileDown, ShieldAlert, CheckCircle, MapPin, CalendarDays, FileText, Phone, Users, AlertTriangle } from 'lucide-react';
+import { SquarePen, Trash2, Plus, Eye, X, Search, Filter, ArrowUp, ArrowDown, ChevronDown, ChevronRight, FileDown, ShieldAlert, CheckCircle, MapPin, CalendarDays, FileText, Phone, Users, AlertTriangle, Clock, Printer, Image, IdCard, Smartphone } from '@/lib/animated-icons';
 import * as XLSX from 'xlsx';
 import { formatDate, formatDateId } from '@/lib/date';
 
@@ -84,19 +84,19 @@ function PekebunRow({ pekebun, onEdit, onDelete, onDetail, onPreview, onPrint })
           {pekebun.foto_pekebun && (
             <button onClick={() => onPreview(pekebun.foto_pekebun)}
               className="text-xs text-primary hover:underline cursor-pointer flex items-center gap-0.5">
-              <PhotoIcon className="w-3 h-3" /> Foto
+              <Image className="w-3 h-3" /> Foto
             </button>
           )}
           {pekebun.upload_ktp && (
             <button onClick={() => onPreview(pekebun.upload_ktp)}
               className="text-xs text-purple-600 hover:underline cursor-pointer flex items-center gap-0.5">
-              <IdentificationIcon className="w-3 h-3" /> KTP
+              <IdCard className="w-3 h-3" /> KTP
             </button>
           )}
           {pekebun.upload_kk && (
             <button onClick={() => onPreview(pekebun.upload_kk)}
               className="text-xs text-green-600 hover:underline cursor-pointer flex items-center gap-0.5">
-              <DevicePhoneMobileIcon className="w-3 h-3" /> KK
+              <Smartphone className="w-3 h-3" /> KK
             </button>
           )}
           {!pekebun.foto_pekebun && !pekebun.upload_ktp && !pekebun.upload_kk && (
@@ -108,7 +108,7 @@ function PekebunRow({ pekebun, onEdit, onDelete, onDetail, onPreview, onPrint })
       <td className="py-3.5 px-3">
         <div className="flex gap-1">
           <button onClick={() => onPrint(pekebun)} className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer" title="Cetak">
-            <PrinterIcon className="w-4 h-4" />
+            <Printer className="w-4 h-4" />
           </button>
           <button onClick={() => onDetail(pekebun)} className="p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer" title="Detail">
             <Eye className="w-4 h-4" />
@@ -471,7 +471,7 @@ export default function AdminPekebunPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={handlePrintAll} className="mr-2"><PrinterIcon className="w-4 h-4" /> Cetak Laporan</Button>
+          <Button variant="outline" onClick={handlePrintAll} className="mr-2"><Printer className="w-4 h-4" /> Cetak Laporan</Button>
           <Button variant="outline" onClick={() => setImportModal(true)}><FileDown className="w-4 h-4" /> Import Excel</Button>
           <Button onClick={openCreate}><Plus className="w-4 h-4" /> Tambah Pekebun</Button>
         </div>
@@ -479,7 +479,7 @@ export default function AdminPekebunPage() {
 
       <motion.div variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-5">
         <StatsCard label="Total Pekebun" value={stats.total} icon={Users} color="bg-gradient-to-br from-blue-500 to-blue-600" />
-        <StatsCard label="Pending" value={stats.pending} icon={ClockIcon} color="bg-gradient-to-br from-yellow-500 to-yellow-600" />
+        <StatsCard label="Pending" value={stats.pending} icon={Clock} color="bg-gradient-to-br from-yellow-500 to-yellow-600" />
         <StatsCard label="Verified" value={stats.verified} icon={CheckCircle} color="bg-gradient-to-br from-emerald-500 to-emerald-600" />
         <StatsCard label="Rejected" value={stats.rejected} icon={X} color="bg-gradient-to-br from-red-500 to-red-600" />
       </motion.div>

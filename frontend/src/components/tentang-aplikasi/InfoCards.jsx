@@ -8,7 +8,7 @@ import {
   Globe,
   MapPin,
   ArrowUpRight,
-} from 'lucide-react';
+} from '@/lib/animated-icons';
 
 const INFO_FIELDS = [
   { key: 'kontak', label: 'Kontak', icon: Phone, color: 'text-emerald-500', bgColor: 'bg-emerald-100' },

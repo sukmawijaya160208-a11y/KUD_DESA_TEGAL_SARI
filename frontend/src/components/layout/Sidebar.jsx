@@ -13,7 +13,7 @@ import {
   Bell, MapPin, ShieldAlert, BookOpen,
   DollarSign, Download, MessageCircle, Info,
   ChevronsLeft, ChevronsRight, Newspaper, LayoutGrid, CreditCard
-} from 'lucide-react';
+} from '@/lib/animated-icons';
 
 const iconMap = {
   Dashboard: Home, 'Data Pekebun': Users, 'Program KUD': ClipboardList,

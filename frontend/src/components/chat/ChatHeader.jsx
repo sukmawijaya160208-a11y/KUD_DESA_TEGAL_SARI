@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import { ArrowLeft, Phone, Video, EllipsisVertical } from 'lucide-react';
+import { ArrowLeft, Phone, Video, EllipsisVertical } from '@/lib/animated-icons';
 import { motion } from 'framer-motion';
 
 function isOnline(user) {

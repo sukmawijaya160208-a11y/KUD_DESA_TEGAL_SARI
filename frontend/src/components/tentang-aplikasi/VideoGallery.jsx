@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { PlayCircle } from 'lucide-react';
+import { PlayCircle } from '@/lib/animated-icons';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
 
 export default function VideoGallery({ youtubeUrl, isAdmin, onUpdateUrl }) {

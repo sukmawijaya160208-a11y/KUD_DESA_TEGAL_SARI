@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Button from '@/components/ui/Button';
 import SertifikatKeanggotaan from '@/components/SertifikatKeanggotaan';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from '@/lib/animated-icons';
 
 const FIELD_LABELS = {
   border_deco: 'Border Dekorasi',

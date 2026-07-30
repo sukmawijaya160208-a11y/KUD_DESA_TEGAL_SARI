@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Bell, Volume2, Image, Key } from 'lucide-react';
+import { X, Bell, Volume2, Image, Key } from '@/lib/animated-icons';
 import { api } from '@/lib/api';
 
 const WALLPAPERS = [

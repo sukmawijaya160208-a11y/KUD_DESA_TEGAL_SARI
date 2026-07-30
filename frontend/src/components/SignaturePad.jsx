@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { RefreshCw, Check } from 'lucide-react';
+import { RefreshCw, Check } from '@/lib/animated-icons';
 
 export default function SignaturePad({ value, onChange, height = 150 }) {
   const canvasRef = useRef(null);

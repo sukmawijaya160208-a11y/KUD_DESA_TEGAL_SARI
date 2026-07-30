@@ -9,7 +9,7 @@ import Textarea from '@/components/ui/Textarea';
 import Select from '@/components/ui/Select';
 import Modal from '@/components/ui/Modal';
 import DatePicker from '@/components/ui/DatePicker';
-import { DollarSign, Plus, Pencil, Trash2, CalendarDays, CheckCircle, Clock } from 'lucide-react';
+import { DollarSign, Plus, Pencil, Trash2, CalendarDays, CheckCircle, Clock } from '@/lib/animated-icons';
 import { formatDate, todayStr } from '@/lib/date';
 
 const KELAS = { A: 'Tandan Buah Segar A', B: 'Tandan Buah Segar B', C: 'Tandan Buah Segar C' };

@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Mic, Video, Volume2 } from 'lucide-react';
+import { Phone, Mic, Video, Volume2 } from '@/lib/animated-icons';
 import { useCall } from './CallProvider';
 
 export default function CallScreen() {

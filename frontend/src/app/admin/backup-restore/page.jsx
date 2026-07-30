@@ -10,7 +10,7 @@ import {
   Download, Upload, AlertTriangle,
   CheckCircle, XCircle, ShieldCheck, FileText,
   Clock, Database, CloudDownload,
-} from 'lucide-react';
+} from '@/lib/animated-icons';
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -21,8 +21,10 @@ const stagger = {
   animate: { transition: { staggerChildren: 0.1 } },
 };
 
+import { formatNumberId } from '@/lib/date';
+
 function formatNumber(n) {
-  return (n || 0).toLocaleString('id-ID');
+  return formatNumberId(n || 0);
 }
 
 export default function BackupRestorePage() {

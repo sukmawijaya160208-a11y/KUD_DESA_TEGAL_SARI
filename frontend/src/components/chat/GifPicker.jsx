@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search } from 'lucide-react';
+import { Search } from '@/lib/animated-icons';
 
 const TRENDING = [
   'https://media.tenor.com/8Qamkf5SMFIAAAAC/ok-thumbs-up.gif',

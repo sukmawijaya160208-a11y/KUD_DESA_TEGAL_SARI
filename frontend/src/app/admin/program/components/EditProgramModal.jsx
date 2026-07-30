@@ -15,7 +15,7 @@ import {
   Plus, SquarePen, Trash2,
   X, Image, CheckCircle,
   FileText, AlertCircle,
-} from 'lucide-react';
+} from '@/lib/animated-icons';
 
 const JENIS_OPTIONS = ['PSR', 'Intensifikasi', 'Ekstensifikasi', 'Pelatihan SDMPKS', 'Beasiswa SDMPKS', 'Kemitraan'];
 

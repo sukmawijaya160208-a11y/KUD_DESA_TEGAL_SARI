@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
-import { Send, Paperclip, Smile, Image, Music } from 'lucide-react';
+import { Send, Paperclip, Smile, Image, Music } from '@/lib/animated-icons';
 import EmojiPicker from './EmojiPicker';
 import GifPicker from './GifPicker';
 import StickerPicker from './StickerPicker';

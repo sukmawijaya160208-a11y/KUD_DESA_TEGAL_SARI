@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
-import { X, Search, UserPlus } from 'lucide-react';
+import { X, Search, UserPlus } from '@/lib/animated-icons';
 
 export default function NewChatModal({ open, onClose, onStart }) {
   const toast = useToast();

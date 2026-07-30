@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
-import { Sparkles } from 'lucide-react';
+import { Sparkles } from '@/lib/animated-icons';
 
 export default function HeroSectionCMS() {
   const [formData, setFormData] = useState({

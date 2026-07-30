@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
+import { X } from '@/lib/animated-icons';
 
 export default function Modal({ open, onClose, title, children, maxWidth = 'max-w-lg' }) {
   const overlayRef = useRef();

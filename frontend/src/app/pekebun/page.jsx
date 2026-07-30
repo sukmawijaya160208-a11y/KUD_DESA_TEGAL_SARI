@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { motion } from 'framer-motion';
-import { User, FileText, ClipboardList, ChevronRight } from 'lucide-react';
+import { User, FileText, ClipboardList, ChevronRight } from '@/lib/animated-icons';
 
 const container = {
   hidden: { opacity: 0 },

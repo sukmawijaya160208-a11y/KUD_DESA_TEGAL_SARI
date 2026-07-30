@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
-import { Bell, Check } from 'lucide-react';
+import { Bell, Check } from '@/lib/animated-icons';
 
 export default function NotifDropdown() {
   const [open, setOpen] = useState(false);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, memo } from 'react';
-import { X, Download, Play, Pause } from 'lucide-react';
+import { X, Download, Play, Pause } from '@/lib/animated-icons';
 import { formatTimeId } from '@/lib/date';
 import { Message, MessageContent, MessageFooter, MessageAvatar } from '@/components/ui/message';
 

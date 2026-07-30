@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Lock, ChevronLeft } from 'lucide-react';
+import { Lock, ChevronLeft } from '@/lib/animated-icons';
 import Link from 'next/link';
 
 export default function KebijakanPrivasiPage() {

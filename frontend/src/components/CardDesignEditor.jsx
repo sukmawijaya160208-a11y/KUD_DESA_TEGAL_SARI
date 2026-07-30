@@ -8,7 +8,7 @@ import { useToast } from '@/components/ToastProvider';
 import Button from '@/components/ui/Button';
 import KartuAnggotaKud from '@/components/KartuAnggotaKud';
 import SignaturePad from '@/components/SignaturePad';
-import { CreditCard } from 'lucide-react';
+import { CreditCard } from '@/lib/animated-icons';
 
 const ITEM_TYPE = 'FIELD';
 

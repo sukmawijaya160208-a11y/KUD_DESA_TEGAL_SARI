@@ -7,7 +7,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 import Modal from '@/components/ui/Modal';
-import { Plus, SquarePen, X } from 'lucide-react';
+import { Plus, SquarePen, X } from '@/lib/animated-icons';
 
 const SECTION_FIELDS = {
   langkah: [

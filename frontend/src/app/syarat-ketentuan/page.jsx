@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ShieldCheck, ChevronLeft } from 'lucide-react';
+import { ShieldCheck, ChevronLeft } from '@/lib/animated-icons';
 import Link from 'next/link';
 
 export default function SyaratKetentuanPage() {

@@ -1,7 +1,7 @@
 'use client';
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { PlayCircle, Upload, Trash2 } from 'lucide-react';
+import { PlayCircle, Upload, Trash2 } from '@/lib/animated-icons';
 
 export default function VideoSection({ urlVideo, isAdmin, onUpload, onRemove, uploading }) {
   const fileRef = useRef(null);

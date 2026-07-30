@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Phone, Video, ArrowDown, PhoneOff } from 'lucide-react';
+import { X, Phone, Video, ArrowDown, PhoneOff } from '@/lib/animated-icons';
 import { api } from '@/lib/api';
 import { formatDateId, formatTimeId } from '@/lib/date';
 

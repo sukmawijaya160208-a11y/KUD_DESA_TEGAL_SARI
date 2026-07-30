@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import KartuAdmin from '@/components/KartuAdmin';
 import { motion } from 'framer-motion';
-import { CreditCard } from 'lucide-react';
+import { CreditCard } from '@/lib/animated-icons';
 
 export default function AdminKartuPage() {
   const [data, setData] = useState(null);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Eye, Printer, X, Download } from 'lucide-react';
+import { Eye, Printer, X, Download } from '@/lib/animated-icons';
 import { formatDateId } from '@/lib/date';
 
 export default function PrintPreview({ title, fetchAll, renderContent, onLoad, pdfUrl, pdfFileName = 'dokumen.pdf' }) {

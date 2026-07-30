@@ -9,7 +9,7 @@ import NewChatModal from './NewChatModal';
 import IncomingCall from './IncomingCall';
 import CallScreen from './CallScreen';
 import MessageSettingsModal from './MessageSettingsModal';
-import { MessageCircle, Settings } from 'lucide-react';
+import { MessageCircle, Settings } from '@/lib/animated-icons';
 
 const POLL_INTERVAL = 3000;
 

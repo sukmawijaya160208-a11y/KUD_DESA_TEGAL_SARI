@@ -1,6 +1,6 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { X } from '@/lib/animated-icons';
 
 export default function ReplyPreview({ message, onCancel }) {
   if (!message) return null;

@@ -12,7 +12,7 @@ import DatePicker from '@/components/ui/DatePicker';
 import Modal from '@/components/ui/Modal';
 import PrintButton from '@/components/PrintButton';
 import { CardSkeleton } from '@/components/ui/Skeleton';
-import { User, Pencil, Camera, FileText, ShieldCheck } from 'lucide-react';
+import { User, Pencil, Camera, FileText, ShieldCheck } from '@/lib/animated-icons';
 import KartuAnggotaKud from '@/components/KartuAnggotaKud';
 import SertifikatKeanggotaan from '@/components/SertifikatKeanggotaan';
 import { formatDate } from '@/lib/date';

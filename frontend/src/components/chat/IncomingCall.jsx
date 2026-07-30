@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Phone, X } from 'lucide-react';
+import { Phone, X } from '@/lib/animated-icons';
 import { useCall } from './CallProvider';
 
 export default function IncomingCall() {

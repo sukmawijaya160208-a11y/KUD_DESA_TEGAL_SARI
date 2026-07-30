@@ -10,7 +10,7 @@ import Select from '@/components/ui/Select';
 import Modal from '@/components/ui/Modal';
 import PrintButton from '@/components/PrintButton';
 import { CardSkeleton } from '@/components/ui/Skeleton';
-import { MapPin, Plus, Trash2, X, Eye, Camera, Image, Pencil, Download, FileText } from 'lucide-react';
+import { MapPin, Plus, Trash2, X, Eye, Camera, Image, Pencil, Download, FileText } from '@/lib/animated-icons';
 
 function isPdfUrl(url) {
   return url && (url.endsWith('.pdf') || url.includes('.pdf?'));

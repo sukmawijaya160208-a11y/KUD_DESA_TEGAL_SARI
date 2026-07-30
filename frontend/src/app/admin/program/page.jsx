@@ -10,7 +10,7 @@ import ProgramDetail from '@/components/ProgramDetail';
 import { formatDate, formatDateShort } from '@/lib/date';
 import { JENIS_OPTIONS } from '@/constants/options';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ClipboardList, Plus, SquarePen, Trash2, CalendarDays, Users, BarChart3, CheckCircle, Clock, XCircle, Search, ChevronDown, ChevronUp, Eye, Filter, Sparkles, Download, ArrowUp, ArrowDown } from 'lucide-react';
+import { ClipboardList, Plus, SquarePen, Trash2, CalendarDays, Users, BarChart3, CheckCircle, Clock, XCircle, Search, ChevronDown, ChevronUp, Eye, Filter, Sparkles, Download, ArrowUp, ArrowDown } from '@/lib/animated-icons';
 
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP',

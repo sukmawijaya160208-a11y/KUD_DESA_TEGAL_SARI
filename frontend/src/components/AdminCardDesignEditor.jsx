@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Button from '@/components/ui/Button';
 import KartuAdmin from '@/components/KartuAdmin';
-import { Pencil, RefreshCw, Eye, SwatchBook } from 'lucide-react';
+import { Pencil, RefreshCw, Eye, SwatchBook } from '@/lib/animated-icons';
 
 const FONT_OPTIONS = [
   { value: 'Inter', label: 'Inter' },

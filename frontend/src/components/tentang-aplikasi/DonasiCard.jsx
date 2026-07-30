@@ -1,6 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
-import { Banknote } from 'lucide-react';
+import { Banknote } from '@/lib/animated-icons';
 
 export default function DonasiCard({ data }) {
   if (!data) return null;

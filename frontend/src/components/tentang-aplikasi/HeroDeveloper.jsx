@@ -1,6 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
-import { Phone, Camera, Mail, SquarePen } from 'lucide-react';
+import { Phone, Camera, Mail, SquarePen } from '@/lib/animated-icons';
 
 export default function HeroDeveloper({ data, admin, onEdit }) {
   if (!data) return null;

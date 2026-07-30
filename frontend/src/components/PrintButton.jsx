@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Printer } from 'lucide-react';
+import { Printer } from '@/lib/animated-icons';
 import { formatDateId, formatTimeId } from '@/lib/date';
 
 const PRINT_STYLES = `

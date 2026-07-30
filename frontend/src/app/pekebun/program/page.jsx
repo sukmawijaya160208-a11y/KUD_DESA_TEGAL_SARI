@@ -13,7 +13,7 @@ import {
   ClipboardList, CheckCircle, CalendarDays, Users,
   ChevronRight, X, MapPin, Clock,
   FileText, Filter, CreditCard, Printer
-} from 'lucide-react';
+} from '@/lib/animated-icons';
 
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',

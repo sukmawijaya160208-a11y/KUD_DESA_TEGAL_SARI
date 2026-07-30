@@ -2,7 +2,7 @@
 
 import { useState, useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, Plus, Search } from 'lucide-react';
+import { MessageCircle, Plus, Search } from '@/lib/animated-icons';
 import { formatDateId } from '@/lib/date';
 
 function timeAgo(dateStr) {

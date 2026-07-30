@@ -19,7 +19,7 @@ import {
   BadgeCheck, FileText, Globe, Bell, Folder,
   Building2, Image, Video, ClipboardList,
   Building,
-} from 'lucide-react';
+} from '@/lib/animated-icons';
 
 import { AnimateIcon } from '@/components/animate-ui/icons/icon';
 

@@ -11,8 +11,8 @@ import {
   AreaChart, Area, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
-import { formatDate, formatRelative, todayStr } from '@/lib/date';
-import { Users, ClipboardList, MapPin, BadgeCheck, Clock, BarChart3, BookOpen, User, DollarSign, Bell, ShieldCheck, Trash2, Plus, PlusCircle, X, SquarePen, FileText, Eye, CheckCircle, Image, Search, ArrowLeft, CalendarDays, Settings, RefreshCw, AlertTriangle, Pause, Play, Download, UserCircle, Flame, ChevronRight } from 'lucide-react';
+import { formatDate, formatRelative, todayStr, formatNumberId } from '@/lib/date';
+import { Users, ClipboardList, MapPin, BadgeCheck, Clock, BarChart3, BookOpen, User, DollarSign, Bell, ShieldCheck, Trash2, Plus, PlusCircle, X, SquarePen, FileText, Eye, CheckCircle, Image, Search, ArrowLeft, CalendarDays, Settings, RefreshCw, AlertTriangle, Pause, Play, Download, UserCircle, Flame, ChevronRight } from '@/lib/animated-icons';
 
 /* ============================================================
    CONSTANTS
@@ -72,7 +72,7 @@ function AnimatedCounter({ value, suffix = '', decimals = 0 }) {
     return () => controls.stop();
   }, [value, decimals]);
 
-  return <span>{display.toLocaleString('id-ID')}{suffix}</span>;
+  return <span>{formatNumberId(display)}{suffix}</span>;
 }
 
 function StatCard({ icon: Icon, label, value, href, color, bg, onClick }) {
@@ -137,7 +137,7 @@ function AreaChartWidget({ data }) {
         <Tooltip
           contentStyle={{ borderRadius: 12, border: '1px solid #E9EDEF', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
           labelFormatter={(v) => formatDate(v + '-01', 'MMMM yyyy')}
-          formatter={(v) => [Number(v).toLocaleString('id-ID') + ' kg', 'TBS']}
+           formatter={(v) => [formatNumberId(v) + ' kg', 'TBS']}
         />
         <Area type="monotone" dataKey="total" stroke={AREA_GRADIENT.g1} strokeWidth={2} fill="url(#tbsGradient)" animationDuration={1200} />
       </AreaChart>
@@ -158,7 +158,7 @@ function DonutChartWidget({ data }) {
           </Pie>
           <Tooltip
             contentStyle={{ borderRadius: 12, border: '1px solid #E9EDEF' }}
-            formatter={(v) => [Number(v).toLocaleString('id-ID') + ' pekebun', '']}
+            formatter={(v) => [formatNumberId(v) + ' pekebun', '']}
           />
         </PieChart>
       </ResponsiveContainer>
@@ -233,7 +233,7 @@ function ActivityTimeline({ verifikasi, pendaftaran, tbsList }) {
         icon: '📦',
         label: 'Catat TBS',
         desc: t.pekebun?.nama || '-',
-        extra: `${Number(t.jumlah_tbs || 0).toLocaleString()} kg`,
+        extra: `${formatNumberId(t.jumlah_tbs || 0)} kg`,
       })),
     ];
     return all.sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 8);
@@ -292,7 +292,7 @@ function HargaTbsCards({ data }) {
               <div>
                 <p className={`text-xs font-semibold ${s.label}`}>TBS Kelas {k}</p>
                 <p className="text-sm font-bold text-foreground">
-                  {h ? `Rp ${Number(h.harga_per_kg).toLocaleString('id-ID')}/kg` : '-'}
+                  {h ? `Rp ${formatNumberId(h.harga_per_kg)}/kg` : '-'}
                 </p>
               </div>
             </div>
@@ -359,7 +359,7 @@ function TopPekebun({ tbsList }) {
             <div className="flex-1 min-w-0">
               <div className="flex justify-between text-sm mb-0.5">
                 <span className="text-foreground font-medium truncate">{p.nama}</span>
-                <span className="text-gray-500 tabular-nums">{Number(p.total).toLocaleString('id-ID')} kg</span>
+                <span className="text-gray-500 tabular-nums">{formatNumberId(p.total)} kg</span>
               </div>
               <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
                 <motion.div

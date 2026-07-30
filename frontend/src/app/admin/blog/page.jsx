@@ -8,7 +8,7 @@ import { useToast } from '@/components/ToastProvider';
 import Modal from '@/components/ui/Modal';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
-import { Newspaper, Plus, SquarePen, Trash2, Search, X, Settings, FileText, Clock, Star, ExternalLink, Zap, Video } from 'lucide-react';
+import { Newspaper, Plus, SquarePen, Trash2, Search, X, Settings, FileText, Clock, Star, ExternalLink, Zap, Video } from '@/lib/animated-icons';
 
 const CATEGORY_COLORS = {
   Pelatihan: 'bg-blue-100 text-blue-700',

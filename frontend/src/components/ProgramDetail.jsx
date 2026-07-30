@@ -5,7 +5,7 @@ import {
   X, CalendarDays, Users, FileText,
   CheckCircle, ChevronRight, Image,
   Pencil,
-} from 'lucide-react';
+} from '@/lib/animated-icons';
 import { formatDate, formatDateShort } from '@/lib/date';
 
 const PERSYARATAN_LABEL = {

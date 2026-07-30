@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { DollarSign, RefreshCw, CalendarDays, BadgeCheck } from 'lucide-react';
+import { DollarSign, RefreshCw, CalendarDays, BadgeCheck } from '@/lib/animated-icons';
 import { api } from '@/lib/api';
-import { formatDateId } from '@/lib/date';
+import { formatDateId, formatNumberId } from '@/lib/date';
 
 const KELAS_INFO = {
   A: { label: 'Kelas A', desc: 'Kualitas Terbaik', bg: 'from-emerald-500/20 to-emerald-600/10', border: 'border-emerald-500/30', text: 'text-emerald-600', badge: 'bg-emerald-500' },
@@ -53,7 +53,7 @@ function PriceCard({ kelas, data, index }) {
 
       <div className="mb-4">
         <div className={`text-3xl sm:text-4xl font-extrabold font-heading ${info.text} leading-tight`}>
-          Rp {Number(data.harga_per_kg).toLocaleString('id-ID')}
+          Rp {formatNumberId(data.harga_per_kg)}
           <span className="text-base sm:text-lg font-medium text-gray-400">/kg</span>
         </div>
       </div>

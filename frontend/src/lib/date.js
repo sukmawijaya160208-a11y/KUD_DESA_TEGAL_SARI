@@ -77,4 +77,10 @@ export function todayStr() {
   return fnsFormat(new Date(), 'yyyy-MM-dd');
 }
 
+export function formatNumberId(num) {
+  const n = Number(num);
+  if (isNaN(n)) return '0';
+  return new Intl.NumberFormat('id-ID').format(n);
+}
+
 export { formatDistanceToNow, parseISO, isValid };

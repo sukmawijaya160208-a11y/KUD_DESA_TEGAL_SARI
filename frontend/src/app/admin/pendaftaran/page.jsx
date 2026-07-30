@@ -11,7 +11,7 @@ import { TableSkeleton } from '@/components/ui/Skeleton';
 import { formatDate } from '@/lib/date';
 
 
-import { Users, Eye, Search, Filter, X, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
+import { Users, Eye, Search, Filter, X, ChevronDown, ChevronUp, Trash2, FileText } from '@/lib/animated-icons';
 import ReviewModal from '@/components/ReviewModal';
 const PERSYARATAN_LABEL = {
   foto_ktp: 'Foto KTP', foto_kk: 'Foto KK', akte: 'Akte',
@@ -184,7 +184,7 @@ export default function AdminPendaftaranPage() {
                     {d.setuju_surat_1 !== undefined && d.programKud?.aktifkan_surat && (
                       <div>
                         <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-                          <DocumentTextIcon className="w-3.5 h-3.5 inline mr-1" />
+                          <FileText className="w-3.5 h-3.5 inline mr-1" />
                           Status Persetujuan Surat
                         </h4>
                         <div className="space-y-2">
