@@ -8,7 +8,6 @@ import { useLogo } from '@/hooks/useLogo';
 import { api } from '@/lib/api';
 import MapSection from '@/components/MapSection';
 import Modal from '@/components/ui/Modal';
-import Hero3DScene from '@/components/Hero3DScene';
 import HargaTbsWidget from '@/components/HargaTbsWidget';
 import { formatDateId } from '@/lib/date';
 
@@ -538,11 +537,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMSIvPjwvZz48L2c+PC9zdmc+')] opacity-40" />
         </div>
 
-        <div className="hidden lg:block absolute inset-0 z-[2] pointer-events-none">
-          <Hero3DScene />
-        </div>
-
-        <div className="block lg:hidden absolute inset-0 z-[2] overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 z-[2] overflow-hidden pointer-events-none">
           <motion.div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-400/15 rounded-full blur-3xl"
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.7, 0.3] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }} />

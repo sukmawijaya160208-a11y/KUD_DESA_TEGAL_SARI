@@ -2,15 +2,12 @@
 
 import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ToastProvider';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { motion, animate } from 'framer-motion';
-import {
-  AreaChart, Area, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-} from 'recharts';
 import { formatDate, formatRelative, todayStr, formatNumberId } from '@/lib/date';
 import { Users, ClipboardList, MapPin, BadgeCheck, Clock, BarChart3, BookOpen, User, DollarSign, Bell, ShieldCheck, Trash2, Plus, PlusCircle, X, SquarePen, FileText, Eye, CheckCircle, Image, Search, ArrowLeft, CalendarDays, Settings, RefreshCw, AlertTriangle, Pause, Play, Download, UserCircle, Flame, ChevronRight } from '@/lib/animated-icons';
 
@@ -19,12 +16,13 @@ import { Users, ClipboardList, MapPin, BadgeCheck, Clock, BarChart3, BookOpen, U
    ============================================================ */
 const CONFETTI_ACTIVE = true;
 
+const AreaChartWidget = dynamic(() => import('@/components/admin/AdminCharts').then((m) => m.AreaChartWidget), { ssr: false, loading: () => <div className="h-[220px] animate-pulse bg-gray-100 rounded-xl" /> });
+const DonutChartWidget = dynamic(() => import('@/components/admin/AdminCharts').then((m) => m.DonutChartWidget), { ssr: false, loading: () => <div className="h-[160px] animate-pulse bg-gray-100 rounded-xl" /> });
+
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.04 } } };
 const itemAnim = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
 const itemAnimL = { hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0 } };
 
-const PIE_COLORS = ['#10B981', '#F59E0B', '#EF4444', '#3B82F6'];
-const AREA_GRADIENT = { g1: '#3B82F6', g2: '#93C5FD' };
 const BAR_COLORS = ['#6366F1', '#8B5CF6', '#A78BFA', '#C4B5FD', '#DDD6FE'];
 
 const ACTIONS = [
@@ -115,62 +113,6 @@ function FullSkeleton() {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {Array.from({ length: 2 }).map((_, i) => <div key={i} className="h-48 bg-gray-100 rounded-2xl animate-pulse" />)}
-      </div>
-    </div>
-  );
-}
-
-function AreaChartWidget({ data }) {
-  if (!data || data.length === 0) return <p className="text-sm text-gray-400 py-8 text-center">Belum ada data TBS</p>;
-  return (
-    <ResponsiveContainer width="100%" height={220}>
-      <AreaChart data={data} margin={{ top: 5, right: 5, left: -15, bottom: 0 }}>
-        <defs>
-          <linearGradient id="tbsGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor={AREA_GRADIENT.g1} stopOpacity={0.3} />
-            <stop offset="95%" stopColor={AREA_GRADIENT.g2} stopOpacity={0} />
-          </linearGradient>
-        </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-        <XAxis dataKey="bulan" tickFormatter={(v) => v?.slice(-2) + '/' + v?.slice(2, 4)} tick={{ fontSize: 10, fill: '#9CA3AF' }} />
-        <YAxis tick={{ fontSize: 10, fill: '#9CA3AF' }} />
-        <Tooltip
-          contentStyle={{ borderRadius: 12, border: '1px solid #E9EDEF', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
-          labelFormatter={(v) => formatDate(v + '-01', 'MMMM yyyy')}
-           formatter={(v) => [formatNumberId(v) + ' kg', 'TBS']}
-        />
-        <Area type="monotone" dataKey="total" stroke={AREA_GRADIENT.g1} strokeWidth={2} fill="url(#tbsGradient)" animationDuration={1200} />
-      </AreaChart>
-    </ResponsiveContainer>
-  );
-}
-
-function DonutChartWidget({ data }) {
-  if (!data || data.length === 0) return <p className="text-sm text-gray-400 py-8 text-center">Belum ada data</p>;
-  const total = data.reduce((s, d) => s + Number(d.total), 0) || 1;
-  const labels = { verified: 'Terverifikasi', pending: 'Pending', rejected: 'Ditolak' };
-  return (
-    <div className="flex flex-col sm:flex-row items-center gap-4">
-      <ResponsiveContainer width={160} height={160}>
-        <PieChart>
-          <Pie data={data} dataKey="total" nameKey="status" cx="50%" cy="50%" innerRadius={45} outerRadius={70} paddingAngle={3} animationDuration={1000}>
-            {data.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
-          </Pie>
-          <Tooltip
-            contentStyle={{ borderRadius: 12, border: '1px solid #E9EDEF' }}
-            formatter={(v) => [formatNumberId(v) + ' pekebun', '']}
-          />
-        </PieChart>
-      </ResponsiveContainer>
-      <div className="space-y-2 text-sm">
-        {data.map((d, i) => (
-          <div key={d.status} className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
-            <span className="text-gray-500 w-24">{labels[d.status] || d.status}</span>
-            <span className="font-semibold text-foreground">{d.total}</span>
-            <span className="text-gray-400 text-xs">({((d.total / total) * 100).toFixed(1)}%)</span>
-          </div>
-        ))}
       </div>
     </div>
   );

@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { api } from '@/lib/api';
-import * as XLSX from 'xlsx';
 import { useLogo } from '@/hooks/useLogo';
 import { useToast } from '@/components/ToastProvider';
 import { formatDate, formatRelative, formatDateId } from '@/lib/date';
@@ -38,8 +37,9 @@ function avatarColor(name) {
   return colors[Math.abs(hash) % colors.length];
 }
 
-function exportToExcel(users) {
+async function exportToExcel(users) {
   if (!users.length) return;
+  const XLSX = await import('xlsx');
   const headers = ['Nama', 'Email', 'Role', 'Status Pekebun', 'NIK', 'No KK', 'No WhatsApp', 'Tempat Lahir', 'Tanggal Lahir', 'Alamat', 'Tanggal Daftar'];
   const data = users.map(u => ({
     Nama: u.name || '',
@@ -373,8 +373,9 @@ export default function AdminUsersPage() {
     setImportFile(file);
     setImportResult(null);
     const reader = new FileReader();
-    reader.onload = (ev) => {
+    reader.onload = async (ev) => {
       try {
+        const XLSX = await import('xlsx');
         const wb = XLSX.read(ev.target.result, { type: 'array' });
         const ws = wb.Sheets[wb.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(ws);
@@ -436,7 +437,8 @@ export default function AdminUsersPage() {
     { key: 'alamat', label: 'Alamat', required: false },
   ];
 
-  const handleDownloadTemplate = () => {
+  const handleDownloadTemplate = async () => {
+    const XLSX = await import('xlsx');
     const headers = IMPORT_TEMPLATE.map(t => t.required ? `${t.label} *` : t.label);
     const example = {};
     IMPORT_TEMPLATE.forEach(t => {

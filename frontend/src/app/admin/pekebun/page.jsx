@@ -12,7 +12,6 @@ import Badge from '@/components/ui/Badge';
 import DatePicker from '@/components/ui/DatePicker';
 import { motion } from 'framer-motion';
 import { SquarePen, Trash2, Plus, Eye, X, Search, Filter, ArrowUp, ArrowDown, ChevronDown, ChevronRight, FileDown, ShieldAlert, CheckCircle, MapPin, CalendarDays, FileText, Phone, Users, AlertTriangle, Clock, Printer, Image, IdCard, Smartphone } from '@/lib/animated-icons';
-import * as XLSX from 'xlsx';
 import { formatDate, formatDateId } from '@/lib/date';
 
 const isMobile = typeof window !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -367,8 +366,9 @@ export default function AdminPekebunPage() {
     setImportFile(file);
     setImportResult(null);
     const reader = new FileReader();
-    reader.onload = (ev) => {
+    reader.onload = async (ev) => {
       try {
+        const XLSX = await import('xlsx');
         const wb = XLSX.read(ev.target.result, { type: 'array' });
         const ws = wb.Sheets[wb.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(ws);
@@ -417,7 +417,8 @@ export default function AdminPekebunPage() {
     setImportSubmitting(false);
   };
 
-  const handleDownloadTemplate = () => {
+  const handleDownloadTemplate = async () => {
+    const XLSX = await import('xlsx');
     const headers = IMPORT_TEMPLATE.map(t => t.required ? `${t.label} *` : t.label);
     const example = {};
     IMPORT_TEMPLATE.forEach(t => {

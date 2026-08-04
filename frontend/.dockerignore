@@ -2,5 +2,9 @@ node_modules
 .next
 .git
 .gitignore
+.env*
+Dockerfile
+.dockerignore
+npm-debug.log*
+README.md
 *.md
-.DS_Store
