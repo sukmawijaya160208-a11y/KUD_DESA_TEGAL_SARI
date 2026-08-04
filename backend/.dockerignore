@@ -4,12 +4,6 @@ node_modules
 .gitignore
 .env
 .env.*
-Dockerfile
-docker-php.ini
-docker-nginx.conf
-supervisord.conf
-startup.sh
-.dockerignore
 *.log
 tests
 phpunit.xml
@@ -18,3 +12,4 @@ README.md
 storage
 public/videos
 public/storage
+.dockerignore
